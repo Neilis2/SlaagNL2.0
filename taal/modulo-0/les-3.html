@@ -1,1 +1,826 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SlaagNL — Módulo 0 · Les 3</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#0d1f3c; --navy2:#162d54; --navy3:#1e3a6e;
+  --orange:#f47c3a; --orange2:#e86a24;
+  --cream:#fdf6ec; --cream2:#f5ead8;
+  --green:#2ecc8a; --yellow:#f4c842; --red:#e8455a;
+  --border:rgba(255,255,255,0.07);
+  --ease:0.22s cubic-bezier(0.4,0,0.2,1);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
+body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);min-height:100vh;-webkit-font-smoothing:antialiased;}
+
+.header{display:flex;align-items:center;gap:10px;padding:14px 16px;background:var(--navy2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50;}
+.btn-back{background:none;border:none;color:var(--orange);font-size:24px;cursor:pointer;padding:0 8px 0 0;line-height:1;flex-shrink:0;}
+.header-info{flex:1;min-width:0;}
+.header-sup{font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:2px;}
+.header-title{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.header-count{font-size:12px;color:rgba(253,246,236,0.4);font-weight:600;flex-shrink:0;}
+
+.progress-wrap{height:3px;background:rgba(255,255,255,0.08);}
+.progress-fill{height:100%;background:var(--orange);transition:width 0.5s ease;}
+
+.main{padding:16px 16px 40px;display:flex;flex-direction:column;gap:14px;max-width:600px;margin:0 auto;}
+
+.card{background:var(--navy2);border-radius:18px;border:1px solid var(--border);overflow:hidden;}
+.card-body{padding:18px;font-size:14px;line-height:1.75;color:rgba(253,246,236,0.85);}
+.card-body strong{color:var(--orange);}
+.card-body em{color:#a8e6cf;font-style:normal;font-weight:600;}
+
+.section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--orange);margin-bottom:10px;}
+
+.lesson-intro{padding:20px 18px 18px;}
+.lesson-tag{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--orange);background:rgba(244,124,58,0.12);border:1px solid rgba(244,124,58,0.2);padding:4px 10px;border-radius:99px;margin-bottom:12px;}
+.lesson-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--cream);margin-bottom:8px;line-height:1.2;}
+.lesson-desc{font-size:14px;color:rgba(253,246,236,0.7);line-height:1.7;}
+
+/* PHRASE ROWS */
+.phrase-list{padding:0 18px 18px;display:flex;flex-direction:column;gap:8px;}
+.phrase-row{display:flex;align-items:center;gap:12px;padding:13px 14px;background:rgba(255,255,255,0.03);border-radius:14px;border:1px solid rgba(255,255,255,0.06);cursor:pointer;transition:all 0.18s;position:relative;user-select:none;}
+.phrase-row:active{transform:scale(0.97);background:rgba(244,124,58,0.08);border-color:rgba(244,124,58,0.25);}
+.phrase-row.playing{border-color:var(--orange);background:rgba(244,124,58,0.08);}
+.phrase-icon{font-size:20px;flex-shrink:0;}
+.phrase-content{flex:1;min-width:0;}
+.phrase-nl{font-size:15px;font-weight:700;color:var(--cream);margin-bottom:2px;}
+.phrase-nl strong{color:var(--orange);}
+.phrase-es{font-size:12px;color:rgba(253,246,236,0.45);font-style:italic;}
+.phrase-sound-btn{width:32px;height:32px;border-radius:50%;background:rgba(244,124,58,0.12);border:1px solid rgba(244,124,58,0.25);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;transition:all 0.18s;}
+.phrase-row.playing .phrase-sound-btn{background:var(--orange);border-color:var(--orange);animation:pulse-ring 1s infinite;}
+
+@keyframes pulse-ring{0%{box-shadow:0 0 0 0 rgba(244,124,58,0.5);}70%{box-shadow:0 0 0 8px rgba(244,124,58,0);}100%{box-shadow:0 0 0 0 rgba(244,124,58,0);}}
+
+.pron-bubble{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--navy3);border:1px solid var(--orange);border-radius:10px;padding:6px 14px;font-size:12px;font-weight:700;color:var(--orange);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 0.2s;z-index:10;}
+.pron-bubble::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--orange);}
+.pron-bubble.show{opacity:1;}
+
+/* FORMULA BOX */
+.formula-box{margin:0 18px 18px;padding:14px 16px;background:rgba(244,124,58,0.07);border:1px solid rgba(244,124,58,0.18);border-radius:14px;}
+.formula-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px;}
+.formula-row:last-child{margin-bottom:0;}
+.formula-chunk{padding:6px 12px;border-radius:8px;font-size:13px;font-weight:700;}
+.chunk-subject{background:rgba(46,204,138,0.15);color:var(--green);border:1px solid rgba(46,204,138,0.25);}
+.chunk-verb{background:rgba(244,124,58,0.2);color:var(--orange);border:1px solid rgba(244,124,58,0.3);}
+.chunk-rest{background:rgba(255,255,255,0.08);color:var(--cream);border:1px solid rgba(255,255,255,0.12);}
+.formula-plus{color:rgba(253,246,236,0.3);font-size:12px;}
+.formula-es{font-size:11px;color:rgba(253,246,236,0.35);margin-top:4px;font-style:italic;}
+
+/* TIP */
+.tip-toggle{display:flex;align-items:center;gap:10px;padding:13px 18px;background:rgba(244,124,58,0.06);border-top:1px solid rgba(255,255,255,0.06);cursor:pointer;user-select:none;transition:background var(--ease);}
+.tip-toggle:hover{background:rgba(244,124,58,0.1);}
+.bulb-wrap{position:relative;width:28px;height:28px;flex-shrink:0;}
+.bulb-icon{font-size:22px;line-height:28px;display:block;text-align:center;transition:transform 0.3s ease;}
+.bulb-glow{position:absolute;inset:-4px;border-radius:50%;background:radial-gradient(circle,rgba(244,196,58,0.35),transparent 70%);opacity:0;transition:opacity 0.3s ease;pointer-events:none;}
+.tip-toggle.open .bulb-glow{opacity:1;}
+.tip-toggle.open .bulb-icon{transform:scale(1.15);filter:brightness(1.3);}
+@keyframes bulbPulse{0%,100%{opacity:0.5}50%{opacity:1}}
+.tip-toggle:not(.open) .bulb-glow{opacity:0.3;animation:bulbPulse 2s infinite;}
+.tip-label{font-size:13px;font-weight:600;color:var(--orange);flex:1;}
+.tip-arrow{color:rgba(244,124,58,0.6);font-size:16px;transition:transform 0.3s ease;}
+.tip-toggle.open .tip-arrow{transform:rotate(180deg);}
+.tip-content{display:none;padding:14px 18px;font-size:13px;line-height:1.7;color:rgba(253,246,236,0.7);background:rgba(244,124,58,0.04);border-top:1px solid rgba(255,255,255,0.04);animation:fadeDown 0.25s ease;}
+.tip-content.open{display:block;}
+.tip-content strong{color:var(--orange);}
+.tip-content em{color:#a8e6cf;font-style:normal;font-weight:600;}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+
+/* CONTEXT TAG */
+.context-tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;padding:3px 8px;border-radius:99px;margin-bottom:10px;}
+.tag-key{background:rgba(244,124,58,0.12);color:var(--orange);border:1px solid rgba(244,124,58,0.2);}
+.tag-note{background:rgba(167,139,250,0.12);color:#a78bfa;border:1px solid rgba(167,139,250,0.2);}
+
+/* DIALOGUE */
+.dialogue-wrap{padding:14px 18px 18px;display:flex;flex-direction:column;gap:10px;}
+.dialogue-bubble{max-width:88%;padding:12px 16px;border-radius:16px;font-size:13px;line-height:1.6;cursor:pointer;transition:all 0.18s;position:relative;user-select:none;}
+.bubble-a{background:var(--navy3);border:1px solid rgba(255,255,255,0.08);border-bottom-left-radius:4px;align-self:flex-start;}
+.bubble-b{background:rgba(244,124,58,0.1);border:1px solid rgba(244,124,58,0.18);border-bottom-right-radius:4px;align-self:flex-end;text-align:right;}
+.bubble-a:active,.bubble-b:active{transform:scale(0.97);}
+.bubble-a.playing{border-color:var(--orange);}
+.bubble-b.playing{border-color:var(--orange);background:rgba(244,124,58,0.18);}
+.bubble-who{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;color:rgba(253,246,236,0.35);}
+.bubble-nl{font-size:14px;font-weight:700;color:var(--cream);margin-bottom:2px;}
+.bubble-es{font-size:11px;color:rgba(253,246,236,0.38);font-style:italic;}
+.bubble-sound{font-size:10px;color:var(--orange);margin-top:4px;font-weight:600;}
+
+/* FILL IN BLANK */
+.fill-block{margin-bottom:20px;}
+.fill-sentence{font-size:15px;font-weight:600;color:var(--cream);line-height:2;margin-bottom:10px;}
+.fill-blank{display:inline-block;min-width:80px;border-bottom:2px solid var(--orange);padding:0 6px;color:var(--orange);font-weight:700;text-align:center;cursor:pointer;transition:all 0.2s;}
+.fill-blank.filled{background:rgba(244,124,58,0.1);border-radius:6px 6px 0 0;}
+.fill-blank.correct{border-color:var(--green);color:var(--green);background:rgba(46,204,138,0.1);border-radius:6px 6px 0 0;}
+.fill-blank.wrong{border-color:var(--red);color:var(--red);background:rgba(232,69,90,0.1);border-radius:6px 6px 0 0;}
+
+/* EXERCISE */
+.exercise-card{padding:18px;}
+.exercise-label{font-size:10px;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+.exercise-instruction{font-size:13px;color:rgba(253,246,236,0.5);margin-bottom:14px;font-style:italic;line-height:1.5;}
+.answer-slots{display:flex;flex-wrap:wrap;gap:8px;min-height:50px;padding:10px;background:rgba(0,0,0,0.2);border-radius:12px;margin-bottom:14px;border:1.5px dashed rgba(255,255,255,0.12);align-items:center;}
+.answer-slot{min-width:52px;height:36px;border-radius:8px;border:1.5px dashed rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--cream);padding:0 12px;background:rgba(255,255,255,0.04);transition:all 0.2s;cursor:pointer;user-select:none;}
+.answer-slot.filled{border-color:var(--orange);background:rgba(244,124,58,0.12);border-style:solid;}
+.answer-slot.filled:active{transform:scale(0.93);}
+.answer-slot.slot-correct{border-color:var(--green);background:rgba(46,204,138,0.15);color:var(--green);border-style:solid;cursor:default;}
+.answer-slot.slot-wrong{border-color:var(--red);background:rgba(232,69,90,0.15);color:var(--red);border-style:solid;}
+.word-bank{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+.word-chip{padding:8px 14px;border-radius:20px;background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,255,255,0.15);color:var(--cream);font-size:13px;font-weight:600;cursor:pointer;transition:all 0.15s;font-family:inherit;user-select:none;}
+.word-chip:active{transform:scale(0.93);}
+.word-chip.used{opacity:0.25;pointer-events:none;}
+.exercise-feedback{margin-top:4px;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:600;display:none;}
+.exercise-feedback.show{display:block;}
+.feedback-correct{background:rgba(46,204,138,0.15);color:var(--green);}
+.feedback-wrong{background:rgba(232,69,90,0.12);color:var(--red);}
+.btn-check{width:100%;padding:13px;background:var(--navy3);border:1.5px solid rgba(255,255,255,0.1);border-radius:12px;color:var(--cream);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:all var(--ease);margin-top:6px;}
+.btn-check:hover{background:rgba(244,124,58,0.15);border-color:var(--orange);}
+
+/* CHALLENGE */
+.challenge-card{padding:18px;}
+.challenge-label{font-size:10px;font-weight:700;color:#a78bfa;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.challenge-question{font-size:14px;color:var(--cream);line-height:1.6;margin-bottom:14px;font-weight:600;}
+.challenge-options{display:flex;flex-direction:column;gap:8px;}
+.challenge-opt{padding:13px 16px;border-radius:12px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);color:var(--cream);font-size:13px;text-align:left;cursor:pointer;transition:all 0.15s;font-family:inherit;font-weight:500;}
+.challenge-opt:active{transform:scale(0.98);}
+.challenge-opt.opt-correct{border-color:var(--green);background:rgba(46,204,138,0.15);color:var(--green);font-weight:700;}
+.challenge-opt.opt-wrong{border-color:var(--red);background:rgba(232,69,90,0.12);color:var(--red);}
+.challenge-feedback{margin-top:12px;padding:12px 14px;border-radius:12px;font-size:13px;line-height:1.5;display:none;animation:fadeDown 0.25s ease;}
+.challenge-feedback.show{display:block;}
+.challenge-feedback strong{font-weight:700;}
+.challenge-feedback.fb-correct{background:rgba(46,204,138,0.12);color:var(--green);}
+.challenge-feedback.fb-wrong{background:rgba(232,69,90,0.1);color:var(--red);}
+
+/* NEXT */
+.next-wrap{padding:0 0 8px;}
+.btn-next{width:100%;padding:17px;background:var(--orange);border:none;border-radius:14px;color:white;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;transition:all var(--ease);display:flex;align-items:center;justify-content:center;gap:8px;opacity:0.4;pointer-events:none;}
+.btn-next.unlocked{opacity:1;pointer-events:all;}
+.btn-next.unlocked:active{opacity:0.85;transform:scale(0.98);}
+
+/* COMPLETE */
+.complete-screen{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;padding:40px 24px;text-align:center;gap:12px;}
+.complete-screen.show{display:flex;}
+.complete-emoji{font-size:64px;margin-bottom:8px;}
+.complete-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--cream);margin-bottom:4px;}
+.complete-sub{font-size:15px;color:rgba(253,246,236,0.5);line-height:1.6;max-width:280px;}
+.btn-continue{margin-top:16px;padding:16px 32px;background:var(--orange);border:none;border-radius:14px;color:white;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;}
+
+.divider{height:1px;background:rgba(255,255,255,0.06);margin:4px 18px 14px;}
+.group-pad{padding:16px 18px 4px;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <button class="btn-back" onclick="history.back()">‹</button>
+  <div class="header-info">
+    <div class="header-sup">Módulo 0 · Fundamentos</div>
+    <div class="header-title">Presentarse</div>
+  </div>
+  <div class="header-count">Les 3 / 7</div>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+</div>
+
+<div class="main" id="main-content">
+
+  <!-- INTRO -->
+  <div class="card lesson-intro">
+    <div class="lesson-tag">📖 Lección 3</div>
+    <div class="lesson-title">Presentarse</div>
+    <div class="lesson-desc">
+      La primera cosa que harás en el examen y en la embajada es presentarte. Aprende las frases clave para decir quién eres, de dónde vienes y qué haces. Toca cualquier frase para escucharla.
+    </div>
+  </div>
+
+  <!-- IK HEET vs IK BEN -->
+  <div class="card">
+    <div class="group-pad">
+      <div class="section-label">👤 Tu nombre</div>
+    </div>
+
+    <div class="phrase-list" style="padding-top:0">
+      <div class="phrase-row" onclick="speak('Ik heet Neilis', 'ik heit NAY-lis', this)">
+        <div class="pron-bubble">ik heit NAY-lis</div>
+        <div class="phrase-icon">🏷️</div>
+        <div class="phrase-content">
+          <div class="phrase-nl"><strong>Ik heet</strong> Neilis</div>
+          <div class="phrase-es">Me llamo Neilis — más natural y común</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('Ik ben Neilis', 'ik ben NAY-lis', this)">
+        <div class="pron-bubble">ik ben NAY-lis</div>
+        <div class="phrase-icon">🪪</div>
+        <div class="phrase-content">
+          <div class="phrase-nl"><strong>Ik ben</strong> Neilis</div>
+          <div class="phrase-es">Yo soy Neilis — también correcto</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('Mijn naam is Neilis', 'main naam is NAY-lis', this)">
+        <div class="pron-bubble">main naam is NAY-lis</div>
+        <div class="phrase-icon">📋</div>
+        <div class="phrase-content">
+          <div class="phrase-nl"><strong>Mijn naam is</strong> Neilis</div>
+          <div class="phrase-es">Mi nombre es Neilis — formal, para formularios</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+    </div>
+
+    <!-- Formula box -->
+    <div class="formula-box">
+      <div class="formula-row">
+        <span class="formula-chunk chunk-subject">Ik</span>
+        <span class="formula-plus">+</span>
+        <span class="formula-chunk chunk-verb">heet / ben</span>
+        <span class="formula-plus">+</span>
+        <span class="formula-chunk chunk-rest">[tu nombre]</span>
+      </div>
+      <div class="formula-es">Verde = sujeto · Naranja = verbo · Blanco = resto</div>
+    </div>
+
+    <div class="tip-toggle" id="tip1-toggle" onclick="toggleTip('tip1')">
+      <div class="bulb-wrap"><span class="bulb-icon">💡</span><div class="bulb-glow"></div></div>
+      <span class="tip-label">¿Cuál usar — heet o ben?</span>
+      <span class="tip-arrow">▾</span>
+    </div>
+    <div class="tip-content" id="tip1-content">
+      <strong>Ik heet</strong> viene del verbo <em>heten</em> (llamarse) — se usa específicamente para el nombre. <strong>Ik ben</strong> viene de <em>zijn</em> (ser/estar) — más general. En la práctica ambas son correctas, pero <em>Ik heet</em> suena más natural para presentarte. En el examen puedes usar cualquiera de las dos.
+    </div>
+  </div>
+
+  <!-- DE DÓNDE ERES -->
+  <div class="card">
+    <div class="group-pad">
+      <div class="section-label">🌍 Tu origen</div>
+    </div>
+    <div class="phrase-list" style="padding-top:0">
+      <div class="phrase-row" onclick="speak('Ik kom uit Spanje', 'ik kom aut SPAN-ye', this)">
+        <div class="pron-bubble">ik kom aut SPAN-ye</div>
+        <div class="phrase-icon">🇪🇸</div>
+        <div class="phrase-content">
+          <div class="phrase-nl"><strong>Ik kom uit</strong> Spanje</div>
+          <div class="phrase-es">Vengo de España</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('Ik kom uit Colombia', 'ik kom aut ko-LOM-bia', this)">
+        <div class="pron-bubble">ik kom aut ko-LOM-bia</div>
+        <div class="phrase-icon">🇨🇴</div>
+        <div class="phrase-content">
+          <div class="phrase-nl"><strong>Ik kom uit</strong> Colombia</div>
+          <div class="phrase-es">Vengo de Colombia</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('Ik ben geboren in Madrid', 'ik ben je-BOO-ren in ma-DRIT', this)">
+        <div class="pron-bubble">ik ben je-BOO-ren in ma-DRIT</div>
+        <div class="phrase-icon">🏙️</div>
+        <div class="phrase-content">
+          <div class="phrase-nl"><strong>Ik ben geboren in</strong> Madrid</div>
+          <div class="phrase-es">Nací en Madrid</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('Ik ben Spaanstalig', 'ik ben SPAANS-taa-laj', this)">
+        <div class="pron-bubble">ik ben SPAANS-taa-laj</div>
+        <div class="phrase-icon">💬</div>
+        <div class="phrase-content">
+          <div class="phrase-nl"><strong>Ik ben</strong> Spaanstalig</div>
+          <div class="phrase-es">Soy hispanohablante</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+    </div>
+
+    <div class="tip-toggle" id="tip2-toggle" onclick="toggleTip('tip2')">
+      <div class="bulb-wrap"><span class="bulb-icon">💡</span><div class="bulb-glow"></div></div>
+      <span class="tip-label">Países importantes en neerlandés</span>
+      <span class="tip-arrow">▾</span>
+    </div>
+    <div class="tip-content" id="tip2-content">
+      Algunos países cambian de nombre: <strong>Spanje</strong> (España) · <strong>Nederland</strong> (Países Bajos) · <strong>Duitsland</strong> (Alemania) · <strong>Frankrijk</strong> (Francia) · <strong>België</strong> (Bélgica) · <strong>Marokko</strong> (Marruecos) · <strong>Turkije</strong> (Turquía). Colombia, México y la mayoría de países latinoamericanos se escriben igual o muy similar.
+    </div>
+  </div>
+
+  <!-- DÓNDE VIVES -->
+  <div class="card">
+    <div class="group-pad">
+      <div class="section-label">🏠 Dónde vives</div>
+    </div>
+    <div class="phrase-list" style="padding-top:0">
+      <div class="phrase-row" onclick="speak('Ik woon in Amsterdam', 'ik voon in AM-ster-dam', this)">
+        <div class="pron-bubble">ik voon in AM-ster-dam</div>
+        <div class="phrase-icon">🏙️</div>
+        <div class="phrase-content">
+          <div class="phrase-nl"><strong>Ik woon in</strong> Amsterdam</div>
+          <div class="phrase-es">Vivo en Ámsterdam</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('Ik woon nog niet in Nederland', 'ik voon nojj niet in NEI-der-lant', this)">
+        <div class="pron-bubble">ik voon nojj niet in NEI-der-lant</div>
+        <div class="phrase-icon">✈️</div>
+        <div class="phrase-content">
+          <div class="phrase-nl"><strong>Ik woon nog niet in</strong> Nederland</div>
+          <div class="phrase-es">Todavía no vivo en los Países Bajos</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('Ik wil in Nederland wonen', 'ik vil in NEI-der-lant VOO-nen', this)">
+        <div class="pron-bubble">ik vil in NEI-der-lant VOO-nen</div>
+        <div class="phrase-icon">🌷</div>
+        <div class="phrase-content">
+          <div class="phrase-nl"><strong>Ik wil in Nederland wonen</strong></div>
+          <div class="phrase-es">Quiero vivir en los Países Bajos</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TU TRABAJO -->
+  <div class="card">
+    <div class="group-pad">
+      <div class="section-label">💼 Tu trabajo</div>
+    </div>
+    <div class="phrase-list" style="padding-top:0">
+      <div class="phrase-row" onclick=\"speak('Ik werk als reisgids', 'ik verk als RAIS-jits', this)\">
+        <div class="pron-bubble">ik verk als RAIS-jits</div>
+        <div class="phrase-icon">🗺️</div>
+        <div class="phrase-content">
+          <div class="phrase-nl"><strong>Ik werk als</strong> reisgids</div>
+          <div class="phrase-es">Trabajo como guía turístico/a</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('Ik ben van beroep reisgids', 'ik ben fan be-RUUP RAIS-jits', this)">
+        <div class="pron-bubble">ik ben fan be-RUUP RAIS-jits</div>
+        <div class="phrase-icon">🪪</div>
+        <div class="phrase-content">
+          <div class="phrase-nl"><strong>Ik ben van beroep</strong> reisgids</div>
+          <div class="phrase-es">Soy guía turístico/a de profesión</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('Ik wil schoonmaker worden', 'ik vil SJON-maa-ker VOR-den', this)">
+        <div class="pron-bubble">ik vil SJON-maa-ker VOR-den</div>
+        <div class="phrase-icon">🧹</div>
+        <div class="phrase-content">
+          <div class="phrase-nl"><strong>Ik wil</strong> schoonmaker <strong>worden</strong></div>
+          <div class="phrase-es">Quiero convertirme en limpiador/a</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+    </div>
+
+    <div class="tip-toggle" id="tip3-toggle" onclick="toggleTip('tip3')">
+      <div class="bulb-wrap"><span class="bulb-icon">💡</span><div class="bulb-glow"></div></div>
+      <span class="tip-label">Sin "een" con profesiones</span>
+      <span class="tip-arrow">▾</span>
+    </div>
+    <div class="tip-content" id="tip3-content">
+      En neerlandés <strong>no se usa artículo</strong> después de <em>ben</em> o <em>werk als</em> con profesiones. En español decimos "soy <em>una</em> guía" pero en neerlandés es <strong>Ik ben reisgids</strong> — sin <em>een</em>. Excepción: si hay un adjetivo → <em>Ik ben een <strong>goede</strong> reisgids</em> (soy una buena guía).
+    </div>
+  </div>
+
+  <!-- IDIOMAS Y FAMILIA -->
+  <div class="card">
+    <div class="group-pad">
+      <div class="section-label">🗣️ Idiomas y más</div>
+    </div>
+    <div class="phrase-list" style="padding-top:0">
+      <div class="phrase-row" onclick="speak('Ik spreek Spaans en een beetje Nederlands', 'ik spreik SPAANS en en BEI-tye NEI-der-lants', this)">
+        <div class="pron-bubble">ik spreik SPAANS en BEI-tye NEI-der-lants</div>
+        <div class="phrase-icon">💬</div>
+        <div class="phrase-content">
+          <div class="phrase-nl"><strong>Ik spreek</strong> Spaans en een beetje Nederlands</div>
+          <div class="phrase-es">Hablo español y un poco de neerlandés</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('Ik leer Nederlands', 'ik leir NEI-der-lants', this)">
+        <div class="pron-bubble">ik leir NEI-der-lants</div>
+        <div class="phrase-icon">📚</div>
+        <div class="phrase-content">
+          <div class="phrase-nl"><strong>Ik leer</strong> Nederlands</div>
+          <div class="phrase-es">Estoy aprendiendo neerlandés</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('Ik ben getrouwd', 'ik ben je-TRAUT', this)">
+        <div class="pron-bubble">ik ben je-TRAUT</div>
+        <div class="phrase-icon">💍</div>
+        <div class="phrase-content">
+          <div class="phrase-nl"><strong>Ik ben</strong> getrouwd</div>
+          <div class="phrase-es">Estoy casado/a</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('Ik heb één kind', 'ik hep ein kint', this)">
+        <div class="pron-bubble">ik hep ein kint</div>
+        <div class="phrase-icon">👶</div>
+        <div class="phrase-content">
+          <div class="phrase-nl"><strong>Ik heb</strong> één kind</div>
+          <div class="phrase-es">Tengo un hijo/a</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('Ik heb geen kinderen', 'ik hep jein KIN-de-ren', this)">
+        <div class="pron-bubble">ik hep jein KIN-de-ren</div>
+        <div class="phrase-icon">🙅</div>
+        <div class="phrase-content">
+          <div class="phrase-nl"><strong>Ik heb geen</strong> kinderen</div>
+          <div class="phrase-es">No tengo hijos</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DIÁLOGO COMPLETO -->
+  <div class="card">
+    <div class="card-body" style="padding-bottom:8px">
+      <div class="section-label">🎭 Presentación completa</div>
+      Una presentación real como en el examen. Toca cada burbuja:
+    </div>
+    <div class="dialogue-wrap">
+      <div class="dialogue-bubble bubble-a" onclick="speak('Goedemiddag, mijn naam is Anna. Hoe heet u', 'ju-de-MI-daj main naam is AN-na. hu heit uu', this)">
+        <div class="pron-bubble">ju-de-MI-daj main naam is AN-na</div>
+        <div class="bubble-who">Examinador</div>
+        <div class="bubble-nl">Goedemiddag, mijn naam is Anna. Hoe heet u?</div>
+        <div class="bubble-es">Buenas tardes, me llamo Anna. ¿Cómo se llama usted?</div>
+        <div class="bubble-sound">🔊 toca para escuchar</div>
+      </div>
+      <div class="dialogue-bubble bubble-b" onclick="speak('Goedemiddag, ik heet Neilis', 'ju-de-MI-daj ik heit NAY-lis', this)">
+        <div class="pron-bubble">ju-de-MI-daj ik heit NAY-lis</div>
+        <div class="bubble-who">Tú</div>
+        <div class="bubble-nl">Goedemiddag, ik heet Neilis.</div>
+        <div class="bubble-es">Buenas tardes, me llamo Neilis.</div>
+        <div class="bubble-sound">🔊 toca para escuchar</div>
+      </div>
+      <div class="dialogue-bubble bubble-a" onclick="speak('Waar komt u vandaan', 'vaar komt uu fan-DAAN', this)">
+        <div class="pron-bubble">vaar komt uu fan-DAAN</div>
+        <div class="bubble-who">Examinador</div>
+        <div class="bubble-nl">Waar komt u vandaan?</div>
+        <div class="bubble-es">¿De dónde viene usted?</div>
+        <div class="bubble-sound">🔊 toca para escuchar</div>
+      </div>
+      <div class="dialogue-bubble bubble-b" onclick="speak('Ik kom uit Spanje. Ik ben geboren in Madrid', 'ik kom aut SPAN-ye. ik ben je-BOO-ren in ma-DRIT', this)">
+        <div class="pron-bubble">ik kom aut SPAN-ye</div>
+        <div class="bubble-who">Tú</div>
+        <div class="bubble-nl">Ik kom uit Spanje. Ik ben geboren in Madrid.</div>
+        <div class="bubble-es">Vengo de España. Nací en Madrid.</div>
+        <div class="bubble-sound">🔊 toca para escuchar</div>
+      </div>
+      <div class="dialogue-bubble bubble-a" onclick="speak('Wat is uw beroep', 'vat is uu be-RUUP', this)">
+        <div class="pron-bubble">vat is uu be-RUUP</div>
+        <div class="bubble-who">Examinador</div>
+        <div class="bubble-nl">Wat is uw beroep?</div>
+        <div class="bubble-es">¿Cuál es su profesión?</div>
+        <div class="bubble-sound">🔊 toca para escuchar</div>
+      </div>
+      <div class="dialogue-bubble bubble-b" onclick="speak('Ik ben van beroep reisgids. Ik werk graag met mensen', 'ik ben fan be-RUUP RAIS-jits. ik verk jraaj met MEN-sen', this)">
+        <div class="pron-bubble">ik ben fan be-RUUP RAIS-jits</div>
+        <div class="bubble-who">Tú</div>
+        <div class="bubble-nl">Ik ben van beroep reisgids. Ik werk graag met mensen.</div>
+        <div class="bubble-es">Soy guía turístico/a de profesión. Me gusta trabajar con personas.</div>
+        <div class="bubble-sound">🔊 toca para escuchar</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EJERCICIO -->
+  <div class="card">
+    <div class="exercise-card">
+      <div class="exercise-label">✏️ Ejercicio</div>
+      <div class="exercise-instruction">
+        Alguien te pregunta: <strong style="color:var(--orange)">"Waar komt u vandaan?"</strong><br>
+        Ordena las palabras para responder correctamente:
+      </div>
+      <div class="answer-slots" id="ex1-slots"></div>
+      <div class="word-bank" id="ex1-bank"></div>
+      <div class="exercise-feedback" id="ex1-feedback"></div>
+      <button class="btn-check" onclick="checkEx1()">Comprobar</button>
+
+      <div class="divider" style="margin: 18px 0 18px"></div>
+
+      <div class="exercise-instruction">
+        Te preguntan: <strong style="color:var(--orange)">"Wat is uw beroep?"</strong><br>
+        Ordena las palabras:
+      </div>
+      <div class="answer-slots" id="ex2-slots"></div>
+      <div class="word-bank" id="ex2-bank"></div>
+      <div class="exercise-feedback" id="ex2-feedback"></div>
+      <button class="btn-check" onclick="checkEx2()">Comprobar</button>
+    </div>
+  </div>
+
+  <!-- CHALLENGE -->
+  <div class="card">
+    <div class="challenge-card">
+      <div class="challenge-label">🎯 Reto</div>
+      <div class="challenge-question" id="challenge-q"></div>
+      <div class="challenge-options" id="challenge-opts"></div>
+      <div class="challenge-feedback" id="challenge-fb"></div>
+    </div>
+  </div>
+
+  <!-- NEXT -->
+  <div class="next-wrap">
+    <button class="btn-next" id="btn-next" onclick="goNext()">
+      Siguiente lección &nbsp;→
+    </button>
+  </div>
+
+</div>
+
+<!-- COMPLETE -->
+<div class="complete-screen" id="complete-screen">
+  <div class="complete-emoji">🌟</div>
+  <div class="complete-title">¡Lección completada!</div>
+  <div class="complete-sub">Ya puedes presentarte en neerlandés como un profesional. ¡Eso es exactamente lo que necesitas en la embajada!</div>
+  <button class="btn-continue" onclick="window.location.href='les-4.html'">
+    Continuar → Pronombres personales
+  </button>
+</div>
+
+<script>
+// ══════ TTS ══════
+let speaking = false, currentRow = null, bubbleTimer = null;
+
+function speak(text, pron, rowEl) {
+  if (speaking && currentRow === rowEl) {
+    window.speechSynthesis.cancel();
+    speaking = false;
+    clearBubble(rowEl);
+    return;
+  }
+  window.speechSynthesis.cancel();
+  if (currentRow) clearBubble(currentRow);
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'nl-NL'; utter.rate = 0.85; utter.pitch = 1;
+  showBubble(rowEl, pron);
+  rowEl.classList.add('playing');
+  speaking = true; currentRow = rowEl;
+  utter.onend = () => {
+    speaking = false; rowEl.classList.remove('playing');
+    clearTimeout(bubbleTimer);
+    bubbleTimer = setTimeout(() => clearBubble(rowEl), 2000);
+  };
+  utter.onerror = () => { speaking = false; rowEl.classList.remove('playing'); clearBubble(rowEl); };
+  window.speechSynthesis.speak(utter);
+}
+
+function showBubble(el, pron) {
+  const b = el.querySelector('.pron-bubble');
+  if (!b) return;
+  b.textContent = pron; b.classList.add('show');
+}
+
+function clearBubble(el) {
+  if (!el) return;
+  el.classList.remove('playing');
+  const b = el.querySelector('.pron-bubble');
+  if (b) b.classList.remove('show');
+}
+
+// ══════ TIP ══════
+function toggleTip(id) {
+  document.getElementById(id+'-toggle').classList.toggle('open');
+  document.getElementById(id+'-content').classList.toggle('open');
+}
+
+// ══════ EXERCISE 1 ══════
+const EX1 = {
+  answer: ['Ik', 'kom', 'uit', 'Spanje.'],
+  options: ['uit', 'Ik', 'woon', 'Spanje.', 'kom', 'Nederland'],
+};
+let ex1Slots = new Array(EX1.answer.length).fill(null);
+let ex1Bank = [], ex1Done = false;
+
+function buildEx1() {
+  const sEl = document.getElementById('ex1-slots');
+  const bEl = document.getElementById('ex1-bank');
+  EX1.answer.forEach((_, i) => {
+    const s = document.createElement('div');
+    s.className = 'answer-slot'; s.id = `s1-${i}`;
+    s.onclick = () => removeSlot(1, i);
+    sEl.appendChild(s);
+  });
+  const sh = [...EX1.options].sort(() => Math.random() - 0.5);
+  ex1Bank = sh;
+  sh.forEach((w, i) => {
+    const c = document.createElement('button');
+    c.className = 'word-chip'; c.textContent = w; c.id = `c1-${i}`;
+    c.onclick = () => addSlot(1, w, i);
+    bEl.appendChild(c);
+  });
+}
+
+// ══════ EXERCISE 2 ══════
+const EX2 = {
+  answer: ['Ik', 'ben', 'van', 'beroep', 'reisgids.'],
+  options: ['van', 'reisgids.', 'Ik', 'beroep', 'werk', 'ben'],
+};
+let ex2Slots = new Array(EX2.answer.length).fill(null);
+let ex2Bank = [], ex2Done = false;
+
+function buildEx2() {
+  const sEl = document.getElementById('ex2-slots');
+  const bEl = document.getElementById('ex2-bank');
+  EX2.answer.forEach((_, i) => {
+    const s = document.createElement('div');
+    s.className = 'answer-slot'; s.id = `s2-${i}`;
+    s.onclick = () => removeSlot(2, i);
+    sEl.appendChild(s);
+  });
+  const sh = [...EX2.options].sort(() => Math.random() - 0.5);
+  ex2Bank = sh;
+  sh.forEach((w, i) => {
+    const c = document.createElement('button');
+    c.className = 'word-chip'; c.textContent = w; c.id = `c2-${i}`;
+    c.onclick = () => addSlot(2, w, i);
+    bEl.appendChild(c);
+  });
+}
+
+function addSlot(num, word, chipIdx) {
+  const slots = num === 1 ? ex1Slots : ex2Slots;
+  const empty = slots.findIndex(s => s === null);
+  if (empty === -1) return;
+  slots[empty] = { word, chipIdx };
+  const slotEl = document.getElementById(`s${num}-${empty}`);
+  slotEl.textContent = word;
+  slotEl.classList.add('filled');
+  document.getElementById(`c${num}-${chipIdx}`).classList.add('used');
+}
+
+function removeSlot(num, idx) {
+  const slots = num === 1 ? ex1Slots : ex2Slots;
+  if (!slots[idx]) return;
+  const slotEl = document.getElementById(`s${num}-${idx}`);
+  if (slotEl.classList.contains('slot-correct') || slotEl.classList.contains('slot-wrong')) return;
+  const { chipIdx } = slots[idx];
+  slots[idx] = null;
+  slotEl.textContent = ''; slotEl.className = 'answer-slot';
+  document.getElementById(`c${num}-${chipIdx}`).classList.remove('used');
+}
+
+function checkEx1() {
+  if (ex1Slots.some(s => s === null)) {
+    showFb('ex1-feedback', '⚠️ Coloca todas las palabras primero.', false); return;
+  }
+  const user = ex1Slots.map(s => s.word);
+  const ok = JSON.stringify(user) === JSON.stringify(EX1.answer);
+  EX1.answer.forEach((w, i) => {
+    const el = document.getElementById(`s1-${i}`);
+    el.classList.remove('filled');
+    el.classList.add(user[i] === w ? 'slot-correct' : 'slot-wrong');
+  });
+  if (ok) {
+    showFb('ex1-feedback', '✅ ¡Perfecto! "Ik kom uit Spanje."', true);
+    ex1Done = true; checkUnlock();
+  } else {
+    showFb('ex1-feedback', '❌ La respuesta: Ik kom uit Spanje.', false);
+    setTimeout(() => resetEx(1), 1800);
+  }
+}
+
+function checkEx2() {
+  if (ex2Slots.some(s => s === null)) {
+    showFb('ex2-feedback', '⚠️ Coloca todas las palabras primero.', false); return;
+  }
+  const user = ex2Slots.map(s => s.word);
+  const ok = JSON.stringify(user) === JSON.stringify(EX2.answer);
+  EX2.answer.forEach((w, i) => {
+    const el = document.getElementById(`s2-${i}`);
+    el.classList.remove('filled');
+    el.classList.add(user[i] === w ? 'slot-correct' : 'slot-wrong');
+  });
+  if (ok) {
+    showFb('ex2-feedback', '✅ ¡Perfecto! "Ik ben van beroep reisgids."', true);
+    ex2Done = true; checkUnlock();
+  } else {
+    showFb('ex2-feedback', '❌ La respuesta: Ik ben van beroep reisgids.', false);
+    setTimeout(() => resetEx(2), 1800);
+  }
+}
+
+function resetEx(num) {
+  const slots = num === 1 ? ex1Slots : ex2Slots;
+  const ans = num === 1 ? EX1.answer : EX2.answer;
+  const bank = num === 1 ? ex1Bank : ex2Bank;
+  slots.fill(null);
+  ans.forEach((_, i) => {
+    const el = document.getElementById(`s${num}-${i}`);
+    el.textContent = ''; el.className = 'answer-slot';
+  });
+  bank.forEach((_, i) => document.getElementById(`c${num}-${i}`).classList.remove('used'));
+  document.getElementById(`ex${num}-feedback`).className = 'exercise-feedback';
+}
+
+function showFb(id, msg, ok) {
+  const el = document.getElementById(id);
+  el.innerHTML = msg;
+  el.className = `exercise-feedback ${ok ? 'feedback-correct' : 'feedback-wrong'} show`;
+}
+
+// ══════ CHALLENGE ══════
+const CHALLENGES = [
+  {
+    q: '¿Cuál es la forma más natural de decir tu nombre en neerlandés?',
+    opts: ['Mijn naam is...', 'Ik ben...', 'Ik heet...', 'Ik zeg...'],
+    correct: 2,
+    fb: '✅ ¡Correcto! <strong>Ik heet</strong> es la forma más natural y común. <em>Mijn naam is</em> también es correcto pero más formal. <em>Ik ben</em> funciona pero se usa más para describirse.'
+  },
+  {
+    q: 'Quieres decir "Trabajo como enfermera". ¿Cuál es correcto?',
+    opts: [
+      'Ik ben een verpleger.',
+      'Ik werk als verpleger.',
+      'Ik werk een verpleger.',
+      'Ik ben als verpleger.'
+    ],
+    correct: 1,
+    fb: '✅ ¡Exacto! <strong>Ik werk als verpleger</strong> — "als" significa "como" en este contexto. Recuerda: sin "een" después de "werk als".'
+  },
+  {
+    q: '¿Cómo dices "Todavía no vivo en los Países Bajos"?',
+    opts: [
+      'Ik woon niet in Nederland.',
+      'Ik woon nog niet in Nederland.',
+      'Ik wil niet in Nederland wonen.',
+      'Ik woon nooit in Nederland.'
+    ],
+    correct: 1,
+    fb: '✅ ¡Bien! <strong>Nog niet</strong> = todavía no. <em>Niet</em> solo = no (permanente). <em>Nooit</em> = nunca. <em>Nog niet</em> implica que sí quieres vivir allí pronto.'
+  },
+];
+
+let chIdx = 0, chDone = false;
+
+function buildChallenge() { showChallenge(0); }
+
+function showChallenge(idx) {
+  if (idx >= CHALLENGES.length) { chDone = true; checkUnlock(); return; }
+  const ch = CHALLENGES[idx];
+  document.getElementById('challenge-q').textContent = ch.q;
+  const el = document.getElementById('challenge-opts');
+  el.innerHTML = '';
+  ch.opts.forEach((o, i) => {
+    const b = document.createElement('button');
+    b.className = 'challenge-opt'; b.textContent = o;
+    b.onclick = () => answerCh(idx, i, b);
+    el.appendChild(b);
+  });
+  document.getElementById('challenge-fb').className = 'challenge-feedback';
+  document.getElementById('challenge-fb').innerHTML = '';
+}
+
+function answerCh(chIdx, optIdx, btn) {
+  const ch = CHALLENGES[chIdx];
+  document.querySelectorAll('.challenge-opt').forEach(b => b.style.pointerEvents = 'none');
+  const fb = document.getElementById('challenge-fb');
+  if (optIdx === ch.correct) {
+    btn.classList.add('opt-correct');
+    fb.innerHTML = ch.fb;
+    fb.className = 'challenge-feedback fb-correct show';
+  } else {
+    btn.classList.add('opt-wrong');
+    document.querySelectorAll('.challenge-opt')[ch.correct].classList.add('opt-correct');
+    fb.innerHTML = `❌ No exactamente. ${ch.fb}`;
+    fb.className = 'challenge-feedback fb-wrong show';
+  }
+  setTimeout(() => { chIdx++; showChallenge(chIdx); }, 2200);
+}
+
+// ══════ UNLOCK ══════
+function checkUnlock() {
+  let p = 0;
+  if (ex1Done) p += 34;
+  if (ex2Done) p += 33;
+  if (chDone) p += 33;
+  document.getElementById('progress-fill').style.width = p + '%';
+  if (ex1Done && ex2Done && chDone) {
+    document.getElementById('btn-next').classList.add('unlocked');
+  }
+}
+
+function goNext() {
+  document.getElementById('main-content').style.display = 'none';
+  document.getElementById('complete-screen').classList.add('show');
+}
+
+// ══════ INIT ══════
+buildEx1(); buildEx2(); buildChallenge();
+</script>
+</body>
+</html>
 
