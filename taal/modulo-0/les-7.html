@@ -1,1 +1,683 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SlaagNL — Módulo 0 · Les 7</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0d1f3c;--navy2:#162d54;--navy3:#1e3a6e;
+  --orange:#f47c3a;--cream:#fdf6ec;--green:#2ecc8a;--red:#e8455a;
+  --purple:#a78bfa;--blue:#60a5fa;
+  --border:rgba(255,255,255,0.07);--ease:0.22s cubic-bezier(0.4,0,0.2,1);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
+body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);min-height:100vh;-webkit-font-smoothing:antialiased;}
+.header{display:flex;align-items:center;gap:10px;padding:14px 16px;background:var(--navy2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50;}
+.btn-back{background:none;border:none;color:var(--orange);font-size:24px;cursor:pointer;padding:0 8px 0 0;line-height:1;flex-shrink:0;}
+.header-info{flex:1;min-width:0;}
+.header-sup{font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:2px;}
+.header-title{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.header-count{font-size:12px;color:rgba(253,246,236,0.4);font-weight:600;flex-shrink:0;}
+.progress-wrap{height:3px;background:rgba(255,255,255,0.08);}
+.progress-fill{height:100%;background:var(--orange);transition:width 0.5s ease;}
+.main{padding:16px 16px 40px;display:flex;flex-direction:column;gap:14px;max-width:600px;margin:0 auto;}
+.card{background:var(--navy2);border-radius:18px;border:1px solid var(--border);overflow:hidden;}
+.card-body{padding:18px;font-size:14px;line-height:1.75;color:rgba(253,246,236,0.85);}
+.card-body strong{color:var(--orange);}
+.card-body em{color:#a8e6cf;font-style:normal;font-weight:600;}
+.section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--orange);margin-bottom:10px;}
+.lesson-intro{padding:20px 18px 18px;}
+.lesson-tag{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--orange);background:rgba(244,124,58,0.12);border:1px solid rgba(244,124,58,0.2);padding:4px 10px;border-radius:99px;margin-bottom:12px;}
+.lesson-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--cream);margin-bottom:8px;line-height:1.2;}
+.lesson-desc{font-size:14px;color:rgba(253,246,236,0.7);line-height:1.7;}
+
+/* QUESTION TYPES */
+.q-type-card{margin:0 18px 14px;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);}
+.q-type-header{padding:12px 16px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;}
+.q-type-header.yn{background:rgba(96,165,250,0.1);color:var(--blue);}
+.q-type-header.wh{background:rgba(244,124,58,0.1);color:var(--orange);}
+.q-type-body{padding:14px 16px;font-size:13px;line-height:1.7;color:rgba(253,246,236,0.75);}
+.q-type-body strong{color:var(--cream);}
+.q-type-body em{color:#a8e6cf;font-style:normal;font-weight:600;}
+
+/* FORMULA */
+.formula-box{margin:0 18px 14px;padding:14px 16px;background:rgba(244,124,58,0.07);border:1px solid rgba(244,124,58,0.18);border-radius:14px;}
+.formula-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--orange);margin-bottom:10px;}
+.formula-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:8px;}
+.formula-row:last-child{margin-bottom:0;}
+.fc{padding:6px 12px;border-radius:8px;font-size:12px;font-weight:700;}
+.fc-v{background:rgba(244,124,58,0.2);color:var(--orange);border:1px solid rgba(244,124,58,0.3);}
+.fc-s{background:rgba(96,165,250,0.15);color:var(--blue);border:1px solid rgba(96,165,250,0.25);}
+.fc-r{background:rgba(255,255,255,0.08);color:var(--cream);border:1px solid rgba(255,255,255,0.12);}
+.fc-q{background:rgba(167,139,250,0.15);color:var(--purple);border:1px solid rgba(167,139,250,0.25);}
+.fc-plus{color:rgba(253,246,236,0.25);font-size:11px;}
+.formula-es{font-size:11px;color:rgba(253,246,236,0.3);font-style:italic;margin-top:4px;}
+
+/* PHRASE ROWS */
+.phrase-list{padding:0 18px 18px;display:flex;flex-direction:column;gap:8px;}
+.phrase-row{display:flex;align-items:center;gap:12px;padding:12px 14px;background:rgba(255,255,255,0.03);border-radius:14px;border:1px solid rgba(255,255,255,0.06);cursor:pointer;transition:all 0.18s;position:relative;user-select:none;}
+.phrase-row:active{transform:scale(0.97);background:rgba(244,124,58,0.08);}
+.phrase-row.playing{border-color:var(--orange);background:rgba(244,124,58,0.08);}
+.phrase-icon{font-size:18px;flex-shrink:0;}
+.phrase-content{flex:1;}
+.phrase-nl{font-size:14px;font-weight:700;color:var(--cream);margin-bottom:2px;}
+.phrase-nl strong{color:var(--orange);}
+.phrase-es{font-size:12px;color:rgba(253,246,236,0.4);font-style:italic;}
+.phrase-pron{font-size:10px;color:rgba(244,124,58,0.7);margin-top:2px;}
+.phrase-sound-btn{width:30px;height:30px;border-radius:50%;background:rgba(244,124,58,0.12);border:1px solid rgba(244,124,58,0.25);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.phrase-row.playing .phrase-sound-btn{background:var(--orange);border-color:var(--orange);animation:pulse-ring 1s infinite;}
+@keyframes pulse-ring{0%{box-shadow:0 0 0 0 rgba(244,124,58,0.5);}70%{box-shadow:0 0 0 8px rgba(244,124,58,0);}100%{box-shadow:0 0 0 0 rgba(244,124,58,0);}}
+
+.pron-bubble{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--navy3);border:1px solid var(--orange);border-radius:10px;padding:6px 14px;font-size:12px;font-weight:700;color:var(--orange);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 0.2s;z-index:10;}
+.pron-bubble::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--orange);}
+.pron-bubble.show{opacity:1;}
+
+/* DIALOGUE */
+.dialogue-wrap{padding:14px 18px 18px;display:flex;flex-direction:column;gap:10px;}
+.dialogue-bubble{max-width:88%;padding:12px 16px;border-radius:16px;font-size:13px;line-height:1.6;cursor:pointer;transition:all 0.18s;position:relative;user-select:none;}
+.bubble-a{background:var(--navy3);border:1px solid rgba(255,255,255,0.08);border-bottom-left-radius:4px;align-self:flex-start;}
+.bubble-b{background:rgba(244,124,58,0.1);border:1px solid rgba(244,124,58,0.18);border-bottom-right-radius:4px;align-self:flex-end;text-align:right;}
+.bubble-a:active,.bubble-b:active{transform:scale(0.97);}
+.bubble-a.playing{border-color:var(--orange);}
+.bubble-b.playing{border-color:var(--orange);background:rgba(244,124,58,0.18);}
+.bubble-who{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;color:rgba(253,246,236,0.35);}
+.bubble-nl{font-size:14px;font-weight:700;color:var(--cream);margin-bottom:2px;}
+.bubble-es{font-size:11px;color:rgba(253,246,236,0.38);font-style:italic;}
+.bubble-sound{font-size:10px;color:var(--orange);margin-top:4px;font-weight:600;}
+
+/* TIP */
+.tip-toggle{display:flex;align-items:center;gap:10px;padding:13px 18px;background:rgba(244,124,58,0.06);border-top:1px solid rgba(255,255,255,0.06);cursor:pointer;user-select:none;transition:background var(--ease);}
+.tip-toggle:hover{background:rgba(244,124,58,0.1);}
+.bulb-wrap{position:relative;width:28px;height:28px;flex-shrink:0;}
+.bulb-icon{font-size:22px;line-height:28px;display:block;text-align:center;transition:transform 0.3s ease;}
+.bulb-glow{position:absolute;inset:-4px;border-radius:50%;background:radial-gradient(circle,rgba(244,196,58,0.35),transparent 70%);opacity:0;transition:opacity 0.3s ease;pointer-events:none;}
+.tip-toggle.open .bulb-glow{opacity:1;}
+.tip-toggle.open .bulb-icon{transform:scale(1.15);filter:brightness(1.3);}
+@keyframes bulbPulse{0%,100%{opacity:0.5}50%{opacity:1}}
+.tip-toggle:not(.open) .bulb-glow{opacity:0.3;animation:bulbPulse 2s infinite;}
+.tip-label{font-size:13px;font-weight:600;color:var(--orange);flex:1;}
+.tip-arrow{color:rgba(244,124,58,0.6);font-size:16px;transition:transform 0.3s ease;}
+.tip-toggle.open .tip-arrow{transform:rotate(180deg);}
+.tip-content{display:none;padding:14px 18px;font-size:13px;line-height:1.7;color:rgba(253,246,236,0.7);background:rgba(244,124,58,0.04);border-top:1px solid rgba(255,255,255,0.04);animation:fadeDown 0.25s ease;}
+.tip-content.open{display:block;}
+.tip-content strong{color:var(--orange);}
+.tip-content em{color:#a8e6cf;font-style:normal;font-weight:600;}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+
+/* EXERCISE — WORD ORDER */
+.exercise-card{padding:18px;}
+.exercise-label{font-size:10px;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+.exercise-instruction{font-size:13px;color:rgba(253,246,236,0.5);margin-bottom:14px;font-style:italic;line-height:1.5;}
+.answer-slots{display:flex;flex-wrap:wrap;gap:8px;min-height:50px;padding:10px;background:rgba(0,0,0,0.2);border-radius:12px;margin-bottom:14px;border:1.5px dashed rgba(255,255,255,0.12);align-items:center;}
+.answer-slot{min-width:52px;height:36px;border-radius:8px;border:1.5px dashed rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--cream);padding:0 12px;background:rgba(255,255,255,0.04);transition:all 0.2s;cursor:pointer;user-select:none;}
+.answer-slot.filled{border-color:var(--orange);background:rgba(244,124,58,0.12);border-style:solid;}
+.answer-slot.filled:active{transform:scale(0.93);}
+.answer-slot.slot-correct{border-color:var(--green);background:rgba(46,204,138,0.15);color:var(--green);border-style:solid;cursor:default;}
+.answer-slot.slot-wrong{border-color:var(--red);background:rgba(232,69,90,0.15);color:var(--red);border-style:solid;}
+.word-bank{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+.word-chip{padding:8px 14px;border-radius:20px;background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,255,255,0.15);color:var(--cream);font-size:13px;font-weight:600;cursor:pointer;transition:all 0.15s;font-family:inherit;user-select:none;}
+.word-chip:active{transform:scale(0.93);}
+.word-chip.used{opacity:0.25;pointer-events:none;}
+.exercise-feedback{margin-top:4px;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:600;display:none;}
+.exercise-feedback.show{display:block;}
+.feedback-correct{background:rgba(46,204,138,0.15);color:var(--green);}
+.feedback-wrong{background:rgba(232,69,90,0.12);color:var(--red);}
+.btn-check{width:100%;padding:13px;background:var(--navy3);border:1.5px solid rgba(255,255,255,0.1);border-radius:12px;color:var(--cream);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:all var(--ease);margin-top:6px;}
+.btn-check:hover{background:rgba(244,124,58,0.15);border-color:var(--orange);}
+
+/* CHALLENGE */
+.challenge-card{padding:18px;}
+.challenge-label{font-size:10px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.challenge-question{font-size:14px;color:var(--cream);line-height:1.6;margin-bottom:14px;font-weight:600;}
+.challenge-options{display:flex;flex-direction:column;gap:8px;}
+.challenge-opt{padding:13px 16px;border-radius:12px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);color:var(--cream);font-size:13px;text-align:left;cursor:pointer;transition:all 0.15s;font-family:inherit;font-weight:500;}
+.challenge-opt:active{transform:scale(0.98);}
+.challenge-opt.opt-correct{border-color:var(--green);background:rgba(46,204,138,0.15);color:var(--green);font-weight:700;}
+.challenge-opt.opt-wrong{border-color:var(--red);background:rgba(232,69,90,0.12);color:var(--red);}
+.challenge-feedback{margin-top:12px;padding:12px 14px;border-radius:12px;font-size:13px;line-height:1.5;display:none;animation:fadeDown 0.25s ease;}
+.challenge-feedback.show{display:block;}
+.challenge-feedback strong{font-weight:700;}
+.challenge-feedback.fb-correct{background:rgba(46,204,138,0.12);color:var(--green);}
+.challenge-feedback.fb-wrong{background:rgba(232,69,90,0.1);color:var(--red);}
+
+.next-wrap{padding:0 0 8px;}
+.btn-next{width:100%;padding:17px;background:var(--orange);border:none;border-radius:14px;color:white;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;transition:all var(--ease);display:flex;align-items:center;justify-content:center;gap:8px;opacity:0.4;pointer-events:none;}
+.btn-next.unlocked{opacity:1;pointer-events:all;}
+.btn-next.unlocked:active{opacity:0.85;transform:scale(0.98);}
+.complete-screen{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;padding:40px 24px;text-align:center;gap:12px;}
+.complete-screen.show{display:flex;}
+.complete-emoji{font-size:64px;margin-bottom:8px;}
+.complete-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--cream);margin-bottom:4px;}
+.complete-sub{font-size:15px;color:rgba(253,246,236,0.5);line-height:1.6;max-width:300px;}
+.btn-continue{margin-top:16px;padding:16px 32px;background:var(--orange);border:none;border-radius:14px;color:white;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;}
+.divider{height:1px;background:rgba(255,255,255,0.06);margin:4px 18px 14px;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <button class="btn-back" onclick="history.back()">‹</button>
+  <div class="header-info">
+    <div class="header-sup">Módulo 0 · Fundamentos</div>
+    <div class="header-title">Preguntas Básicas</div>
+  </div>
+  <div class="header-count">Les 7 / 7</div>
+</div>
+<div class="progress-wrap"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+
+<div class="main" id="main-content">
+
+  <div class="card lesson-intro">
+    <div class="lesson-tag">📖 Lección 7 — Última del Módulo 0</div>
+    <div class="lesson-title">Preguntas Básicas</div>
+    <div class="lesson-desc">Con lo que aprendiste en las lecciones anteriores, ya puedes hacer y responder las preguntas más importantes del examen. Aquí las aprendemos todas juntas.</div>
+  </div>
+
+  <!-- DOS TIPOS DE PREGUNTAS -->
+  <div class="card">
+    <div class="card-body" style="padding-bottom:8px">
+      <div class="section-label">❓ Dos tipos de preguntas</div>
+    </div>
+    <div class="q-type-card">
+      <div class="q-type-header yn">🔵 Preguntas Sí/No</div>
+      <div class="q-type-body">El <strong>verbo va primero</strong>, luego el sujeto.<br>
+      Estructura: <em>Verbo + Sujeto + Resto?</em><br>
+      Ej: <strong>Werkt u hier?</strong> (¿Trabaja usted aquí?)</div>
+    </div>
+    <div class="q-type-card">
+      <div class="q-type-header wh">🟠 Preguntas con pronombre (Wh-)</div>
+      <div class="q-type-body">El <strong>pronombre interrogativo va primero</strong>, luego verbo y sujeto.<br>
+      Estructura: <em>Vraagwoord + Verbo + Sujeto + Resto?</em><br>
+      Ej: <strong>Waar woont u?</strong> (¿Dónde vive usted?)</div>
+    </div>
+
+    <div class="tip-toggle" id="tip1-toggle" onclick="toggleTip('tip1')">
+      <div class="bulb-wrap"><span class="bulb-icon">💡</span><div class="bulb-glow"></div></div>
+      <span class="tip-label">El verbo siempre va en posición 2</span>
+      <span class="tip-arrow">▾</span>
+    </div>
+    <div class="tip-content" id="tip1-content">
+      En neerlandés el verbo siempre ocupa la <strong>segunda posición</strong> de la oración — esto aplica en frases normales Y en preguntas. En preguntas Sí/No el verbo va primero porque no hay sujeto antes. En preguntas con pronombre, el pronombre ocupa posición 1 y el verbo posición 2. Verás esto en profundidad en el <em>Módulo 2 — Gramática</em>.
+    </div>
+  </div>
+
+  <!-- FÓRMULAS VISUALES -->
+  <div class="card">
+    <div class="card-body" style="padding-bottom:8px">
+      <div class="section-label">📐 Fórmulas</div>
+    </div>
+    <div class="formula-box">
+      <div class="formula-title">Pregunta Sí/No</div>
+      <div class="formula-row">
+        <span class="fc fc-v">Verbo</span>
+        <span class="fc-plus">+</span>
+        <span class="fc fc-s">Sujeto</span>
+        <span class="fc-plus">+</span>
+        <span class="fc fc-r">Resto</span>
+        <span class="fc-plus">+</span>
+        <span class="fc fc-q">?</span>
+      </div>
+      <div class="formula-es">Werkt + u + hier + ?</div>
+    </div>
+    <div class="formula-box" style="margin-top:0">
+      <div class="formula-title">Pregunta con Pronombre</div>
+      <div class="formula-row">
+        <span class="fc fc-q">Vraagwoord</span>
+        <span class="fc-plus">+</span>
+        <span class="fc fc-v">Verbo</span>
+        <span class="fc-plus">+</span>
+        <span class="fc fc-s">Sujeto</span>
+        <span class="fc-plus">+</span>
+        <span class="fc fc-r">Resto</span>
+        <span class="fc-plus">+</span>
+        <span class="fc fc-q">?</span>
+      </div>
+      <div class="formula-es">Waar + woont + u + ?</div>
+    </div>
+  </div>
+
+  <!-- VRAAGWOORDEN -->
+  <div class="card">
+    <div class="card-body" style="padding-bottom:8px">
+      <div class="section-label">🔑 Vraagwoorden — Pronombres interrogativos</div>
+      Toca cada uno para escucharlo:
+    </div>
+    <div class="phrase-list" style="padding-top:0">
+      <div class="phrase-row" onclick="speak('wie', 'vi', this)">
+        <div class="pron-bubble"></div>
+        <div class="phrase-icon">👤</div>
+        <div class="phrase-content">
+          <div class="phrase-nl"><strong>Wie</strong></div>
+          <div class="phrase-es">Quién</div>
+          <div class="phrase-pron">🔊 vi</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('wat', 'vat', this)">
+        <div class="pron-bubble"></div>
+        <div class="phrase-icon">❓</div>
+        <div class="phrase-content">
+          <div class="phrase-nl"><strong>Wat</strong></div>
+          <div class="phrase-es">Qué</div>
+          <div class="phrase-pron">🔊 vat</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('waar', 'vaar', this)">
+        <div class="pron-bubble"></div>
+        <div class="phrase-icon">📍</div>
+        <div class="phrase-content">
+          <div class="phrase-nl"><strong>Waar</strong></div>
+          <div class="phrase-es">Dónde</div>
+          <div class="phrase-pron">🔊 vaar</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('wanneer', 'va-NEER', this)">
+        <div class="pron-bubble"></div>
+        <div class="phrase-icon">📅</div>
+        <div class="phrase-content">
+          <div class="phrase-nl"><strong>Wanneer</strong></div>
+          <div class="phrase-es">Cuándo</div>
+          <div class="phrase-pron">🔊 va-NEER</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('waarom', 'vaa-ROM', this)">
+        <div class="pron-bubble"></div>
+        <div class="phrase-icon">🤔</div>
+        <div class="phrase-content">
+          <div class="phrase-nl"><strong>Waarom</strong></div>
+          <div class="phrase-es">Por qué</div>
+          <div class="phrase-pron">🔊 vaa-ROM</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('hoe', 'hu', this)">
+        <div class="pron-bubble"></div>
+        <div class="phrase-icon">🛠️</div>
+        <div class="phrase-content">
+          <div class="phrase-nl"><strong>Hoe</strong></div>
+          <div class="phrase-es">Cómo</div>
+          <div class="phrase-pron">🔊 hu</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('hoeveel', 'hu-FEEL', this)">
+        <div class="pron-bubble"></div>
+        <div class="phrase-icon">🔢</div>
+        <div class="phrase-content">
+          <div class="phrase-nl"><strong>Hoeveel</strong></div>
+          <div class="phrase-es">Cuánto / cuántos</div>
+          <div class="phrase-pron">🔊 hu-FEEL</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('welk welke', 'velk VEL-ke', this)">
+        <div class="pron-bubble"></div>
+        <div class="phrase-icon">☝️</div>
+        <div class="phrase-content">
+          <div class="phrase-nl"><strong>Welk / Welke</strong></div>
+          <div class="phrase-es">Cuál / cuáles</div>
+          <div class="phrase-pron">🔊 velk · VEL-ke</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+    </div>
+
+    <div class="tip-toggle" id="tip2-toggle" onclick="toggleTip('tip2')">
+      <div class="bulb-wrap"><span class="bulb-icon">💡</span><div class="bulb-glow"></div></div>
+      <span class="tip-label">Welk vs Welke — ¿cuándo usar cada uno?</span>
+      <span class="tip-arrow">▾</span>
+    </div>
+    <div class="tip-content" id="tip2-content">
+      <strong>Welk</strong> se usa con palabras <em>het</em>: <em>Welk huis?</em> (¿Qué casa?) · <strong>Welke</strong> se usa con palabras <em>de</em> y con plurales: <em>Welke auto? · Welke mensen?</em> No te preocupes demasiado por esto ahora — lo verás en detalle en el módulo de artículos.
+    </div>
+  </div>
+
+  <!-- PREGUNTAS DEL EXAMEN -->
+  <div class="card">
+    <div class="card-body" style="padding-bottom:8px">
+      <div class="section-label">📋 Preguntas del examen</div>
+      Las más importantes — toca para escuchar:
+    </div>
+    <div class="phrase-list" style="padding-top:0">
+      <div class="phrase-row" onclick="speak('Hoe heet u', 'hu heit uu', this)">
+        <div class="pron-bubble"></div>
+        <div class="phrase-icon">🏷️</div>
+        <div class="phrase-content">
+          <div class="phrase-nl"><strong>Hoe heet u?</strong></div>
+          <div class="phrase-es">¿Cómo se llama usted?</div>
+          <div class="phrase-pron">🔊 hu heit uu</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('Waar woont u', 'vaar voont uu', this)">
+        <div class="pron-bubble"></div>
+        <div class="phrase-icon">🏠</div>
+        <div class="phrase-content">
+          <div class="phrase-nl"><strong>Waar woont u?</strong></div>
+          <div class="phrase-es">¿Dónde vive usted?</div>
+          <div class="phrase-pron">🔊 vaar voont uu</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('Waar komt u vandaan', 'vaar komt uu fan-DAAN', this)">
+        <div class="pron-bubble"></div>
+        <div class="phrase-icon">🌍</div>
+        <div class="phrase-content">
+          <div class="phrase-nl"><strong>Waar komt u vandaan?</strong></div>
+          <div class="phrase-es">¿De dónde viene usted?</div>
+          <div class="phrase-pron">🔊 vaar komt uu fan-DAAN</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('Wat is uw beroep', 'vat is uu be-RUUP', this)">
+        <div class="pron-bubble"></div>
+        <div class="phrase-icon">💼</div>
+        <div class="phrase-content">
+          <div class="phrase-nl"><strong>Wat is uw beroep?</strong></div>
+          <div class="phrase-es">¿Cuál es su profesión?</div>
+          <div class="phrase-pron">🔊 vat is uu be-RUUP</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('Hoe oud bent u', 'hu aut bent uu', this)">
+        <div class="pron-bubble"></div>
+        <div class="phrase-icon">🎂</div>
+        <div class="phrase-content">
+          <div class="phrase-nl"><strong>Hoe oud bent u?</strong></div>
+          <div class="phrase-es">¿Cuántos años tiene usted?</div>
+          <div class="phrase-pron">🔊 hu aut bent uu</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('Heeft u kinderen', 'heft uu KIN-de-ren', this)">
+        <div class="pron-bubble"></div>
+        <div class="phrase-icon">👨‍👩‍👧</div>
+        <div class="phrase-content">
+          <div class="phrase-nl"><strong>Heeft u kinderen?</strong></div>
+          <div class="phrase-es">¿Tiene usted hijos?</div>
+          <div class="phrase-pron">🔊 heft uu KIN-de-ren</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('Spreekt u Nederlands', 'spreikt uu NEI-der-lants', this)">
+        <div class="pron-bubble"></div>
+        <div class="phrase-icon">🗣️</div>
+        <div class="phrase-content">
+          <div class="phrase-nl"><strong>Spreekt u Nederlands?</strong></div>
+          <div class="phrase-es">¿Habla usted neerlandés?</div>
+          <div class="phrase-pron">🔊 spreikt uu NEI-der-lants</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('Waarom wilt u in Nederland wonen', 'vaa-ROM vilt uu in NEI-der-lant VOO-nen', this)">
+        <div class="pron-bubble"></div>
+        <div class="phrase-icon">🌷</div>
+        <div class="phrase-content">
+          <div class="phrase-nl"><strong>Waarom wilt u in Nederland wonen?</strong></div>
+          <div class="phrase-es">¿Por qué quiere vivir en los Países Bajos?</div>
+          <div class="phrase-pron">🔊 vaa-ROM vilt uu in NEI-der-lant VOO-nen</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DIÁLOGO TIPO EXAMEN -->
+  <div class="card">
+    <div class="card-body" style="padding-bottom:8px">
+      <div class="section-label">🎭 Diálogo tipo examen</div>
+      Practica el diálogo completo — toca cada burbuja:
+    </div>
+    <div class="dialogue-wrap">
+      <div class="dialogue-bubble bubble-a" onclick="speak('Goedemiddag. Hoe heet u', 'ju-de-MI-daj. hu heit uu', this)">
+        <div class="pron-bubble"></div>
+        <div class="bubble-who">Examinador</div>
+        <div class="bubble-nl">Goedemiddag. Hoe heet u?</div>
+        <div class="bubble-es">Buenas tardes. ¿Cómo se llama?</div>
+        <div class="bubble-sound">🔊 toca para escuchar</div>
+      </div>
+      <div class="dialogue-bubble bubble-b" onclick="speak('Goedemiddag. Ik heet Neilis', 'ju-de-MI-daj. ik heit NAY-lis', this)">
+        <div class="pron-bubble"></div>
+        <div class="bubble-who">Tú</div>
+        <div class="bubble-nl">Goedemiddag. Ik heet Neilis.</div>
+        <div class="bubble-es">Buenas tardes. Me llamo Neilis.</div>
+        <div class="bubble-sound">🔊 toca para escuchar</div>
+      </div>
+      <div class="dialogue-bubble bubble-a" onclick="speak('Waar komt u vandaan', 'vaar komt uu fan-DAAN', this)">
+        <div class="pron-bubble"></div>
+        <div class="bubble-who">Examinador</div>
+        <div class="bubble-nl">Waar komt u vandaan?</div>
+        <div class="bubble-es">¿De dónde viene usted?</div>
+        <div class="bubble-sound">🔊 toca para escuchar</div>
+      </div>
+      <div class="dialogue-bubble bubble-b" onclick="speak('Ik kom uit Spanje. Ik ben geboren in Madrid', 'ik kom aut SPAN-ye. ik ben je-BOO-ren in ma-DRIT', this)">
+        <div class="pron-bubble"></div>
+        <div class="bubble-who">Tú</div>
+        <div class="bubble-nl">Ik kom uit Spanje. Ik ben geboren in Madrid.</div>
+        <div class="bubble-es">Vengo de España. Nací en Madrid.</div>
+        <div class="bubble-sound">🔊 toca para escuchar</div>
+      </div>
+      <div class="dialogue-bubble bubble-a" onclick="speak('Wat is uw beroep', 'vat is uu be-RUUP', this)">
+        <div class="pron-bubble"></div>
+        <div class="bubble-who">Examinador</div>
+        <div class="bubble-nl">Wat is uw beroep?</div>
+        <div class="bubble-es">¿Cuál es su profesión?</div>
+        <div class="bubble-sound">🔊 toca para escuchar</div>
+      </div>
+      <div class="dialogue-bubble bubble-b" onclick="speak('Ik werk als reisgids. Ik werk graag met mensen', 'ik verk als RAIS-jits. ik verk jraaj met MEN-sen', this)">
+        <div class="pron-bubble"></div>
+        <div class="bubble-who">Tú</div>
+        <div class="bubble-nl">Ik werk als reisgids. Ik werk graag met mensen.</div>
+        <div class="bubble-es">Trabajo como guía turístico/a. Me gusta trabajar con personas.</div>
+        <div class="bubble-sound">🔊 toca para escuchar</div>
+      </div>
+      <div class="dialogue-bubble bubble-a" onclick="speak('Waarom wilt u in Nederland wonen', 'vaa-ROM vilt uu in NEI-der-lant VOO-nen', this)">
+        <div class="pron-bubble"></div>
+        <div class="bubble-who">Examinador</div>
+        <div class="bubble-nl">Waarom wilt u in Nederland wonen?</div>
+        <div class="bubble-es">¿Por qué quiere vivir en Holanda?</div>
+        <div class="bubble-sound">🔊 toca para escuchar</div>
+      </div>
+      <div class="dialogue-bubble bubble-b" onclick="speak('Ik wil in Nederland wonen omdat mijn man daar woont', 'ik vil in NEI-der-lant VOO-nen OM-dat main man daar voont', this)">
+        <div class="pron-bubble"></div>
+        <div class="bubble-who">Tú</div>
+        <div class="bubble-nl">Ik wil in Nederland wonen omdat mijn man daar woont.</div>
+        <div class="bubble-es">Quiero vivir en Holanda porque mi marido vive allí.</div>
+        <div class="bubble-sound">🔊 toca para escuchar</div>
+      </div>
+    </div>
+
+    <div class="tip-toggle" id="tip3-toggle" onclick="toggleTip('tip3')">
+      <div class="bulb-wrap"><span class="bulb-icon">💡</span><div class="bulb-glow"></div></div>
+      <span class="tip-label">Omdat — el verbo va al final</span>
+      <span class="tip-arrow">▾</span>
+    </div>
+    <div class="tip-content" id="tip3-content">
+      ¿Notaste la última frase? <em>...omdat mijn man daar <strong>woont</strong>.</em> La palabra <strong>omdat</strong> (porque) hace que el verbo vaya al final de la cláusula. Esto es una regla gramatical muy importante que aprenderás en detalle en el <em>Módulo 2</em>. Por ahora memoriza esta frase como modelo.
+    </div>
+  </div>
+
+  <!-- EJERCICIO -->
+  <div class="card">
+    <div class="exercise-card">
+      <div class="exercise-label">✏️ Ejercicio — Forma la pregunta</div>
+      <div class="exercise-instruction">Ordena las palabras para formar la pregunta correcta:</div>
+
+      <!-- Ex 1 -->
+      <div style="margin-bottom:20px">
+        <div style="font-size:13px;font-weight:600;color:var(--cream);margin-bottom:4px">¿Dónde vive usted?</div>
+        <div class="answer-slots" id="ex1-slots"></div>
+        <div class="word-bank" id="ex1-bank"></div>
+        <div class="exercise-feedback" id="ex1-fb"></div>
+        <button class="btn-check" onclick="checkEx(1)">Comprobar</button>
+      </div>
+
+      <div class="divider" style="margin:0 0 18px"></div>
+
+      <!-- Ex 2 -->
+      <div style="margin-bottom:20px">
+        <div style="font-size:13px;font-weight:600;color:var(--cream);margin-bottom:4px">¿Cuál es su profesión?</div>
+        <div class="answer-slots" id="ex2-slots"></div>
+        <div class="word-bank" id="ex2-bank"></div>
+        <div class="exercise-feedback" id="ex2-fb"></div>
+        <button class="btn-check" onclick="checkEx(2)">Comprobar</button>
+      </div>
+
+      <div class="divider" style="margin:0 0 18px"></div>
+
+      <!-- Ex 3 -->
+      <div>
+        <div style="font-size:13px;font-weight:600;color:var(--cream);margin-bottom:4px">¿Habla usted neerlandés?</div>
+        <div class="answer-slots" id="ex3-slots"></div>
+        <div class="word-bank" id="ex3-bank"></div>
+        <div class="exercise-feedback" id="ex3-fb"></div>
+        <button class="btn-check" onclick="checkEx(3)">Comprobar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHALLENGE -->
+  <div class="card">
+    <div class="challenge-card">
+      <div class="challenge-label">🎯 Reto Final del Módulo 0</div>
+      <div class="challenge-question" id="ch-q"></div>
+      <div class="challenge-options" id="ch-opts"></div>
+      <div class="challenge-feedback" id="ch-fb"></div>
+    </div>
+  </div>
+
+  <div class="next-wrap">
+    <button class="btn-next" id="btn-next" onclick="goNext()">¡Completar Módulo 0! 🎉</button>
+  </div>
+</div>
+
+<div class="complete-screen" id="complete-screen">
+  <div class="complete-emoji">🏆</div>
+  <div class="complete-title">¡Módulo 0 completado!</div>
+  <div class="complete-sub">Has aprendido el alfabeto, saludos, presentación, pronombres, partes de la oración, los primeros verbos y las preguntas básicas. ¡Ya tienes la base para empezar la gramática!</div>
+  <button class="btn-continue" onclick="window.location.href='../modulo-1/index.html'">Continuar → Módulo 1: Artículos 🚀</button>
+</div>
+
+<script>
+const EXERCISES = {
+  1:{ answer:['Waar','woont','u?'], options:['woont','Waar','wonen','u?','ik'] },
+  2:{ answer:['Wat','is','uw','beroep?'], options:['uw','Wat','beroep?','is','werk'] },
+  3:{ answer:['Spreekt','u','Nederlands?'], options:['u','Spreekt','Nederlands?','spreek','jij'] },
+};
+
+const CHALLENGES = [
+  { q:'¿Cómo preguntas "¿Cuántos años tiene usted?" en neerlandés?', opts:['Hoeveel oud u bent?','Hoe oud bent u?','Hoe oud u bent?','Bent u oud?'], correct:1, fb:'✅ ¡Correcto! <strong>Hoe oud bent u?</strong> — Hoe (cómo/cuánto) + oud (viejo/años) + bent (verbo, posición 2) + u (sujeto).' },
+  { q:'Quieres preguntar "¿De dónde viene usted?". ¿Cuál es correcta?', opts:['Vandaan u komt waar?','Waar komt u vandaan?','Waar u komt vandaan?','U komt waar vandaan?'], correct:1, fb:'✅ ¡Exacto! <strong>Waar + komt + u + vandaan?</strong> — Vraagwoord primero, luego verbo, luego sujeto. <em>Vandaan</em> va al final.' },
+  { q:'¿Cuál de estas es una pregunta Sí/No correcta?', opts:['U werkt hier?','Werkt u hier?','Hier werkt u?','U hier werkt?'], correct:1, fb:'✅ ¡Bien! En preguntas Sí/No el <strong>verbo va primero</strong>: <em>Werkt u hier?</em> Si el sujeto va primero suena como una afirmación, no una pregunta.' },
+];
+
+let ex1Done=false, ex2Done=false, ex3Done=false, chDone=false, chIdx=0;
+let slots={1:[],2:[],3:[]}, banks={1:[],2:[],3:[]};
+let currentRow=null, bubbleTimers={};
+
+function speak(text,pron,rowEl){
+  window.speechSynthesis.cancel();
+  if(currentRow) clearBubble(currentRow);
+  const utter=new SpeechSynthesisUtterance(text);
+  utter.lang='nl-NL'; utter.rate=0.85;
+  showBubble(rowEl,pron); rowEl.classList.add('playing'); currentRow=rowEl;
+  utter.onend=()=>{ rowEl.classList.remove('playing'); clearTimeout(bubbleTimers['r']); bubbleTimers['r']=setTimeout(()=>clearBubble(rowEl),2000); };
+  utter.onerror=()=>{ rowEl.classList.remove('playing'); clearBubble(rowEl); };
+  window.speechSynthesis.speak(utter);
+}
+function showBubble(el,pron){ const b=el.querySelector('.pron-bubble'); if(!b)return; b.textContent=pron; b.classList.add('show'); }
+function clearBubble(el){ if(!el)return; el.classList.remove('playing'); const b=el.querySelector('.pron-bubble'); if(b)b.classList.remove('show'); }
+function toggleTip(id){ document.getElementById(id+'-toggle').classList.toggle('open'); document.getElementById(id+'-content').classList.toggle('open'); }
+
+function buildEx(num){
+  const ex=EXERCISES[num];
+  const sEl=document.getElementById(`ex${num}-slots`);
+  const bEl=document.getElementById(`ex${num}-bank`);
+  slots[num]=new Array(ex.answer.length).fill(null);
+  ex.answer.forEach((_,i)=>{ const s=document.createElement('div'); s.className='answer-slot'; s.id=`s${num}-${i}`; s.onclick=()=>removeSlot(num,i); sEl.appendChild(s); });
+  const sh=[...ex.options].sort(()=>Math.random()-0.5); banks[num]=sh;
+  sh.forEach((w,i)=>{ const c=document.createElement('button'); c.className='word-chip'; c.textContent=w; c.id=`c${num}-${i}`; c.onclick=()=>addSlot(num,w,i); bEl.appendChild(c); });
+}
+
+function addSlot(num,word,chipIdx){
+  const empty=slots[num].findIndex(s=>s===null); if(empty===-1)return;
+  slots[num][empty]={word,chipIdx};
+  const el=document.getElementById(`s${num}-${empty}`); el.textContent=word; el.classList.add('filled');
+  document.getElementById(`c${num}-${chipIdx}`).classList.add('used');
+}
+
+function removeSlot(num,idx){
+  if(!slots[num][idx])return;
+  const el=document.getElementById(`s${num}-${idx}`);
+  if(el.classList.contains('slot-correct')||el.classList.contains('slot-wrong'))return;
+  const {chipIdx}=slots[num][idx]; slots[num][idx]=null;
+  el.textContent=''; el.className='answer-slot';
+  document.getElementById(`c${num}-${chipIdx}`).classList.remove('used');
+}
+
+function checkEx(num){
+  const ex=EXERCISES[num];
+  if(slots[num].some(s=>s===null)){ showFb(`ex${num}-fb`,'⚠️ Coloca todas las palabras primero.',false); return; }
+  const user=slots[num].map(s=>s.word);
+  const ok=JSON.stringify(user)===JSON.stringify(ex.answer);
+  ex.answer.forEach((w,i)=>{ const el=document.getElementById(`s${num}-${i}`); el.classList.remove('filled'); el.classList.add(user[i]===w?'slot-correct':'slot-wrong'); });
+  if(ok){
+    showFb(`ex${num}-fb`,`✅ ¡Perfecto! "${ex.answer.join(' ')}"`,true);
+    if(num===1)ex1Done=true; if(num===2)ex2Done=true; if(num===3)ex3Done=true;
+    checkUnlock();
+  } else {
+    showFb(`ex${num}-fb`,`❌ Era: ${ex.answer.join(' ')}`,false);
+    setTimeout(()=>resetEx(num),1800);
+  }
+}
+
+function resetEx(num){
+  const ex=EXERCISES[num];
+  slots[num]=new Array(ex.answer.length).fill(null);
+  ex.answer.forEach((_,i)=>{ const el=document.getElementById(`s${num}-${i}`); el.textContent=''; el.className='answer-slot'; });
+  banks[num].forEach((_,i)=>document.getElementById(`c${num}-${i}`).classList.remove('used'));
+  document.getElementById(`ex${num}-fb`).className='exercise-feedback';
+}
+
+function showFb(id,msg,ok){ const el=document.getElementById(id); el.innerHTML=msg; el.className=`exercise-feedback ${ok?'feedback-correct':'feedback-wrong'} show`; }
+
+function buildChallenge(){ showChallenge(0); }
+function showChallenge(idx){
+  if(idx>=CHALLENGES.length){ chDone=true; checkUnlock(); return; }
+  const ch=CHALLENGES[idx];
+  document.getElementById('ch-q').textContent=ch.q;
+  const el=document.getElementById('ch-opts'); el.innerHTML='';
+  ch.opts.forEach((o,i)=>{ const b=document.createElement('button'); b.className='challenge-opt'; b.textContent=o; b.onclick=()=>answerCh(idx,i,b); el.appendChild(b); });
+  document.getElementById('ch-fb').className='challenge-feedback';
+  document.getElementById('ch-fb').innerHTML='';
+}
+
+function answerCh(cIdx,optIdx,btn){
+  const ch=CHALLENGES[cIdx];
+  document.querySelectorAll('.challenge-opt').forEach(b=>b.style.pointerEvents='none');
+  const fb=document.getElementById('ch-fb');
+  if(optIdx===ch.correct){ btn.classList.add('opt-correct'); fb.innerHTML=ch.fb; fb.className='challenge-feedback fb-correct show'; }
+  else { btn.classList.add('opt-wrong'); document.querySelectorAll('.challenge-opt')[ch.correct].classList.add('opt-correct'); fb.innerHTML=`❌ No exactamente. ${ch.fb}`; fb.className='challenge-feedback fb-wrong show'; }
+  setTimeout(()=>{ chIdx++; showChallenge(chIdx); },2200);
+}
+
+function checkUnlock(){
+  let p=0;
+  if(ex1Done)p+=17; if(ex2Done)p+=17; if(ex3Done)p+=16; if(chDone)p+=50;
+  document.getElementById('progress-fill').style.width=p+'%';
+  if(ex1Done&&ex2Done&&ex3Done&&chDone) document.getElementById('btn-next').classList.add('unlocked');
+}
+
+function goNext(){ document.getElementById('main-content').style.display='none'; document.getElementById('complete-screen').classList.add('show'); }
+
+[1,2,3].forEach(buildEx); buildChallenge();
+</script>
+</body>
+</html>
 
