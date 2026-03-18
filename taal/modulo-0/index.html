@@ -1,1 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SlaagNL — Módulo 0</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0d1f3c;--navy2:#162d54;--navy3:#1e3a6e;
+  --orange:#f47c3a;--cream:#fdf6ec;--green:#2ecc8a;--red:#e8455a;
+  --purple:#a78bfa;--muted:#6b7a99;
+  --border:rgba(255,255,255,0.07);--ease:0.22s cubic-bezier(0.4,0,0.2,1);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
+body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);min-height:100vh;-webkit-font-smoothing:antialiased;}
+
+/* HEADER */
+.header{display:flex;align-items:center;gap:10px;padding:14px 16px;background:var(--navy2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50;}
+.btn-back{background:none;border:none;color:var(--orange);font-size:24px;cursor:pointer;padding:0 8px 0 0;line-height:1;flex-shrink:0;}
+.header-info{flex:1;min-width:0;}
+.header-sup{font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:2px;}
+.header-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--cream);}
+
+/* HERO */
+.hero{padding:24px 20px 20px;background:linear-gradient(160deg,var(--navy2),var(--navy3));border-bottom:1px solid var(--border);}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--orange);background:rgba(244,124,58,0.12);border:1px solid rgba(244,124,58,0.2);padding:4px 10px;border-radius:99px;margin-bottom:12px;}
+.hero-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:var(--cream);line-height:1.2;margin-bottom:8px;}
+.hero-desc{font-size:13px;color:rgba(253,246,236,0.6);line-height:1.6;margin-bottom:18px;}
+
+/* PROGRESS */
+.progress-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+.progress-label{font-size:11px;font-weight:700;color:rgba(253,246,236,0.5);text-transform:uppercase;letter-spacing:0.8px;}
+.progress-pct{font-size:11px;font-weight:700;color:var(--orange);margin-left:auto;}
+.progress-bar{height:6px;background:rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--orange),#f4c842);border-radius:10px;transition:width 0.6s ease;}
+
+/* STATS ROW */
+.stats-row{display:flex;gap:12px;margin-top:16px;}
+.stat-pill{flex:1;padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:12px;text-align:center;}
+.stat-pill-num{font-family:'Playfair Display',serif;font-size:18px;font-weight:900;line-height:1;}
+.stat-pill-num.done{color:var(--green);}
+.stat-pill-num.locked{color:var(--muted);}
+.stat-pill-num.total{color:var(--orange);}
+.stat-pill-label{font-size:10px;color:rgba(253,246,236,0.4);text-transform:uppercase;letter-spacing:0.8px;margin-top:3px;}
+
+/* LESSONS LIST */
+.lessons-wrap{padding:16px 16px 40px;display:flex;flex-direction:column;gap:10px;max-width:600px;margin:0 auto;}
+
+.les-card{
+  display:flex;align-items:center;gap:14px;
+  padding:16px 16px;
+  background:var(--navy2);
+  border-radius:18px;
+  border:1px solid var(--border);
+  cursor:pointer;
+  transition:all var(--ease);
+  text-decoration:none;
+  color:inherit;
+  position:relative;
+  overflow:hidden;
+}
+.les-card.available:active{transform:scale(0.98);}
+.les-card.available:hover{border-color:rgba(244,124,58,0.3);background:rgba(22,45,84,0.9);}
+.les-card.completed{border-color:rgba(46,204,138,0.2);background:rgba(46,204,138,0.04);}
+.les-card.locked{opacity:0.55;cursor:not-allowed;}
+.les-card.locked:active{transform:none;}
+
+/* Shimmer on available */
+.les-card.available::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(244,124,58,0.04),transparent);
+  animation:shimmer 3s infinite;
+}
+@keyframes shimmer{0%{transform:translateX(-100%);}100%{transform:translateX(100%);}}
+
+/* Status icon */
+.les-status{
+  width:44px;height:44px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;flex-shrink:0;
+  transition:all var(--ease);
+}
+.les-status.done{background:rgba(46,204,138,0.15);border:2px solid rgba(46,204,138,0.3);}
+.les-status.current{background:rgba(244,124,58,0.15);border:2px solid rgba(244,124,58,0.4);animation:pulse-border 2s infinite;}
+.les-status.locked-s{background:rgba(255,255,255,0.04);border:2px solid rgba(255,255,255,0.08);}
+
+@keyframes pulse-border{
+  0%,100%{border-color:rgba(244,124,58,0.4);}
+  50%{border-color:rgba(244,124,58,0.9);}
+}
+
+/* Content */
+.les-content{flex:1;min-width:0;}
+.les-num{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;}
+.les-num.done{color:var(--green);}
+.les-num.current{color:var(--orange);}
+.les-num.locked-t{color:rgba(253,246,236,0.3);}
+
+.les-title{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--cream);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.les-card.locked .les-title{color:rgba(253,246,236,0.4);}
+
+.les-desc{font-size:12px;color:rgba(253,246,236,0.4);line-height:1.4;}
+.les-card.locked .les-desc{color:rgba(253,246,236,0.2);}
+
+/* XP badge */
+.les-xp{font-size:11px;font-weight:700;color:var(--orange);background:rgba(244,124,58,0.1);border:1px solid rgba(244,124,58,0.2);padding:3px 8px;border-radius:99px;margin-top:4px;display:inline-block;}
+.les-card.completed .les-xp{color:var(--green);background:rgba(46,204,138,0.1);border-color:rgba(46,204,138,0.2);}
+
+/* Arrow */
+.les-arrow{font-size:18px;flex-shrink:0;transition:transform var(--ease);}
+.les-card.available:hover .les-arrow{transform:translateX(4px);}
+.les-card.locked .les-arrow{opacity:0.2;}
+
+/* PREMIUM BANNER */
+.premium-banner{
+  margin:0 16px;
+  padding:16px;
+  background:linear-gradient(135deg,rgba(167,139,250,0.12),rgba(244,124,58,0.08));
+  border:1px solid rgba(167,139,250,0.25);
+  border-radius:16px;
+  display:flex;align-items:center;gap:12px;
+  cursor:pointer;
+  transition:all var(--ease);
+}
+.premium-banner:active{transform:scale(0.98);}
+.premium-icon{font-size:28px;flex-shrink:0;}
+.premium-text{flex:1;}
+.premium-title{font-size:13px;font-weight:700;color:var(--purple);margin-bottom:2px;}
+.premium-sub{font-size:11px;color:rgba(253,246,236,0.45);line-height:1.4;}
+.premium-arrow{font-size:16px;color:var(--purple);flex-shrink:0;}
+
+/* CONNECTOR LINE */
+.connector{width:2px;height:10px;background:rgba(255,255,255,0.06);margin:0 auto;border-radius:2px;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <button class="btn-back" onclick="history.back()">‹</button>
+  <div class="header-info">
+    <div class="header-sup">Taal · Lengua</div>
+    <div class="header-title">Módulo 0 — Fundamentos</div>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">🧱 Base absoluta</div>
+  <div class="hero-title">Fundamentos del Neerlandés</div>
+  <div class="hero-desc">Antes de la gramática, necesitas esta base: el alfabeto, los saludos, cómo presentarte, y los primeros verbos. Sin esto, nada de lo que sigue tiene sentido.</div>
+
+  <div class="progress-row">
+    <span class="progress-label">Tu progreso</span>
+    <span class="progress-pct" id="prog-pct">0%</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+
+  <div class="stats-row">
+    <div class="stat-pill">
+      <div class="stat-pill-num done" id="stat-done">0</div>
+      <div class="stat-pill-label">Completadas</div>
+    </div>
+    <div class="stat-pill">
+      <div class="stat-pill-num locked" id="stat-locked">6</div>
+      <div class="stat-pill-label">Bloqueadas</div>
+    </div>
+    <div class="stat-pill">
+      <div class="stat-pill-num total">7</div>
+      <div class="stat-pill-label">Total</div>
+    </div>
+  </div>
+</div>
+
+<!-- LESSONS -->
+<div class="lessons-wrap" id="lessons-list"></div>
+
+<script>
+const LESSONS = [
+  { num:1, file:'les-1.html', icon:'🔤', title:'El Alfabeto y la Pronunciación', desc:'26 letras, sonidos clave, combinaciones especiales', xp:'+50 XP' },
+  { num:2, file:'les-2.html', icon:'👋', title:'Saludos y Despedidas', desc:'Hallo, Goedemorgen, Tot ziens — formal e informal', xp:'+50 XP' },
+  { num:3, file:'les-3.html', icon:'🪪', title:'Presentarse', desc:'Ik heet, Ik kom uit, Ik werk als...', xp:'+50 XP' },
+  { num:4, file:'les-4.html', icon:'👤', title:'Pronombres Personales', desc:'Ik, jij, hij, zij, wij, jullie — y el formal U', xp:'+50 XP' },
+  { num:5, file:'les-5.html', icon:'🧩', title:'Partes de la Oración', desc:'Sujeto, verbo, objeto, complemento con colores', xp:'+50 XP' },
+  { num:6, file:'les-6.html', icon:'🌱', title:'Primeros Verbos Esenciales', desc:'Zijn, hebben, heten, wonen, werken conjugados', xp:'+50 XP' },
+  { num:7, file:'les-7.html', icon:'❓', title:'Preguntas Básicas', desc:'Hoe heet u? Waar woont u? Vraagwoorden', xp:'+100 XP' },
+];
+
+// ── STORAGE KEYS ──
+const KEY_PREFIX = 'slaagnl_m0_';
+const KEY_PREMIUM = 'slaagnl_premium';
+
+function isDone(num){ return localStorage.getItem(KEY_PREFIX + num) === 'done'; }
+function isPremium(){ return localStorage.getItem(KEY_PREMIUM) === 'true'; }
+
+// For demo: mark a lesson done via URL param ?done=N
+(()=>{
+  const p=new URLSearchParams(window.location.search);
+  if(p.has('done')){ localStorage.setItem(KEY_PREFIX+p.get('done'),'done'); window.history.replaceState({},'',window.location.pathname); }
+})();
+
+function getStatus(num){
+  if(isDone(num)) return 'completed';
+  if(isPremium()) return 'available';
+  // Free: only first lesson and next unlocked
+  if(num===1) return 'available';
+  if(isDone(num-1)) return 'available';
+  return 'locked';
+}
+
+function buildList(){
+  const container=document.getElementById('lessons-list');
+  container.innerHTML='';
+  let doneCount=0;
+
+  LESSONS.forEach((les,i)=>{
+    const status=getStatus(les.num);
+    if(status==='completed') doneCount++;
+
+    // Connector
+    if(i>0){ const conn=document.createElement('div'); conn.className='connector'; container.appendChild(conn); }
+
+    const card=document.createElement(status==='locked'?'div':'a');
+    card.className=`les-card ${status==='completed'?'completed':status==='available'?'available':'locked'}`;
+    if(status!=='locked') card.href=les.file;
+
+    // Status icon
+    let statusIcon, statusClass, numClass;
+    if(status==='completed'){ statusIcon='✅'; statusClass='done'; numClass='done'; }
+    else if(status==='available' && !isDone(les.num)){ statusIcon=les.icon; statusClass='current'; numClass='current'; }
+    else if(status==='available'){ statusIcon=les.icon; statusClass='current'; numClass='current'; }
+    else { statusIcon='🔒'; statusClass='locked-s'; numClass='locked-t'; }
+
+    card.innerHTML=`
+      <div class="les-status ${statusClass}">${statusIcon}</div>
+      <div class="les-content">
+        <div class="les-num ${numClass}">Lección ${les.num} ${status==='completed'?'· Completada':status==='locked'?'· Bloqueada':''}</div>
+        <div class="les-title">${les.title}</div>
+        <div class="les-desc">${les.desc}</div>
+        <div class="les-xp">${status==='completed'?'✓ Completada':les.xp}</div>
+      </div>
+      <div class="les-arrow">${status==='locked'?'🔒':'›'}</div>
+    `;
+
+    container.appendChild(card);
+  });
+
+  // Update stats
+  const pct=Math.round(doneCount/LESSONS.length*100);
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('prog-pct').textContent=pct+'%';
+  document.getElementById('stat-done').textContent=doneCount;
+  document.getElementById('stat-locked').textContent=LESSONS.length-doneCount;
+
+  // Premium banner if free user hasn't completed all
+  if(!isPremium() && doneCount < LESSONS.length){
+    const banner=document.createElement('div');
+    banner.className='premium-banner';
+    banner.innerHTML=`
+      <div class="premium-icon">⭐</div>
+      <div class="premium-text">
+        <div class="premium-title">Desbloquea todo con Premium</div>
+        <div class="premium-sub">Accede a todas las lecciones libremente sin esperar a completar cada una.</div>
+      </div>
+      <div class="premium-arrow">›</div>
+    `;
+    banner.onclick=()=>alert('¡Próximamente! La suscripción Premium estará disponible pronto.');
+    container.appendChild(banner);
+  }
+}
+
+buildList();
+</script>
+</body>
+</html>
 
