@@ -1,1 +1,1087 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SlaagNL — Módulo 0 · Les 2</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:    #0d1f3c;
+  --navy2:   #162d54;
+  --navy3:   #1e3a6e;
+  --orange:  #f47c3a;
+  --orange2: #e86a24;
+  --cream:   #fdf6ec;
+  --cream2:  #f5ead8;
+  --green:   #2ecc8a;
+  --yellow:  #f4c842;
+  --red:     #e8455a;
+  --border:  rgba(255,255,255,0.07);
+  --ease:    0.22s cubic-bezier(0.4,0,0.2,1);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { -webkit-text-size-adjust:100%; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--navy);
+  color: var(--cream);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── HEADER ── */
+.header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 16px;
+  background: var(--navy2);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 50;
+}
+.btn-back {
+  background: none; border: none;
+  color: var(--orange); font-size: 24px;
+  cursor: pointer; padding: 0 8px 0 0; line-height: 1; flex-shrink: 0;
+}
+.header-info { flex: 1; min-width: 0; }
+.header-sup {
+  font-size: 10px; color: var(--orange);
+  text-transform: uppercase; letter-spacing: 1.2px;
+  font-weight: 700; margin-bottom: 2px;
+}
+.header-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 15px; font-weight: 700; color: var(--cream);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.header-count { font-size: 12px; color: rgba(253,246,236,0.4); font-weight: 600; flex-shrink: 0; }
+
+/* ── PROGRESS ── */
+.progress-wrap { height: 3px; background: rgba(255,255,255,0.08); }
+.progress-fill { height: 100%; background: var(--orange); transition: width 0.5s ease; }
+
+/* ── MAIN ── */
+.main {
+  padding: 16px 16px 40px;
+  display: flex; flex-direction: column; gap: 14px;
+  max-width: 600px; margin: 0 auto;
+}
+
+/* ── CARDS ── */
+.card {
+  background: var(--navy2);
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.card-body {
+  padding: 18px;
+  font-size: 14px; line-height: 1.75;
+  color: rgba(253,246,236,0.85);
+}
+.card-body strong { color: var(--orange); }
+.card-body em { color: #a8e6cf; font-style: normal; font-weight: 600; }
+
+.section-label {
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1.2px;
+  color: var(--orange); margin-bottom: 10px;
+}
+
+/* ── LESSON INTRO ── */
+.lesson-intro { padding: 20px 18px 18px; }
+.lesson-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1.2px; color: var(--orange);
+  background: rgba(244,124,58,0.12);
+  border: 1px solid rgba(244,124,58,0.2);
+  padding: 4px 10px; border-radius: 99px; margin-bottom: 12px;
+}
+.lesson-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px; font-weight: 900; color: var(--cream);
+  margin-bottom: 8px; line-height: 1.2;
+}
+.lesson-desc {
+  font-size: 14px; color: rgba(253,246,236,0.7); line-height: 1.7;
+}
+
+/* ── PHRASE ROW (tappable) ── */
+.phrase-list {
+  padding: 0 18px 18px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+
+.phrase-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 13px 14px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.06);
+  cursor: pointer;
+  transition: all 0.18s;
+  position: relative;
+  user-select: none;
+}
+
+.phrase-row:active { transform: scale(0.97); background: rgba(244,124,58,0.08); border-color: rgba(244,124,58,0.25); }
+.phrase-row.playing { border-color: var(--orange); background: rgba(244,124,58,0.08); }
+
+.phrase-icon { font-size: 20px; flex-shrink: 0; }
+
+.phrase-content { flex: 1; min-width: 0; }
+
+.phrase-nl {
+  font-size: 15px; font-weight: 700; color: var(--cream);
+  margin-bottom: 2px;
+}
+
+.phrase-es {
+  font-size: 12px; color: rgba(253,246,236,0.45); font-style: italic;
+}
+
+.phrase-sound-btn {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: rgba(244,124,58,0.12);
+  border: 1px solid rgba(244,124,58,0.25);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+  transition: all 0.18s;
+}
+
+.phrase-row.playing .phrase-sound-btn {
+  background: var(--orange);
+  border-color: var(--orange);
+  animation: pulse-ring 1s infinite;
+}
+
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(244,124,58,0.5); }
+  70% { box-shadow: 0 0 0 8px rgba(244,124,58,0); }
+  100% { box-shadow: 0 0 0 0 rgba(244,124,58,0); }
+}
+
+/* Pronunciation bubble */
+.pron-bubble {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%; transform: translateX(-50%);
+  background: var(--navy3);
+  border: 1px solid var(--orange);
+  border-radius: 10px;
+  padding: 6px 14px;
+  font-size: 12px; font-weight: 700;
+  color: var(--orange);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  z-index: 10;
+}
+
+.pron-bubble::after {
+  content: '';
+  position: absolute;
+  top: 100%; left: 50%; transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--orange);
+}
+
+.pron-bubble.show { opacity: 1; }
+
+/* ── CONTEXT TAG ── */
+.context-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.8px;
+  padding: 3px 8px; border-radius: 99px; margin-bottom: 10px;
+}
+.tag-formal { background: rgba(167,139,250,0.15); color: #a78bfa; border: 1px solid rgba(167,139,250,0.25); }
+.tag-informal { background: rgba(46,204,138,0.12); color: var(--green); border: 1px solid rgba(46,204,138,0.2); }
+.tag-both { background: rgba(244,124,58,0.12); color: var(--orange); border: 1px solid rgba(244,124,58,0.2); }
+
+/* ── GROUP SECTION ── */
+.group-section { padding: 16px 18px 4px; }
+.group-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 15px; font-weight: 700; color: var(--cream);
+  margin-bottom: 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+
+/* ── TIP / LIGHTBULB ── */
+.tip-toggle {
+  display: flex; align-items: center; gap: 10px;
+  padding: 13px 18px;
+  background: rgba(244,124,58,0.06);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  cursor: pointer; user-select: none;
+  transition: background var(--ease);
+}
+.tip-toggle:hover { background: rgba(244,124,58,0.1); }
+
+.bulb-wrap { position: relative; width: 28px; height: 28px; flex-shrink: 0; }
+.bulb-icon { font-size: 22px; line-height: 28px; display: block; text-align: center; transition: transform 0.3s ease; }
+.bulb-glow {
+  position: absolute; inset: -4px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(244,196,58,0.35), transparent 70%);
+  opacity: 0; transition: opacity 0.3s ease; pointer-events: none;
+}
+.tip-toggle.open .bulb-glow { opacity: 1; }
+.tip-toggle.open .bulb-icon { transform: scale(1.15); filter: brightness(1.3); }
+@keyframes bulbPulse { 0%,100%{opacity:0.5} 50%{opacity:1} }
+.tip-toggle:not(.open) .bulb-glow { opacity: 0.3; animation: bulbPulse 2s infinite; }
+
+.tip-label { font-size: 13px; font-weight: 600; color: var(--orange); flex: 1; }
+.tip-arrow { color: rgba(244,124,58,0.6); font-size: 16px; transition: transform 0.3s ease; }
+.tip-toggle.open .tip-arrow { transform: rotate(180deg); }
+
+.tip-content {
+  display: none; padding: 14px 18px;
+  font-size: 13px; line-height: 1.7;
+  color: rgba(253,246,236,0.7);
+  background: rgba(244,124,58,0.04);
+  border-top: 1px solid rgba(255,255,255,0.04);
+  animation: fadeDown 0.25s ease;
+}
+.tip-content.open { display: block; }
+.tip-content strong { color: var(--orange); }
+.tip-content em { color: #a8e6cf; font-style: normal; font-weight: 600; }
+
+@keyframes fadeDown {
+  from { opacity:0; transform:translateY(-6px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* ── DIALOGUE ── */
+.dialogue-wrap { padding: 14px 18px 18px; display: flex; flex-direction: column; gap: 10px; }
+
+.dialogue-bubble {
+  max-width: 85%;
+  padding: 12px 16px;
+  border-radius: 16px;
+  font-size: 13px; line-height: 1.6;
+  cursor: pointer;
+  transition: all 0.18s;
+  position: relative;
+  user-select: none;
+}
+
+.bubble-a {
+  background: var(--navy3);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-bottom-left-radius: 4px;
+  align-self: flex-start;
+}
+
+.bubble-b {
+  background: rgba(244,124,58,0.12);
+  border: 1px solid rgba(244,124,58,0.2);
+  border-bottom-right-radius: 4px;
+  align-self: flex-end;
+  text-align: right;
+}
+
+.bubble-a:active, .bubble-b:active { transform: scale(0.97); }
+.bubble-a.playing { border-color: var(--orange); }
+.bubble-b.playing { border-color: var(--orange); background: rgba(244,124,58,0.2); }
+
+.bubble-who {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1px; margin-bottom: 4px;
+  color: rgba(253,246,236,0.4);
+}
+
+.bubble-nl { font-size: 14px; font-weight: 700; color: var(--cream); margin-bottom: 2px; }
+.bubble-es { font-size: 11px; color: rgba(253,246,236,0.4); font-style: italic; }
+.bubble-sound { font-size: 10px; color: var(--orange); margin-top: 4px; font-weight: 600; }
+
+/* ── EXERCISE ── */
+.exercise-card { padding: 18px; }
+.exercise-label {
+  font-size: 10px; font-weight: 700; color: var(--orange);
+  text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;
+}
+.exercise-instruction {
+  font-size: 13px; color: rgba(253,246,236,0.5);
+  margin-bottom: 14px; font-style: italic; line-height: 1.5;
+}
+
+/* Match exercise */
+.match-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+  margin-bottom: 14px;
+}
+
+.match-item {
+  padding: 12px 10px;
+  border-radius: 12px;
+  border: 1.5px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.04);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.18s;
+  font-family: inherit;
+  user-select: none;
+}
+
+.match-item:active { transform: scale(0.95); }
+
+.match-item.selected {
+  border-color: var(--orange);
+  background: rgba(244,124,58,0.12);
+}
+
+.match-item.match-correct {
+  border-color: var(--green);
+  background: rgba(46,204,138,0.12);
+  color: var(--green);
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.match-item.match-wrong {
+  border-color: var(--red);
+  background: rgba(232,69,90,0.1);
+  animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+.match-nl { font-size: 14px; font-weight: 700; color: var(--cream); margin-bottom: 2px; }
+.match-tag { font-size: 10px; color: rgba(253,246,236,0.4); }
+
+/* Answer slots + word bank */
+.answer-slots {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  min-height: 50px; padding: 10px;
+  background: rgba(0,0,0,0.2); border-radius: 12px;
+  margin-bottom: 14px;
+  border: 1.5px dashed rgba(255,255,255,0.12);
+  align-items: center;
+}
+.answer-slot {
+  min-width: 52px; height: 36px; border-radius: 8px;
+  border: 1.5px dashed rgba(255,255,255,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 600; color: var(--cream);
+  padding: 0 12px; background: rgba(255,255,255,0.04);
+  transition: all 0.2s; cursor: pointer; user-select: none;
+}
+.answer-slot.filled { border-color: var(--orange); background: rgba(244,124,58,0.12); border-style: solid; }
+.answer-slot.filled:active { transform: scale(0.93); }
+.answer-slot.slot-correct { border-color: var(--green); background: rgba(46,204,138,0.15); color: var(--green); border-style: solid; cursor: default; }
+.answer-slot.slot-wrong { border-color: var(--red); background: rgba(232,69,90,0.15); color: var(--red); border-style: solid; }
+
+.word-bank { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.word-chip {
+  padding: 8px 14px; border-radius: 20px;
+  background: rgba(255,255,255,0.07);
+  border: 1.5px solid rgba(255,255,255,0.15);
+  color: var(--cream); font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: all 0.15s;
+  font-family: inherit; user-select: none;
+}
+.word-chip:active { transform: scale(0.93); }
+.word-chip.used { opacity: 0.25; pointer-events: none; }
+
+.exercise-feedback {
+  margin-top: 4px; padding: 10px 14px;
+  border-radius: 10px; font-size: 13px; font-weight: 600;
+  display: none;
+}
+.exercise-feedback.show { display: block; }
+.feedback-correct { background: rgba(46,204,138,0.15); color: var(--green); }
+.feedback-wrong   { background: rgba(232,69,90,0.12); color: var(--red); }
+
+.btn-check {
+  width: 100%; padding: 13px;
+  background: var(--navy3);
+  border: 1.5px solid rgba(255,255,255,0.1);
+  border-radius: 12px; color: var(--cream);
+  font-size: 14px; font-weight: 600;
+  cursor: pointer; font-family: inherit;
+  transition: all var(--ease); margin-top: 6px;
+}
+.btn-check:hover { background: rgba(244,124,58,0.15); border-color: var(--orange); }
+
+/* ── CHALLENGE ── */
+.challenge-card { padding: 18px; }
+.challenge-label {
+  font-size: 10px; font-weight: 700; color: #a78bfa;
+  text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;
+}
+.challenge-question {
+  font-size: 14px; color: var(--cream);
+  line-height: 1.6; margin-bottom: 14px; font-weight: 600;
+}
+.challenge-options { display: flex; flex-direction: column; gap: 8px; }
+.challenge-opt {
+  padding: 13px 16px; border-radius: 12px;
+  background: rgba(255,255,255,0.05);
+  border: 1.5px solid rgba(255,255,255,0.1);
+  color: var(--cream); font-size: 13px;
+  text-align: left; cursor: pointer;
+  transition: all 0.15s; font-family: inherit; font-weight: 500;
+}
+.challenge-opt:active { transform: scale(0.98); }
+.challenge-opt.opt-correct { border-color: var(--green); background: rgba(46,204,138,0.15); color: var(--green); font-weight: 700; }
+.challenge-opt.opt-wrong { border-color: var(--red); background: rgba(232,69,90,0.12); color: var(--red); }
+.challenge-feedback {
+  margin-top: 12px; padding: 12px 14px;
+  border-radius: 12px; font-size: 13px; line-height: 1.5;
+  display: none; animation: fadeDown 0.25s ease;
+}
+.challenge-feedback.show { display: block; }
+.challenge-feedback strong { font-weight: 700; }
+.challenge-feedback.fb-correct { background: rgba(46,204,138,0.12); color: var(--green); }
+.challenge-feedback.fb-wrong   { background: rgba(232,69,90,0.1); color: var(--red); }
+
+/* ── NEXT ── */
+.next-wrap { padding: 0 0 8px; }
+.btn-next {
+  width: 100%; padding: 17px;
+  background: var(--orange); border: none;
+  border-radius: 14px; color: white;
+  font-size: 16px; font-weight: 700;
+  cursor: pointer; font-family: inherit;
+  transition: all var(--ease);
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  opacity: 0.4; pointer-events: none;
+}
+.btn-next.unlocked { opacity: 1; pointer-events: all; }
+.btn-next.unlocked:active { opacity: 0.85; transform: scale(0.98); }
+
+/* ── COMPLETE ── */
+.complete-screen {
+  display: none; flex-direction: column;
+  align-items: center; justify-content: center;
+  min-height: 60vh; padding: 40px 24px;
+  text-align: center; gap: 12px;
+}
+.complete-screen.show { display: flex; }
+.complete-emoji { font-size: 64px; margin-bottom: 8px; }
+.complete-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px; font-weight: 900; color: var(--cream); margin-bottom: 4px;
+}
+.complete-sub {
+  font-size: 15px; color: rgba(253,246,236,0.5);
+  line-height: 1.6; max-width: 280px;
+}
+.btn-continue {
+  margin-top: 16px; padding: 16px 32px;
+  background: var(--orange); border: none;
+  border-radius: 14px; color: white;
+  font-size: 16px; font-weight: 700;
+  cursor: pointer; font-family: inherit;
+}
+
+.divider { height: 1px; background: rgba(255,255,255,0.06); margin: 4px 18px 14px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <button class="btn-back" onclick="history.back()">‹</button>
+  <div class="header-info">
+    <div class="header-sup">Módulo 0 · Fundamentos</div>
+    <div class="header-title">Saludos y Despedidas</div>
+  </div>
+  <div class="header-count">Les 2 / 7</div>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+</div>
+
+<div class="main" id="main-content">
+
+  <!-- INTRO -->
+  <div class="card lesson-intro">
+    <div class="lesson-tag">📖 Lección 2</div>
+    <div class="lesson-title">Saludos y Despedidas</div>
+    <div class="lesson-desc">
+      Las primeras palabras que usarás en neerlandés. Toca cualquier frase para escucharla y ver cómo se pronuncia.
+    </div>
+  </div>
+
+  <!-- SALUDOS -->
+  <div class="card">
+    <div class="group-section">
+      <div class="section-label">👋 Saludos</div>
+    </div>
+
+    <!-- FORMAL -->
+    <div style="padding: 0 18px 8px">
+      <span class="context-tag tag-formal">🎩 Formal</span>
+    </div>
+    <div class="phrase-list" style="padding-top:0">
+      <div class="phrase-row" onclick="speak('Goedemorgen', 'ju-de-MOR-jen', this)">
+        <div class="pron-bubble">ju-de-MOR-jen</div>
+        <div class="phrase-icon">🌅</div>
+        <div class="phrase-content">
+          <div class="phrase-nl">Goedemorgen</div>
+          <div class="phrase-es">Buenos días (hasta ~12h)</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('Goedemiddag', 'ju-de-MI-daj', this)">
+        <div class="pron-bubble">ju-de-MI-daj</div>
+        <div class="phrase-icon">☀️</div>
+        <div class="phrase-content">
+          <div class="phrase-nl">Goedemiddag</div>
+          <div class="phrase-es">Buenas tardes (12h–18h)</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('Goedenavond', 'ju-de-NAA-vont', this)">
+        <div class="pron-bubble">ju-de-NAA-vont</div>
+        <div class="phrase-icon">🌆</div>
+        <div class="phrase-content">
+          <div class="phrase-nl">Goedenavond</div>
+          <div class="phrase-es">Buenas noches (saludo, desde ~18h)</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+    </div>
+
+    <!-- INFORMAL -->
+    <div style="padding: 8px 18px 8px">
+      <span class="context-tag tag-informal">😊 Informal</span>
+    </div>
+    <div class="phrase-list" style="padding-top:0">
+      <div class="phrase-row" onclick="speak('Hallo', 'HA-lo', this)">
+        <div class="pron-bubble">HA-lo</div>
+        <div class="phrase-icon">👋</div>
+        <div class="phrase-content">
+          <div class="phrase-nl">Hallo</div>
+          <div class="phrase-es">Hola — neutro, muy común</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('Hoi', 'hoi', this)">
+        <div class="pron-bubble">hoi</div>
+        <div class="phrase-icon">✌️</div>
+        <div class="phrase-content">
+          <div class="phrase-nl">Hoi</div>
+          <div class="phrase-es">Hola — muy informal, entre amigos</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('Hé', 'heh', this)">
+        <div class="pron-bubble">heh</div>
+        <div class="phrase-icon">😄</div>
+        <div class="phrase-content">
+          <div class="phrase-nl">Hé</div>
+          <div class="phrase-es">¡Ey! — muy coloquial</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+    </div>
+
+    <!-- TIP: formal vs informal -->
+    <div class="tip-toggle" id="tip1-toggle" onclick="toggleTip('tip1')">
+      <div class="bulb-wrap">
+        <span class="bulb-icon">💡</span>
+        <div class="bulb-glow"></div>
+      </div>
+      <span class="tip-label">¿Cuándo usar formal o informal?</span>
+      <span class="tip-arrow">▾</span>
+    </div>
+    <div class="tip-content" id="tip1-content">
+      En el examen de inburgering y en la embajada usa siempre <strong>Goedemorgen / Goedemiddag</strong> — es lo más profesional. En la vida diaria en Holanda <em>Hallo</em> funciona en casi cualquier situación — tiendas, trabajo, vecinos. <strong>Hoi</strong> y <strong>Hé</strong> solo con gente de confianza.
+    </div>
+  </div>
+
+  <!-- DESPEDIDAS -->
+  <div class="card">
+    <div class="group-section">
+      <div class="section-label">🚪 Despedidas</div>
+    </div>
+
+    <div style="padding: 0 18px 8px">
+      <span class="context-tag tag-both">👥 Formal e informal</span>
+    </div>
+    <div class="phrase-list" style="padding-top:0">
+      <div class="phrase-row" onclick="speak('Tot ziens', 'tot ZINS', this)">
+        <div class="pron-bubble">tot ZINS</div>
+        <div class="phrase-icon">👋</div>
+        <div class="phrase-content">
+          <div class="phrase-nl">Tot ziens</div>
+          <div class="phrase-es">Hasta luego — formal / neutro</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('Doei', 'dui', this)">
+        <div class="pron-bubble">dui</div>
+        <div class="phrase-icon">✌️</div>
+        <div class="phrase-content">
+          <div class="phrase-nl">Doei</div>
+          <div class="phrase-es">Chao — muy informal</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('Tot morgen', 'tot MOR-jen', this)">
+        <div class="pron-bubble">tot MOR-jen</div>
+        <div class="phrase-icon">🌙</div>
+        <div class="phrase-content">
+          <div class="phrase-nl">Tot morgen</div>
+          <div class="phrase-es">Hasta mañana</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('Tot straks', 'tot straks', this)">
+        <div class="pron-bubble">tot straks</div>
+        <div class="phrase-icon">⏱️</div>
+        <div class="phrase-content">
+          <div class="phrase-nl">Tot straks</div>
+          <div class="phrase-es">Hasta luego (en un rato)</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('Goedenacht', 'ju-de-NAXT', this)">
+        <div class="pron-bubble">ju-de-NAXT</div>
+        <div class="phrase-icon">😴</div>
+        <div class="phrase-content">
+          <div class="phrase-nl">Goedenacht</div>
+          <div class="phrase-es">Buenas noches (despedida, al dormir)</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+    </div>
+
+    <div class="tip-toggle" id="tip2-toggle" onclick="toggleTip('tip2')">
+      <div class="bulb-wrap">
+        <span class="bulb-icon">💡</span>
+        <div class="bulb-glow"></div>
+      </div>
+      <span class="tip-label">Goedenavond vs Goedenacht — ¿cuál es cuál?</span>
+      <span class="tip-arrow">▾</span>
+    </div>
+    <div class="tip-content" id="tip2-content">
+      <strong>Goedenavond</strong> es el <em>saludo</em> de la noche — cuando llegas a algún lugar después de las 6pm, como "buenas noches" al entrar. <strong>Goedenacht</strong> es la <em>despedida</em> — cuando alguien se va a dormir, como "que descanses". ¡No las confundas en el examen!
+    </div>
+  </div>
+
+  <!-- ¿CÓMO ESTÁS? -->
+  <div class="card">
+    <div class="group-section">
+      <div class="section-label">💬 ¿Cómo estás?</div>
+    </div>
+    <div class="phrase-list" style="padding-top:0">
+      <div class="phrase-row" onclick="speak('Hoe gaat het', 'hu jaat het', this)">
+        <div class="pron-bubble">hu jaat het</div>
+        <div class="phrase-icon">🙂</div>
+        <div class="phrase-content">
+          <div class="phrase-nl">Hoe gaat het?</div>
+          <div class="phrase-es">¿Cómo estás? — formal / neutro</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('Hoe gaat het met u', 'hu jaat het met uu', this)">
+        <div class="pron-bubble">hu jaat het met uu</div>
+        <div class="phrase-icon">🤝</div>
+        <div class="phrase-content">
+          <div class="phrase-nl">Hoe gaat het met u?</div>
+          <div class="phrase-es">¿Cómo está usted? — muy formal</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('Goed, dank je', 'jut dank ye', this)">
+        <div class="pron-bubble">jut dank ye</div>
+        <div class="phrase-icon">😊</div>
+        <div class="phrase-content">
+          <div class="phrase-nl">Goed, dank je</div>
+          <div class="phrase-es">Bien, gracias — informal</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('Goed, dank u wel', 'jut dank uu vel', this)">
+        <div class="pron-bubble">jut dank uu vel</div>
+        <div class="phrase-icon">🙏</div>
+        <div class="phrase-content">
+          <div class="phrase-nl">Goed, dank u wel</div>
+          <div class="phrase-es">Bien, muchas gracias — formal</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+      <div class="phrase-row" onclick="speak('Het gaat wel', 'het jaat vel', this)">
+        <div class="pron-bubble">het jaat vel</div>
+        <div class="phrase-icon">😐</div>
+        <div class="phrase-content">
+          <div class="phrase-nl">Het gaat wel</div>
+          <div class="phrase-es">Más o menos / tirando</div>
+        </div>
+        <div class="phrase-sound-btn">🔊</div>
+      </div>
+    </div>
+
+    <div class="tip-toggle" id="tip3-toggle" onclick="toggleTip('tip3')">
+      <div class="bulb-wrap">
+        <span class="bulb-icon">💡</span>
+        <div class="bulb-glow"></div>
+      </div>
+      <span class="tip-label">U vs Jij — el usted holandés</span>
+      <span class="tip-arrow">▾</span>
+    </div>
+    <div class="tip-content" id="tip3-content">
+      En neerlandés <strong>u</strong> es el equivalente al "usted" español — se usa con desconocidos, personas mayores, jefes, y siempre en situaciones oficiales como el examen. <em>Jij/je</em> es el "tú" informal. En la embajada y en el examen, <strong>usa siempre u</strong> cuando te dirijas a alguien.
+    </div>
+  </div>
+
+  <!-- DIÁLOGO EN CONTEXTO -->
+  <div class="card">
+    <div class="card-body" style="padding-bottom:8px">
+      <div class="section-label">🎭 Diálogo en contexto</div>
+      Toca cada burbuja para escucharla:
+    </div>
+    <div class="dialogue-wrap">
+      <div class="dialogue-bubble bubble-a" onclick="speak('Goedemorgen, hoe gaat het met u', 'ju-de-MOR-jen hu jaat het met uu', this)">
+        <div class="bubble-who">Persona A</div>
+        <div class="bubble-nl">Goedemorgen, hoe gaat het met u?</div>
+        <div class="bubble-es">Buenos días, ¿cómo está usted?</div>
+        <div class="bubble-sound">🔊 ju-de-MOR-jen hu jaat het met uu</div>
+        <div class="pron-bubble">ju-de-MOR-jen hu jaat het met uu</div>
+      </div>
+      <div class="dialogue-bubble bubble-b" onclick="speak('Goed dank u wel en met u', 'jut dank uu vel en met uu', this)">
+        <div class="bubble-who">Persona B</div>
+        <div class="bubble-nl">Goed, dank u wel. En met u?</div>
+        <div class="bubble-es">Bien, muchas gracias. ¿Y usted?</div>
+        <div class="bubble-sound">🔊 jut dank uu vel en met uu</div>
+        <div class="pron-bubble">jut dank uu vel en met uu</div>
+      </div>
+      <div class="dialogue-bubble bubble-a" onclick="speak('Ook goed dank u wel Tot ziens', 'ook jut dank uu vel tot ZINS', this)">
+        <div class="bubble-who">Persona A</div>
+        <div class="bubble-nl">Ook goed, dank u wel. Tot ziens!</div>
+        <div class="bubble-es">También bien, gracias. ¡Hasta luego!</div>
+        <div class="bubble-sound">🔊 ook jut dank uu vel tot ZINS</div>
+        <div class="pron-bubble">ook jut dank uu vel tot ZINS</div>
+      </div>
+      <div class="dialogue-bubble bubble-b" onclick="speak('Tot ziens', 'tot ZINS', this)">
+        <div class="bubble-who">Persona B</div>
+        <div class="bubble-nl">Tot ziens!</div>
+        <div class="bubble-es">¡Hasta luego!</div>
+        <div class="bubble-sound">🔊 tot ZINS</div>
+        <div class="pron-bubble">tot ZINS</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EJERCICIO — ORDENAR RESPUESTA -->
+  <div class="card">
+    <div class="exercise-card">
+      <div class="exercise-label">✏️ Ejercicio</div>
+      <div class="exercise-instruction">
+        Son las 9 de la mañana. Alguien te saluda: <strong style="color:var(--orange)">"Goedemorgen! Hoe gaat het?"</strong><br>
+        Ordena las palabras para responder correctamente:
+      </div>
+      <div class="answer-slots" id="ex1-slots"></div>
+      <div class="word-bank" id="ex1-bank"></div>
+      <div class="exercise-feedback" id="ex1-feedback"></div>
+      <button class="btn-check" onclick="checkEx1()">Comprobar</button>
+    </div>
+  </div>
+
+  <!-- CHALLENGE -->
+  <div class="card">
+    <div class="challenge-card">
+      <div class="challenge-label">🎯 Reto</div>
+      <div class="challenge-question" id="challenge-q"></div>
+      <div class="challenge-options" id="challenge-opts"></div>
+      <div class="challenge-feedback" id="challenge-fb"></div>
+    </div>
+  </div>
+
+  <!-- NEXT -->
+  <div class="next-wrap">
+    <button class="btn-next" id="btn-next" onclick="goNext()">
+      Siguiente lección &nbsp;→
+    </button>
+  </div>
+
+</div>
+
+<!-- COMPLETE -->
+<div class="complete-screen" id="complete-screen">
+  <div class="complete-emoji">🎉</div>
+  <div class="complete-title">¡Lección completada!</div>
+  <div class="complete-sub">Ya sabes saludar y despedirte en neerlandés — formal e informal. ¡Eso es el primer paso real!</div>
+  <button class="btn-continue" onclick="window.location.href='les-3.html'">
+    Continuar → Presentarse
+  </button>
+</div>
+
+<script>
+// ══════════════════════════════════════
+// TEXT TO SPEECH
+// ══════════════════════════════════════
+let speaking = false;
+let currentRow = null;
+let bubbleTimer = null;
+
+function speak(text, pron, rowEl) {
+  // Stop if already speaking same
+  if (speaking && currentRow === rowEl) {
+    window.speechSynthesis.cancel();
+    speaking = false;
+    clearBubble(rowEl);
+    return;
+  }
+
+  window.speechSynthesis.cancel();
+  if (currentRow) clearBubble(currentRow);
+
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'nl-NL';
+  utter.rate = 0.85;
+  utter.pitch = 1;
+
+  // Show bubble
+  showBubble(rowEl, pron);
+  rowEl.classList.add('playing');
+  speaking = true;
+  currentRow = rowEl;
+
+  utter.onend = () => {
+    speaking = false;
+    rowEl.classList.remove('playing');
+    // Bubble stays 2 more seconds then fades
+    clearTimeout(bubbleTimer);
+    bubbleTimer = setTimeout(() => clearBubble(rowEl), 2000);
+  };
+
+  utter.onerror = () => {
+    speaking = false;
+    rowEl.classList.remove('playing');
+    clearBubble(rowEl);
+  };
+
+  window.speechSynthesis.speak(utter);
+}
+
+function showBubble(el, pron) {
+  const bubble = el.querySelector('.pron-bubble');
+  if (!bubble) return;
+  bubble.textContent = pron;
+  bubble.classList.add('show');
+}
+
+function clearBubble(el) {
+  if (!el) return;
+  el.classList.remove('playing');
+  const bubble = el.querySelector('.pron-bubble');
+  if (bubble) bubble.classList.remove('show');
+}
+
+// ══════════════════════════════════════
+// TIP TOGGLE
+// ══════════════════════════════════════
+function toggleTip(id) {
+  const toggle = document.getElementById(id + '-toggle');
+  const content = document.getElementById(id + '-content');
+  toggle.classList.toggle('open');
+  content.classList.toggle('open');
+}
+
+// ══════════════════════════════════════
+// EXERCISE 1 — Ordenar respuesta
+// ══════════════════════════════════════
+const EX1 = {
+  answer: ['Goed,', 'dank', 'u', 'wel'],
+  options: ['dank', 'Goed,', 'morgen', 'wel', 'u', 'hoi'],
+};
+
+let ex1Slots = new Array(EX1.answer.length).fill(null);
+let ex1Bank = [];
+let ex1Done = false;
+
+function buildEx1() {
+  const slotsEl = document.getElementById('ex1-slots');
+  const bankEl = document.getElementById('ex1-bank');
+
+  EX1.answer.forEach((_, i) => {
+    const slot = document.createElement('div');
+    slot.className = 'answer-slot';
+    slot.id = `slot-${i}`;
+    slot.onclick = () => removeSlot(i);
+    slotsEl.appendChild(slot);
+  });
+
+  const shuffled = [...EX1.options].sort(() => Math.random() - 0.5);
+  ex1Bank = shuffled;
+
+  shuffled.forEach((word, i) => {
+    const chip = document.createElement('button');
+    chip.className = 'word-chip';
+    chip.textContent = word;
+    chip.id = `chip-${i}`;
+    chip.onclick = () => addSlot(word, i);
+    bankEl.appendChild(chip);
+  });
+}
+
+function addSlot(word, chipIdx) {
+  const empty = ex1Slots.findIndex(s => s === null);
+  if (empty === -1) return;
+  ex1Slots[empty] = { word, chipIdx };
+  const slotEl = document.getElementById(`slot-${empty}`);
+  slotEl.textContent = word;
+  slotEl.classList.add('filled');
+  document.getElementById(`chip-${chipIdx}`).classList.add('used');
+}
+
+function removeSlot(idx) {
+  if (!ex1Slots[idx]) return;
+  const slotEl = document.getElementById(`slot-${idx}`);
+  if (slotEl.classList.contains('slot-correct') || slotEl.classList.contains('slot-wrong')) return;
+  const { chipIdx } = ex1Slots[idx];
+  ex1Slots[idx] = null;
+  slotEl.textContent = '';
+  slotEl.className = 'answer-slot';
+  document.getElementById(`chip-${chipIdx}`).classList.remove('used');
+}
+
+function checkEx1() {
+  if (ex1Slots.some(s => s === null)) {
+    const fb = document.getElementById('ex1-feedback');
+    fb.textContent = '⚠️ Coloca todas las palabras primero.';
+    fb.className = 'exercise-feedback feedback-wrong show';
+    return;
+  }
+
+  const user = ex1Slots.map(s => s.word);
+  const correct = JSON.stringify(user) === JSON.stringify(EX1.answer);
+  const fb = document.getElementById('ex1-feedback');
+
+  EX1.answer.forEach((w, i) => {
+    const slotEl = document.getElementById(`slot-${i}`);
+    slotEl.classList.remove('filled');
+    slotEl.classList.add(user[i] === w ? 'slot-correct' : 'slot-wrong');
+  });
+
+  if (correct) {
+    fb.textContent = '✅ ¡Perfecto! "Goed, dank u wel" — Bien, muchas gracias.';
+    fb.className = 'exercise-feedback feedback-correct show';
+    ex1Done = true;
+    checkUnlock();
+  } else {
+    fb.innerHTML = '❌ Casi. La respuesta: <strong>Goed, dank u wel</strong>';
+    fb.className = 'exercise-feedback feedback-wrong show';
+    setTimeout(() => resetEx1(), 1800);
+  }
+}
+
+function resetEx1() {
+  ex1Slots = new Array(EX1.answer.length).fill(null);
+  EX1.answer.forEach((_, i) => {
+    const slotEl = document.getElementById(`slot-${i}`);
+    slotEl.textContent = '';
+    slotEl.className = 'answer-slot';
+  });
+  ex1Bank.forEach((_, i) => document.getElementById(`chip-${i}`).classList.remove('used'));
+  document.getElementById('ex1-feedback').className = 'exercise-feedback';
+}
+
+// ══════════════════════════════════════
+// CHALLENGE
+// ══════════════════════════════════════
+const CHALLENGES = [
+  {
+    q: 'Son las 3 de la tarde. Entras a una tienda. ¿Qué dices?',
+    opts: ['Goedemorgen!', 'Goedemiddag!', 'Goedenavond!', 'Goedenacht!'],
+    correct: 1,
+    fb: '✅ ¡Correcto! Las 3pm es la tarde — <strong>Goedemiddag</strong>. Goedemorgen es hasta las 12h y Goedenavond desde las 18h.'
+  },
+  {
+    q: 'Tu jefa te pregunta: "Hoe gaat het met u?" ¿Cómo respondes formalmente?',
+    opts: ['Hoi, goed!', 'Goed, dank u wel!', 'Het gaat wel, doei!', 'Hé, prima!'],
+    correct: 1,
+    fb: '✅ ¡Exacto! <strong>Goed, dank u wel</strong> es la respuesta formal correcta. Con tu jefa siempre usas <em>u</em>, no <em>je</em>.'
+  },
+  {
+    q: 'Te vas a casa y tu vecino te dice "Tot ziens!". ¿Qué respondes?',
+    opts: ['Goedemorgen!', 'Hoe gaat het?', 'Tot ziens! / Doei!', 'Goedenacht!'],
+    correct: 2,
+    fb: '✅ ¡Bien! <strong>Tot ziens</strong> o <strong>Doei</strong> son las respuestas correctas a una despedida. Goedenacht solo se usa al irse a dormir.'
+  },
+];
+
+let challengeIdx = 0;
+let challengeDone = false;
+
+function buildChallenge() { showChallenge(0); }
+
+function showChallenge(idx) {
+  if (idx >= CHALLENGES.length) {
+    challengeDone = true;
+    checkUnlock();
+    return;
+  }
+  const ch = CHALLENGES[idx];
+  document.getElementById('challenge-q').textContent = ch.q;
+  const optsEl = document.getElementById('challenge-opts');
+  optsEl.innerHTML = '';
+  ch.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'challenge-opt';
+    btn.textContent = opt;
+    btn.onclick = () => answerChallenge(idx, i, btn);
+    optsEl.appendChild(btn);
+  });
+  document.getElementById('challenge-fb').className = 'challenge-feedback';
+  document.getElementById('challenge-fb').innerHTML = '';
+}
+
+function answerChallenge(chIdx, optIdx, btn) {
+  const ch = CHALLENGES[chIdx];
+  document.querySelectorAll('.challenge-opt').forEach(b => b.style.pointerEvents = 'none');
+  const fb = document.getElementById('challenge-fb');
+  if (optIdx === ch.correct) {
+    btn.classList.add('opt-correct');
+    fb.innerHTML = ch.fb;
+    fb.className = 'challenge-feedback fb-correct show';
+  } else {
+    btn.classList.add('opt-wrong');
+    document.querySelectorAll('.challenge-opt')[ch.correct].classList.add('opt-correct');
+    fb.innerHTML = `❌ No exactamente. ${ch.fb}`;
+    fb.className = 'challenge-feedback fb-wrong show';
+  }
+  setTimeout(() => { challengeIdx++; showChallenge(challengeIdx); }, 2200);
+}
+
+// ══════════════════════════════════════
+// UNLOCK
+// ══════════════════════════════════════
+function checkUnlock() {
+  let p = 0;
+  if (ex1Done) p += 50;
+  if (challengeDone) p += 50;
+  document.getElementById('progress-fill').style.width = p + '%';
+  if (ex1Done && challengeDone) {
+    document.getElementById('btn-next').classList.add('unlocked');
+  }
+}
+
+function goNext() {
+  document.getElementById('main-content').style.display = 'none';
+  document.getElementById('complete-screen').classList.add('show');
+}
+
+// ══════════════════════════════════════
+// INIT
+// ══════════════════════════════════════
+buildEx1();
+buildChallenge();
+</script>
+</body>
+</html>
 
