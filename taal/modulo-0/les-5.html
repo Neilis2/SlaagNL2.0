@@ -1,1 +1,511 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SlaagNL — Módulo 0 · Les 5</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#0d1f3c; --navy2:#162d54; --navy3:#1e3a6e;
+  --orange:#f47c3a; --cream:#fdf6ec; --green:#2ecc8a; --red:#e8455a;
+  --purple:#a78bfa; --blue:#60a5fa; --yellow:#f4c842;
+  --border:rgba(255,255,255,0.07); --ease:0.22s cubic-bezier(0.4,0,0.2,1);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
+body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);min-height:100vh;-webkit-font-smoothing:antialiased;}
+
+.header{display:flex;align-items:center;gap:10px;padding:14px 16px;background:var(--navy2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50;}
+.btn-back{background:none;border:none;color:var(--orange);font-size:24px;cursor:pointer;padding:0 8px 0 0;line-height:1;flex-shrink:0;}
+.header-info{flex:1;min-width:0;}
+.header-sup{font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:2px;}
+.header-title{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.header-count{font-size:12px;color:rgba(253,246,236,0.4);font-weight:600;flex-shrink:0;}
+.progress-wrap{height:3px;background:rgba(255,255,255,0.08);}
+.progress-fill{height:100%;background:var(--orange);transition:width 0.5s ease;}
+.main{padding:16px 16px 40px;display:flex;flex-direction:column;gap:14px;max-width:600px;margin:0 auto;}
+.card{background:var(--navy2);border-radius:18px;border:1px solid var(--border);overflow:hidden;}
+.card-body{padding:18px;font-size:14px;line-height:1.75;color:rgba(253,246,236,0.85);}
+.card-body strong{color:var(--orange);}
+.card-body em{color:#a8e6cf;font-style:normal;font-weight:600;}
+.section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--orange);margin-bottom:10px;}
+.lesson-intro{padding:20px 18px 18px;}
+.lesson-tag{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--orange);background:rgba(244,124,58,0.12);border:1px solid rgba(244,124,58,0.2);padding:4px 10px;border-radius:99px;margin-bottom:12px;}
+.lesson-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--cream);margin-bottom:8px;line-height:1.2;}
+.lesson-desc{font-size:14px;color:rgba(253,246,236,0.7);line-height:1.7;}
+
+/* PART CARDS */
+.parts-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:18px;}
+.part-card{border-radius:14px;padding:14px;border:2px solid;}
+.part-s{background:rgba(96,165,250,0.08);border-color:rgba(96,165,250,0.3);}
+.part-v{background:rgba(244,124,58,0.08);border-color:rgba(244,124,58,0.3);}
+.part-o{background:rgba(46,204,138,0.08);border-color:rgba(46,204,138,0.3);}
+.part-c{background:rgba(167,139,250,0.08);border-color:rgba(167,139,250,0.3);}
+.part-icon{font-size:24px;margin-bottom:6px;}
+.part-name-nl{font-family:'Playfair Display',serif;font-size:15px;font-weight:900;margin-bottom:2px;}
+.part-s .part-name-nl{color:var(--blue);}
+.part-v .part-name-nl{color:var(--orange);}
+.part-o .part-name-nl{color:var(--green);}
+.part-c .part-name-nl{color:var(--purple);}
+.part-name-es{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;opacity:0.5;margin-bottom:6px;}
+.part-desc{font-size:12px;color:rgba(253,246,236,0.65);line-height:1.5;}
+
+/* SENTENCE VISUAL */
+.sentence-visual{padding:18px;}
+.sv-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--orange);margin-bottom:12px;}
+.sv-sentence{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;align-items:flex-end;}
+.sv-word{display:flex;flex-direction:column;align-items:center;gap:4px;}
+.sv-chip{padding:8px 14px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.18s;position:relative;user-select:none;}
+.sv-chip:active{transform:scale(0.94);}
+.sv-chip.s{background:rgba(96,165,250,0.15);border:2px solid rgba(96,165,250,0.4);color:var(--blue);}
+.sv-chip.v{background:rgba(244,124,58,0.15);border:2px solid rgba(244,124,58,0.4);color:var(--orange);}
+.sv-chip.o{background:rgba(46,204,138,0.15);border:2px solid rgba(46,204,138,0.4);color:var(--green);}
+.sv-chip.c{background:rgba(167,139,250,0.15);border:2px solid rgba(167,139,250,0.4);color:var(--purple);}
+.sv-tag{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;opacity:0.7;}
+.sv-tag.s{color:var(--blue);}
+.sv-tag.v{color:var(--orange);}
+.sv-tag.o{color:var(--green);}
+.sv-tag.c{color:var(--purple);}
+.sv-es{font-size:12px;color:rgba(253,246,236,0.35);font-style:italic;margin-top:4px;}
+
+.pron-bubble{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--navy3);border:1px solid var(--orange);border-radius:10px;padding:5px 12px;font-size:11px;font-weight:700;color:var(--orange);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 0.2s;z-index:10;}
+.pron-bubble::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--orange);}
+.pron-bubble.show{opacity:1;}
+
+/* TIP */
+.tip-toggle{display:flex;align-items:center;gap:10px;padding:13px 18px;background:rgba(244,124,58,0.06);border-top:1px solid rgba(255,255,255,0.06);cursor:pointer;user-select:none;transition:background var(--ease);}
+.tip-toggle:hover{background:rgba(244,124,58,0.1);}
+.bulb-wrap{position:relative;width:28px;height:28px;flex-shrink:0;}
+.bulb-icon{font-size:22px;line-height:28px;display:block;text-align:center;transition:transform 0.3s ease;}
+.bulb-glow{position:absolute;inset:-4px;border-radius:50%;background:radial-gradient(circle,rgba(244,196,58,0.35),transparent 70%);opacity:0;transition:opacity 0.3s ease;pointer-events:none;}
+.tip-toggle.open .bulb-glow{opacity:1;}
+.tip-toggle.open .bulb-icon{transform:scale(1.15);filter:brightness(1.3);}
+@keyframes bulbPulse{0%,100%{opacity:0.5}50%{opacity:1}}
+.tip-toggle:not(.open) .bulb-glow{opacity:0.3;animation:bulbPulse 2s infinite;}
+.tip-label{font-size:13px;font-weight:600;color:var(--orange);flex:1;}
+.tip-arrow{color:rgba(244,124,58,0.6);font-size:16px;transition:transform 0.3s ease;}
+.tip-toggle.open .tip-arrow{transform:rotate(180deg);}
+.tip-content{display:none;padding:14px 18px;font-size:13px;line-height:1.7;color:rgba(253,246,236,0.7);background:rgba(244,124,58,0.04);border-top:1px solid rgba(255,255,255,0.04);animation:fadeDown 0.25s ease;}
+.tip-content.open{display:block;}
+.tip-content strong{color:var(--orange);}
+.tip-content em{color:#a8e6cf;font-style:normal;font-weight:600;}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+
+/* IDENTIFY EXERCISE */
+.exercise-card{padding:18px;}
+.exercise-label{font-size:10px;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+.exercise-instruction{font-size:13px;color:rgba(253,246,236,0.5);margin-bottom:14px;font-style:italic;line-height:1.5;}
+
+.identify-sentence{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;padding:14px;background:rgba(0,0,0,0.2);border-radius:12px;}
+.id-word{padding:8px 14px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.18s;user-select:none;border:2px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:var(--cream);}
+.id-word:active{transform:scale(0.94);}
+.id-word.selected-s{border-color:var(--blue);background:rgba(96,165,250,0.15);color:var(--blue);}
+.id-word.selected-v{border-color:var(--orange);background:rgba(244,124,58,0.15);color:var(--orange);}
+.id-word.selected-o{border-color:var(--green);background:rgba(46,204,138,0.15);color:var(--green);}
+.id-word.correct-s{border-color:var(--blue);background:rgba(96,165,250,0.2);color:var(--blue);}
+.id-word.correct-v{border-color:var(--orange);background:rgba(244,124,58,0.2);color:var(--orange);}
+.id-word.correct-o{border-color:var(--green);background:rgba(46,204,138,0.2);color:var(--green);}
+.id-word.wrong{border-color:var(--red);background:rgba(232,69,90,0.15);color:var(--red);animation:shake 0.3s ease;}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-5px);}75%{transform:translateX(5px);}}
+
+.part-selector{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+.part-sel-btn{padding:7px 14px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.18s;font-family:inherit;border:2px solid;}
+.part-sel-btn.sel-s{background:rgba(96,165,250,0.08);border-color:rgba(96,165,250,0.3);color:var(--blue);}
+.part-sel-btn.sel-v{background:rgba(244,124,58,0.08);border-color:rgba(244,124,58,0.3);color:var(--orange);}
+.part-sel-btn.sel-o{background:rgba(46,204,138,0.08);border-color:rgba(46,204,138,0.3);color:var(--green);}
+.part-sel-btn.active-s{background:rgba(96,165,250,0.25);border-color:var(--blue);}
+.part-sel-btn.active-v{background:rgba(244,124,58,0.25);border-color:var(--orange);}
+.part-sel-btn.active-o{background:rgba(46,204,138,0.25);border-color:var(--green);}
+
+.id-instruction{font-size:12px;color:rgba(253,246,236,0.4);margin-bottom:10px;font-style:italic;}
+.id-feedback{padding:10px 14px;border-radius:10px;font-size:13px;font-weight:600;display:none;margin-top:8px;}
+.id-feedback.show{display:block;}
+.feedback-correct{background:rgba(46,204,138,0.15);color:var(--green);}
+.feedback-wrong{background:rgba(232,69,90,0.12);color:var(--red);}
+
+.btn-check{width:100%;padding:13px;background:var(--navy3);border:1.5px solid rgba(255,255,255,0.1);border-radius:12px;color:var(--cream);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:all var(--ease);margin-top:8px;}
+.btn-check:hover{background:rgba(244,124,58,0.15);border-color:var(--orange);}
+
+/* CHALLENGE */
+.challenge-card{padding:18px;}
+.challenge-label{font-size:10px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.challenge-question{font-size:14px;color:var(--cream);line-height:1.6;margin-bottom:14px;font-weight:600;}
+.challenge-options{display:flex;flex-direction:column;gap:8px;}
+.challenge-opt{padding:13px 16px;border-radius:12px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);color:var(--cream);font-size:13px;text-align:left;cursor:pointer;transition:all 0.15s;font-family:inherit;font-weight:500;}
+.challenge-opt:active{transform:scale(0.98);}
+.challenge-opt.opt-correct{border-color:var(--green);background:rgba(46,204,138,0.15);color:var(--green);font-weight:700;}
+.challenge-opt.opt-wrong{border-color:var(--red);background:rgba(232,69,90,0.12);color:var(--red);}
+.challenge-feedback{margin-top:12px;padding:12px 14px;border-radius:12px;font-size:13px;line-height:1.5;display:none;animation:fadeDown 0.25s ease;}
+.challenge-feedback.show{display:block;}
+.challenge-feedback strong{font-weight:700;}
+.challenge-feedback.fb-correct{background:rgba(46,204,138,0.12);color:var(--green);}
+.challenge-feedback.fb-wrong{background:rgba(232,69,90,0.1);color:var(--red);}
+
+/* NEXT */
+.next-wrap{padding:0 0 8px;}
+.btn-next{width:100%;padding:17px;background:var(--orange);border:none;border-radius:14px;color:white;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;transition:all var(--ease);display:flex;align-items:center;justify-content:center;gap:8px;opacity:0.4;pointer-events:none;}
+.btn-next.unlocked{opacity:1;pointer-events:all;}
+.btn-next.unlocked:active{opacity:0.85;transform:scale(0.98);}
+
+.complete-screen{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;padding:40px 24px;text-align:center;gap:12px;}
+.complete-screen.show{display:flex;}
+.complete-emoji{font-size:64px;margin-bottom:8px;}
+.complete-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--cream);margin-bottom:4px;}
+.complete-sub{font-size:15px;color:rgba(253,246,236,0.5);line-height:1.6;max-width:280px;}
+.btn-continue{margin-top:16px;padding:16px 32px;background:var(--orange);border:none;border-radius:14px;color:white;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;}
+.divider{height:1px;background:rgba(255,255,255,0.06);margin:4px 18px 16px;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <button class="btn-back" onclick="history.back()">‹</button>
+  <div class="header-info">
+    <div class="header-sup">Módulo 0 · Fundamentos</div>
+    <div class="header-title">Partes de la Oración</div>
+  </div>
+  <div class="header-count">Les 5 / 7</div>
+</div>
+<div class="progress-wrap"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+
+<div class="main" id="main-content">
+
+  <!-- INTRO -->
+  <div class="card lesson-intro">
+    <div class="lesson-tag">📖 Lección 5</div>
+    <div class="lesson-title">Partes de la Oración</div>
+    <div class="lesson-desc">Para entender la gramática neerlandesa necesitas saber identificar las partes de una oración. No te preocupes — lo explicamos muy simple con colores y ejemplos visuales.</div>
+  </div>
+
+  <!-- LAS 4 PARTES -->
+  <div class="card">
+    <div class="card-body" style="padding-bottom:8px">
+      <div class="section-label">🧩 Las partes principales</div>
+    </div>
+    <div class="parts-grid">
+      <div class="part-card part-s">
+        <div class="part-icon">🔵</div>
+        <div class="part-name-nl">Onderwerp</div>
+        <div class="part-name-es">Sujeto</div>
+        <div class="part-desc">Quien realiza la acción. Responde a: ¿Quién? Ej: <em>Ik, jij, Neilis</em></div>
+      </div>
+      <div class="part-card part-v">
+        <div class="part-icon">🟠</div>
+        <div class="part-name-nl">Werkwoord</div>
+        <div class="part-name-es">Verbo</div>
+        <div class="part-desc">La acción o estado. Responde a: ¿Qué hace? Ej: <em>werkt, woont, heet</em></div>
+      </div>
+      <div class="part-card part-o">
+        <div class="part-icon">🟢</div>
+        <div class="part-name-nl">Lijdend voorwerp</div>
+        <div class="part-name-es">Objeto</div>
+        <div class="part-desc">Quien recibe la acción. Responde a: ¿Qué/a quién? Ej: <em>Nederlands, koffie</em></div>
+      </div>
+      <div class="part-card part-c">
+        <div class="part-icon">🟣</div>
+        <div class="part-name-nl">Bijwoordelijke bepaling</div>
+        <div class="part-name-es">Complemento</div>
+        <div class="part-desc">Dónde, cuándo, cómo. Ej: <em>in Nederland, elke dag, thuis</em></div>
+      </div>
+    </div>
+
+    <div class="tip-toggle" id="tip1-toggle" onclick="toggleTip('tip1')">
+      <div class="bulb-wrap"><span class="bulb-icon">💡</span><div class="bulb-glow"></div></div>
+      <span class="tip-label">¿Por qué importa saber esto?</span>
+      <span class="tip-arrow">▾</span>
+    </div>
+    <div class="tip-content" id="tip1-content">
+      En neerlandés el <strong>verbo siempre va en la segunda posición</strong> — pero ¿segunda posición de qué? De las partes de la oración. Si no sabes identificar el sujeto y el verbo, no podrás construir frases correctas. <em>Identificar estas partes es la clave de toda la gramática que viene después.</em>
+    </div>
+  </div>
+
+  <!-- ORACIONES VISUALES -->
+  <div class="card">
+    <div class="sentence-visual">
+      <div class="sv-label">🎨 Oraciones con colores</div>
+      <p style="font-size:13px;color:rgba(253,246,236,0.5);margin-bottom:14px;font-style:italic">Toca cada palabra para escucharla:</p>
+
+      <!-- Sentence 1 -->
+      <div style="margin-bottom:18px">
+        <div class="sv-sentence" id="sv1"></div>
+        <div class="sv-es">Yo aprendo neerlandés en casa.</div>
+      </div>
+
+      <!-- Sentence 2 -->
+      <div style="margin-bottom:18px">
+        <div class="sv-sentence" id="sv2"></div>
+        <div class="sv-es">Neilis trabaja cada día.</div>
+      </div>
+
+      <!-- Sentence 3 -->
+      <div>
+        <div class="sv-sentence" id="sv3"></div>
+        <div class="sv-es">Él bebe café por las mañanas.</div>
+      </div>
+    </div>
+
+    <div class="tip-toggle" id="tip2-toggle" onclick="toggleTip('tip2')">
+      <div class="bulb-wrap"><span class="bulb-icon">💡</span><div class="bulb-glow"></div></div>
+      <span class="tip-label">No toda oración tiene objeto</span>
+      <span class="tip-arrow">▾</span>
+    </div>
+    <div class="tip-content" id="tip2-content">
+      El sujeto y el verbo son <strong>obligatorios</strong> en toda oración neerlandesa. El objeto y el complemento son <em>opcionales</em>. La oración más corta posible es: <strong>Ik werk</strong> (Yo trabajo) — solo sujeto + verbo. Ya es una oración completa y correcta.
+    </div>
+  </div>
+
+  <!-- EJERCICIO IDENTIFICAR -->
+  <div class="card">
+    <div class="exercise-card">
+      <div class="exercise-label">✏️ Ejercicio — Identifica las partes</div>
+      <div class="exercise-instruction">Selecciona el tipo de parte (S/V/O) y luego toca cada palabra para identificarla:</div>
+      <div id="identify-exercises"></div>
+    </div>
+  </div>
+
+  <!-- CHALLENGE -->
+  <div class="card">
+    <div class="challenge-card">
+      <div class="challenge-label">🎯 Reto</div>
+      <div class="challenge-question" id="ch-q"></div>
+      <div class="challenge-options" id="ch-opts"></div>
+      <div class="challenge-feedback" id="ch-fb"></div>
+    </div>
+  </div>
+
+  <div class="next-wrap">
+    <button class="btn-next" id="btn-next" onclick="goNext()">Siguiente lección &nbsp;→</button>
+  </div>
+</div>
+
+<div class="complete-screen" id="complete-screen">
+  <div class="complete-emoji">🧩</div>
+  <div class="complete-title">¡Lección completada!</div>
+  <div class="complete-sub">Ya sabes identificar las partes de una oración. ¡Ahora la gramática tendrá mucho más sentido!</div>
+  <button class="btn-continue" onclick="window.location.href='les-6.html'">Continuar → Primeros verbos →</button>
+</div>
+
+<script>
+// SENTENCES DATA
+const SENTENCES = [
+  { id:'sv1', words:[
+    {w:'Ik', type:'s', speak:'ik'}, {w:'leer', type:'v', speak:'leer'},
+    {w:'Nederlands', type:'o', speak:'Nederlands'}, {w:"'s avonds", type:'c', speak:"'s avonds"}
+  ]},
+  { id:'sv2', words:[
+    {w:'Neilis', type:'s', speak:'Neilis'}, {w:'werkt', type:'v', speak:'werkt'},
+    {w:'elke dag', type:'c', speak:'elke dag'}
+  ]},
+  { id:'sv3', words:[
+    {w:'Hij', type:'s', speak:'hij'}, {w:'drinkt', type:'v', speak:'drinkt'},
+    {w:'koffie', type:'o', speak:'koffie'}, {"w":"'s ochtends", type:'c', speak:"'s ochtends"}
+  ]},
+];
+
+const IDENTIFY_EX = [
+  { sentence:'Zij woont in Amsterdam.', words:['Zij','woont','in Amsterdam.'], correct:['s','v','c'], es:'Ella vive en Ámsterdam.' },
+  { sentence:'Wij leren Nederlands.', words:['Wij','leren','Nederlands.'], correct:['s','v','o'], es:'Nosotros aprendemos neerlandés.' },
+  { sentence:'Hij drinkt koffie elke dag.', words:['Hij','drinkt','koffie','elke dag.'], correct:['s','v','o','c'], es:'Él bebe café cada día.' },
+];
+
+const CHALLENGES = [
+  { q:'En la frase "Ik werk elke dag" — ¿cuál es el verbo?', opts:['Ik','werk','elke','dag'], correct:1, fb:'✅ ¡Correcto! <strong>werk</strong> es el verbo — la acción que realiza el sujeto. <em>Ik</em> es el sujeto y <em>elke dag</em> es el complemento.' },
+  { q:'¿Qué parte de la oración es "Nederlands" en "Ik leer Nederlands"?', opts:['Sujeto','Verbo','Objeto','Complemento'], correct:2, fb:'✅ ¡Exacto! <strong>Nederlands</strong> es el objeto — recibe la acción del verbo "leer". Responde a: ¿qué aprendo? → Nederlands.' },
+  { q:'¿Cuál es la oración correcta? (S + V obligatorios)', opts:['Werkt elke dag.','Ik elke dag.','Ik werk.','Nederlands leer.'], correct:2, fb:'✅ ¡Bien! <strong>Ik werk</strong> tiene sujeto (Ik) + verbo (werk) — es completa y correcta. Las otras les falta el sujeto o el verbo.' },
+];
+
+let exDone=false, chDone=false, chIdx=0;
+let idAnswers=[], idCorrect=0;
+let selectedPart=null;
+let bubbleTimers={};
+let currentRow=null;
+
+// TTS
+function speakWord(text, el) {
+  window.speechSynthesis.cancel();
+  const utter=new SpeechSynthesisUtterance(text);
+  utter.lang='nl-NL'; utter.rate=0.85;
+  el.style.transform='scale(0.94)';
+  setTimeout(()=>el.style.transform='',200);
+  window.speechSynthesis.speak(utter);
+}
+
+// TIP
+function toggleTip(id){
+  document.getElementById(id+'-toggle').classList.toggle('open');
+  document.getElementById(id+'-content').classList.toggle('open');
+}
+
+// BUILD COLORED SENTENCES
+function buildSentences(){
+  SENTENCES.forEach(s=>{
+    const el=document.getElementById(s.id);
+    s.words.forEach(w=>{
+      const wrap=document.createElement('div');
+      wrap.className='sv-word';
+      const chip=document.createElement('div');
+      chip.className=`sv-chip ${w.type}`;
+      chip.innerHTML=`<div class="pron-bubble"></div>${w.w}`;
+      chip.onclick=()=>speakWord(w.speak, chip);
+      const tag=document.createElement('div');
+      tag.className=`sv-tag ${w.type}`;
+      const labels={s:'Sujeto',v:'Verbo',o:'Objeto',c:'Compl.'};
+      tag.textContent=labels[w.type];
+      wrap.appendChild(chip);
+      wrap.appendChild(tag);
+      el.appendChild(wrap);
+    });
+  });
+}
+
+// BUILD IDENTIFY EXERCISES
+function buildIdentify(){
+  const container=document.getElementById('identify-exercises');
+  idAnswers=IDENTIFY_EX.map(e=>new Array(e.words.length).fill(null));
+
+  IDENTIFY_EX.forEach((ex,ei)=>{
+    const div=document.createElement('div');
+    div.style.marginBottom='20px';
+
+    const labels={s:'🔵 Sujeto',v:'🟠 Verbo',o:'🟢 Objeto',c:'🟣 Compl.'};
+    const selLabels={s:'sel-s',v:'sel-v',o:'sel-o',c:'sel-c'};
+
+    div.innerHTML=`
+      <div style="font-size:13px;font-weight:600;color:var(--cream);margin-bottom:6px">${ei+1}. <em style="color:rgba(253,246,236,0.45)">${ex.es}</em></div>
+      <div class="id-instruction">1. Selecciona el tipo → 2. Toca la palabra</div>
+      <div class="part-selector" id="ps-${ei}">
+        ${Object.entries(labels).map(([k,v])=>`<button class="part-sel-btn ${selLabels[k]}" id="psb-${ei}-${k}" onclick="selectPart('${ei}','${k}')">${v}</button>`).join('')}
+      </div>
+      <div class="identify-sentence" id="is-${ei}"></div>
+      <div class="id-feedback" id="idfb-${ei}"></div>
+      <button class="btn-check" onclick="checkIdentify(${ei})">Comprobar</button>
+    `;
+    container.appendChild(div);
+
+    const sentEl=div.querySelector(`#is-${ei}`);
+    ex.words.forEach((word,wi)=>{
+      const btn=document.createElement('button');
+      btn.className='id-word';
+      btn.textContent=word;
+      btn.id=`iw-${ei}-${wi}`;
+      btn.onclick=()=>assignPart(ei,wi,btn);
+      sentEl.appendChild(btn);
+    });
+
+    if(ei<IDENTIFY_EX.length-1){
+      const divEl=document.createElement('div');
+      divEl.className='divider';
+      container.appendChild(divEl);
+    }
+  });
+}
+
+let currentSelectedPart={};
+
+function selectPart(ei, part){
+  currentSelectedPart[ei]=part;
+  const selLabels={s:'active-s',v:'active-v',o:'active-o',c:'active-c'};
+  ['s','v','o','c'].forEach(p=>{
+    const btn=document.getElementById(`psb-${ei}-${p}`);
+    if(btn){
+      btn.classList.remove('active-s','active-v','active-o','active-c');
+      if(p===part) btn.classList.add(selLabels[p]);
+    }
+  });
+}
+
+function assignPart(ei,wi,btn){
+  const part=currentSelectedPart[ei];
+  if(!part) return;
+  const classMap={s:'selected-s',v:'selected-v',o:'selected-o',c:'selected-c'};
+  btn.className='id-word '+classMap[part];
+  idAnswers[ei][wi]=part;
+}
+
+function checkIdentify(ei){
+  const ex=IDENTIFY_EX[ei];
+  const fb=document.getElementById(`idfb-${ei}`);
+
+  if(idAnswers[ei].some(a=>a===null)){
+    fb.textContent='⚠️ Identifica todas las palabras primero.';
+    fb.className='id-feedback feedback-wrong show'; return;
+  }
+
+  let allOk=true;
+  const correctMap={s:'correct-s',v:'correct-v',o:'correct-o',c:'correct-c'};
+
+  ex.words.forEach((word,wi)=>{
+    const btn=document.getElementById(`iw-${ei}-${wi}`);
+    if(idAnswers[ei][wi]===ex.correct[wi]){
+      btn.className='id-word '+correctMap[ex.correct[wi]];
+    } else {
+      btn.className='id-word wrong';
+      allOk=false;
+      setTimeout(()=>{
+        btn.className='id-word '+correctMap[ex.correct[wi]];
+      },800);
+    }
+  });
+
+  if(allOk){
+    fb.textContent='✅ ¡Perfecto! Todas las partes correctas.';
+    fb.className='id-feedback feedback-correct show';
+    idCorrect++;
+    if(idCorrect>=IDENTIFY_EX.length){ exDone=true; checkUnlock(); }
+  } else {
+    fb.textContent='❌ Algunas no son correctas — mira los colores corregidos.';
+    fb.className='id-feedback feedback-wrong show';
+  }
+}
+
+// CHALLENGE
+function buildChallenge(){ showChallenge(0); }
+function showChallenge(idx){
+  if(idx>=CHALLENGES.length){ chDone=true; checkUnlock(); return; }
+  const ch=CHALLENGES[idx];
+  document.getElementById('ch-q').textContent=ch.q;
+  const el=document.getElementById('ch-opts'); el.innerHTML='';
+  ch.opts.forEach((o,i)=>{
+    const b=document.createElement('button');
+    b.className='challenge-opt'; b.textContent=o;
+    b.onclick=()=>answerCh(idx,i,b);
+    el.appendChild(b);
+  });
+  document.getElementById('ch-fb').className='challenge-feedback';
+  document.getElementById('ch-fb').innerHTML='';
+}
+
+function answerCh(cIdx,optIdx,btn){
+  const ch=CHALLENGES[cIdx];
+  document.querySelectorAll('.challenge-opt').forEach(b=>b.style.pointerEvents='none');
+  const fb=document.getElementById('ch-fb');
+  if(optIdx===ch.correct){
+    btn.classList.add('opt-correct'); fb.innerHTML=ch.fb;
+    fb.className='challenge-feedback fb-correct show';
+  } else {
+    btn.classList.add('opt-wrong');
+    document.querySelectorAll('.challenge-opt')[ch.correct].classList.add('opt-correct');
+    fb.innerHTML=`❌ No exactamente. ${ch.fb}`;
+    fb.className='challenge-feedback fb-wrong show';
+  }
+  setTimeout(()=>{ chIdx++; showChallenge(chIdx); },2200);
+}
+
+function checkUnlock(){
+  let p=0;
+  if(exDone) p+=50; if(chDone) p+=50;
+  document.getElementById('progress-fill').style.width=p+'%';
+  if(exDone&&chDone) document.getElementById('btn-next').classList.add('unlocked');
+}
+
+function goNext(){
+  document.getElementById('main-content').style.display='none';
+  document.getElementById('complete-screen').classList.add('show');
+}
+
+buildSentences(); buildIdentify(); buildChallenge();
+</script>
+</body>
+</html>
 
