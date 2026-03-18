@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SlaagNL — M1 · Les 2</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0d1f3c;--navy2:#162d54;--navy3:#1e3a6e;--orange:#f47c3a;--cream:#fdf6ec;--green:#2ecc8a;--red:#e8455a;--purple:#a78bfa;--blue:#60a5fa;--border:rgba(255,255,255,0.07);--ease:0.22s cubic-bezier(0.4,0,0.2,1);}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
+body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);min-height:100vh;-webkit-font-smoothing:antialiased;}
+.header{display:flex;align-items:center;gap:10px;padding:14px 16px;background:var(--navy2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50;}
+.btn-back{background:none;border:none;color:var(--orange);font-size:24px;cursor:pointer;padding:0 8px 0 0;line-height:1;flex-shrink:0;}
+.header-info{flex:1;min-width:0;}
+.header-sup{font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:2px;}
+.header-title{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.header-count{font-size:12px;color:rgba(253,246,236,0.4);font-weight:600;flex-shrink:0;}
+.progress-wrap{height:3px;background:rgba(255,255,255,0.08);}
+.progress-fill{height:100%;background:var(--orange);transition:width 0.5s ease;}
+.main{padding:16px 16px 40px;display:flex;flex-direction:column;gap:14px;max-width:600px;margin:0 auto;}
+.card{background:var(--navy2);border-radius:18px;border:1px solid var(--border);overflow:hidden;}
+.card-body{padding:18px;font-size:14px;line-height:1.75;color:rgba(253,246,236,0.85);}
+.card-body strong{color:var(--orange);}
+.card-body em{color:#a8e6cf;font-style:normal;font-weight:600;}
+.section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--orange);margin-bottom:10px;}
+.lesson-intro{padding:20px 18px 18px;}
+.lesson-tag{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--orange);background:rgba(244,124,58,0.12);border:1px solid rgba(244,124,58,0.2);padding:4px 10px;border-radius:99px;margin-bottom:12px;}
+.lesson-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--cream);margin-bottom:8px;line-height:1.2;}
+.lesson-desc{font-size:14px;color:rgba(253,246,236,0.7);line-height:1.7;}
+
+/* CATEGORY CARDS */
+.cat-list{padding:0 18px 18px;display:flex;flex-direction:column;gap:10px;}
+.cat-card{padding:14px 16px;background:rgba(96,165,250,0.06);border:1px solid rgba(96,165,250,0.2);border-radius:14px;}
+.cat-title{font-size:13px;font-weight:700;color:var(--blue);margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.cat-examples{display:flex;flex-wrap:wrap;gap:6px;}
+.cat-word{padding:4px 10px;border-radius:20px;background:rgba(96,165,250,0.12);border:1px solid rgba(96,165,250,0.2);font-size:12px;font-weight:600;color:var(--cream);cursor:pointer;transition:all 0.15s;user-select:none;}
+.cat-word:active{transform:scale(0.94);background:rgba(96,165,250,0.25);}
+
+/* PHRASE ROWS */
+.phrase-list{padding:0 18px 18px;display:flex;flex-direction:column;gap:8px;}
+.phrase-row{display:flex;align-items:center;gap:12px;padding:12px 14px;background:rgba(255,255,255,0.03);border-radius:14px;border:1px solid rgba(255,255,255,0.06);cursor:pointer;transition:all 0.18s;position:relative;user-select:none;}
+.phrase-row:active{transform:scale(0.97);}
+.phrase-row.playing{border-color:var(--orange);background:rgba(244,124,58,0.08);}
+.phrase-icon{font-size:18px;flex-shrink:0;}
+.phrase-content{flex:1;}
+.phrase-nl{font-size:14px;font-weight:700;color:var(--cream);margin-bottom:2px;}
+.phrase-nl .de{color:var(--blue);}
+.phrase-es{font-size:12px;color:rgba(253,246,236,0.4);font-style:italic;}
+.phrase-sound-btn{width:30px;height:30px;border-radius:50%;background:rgba(244,124,58,0.12);border:1px solid rgba(244,124,58,0.25);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.phrase-row.playing .phrase-sound-btn{background:var(--orange);border-color:var(--orange);}
+.pron-bubble{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--navy3);border:1px solid var(--orange);border-radius:10px;padding:6px 14px;font-size:12px;font-weight:700;color:var(--orange);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 0.2s;z-index:10;}
+.pron-bubble::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--orange);}
+.pron-bubble.show{opacity:1;}
+
+/* TIP */
+.tip-toggle{display:flex;align-items:center;gap:10px;padding:13px 18px;background:rgba(244,124,58,0.06);border-top:1px solid rgba(255,255,255,0.06);cursor:pointer;user-select:none;}
+.bulb-wrap{position:relative;width:28px;height:28px;flex-shrink:0;}
+.bulb-icon{font-size:22px;line-height:28px;display:block;text-align:center;transition:transform 0.3s ease;}
+.bulb-glow{position:absolute;inset:-4px;border-radius:50%;background:radial-gradient(circle,rgba(244,196,58,0.35),transparent 70%);opacity:0;transition:opacity 0.3s ease;pointer-events:none;}
+.tip-toggle.open .bulb-glow{opacity:1;}
+.tip-toggle.open .bulb-icon{transform:scale(1.15);filter:brightness(1.3);}
+@keyframes bulbPulse{0%,100%{opacity:0.5}50%{opacity:1}}
+.tip-toggle:not(.open) .bulb-glow{opacity:0.3;animation:bulbPulse 2s infinite;}
+.tip-label{font-size:13px;font-weight:600;color:var(--orange);flex:1;}
+.tip-arrow{color:rgba(244,124,58,0.6);font-size:16px;transition:transform 0.3s ease;}
+.tip-toggle.open .tip-arrow{transform:rotate(180deg);}
+.tip-content{display:none;padding:14px 18px;font-size:13px;line-height:1.7;color:rgba(253,246,236,0.7);background:rgba(244,124,58,0.04);border-top:1px solid rgba(255,255,255,0.04);}
+.tip-content.open{display:block;}
+.tip-content strong{color:var(--orange);}
+.tip-content em{color:#a8e6cf;font-style:normal;font-weight:600;}
+
+/* TRUE/FALSE EXERCISE */
+.exercise-card{padding:18px;}
+.exercise-label{font-size:10px;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+.exercise-instruction{font-size:13px;color:rgba(253,246,236,0.5);margin-bottom:16px;font-style:italic;}
+.tf-score{text-align:right;font-size:12px;font-weight:700;color:rgba(253,246,236,0.4);margin-bottom:10px;}
+.tf-score span{color:var(--orange);}
+
+.tf-card{background:rgba(0,0,0,0.2);border-radius:16px;padding:20px 16px;text-align:center;margin-bottom:14px;border:1px solid rgba(255,255,255,0.06);}
+.tf-word{font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--cream);margin-bottom:6px;}
+.tf-question{font-size:13px;color:rgba(253,246,236,0.5);margin-bottom:16px;}
+.tf-question strong{color:var(--blue);}
+.tf-buttons{display:flex;gap:10px;}
+.tf-btn{flex:1;padding:14px;border-radius:14px;border:none;font-family:'Playfair Display',serif;font-size:18px;font-weight:900;cursor:pointer;transition:all 0.18s;}
+.tf-btn:active{transform:scale(0.95);}
+.tf-yes{background:rgba(46,204,138,0.15);color:var(--green);border:2px solid rgba(46,204,138,0.3);}
+.tf-no{background:rgba(232,69,90,0.12);color:var(--red);border:2px solid rgba(232,69,90,0.2);}
+.tf-yes:hover{background:rgba(46,204,138,0.25);}
+.tf-no:hover{background:rgba(232,69,90,0.2);}
+.tf-feedback{padding:12px 14px;border-radius:12px;font-size:13px;font-weight:600;text-align:center;display:none;margin-bottom:10px;animation:fadeDown 0.2s ease;}
+.tf-feedback.show{display:block;}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
+.tf-feedback.fb-correct{background:rgba(46,204,138,0.15);color:var(--green);}
+.tf-feedback.fb-wrong{background:rgba(232,69,90,0.12);color:var(--red);}
+.tf-complete{text-align:center;padding:16px;background:rgba(46,204,138,0.08);border-radius:14px;border:1px solid rgba(46,204,138,0.2);display:none;}
+.tf-complete.show{display:block;}
+.tf-complete-score{font-family:'Playfair Display',serif;font-size:32px;font-weight:900;color:var(--green);}
+.tf-complete-label{font-size:13px;color:rgba(253,246,236,0.5);margin-top:4px;}
+
+/* CHALLENGE */
+.challenge-card{padding:18px;}
+.challenge-label{font-size:10px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.challenge-question{font-size:14px;color:var(--cream);line-height:1.6;margin-bottom:14px;font-weight:600;}
+.challenge-options{display:flex;flex-direction:column;gap:8px;}
+.challenge-opt{padding:13px 16px;border-radius:12px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);color:var(--cream);font-size:13px;text-align:left;cursor:pointer;transition:all 0.15s;font-family:inherit;font-weight:500;}
+.challenge-opt.opt-correct{border-color:var(--green);background:rgba(46,204,138,0.15);color:var(--green);font-weight:700;}
+.challenge-opt.opt-wrong{border-color:var(--red);background:rgba(232,69,90,0.12);color:var(--red);}
+.challenge-feedback{margin-top:12px;padding:12px 14px;border-radius:12px;font-size:13px;line-height:1.5;display:none;}
+.challenge-feedback.show{display:block;}
+.challenge-feedback strong{font-weight:700;}
+.challenge-feedback.fb-correct{background:rgba(46,204,138,0.12);color:var(--green);}
+.challenge-feedback.fb-wrong{background:rgba(232,69,90,0.1);color:var(--red);}
+
+.next-wrap{padding:0 0 8px;}
+.btn-next{width:100%;padding:17px;background:var(--orange);border:none;border-radius:14px;color:white;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;opacity:0.4;pointer-events:none;}
+.btn-next.unlocked{opacity:1;pointer-events:all;}
+.complete-screen{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;padding:40px 24px;text-align:center;gap:12px;}
+.complete-screen.show{display:flex;}
+.complete-emoji{font-size:64px;margin-bottom:8px;}
+.complete-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--cream);margin-bottom:4px;}
+.complete-sub{font-size:15px;color:rgba(253,246,236,0.5);line-height:1.6;max-width:280px;}
+.btn-continue{margin-top:16px;padding:16px 32px;background:var(--orange);border:none;border-radius:14px;color:white;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;}
+</style>
+</head>
+<body>
+<div class="header">
+  <button class="btn-back" onclick="history.back()">‹</button>
+  <div class="header-info">
+    <div class="header-sup">Módulo 1 · Artículos</div>
+    <div class="header-title">Palabras DE</div>
+  </div>
+  <div class="header-count">Les 2 / 6</div>
+</div>
+<div class="progress-wrap"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+
+<div class="main" id="main-content">
+  <div class="card lesson-intro">
+    <div class="lesson-tag">📖 Lección 2</div>
+    <div class="lesson-title">Palabras DE</div>
+    <div class="lesson-desc">Hay categorías de palabras que <strong>siempre usan de</strong>. Si memorizas estas categorías, reconocerás la mayoría de palabras de sin esfuerzo. Toca cualquier palabra para escucharla.</div>
+  </div>
+
+  <!-- CATEGORIES -->
+  <div class="card">
+    <div class="card-body" style="padding-bottom:8px">
+      <div class="section-label">🔵 Categorías que SIEMPRE son DE</div>
+    </div>
+    <div class="cat-list">
+      <div class="cat-card">
+        <div class="cat-title">👤 Personas y profesiones</div>
+        <div class="cat-examples">
+          <span class="cat-word" onclick="speakWord('de man')">de man</span>
+          <span class="cat-word" onclick="speakWord('de vrouw')">de vrouw</span>
+          <span class="cat-word" onclick="speakWord('de dokter')">de dokter</span>
+          <span class="cat-word" onclick="speakWord('de leraar')">de leraar</span>
+          <span class="cat-word" onclick="speakWord('de student')">de student</span>
+        </div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-title">🌊 Ríos, montañas, plantas</div>
+        <div class="cat-examples">
+          <span class="cat-word" onclick="speakWord('de Rijn')">de Rijn</span>
+          <span class="cat-word" onclick="speakWord('de boom')">de boom</span>
+          <span class="cat-word" onclick="speakWord('de bloem')">de bloem</span>
+          <span class="cat-word" onclick="speakWord('de roos')">de roos</span>
+        </div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-title">🔢 Números, letras, fechas</div>
+        <div class="cat-examples">
+          <span class="cat-word" onclick="speakWord('de drie')">de drie</span>
+          <span class="cat-word" onclick="speakWord('de letter')">de letter</span>
+          <span class="cat-word" onclick="speakWord('de maand')">de maand</span>
+          <span class="cat-word" onclick="speakWord('de dag')">de dag</span>
+        </div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-title">📰 Palabras terminadas en -heid, -ing, -ij, -ie, -ie</div>
+        <div class="cat-examples">
+          <span class="cat-word" onclick="speakWord('de vrijheid')">de vrijheid</span>
+          <span class="cat-word" onclick="speakWord('de opleiding')">de opleiding</span>
+          <span class="cat-word" onclick="speakWord('de familie')">de familie</span>
+          <span class="cat-word" onclick="speakWord('de politie')">de politie</span>
+        </div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-title">🏢 Palabras terminadas en -schap, -nis, -st</div>
+        <div class="cat-examples">
+          <span class="cat-word" onclick="speakWord('de maatschappij')">de maatschappij</span>
+          <span class="cat-word" onclick="speakWord('de kennis')">de kennis</span>
+          <span class="cat-word" onclick="speakWord('de kunst')">de kunst</span>
+          <span class="cat-word" onclick="speakWord('de dienst')">de dienst</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip-toggle" id="tip1-toggle" onclick="toggleTip('tip1')">
+      <div class="bulb-wrap"><span class="bulb-icon">💡</span><div class="bulb-glow"></div></div>
+      <span class="tip-label">El truco más útil — terminaciones</span>
+      <span class="tip-arrow">▾</span>
+    </div>
+    <div class="tip-content" id="tip1-content">
+      Las terminaciones son tu mejor aliado. Si una palabra termina en <strong>-heid</strong> (vrijheid, gezondheid), <strong>-ing</strong> (opleiding, woning), <strong>-ij</strong> (bakkerij, maatschappij), o <strong>-ie</strong> (familie, politie) — es <em>siempre de</em>. Memoriza estas 4 terminaciones y reconocerás cientos de palabras de forma automática.
+    </div>
+  </div>
+
+  <!-- COMMON DE WORDS -->
+  <div class="card">
+    <div class="card-body" style="padding-bottom:8px">
+      <div class="section-label">📋 Las 20 palabras DE más comunes del examen</div>
+      Toca para escuchar:
+    </div>
+    <div class="phrase-list" style="padding-top:0">
+      <div class="phrase-row" onclick="speak('de tijd','de tait',this)"><div class="pron-bubble"></div><div class="phrase-icon">⏰</div><div class="phrase-content"><div class="phrase-nl"><span class="de">de</span> tijd</div><div class="phrase-es">el tiempo / la época</div></div><div class="phrase-sound-btn">🔊</div></div>
+      <div class="phrase-row" onclick="speak('de school','de sjool',this)"><div class="pron-bubble"></div><div class="phrase-icon">🏫</div><div class="phrase-content"><div class="phrase-nl"><span class="de">de</span> school</div><div class="phrase-es">la escuela</div></div><div class="phrase-sound-btn">🔊</div></div>
+      <div class="phrase-row" onclick="speak('de taal','de taal',this)"><div class="pron-bubble"></div><div class="phrase-icon">🗣️</div><div class="phrase-content"><div class="phrase-nl"><span class="de">de</span> taal</div><div class="phrase-es">el idioma</div></div><div class="phrase-sound-btn">🔊</div></div>
+      <div class="phrase-row" onclick="speak('de stad','de stat',this)"><div class="pron-bubble"></div><div class="phrase-icon">🏙️</div><div class="phrase-content"><div class="phrase-nl"><span class="de">de</span> stad</div><div class="phrase-es">la ciudad</div></div><div class="phrase-sound-btn">🔊</div></div>
+      <div class="phrase-row" onclick="speak('de straat','de straat',this)"><div class="pron-bubble"></div><div class="phrase-icon">🛣️</div><div class="phrase-content"><div class="phrase-nl"><span class="de">de</span> straat</div><div class="phrase-es">la calle</div></div><div class="phrase-sound-btn">🔊</div></div>
+      <div class="phrase-row" onclick="speak('de kerk','de kerk',this)"><div class="pron-bubble"></div><div class="phrase-icon">⛪</div><div class="phrase-content"><div class="phrase-nl"><span class="de">de</span> kerk</div><div class="phrase-es">la iglesia</div></div><div class="phrase-sound-btn">🔊</div></div>
+      <div class="phrase-row" onclick="speak('de winkel','de VIN-kel',this)"><div class="pron-bubble"></div><div class="phrase-icon">🛒</div><div class="phrase-content"><div class="phrase-nl"><span class="de">de</span> winkel</div><div class="phrase-es">la tienda</div></div><div class="phrase-sound-btn">🔊</div></div>
+      <div class="phrase-row" onclick="speak('de woning','de VOO-ning',this)"><div class="pron-bubble"></div><div class="phrase-icon">🏠</div><div class="phrase-content"><div class="phrase-nl"><span class="de">de</span> woning</div><div class="phrase-es">la vivienda</div></div><div class="phrase-sound-btn">🔊</div></div>
+    </div>
+
+    <div class="tip-toggle" id="tip2-toggle" onclick="toggleTip('tip2')">
+      <div class="bulb-wrap"><span class="bulb-icon">💡</span><div class="bulb-glow"></div></div>
+      <span class="tip-label">¿Y si no sabes si es de o het?</span>
+      <span class="tip-arrow">▾</span>
+    </div>
+    <div class="tip-content" id="tip2-content">
+      Si no sabes si una palabra es de o het, hay una estadística a tu favor: <strong>aproximadamente el 75% de las palabras neerlandesas son de</strong>. Si dudas, di <em>de</em> — tendrás más probabilidades de acertar. Además, en el examen de inburgering A1 el contexto siempre ayuda.
+    </div>
+  </div>
+
+  <!-- TRUE / FALSE EXERCISE -->
+  <div class="card">
+    <div class="exercise-card">
+      <div class="exercise-label">✅ Ejercicio — ¿Es esta palabra DE?</div>
+      <div class="exercise-instruction">Lee cada palabra y decide: ¿usa el artículo DE? Toca Sí o No.</div>
+      <div class="tf-score">Puntuación: <span id="tf-score">0</span> / <span id="tf-total">0</span></div>
+      <div class="tf-card" id="tf-card">
+        <div class="tf-word" id="tf-word"></div>
+        <div class="tf-question">¿Es <strong>de</strong> ____?</div>
+        <div class="tf-buttons">
+          <button class="tf-btn tf-yes" onclick="answerTF(true)">✅ Sí, de</button>
+          <button class="tf-btn tf-no" onclick="answerTF(false)">❌ No, het</button>
+        </div>
+      </div>
+      <div class="tf-feedback" id="tf-feedback"></div>
+      <div class="tf-complete" id="tf-complete">
+        <div style="font-size:2rem;margin-bottom:8px">🎉</div>
+        <div class="tf-complete-score" id="tf-final-score"></div>
+        <div class="tf-complete-label">respuestas correctas</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHALLENGE -->
+  <div class="card">
+    <div class="challenge-card">
+      <div class="challenge-label">🎯 Reto</div>
+      <div class="challenge-question" id="ch-q"></div>
+      <div class="challenge-options" id="ch-opts"></div>
+      <div class="challenge-feedback" id="ch-fb"></div>
+    </div>
+  </div>
+
+  <div class="next-wrap">
+    <button class="btn-next" id="btn-next" onclick="goNext()">Siguiente lección &nbsp;→</button>
+  </div>
+</div>
+
+<div class="complete-screen" id="complete-screen">
+  <div class="complete-emoji">🔵</div>
+  <div class="complete-title">¡Lección completada!</div>
+  <div class="complete-sub">Ya conoces las categorías que siempre usan de. ¡Ahora vamos con het!</div>
+  <button class="btn-continue" onclick="window.location.href='les-3.html'">Continuar → Palabras HET →</button>
+</div>
+
+<script>
+let currentRow=null,bubbleTimers={};
+function speak(text,pron,el){
+  window.speechSynthesis.cancel();
+  if(currentRow)clearBubble(currentRow);
+  const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';u.rate=0.85;
+  showBubble(el,pron);el.classList.add('playing');currentRow=el;
+  u.onend=()=>{el.classList.remove('playing');clearTimeout(bubbleTimers.r);bubbleTimers.r=setTimeout(()=>clearBubble(el),2000);};
+  u.onerror=()=>{el.classList.remove('playing');clearBubble(el);};
+  window.speechSynthesis.speak(u);
+}
+function speakWord(text){
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';u.rate=0.85;
+  window.speechSynthesis.speak(u);
+}
+function showBubble(el,pron){const b=el.querySelector('.pron-bubble');if(!b)return;b.textContent=pron;b.classList.add('show');}
+function clearBubble(el){if(!el)return;el.classList.remove('playing');const b=el.querySelector('.pron-bubble');if(b)b.classList.remove('show');}
+function toggleTip(id){document.getElementById(id+'-toggle').classList.toggle('open');document.getElementById(id+'-content').classList.toggle('open');}
+
+// TRUE/FALSE DATA
+const TF_WORDS=[
+  {w:'man',isDE:true,hint:'Personas → siempre de'},
+  {w:'huis',isDE:false,hint:'huis es het — sustantivo neutro'},
+  {w:'opleiding',isDE:true,hint:'Termina en -ing → siempre de'},
+  {w:'water',isDE:false,hint:'water es het — sustantivo neutro'},
+  {w:'vrijheid',isDE:true,hint:'Termina en -heid → siempre de'},
+  {w:'boek',isDE:false,hint:'boek es het — sustantivo neutro'},
+  {w:'politie',isDE:true,hint:'Termina en -ie → siempre de'},
+  {w:'kind',isDE:false,hint:'kind es het — personas jóvenes neutras'},
+  {w:'straat',isDE:true,hint:'straat es de — nombres de lugares geográficos'},
+  {w:'land',isDE:false,hint:'land es het — sustantivo neutro'},
+];
+
+let tfIdx=0,tfScore=0,tfDone=false,chDone=false,chIdx=0;
+
+function showTF(){
+  if(tfIdx>=TF_WORDS.length){
+    document.getElementById('tf-card').style.display='none';
+    const comp=document.getElementById('tf-complete');
+    comp.classList.add('show');
+    document.getElementById('tf-final-score').textContent=`${tfScore} / ${TF_WORDS.length}`;
+    tfDone=true;checkUnlock();return;
+  }
+  document.getElementById('tf-word').textContent=TF_WORDS[tfIdx].w;
+  document.getElementById('tf-total').textContent=TF_WORDS.length;
+  document.getElementById('tf-feedback').className='tf-feedback';
+  document.querySelectorAll('.tf-btn').forEach(b=>b.style.pointerEvents='');
+}
+
+function answerTF(userSaysDE){
+  const item=TF_WORDS[tfIdx];
+  document.querySelectorAll('.tf-btn').forEach(b=>b.style.pointerEvents='none');
+  const fb=document.getElementById('tf-feedback');
+  if(userSaysDE===item.isDE){
+    tfScore++;
+    fb.innerHTML=`✅ ¡Correcto! ${item.isDE?'<strong>de</strong>':'<strong>het</strong>'} ${item.w} — ${item.hint}`;
+    fb.className='tf-feedback fb-correct show';
+  } else {
+    fb.innerHTML=`❌ Era <strong>${item.isDE?'de':'het'}</strong> ${item.w} — ${item.hint}`;
+    fb.className='tf-feedback fb-wrong show';
+  }
+  document.getElementById('tf-score').textContent=tfScore;
+  setTimeout(()=>{tfIdx++;showTF();},1800);
+}
+
+// CHALLENGE
+const CHALLENGES=[
+  {q:'¿Cuál de estas palabras usa DE por su terminación?',opts:['het boek','het land','de vrijheid','het water'],correct:2,fb:'✅ ¡Correcto! <strong>vrijheid</strong> termina en <em>-heid</em>, que es siempre de. Memoriza: -heid, -ing, -ij, -ie → siempre de.'},
+  {q:'"De politie" — ¿por qué es de y no het?',opts:['Porque es una institución','Porque termina en -ie','Porque es una persona','Por su longitud'],correct:1,fb:'✅ ¡Exacto! <strong>politie</strong> termina en <em>-ie</em> → siempre de. Lo mismo con: familie, energie, provincie...'},
+  {q:'Aproximadamente, ¿qué porcentaje de palabras neerlandesas son DE?',opts:['25%','50%','75%','90%'],correct:2,fb:'✅ ¡Bien! Alrededor del <strong>75%</strong> de las palabras son de. Si dudas y dices de, tendrás más probabilidades de acertar que si dices het.'},
+];
+
+function buildChallenge(){showChallenge(0);}
+function showChallenge(idx){
+  if(idx>=CHALLENGES.length){chDone=true;checkUnlock();return;}
+  const ch=CHALLENGES[idx];
+  document.getElementById('ch-q').textContent=ch.q;
+  const el=document.getElementById('ch-opts');el.innerHTML='';
+  ch.opts.forEach((o,i)=>{const b=document.createElement('button');b.className='challenge-opt';b.textContent=o;b.onclick=()=>answerCh(idx,i,b);el.appendChild(b);});
+  document.getElementById('ch-fb').className='challenge-feedback';
+  document.getElementById('ch-fb').innerHTML='';
+}
+function answerCh(cIdx,optIdx,btn){
+  const ch=CHALLENGES[cIdx];
+  document.querySelectorAll('.challenge-opt').forEach(b=>b.style.pointerEvents='none');
+  const fb=document.getElementById('ch-fb');
+  if(optIdx===ch.correct){btn.classList.add('opt-correct');fb.innerHTML=ch.fb;fb.className='challenge-feedback fb-correct show';}
+  else{btn.classList.add('opt-wrong');document.querySelectorAll('.challenge-opt')[ch.correct].classList.add('opt-correct');fb.innerHTML=`❌ No exactamente. ${ch.fb}`;fb.className='challenge-feedback fb-wrong show';}
+  setTimeout(()=>{chIdx++;showChallenge(chIdx);},2200);
+}
+
+function checkUnlock(){
+  let p=0;if(tfDone)p+=50;if(chDone)p+=50;
+  document.getElementById('progress-fill').style.width=p+'%';
+  if(tfDone&&chDone)document.getElementById('btn-next').classList.add('unlocked');
+}
+function goNext(){document.getElementById('main-content').style.display='none';document.getElementById('complete-screen').classList.add('show');}
+
+showTF();buildChallenge();
+</script>
+</body>
+</html>
+
