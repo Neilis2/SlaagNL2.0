@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SlaagNL — Módulo 0 · Les 1</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:    #0d1f3c;
+  --navy2:   #162d54;
+  --navy3:   #1e3a6e;
+  --orange:  #f47c3a;
+  --orange2: #e86a24;
+  --cream:   #fdf6ec;
+  --cream2:  #f5ead8;
+  --green:   #2ecc8a;
+  --yellow:  #f4c842;
+  --red:     #e8455a;
+  --muted:   #6b7a99;
+  --border:  rgba(255,255,255,0.07);
+  --ease:    0.22s cubic-bezier(0.4,0,0.2,1);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { -webkit-text-size-adjust:100%; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--navy);
+  color: var(--cream);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── HEADER ── */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  background: var(--navy2);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.btn-back {
+  background: none;
+  border: none;
+  color: var(--orange);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0 8px 0 0;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.header-info { flex: 1; min-width: 0; }
+
+.header-sup {
+  font-size: 10px;
+  color: var(--orange);
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.header-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--cream);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.header-count {
+  font-size: 12px;
+  color: rgba(253,246,236,0.4);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+/* ── PROGRESS BAR ── */
+.progress-wrap {
+  height: 3px;
+  background: rgba(255,255,255,0.08);
+}
+.progress-fill {
+  height: 100%;
+  background: var(--orange);
+  transition: width 0.5s ease;
+}
+
+/* ── MAIN SCROLL ── */
+.main {
+  padding: 16px 16px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ── CARD BASE ── */
+.card {
+  background: var(--navy2);
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+/* ── LESSON INTRO ── */
+.lesson-intro {
+  padding: 20px 18px 18px;
+}
+
+.lesson-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--orange);
+  background: rgba(244,124,58,0.12);
+  border: 1px solid rgba(244,124,58,0.2);
+  padding: 4px 10px;
+  border-radius: 99px;
+  margin-bottom: 12px;
+}
+
+.lesson-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--cream);
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+
+.lesson-desc {
+  font-size: 14px;
+  color: rgba(253,246,236,0.7);
+  line-height: 1.7;
+}
+
+/* ── EXPLANATION CARD ── */
+.card-body {
+  padding: 18px;
+  font-size: 14px;
+  line-height: 1.75;
+  color: rgba(253,246,236,0.85);
+}
+
+.card-body strong { color: var(--orange); }
+.card-body em { color: #a8e6cf; font-style: normal; font-weight: 600; }
+
+.section-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--orange);
+  margin-bottom: 10px;
+}
+
+/* ── ALPHABET GRID ── */
+.alphabet-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  gap: 8px;
+  padding: 18px;
+}
+
+.letter-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 10px 6px;
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--ease);
+  user-select: none;
+}
+
+.letter-card:active {
+  transform: scale(0.94);
+  background: rgba(244,124,58,0.12);
+  border-color: var(--orange);
+}
+
+.letter-main {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--cream);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.letter-sound {
+  font-size: 10px;
+  color: var(--orange);
+  font-weight: 600;
+}
+
+/* ── EXAMPLES ── */
+.examples-list {
+  padding: 0 18px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.example-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.example-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.example-content { flex: 1; }
+
+.example-nl {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--cream);
+  margin-bottom: 2px;
+}
+
+.example-nl strong { color: var(--orange); }
+
+.example-es {
+  font-size: 12px;
+  color: rgba(253,246,236,0.45);
+  font-style: italic;
+}
+
+/* ── LIGHTBULB TIP ── */
+.tip-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 18px;
+  background: rgba(244,124,58,0.06);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  cursor: pointer;
+  user-select: none;
+  transition: background var(--ease);
+}
+
+.tip-toggle:hover { background: rgba(244,124,58,0.1); }
+
+.bulb-wrap {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+}
+
+.bulb-icon {
+  font-size: 22px;
+  line-height: 28px;
+  display: block;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.bulb-glow {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(244,196,58,0.35), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.tip-toggle.open .bulb-glow { opacity: 1; }
+.tip-toggle.open .bulb-icon { transform: scale(1.15); filter: brightness(1.3); }
+
+@keyframes bulbPulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.tip-toggle:not(.open) .bulb-glow {
+  opacity: 0.3;
+  animation: bulbPulse 2s infinite;
+}
+
+.tip-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--orange);
+  flex: 1;
+}
+
+.tip-arrow {
+  color: rgba(244,124,58,0.6);
+  font-size: 16px;
+  transition: transform 0.3s ease;
+}
+
+.tip-toggle.open .tip-arrow { transform: rotate(180deg); }
+
+.tip-content {
+  display: none;
+  padding: 14px 18px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: rgba(253,246,236,0.7);
+  background: rgba(244,124,58,0.04);
+  border-top: 1px solid rgba(255,255,255,0.04);
+  animation: fadeDown 0.25s ease;
+}
+
+.tip-content.open { display: block; }
+.tip-content strong { color: var(--orange); }
+.tip-content em { color: #a8e6cf; font-style: normal; font-weight: 600; }
+
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── PRONUNCIATION RULES ── */
+.pron-list {
+  padding: 14px 18px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pron-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 12px;
+  border-left: 3px solid var(--orange);
+}
+
+.pron-letter {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--orange);
+  min-width: 36px;
+  text-align: center;
+}
+
+.pron-info { flex: 1; }
+
+.pron-sound {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--cream);
+  margin-bottom: 2px;
+}
+
+.pron-example {
+  font-size: 11px;
+  color: rgba(253,246,236,0.45);
+  font-style: italic;
+}
+
+/* ── EXERCISE ── */
+.exercise-card {
+  padding: 18px;
+}
+
+.exercise-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--orange);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+.exercise-instruction {
+  font-size: 13px;
+  color: rgba(253,246,236,0.5);
+  margin-bottom: 6px;
+  font-style: italic;
+}
+
+.exercise-translation {
+  font-size: 12px;
+  color: rgba(253,246,236,0.35);
+  margin-bottom: 14px;
+  font-style: italic;
+}
+
+/* Answer slots */
+.answer-slots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 50px;
+  padding: 10px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 12px;
+  margin-bottom: 14px;
+  border: 1.5px dashed rgba(255,255,255,0.12);
+  align-items: center;
+}
+
+.answer-slot {
+  min-width: 52px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1.5px dashed rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--cream);
+  padding: 0 12px;
+  background: rgba(255,255,255,0.04);
+  transition: all 0.2s;
+  cursor: pointer;
+  user-select: none;
+}
+
+.answer-slot.filled {
+  border-color: var(--orange);
+  background: rgba(244,124,58,0.12);
+  border-style: solid;
+}
+
+.answer-slot.filled:active { transform: scale(0.93); }
+
+.answer-slot.slot-correct {
+  border-color: var(--green);
+  background: rgba(46,204,138,0.15);
+  color: var(--green);
+  border-style: solid;
+  cursor: default;
+}
+
+.answer-slot.slot-wrong {
+  border-color: var(--red);
+  background: rgba(232,69,90,0.15);
+  color: var(--red);
+  border-style: solid;
+}
+
+/* Word bank */
+.word-bank {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.word-chip {
+  padding: 8px 14px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.07);
+  border: 1.5px solid rgba(255,255,255,0.15);
+  color: var(--cream);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+  user-select: none;
+}
+
+.word-chip:active { transform: scale(0.93); }
+
+.word-chip.used {
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+/* Feedback */
+.exercise-feedback {
+  margin-top: 4px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  display: none;
+}
+
+.exercise-feedback.show { display: block; }
+.feedback-correct { background: rgba(46,204,138,0.15); color: var(--green); }
+.feedback-wrong   { background: rgba(232,69,90,0.12);  color: var(--red); }
+
+.btn-check {
+  width: 100%;
+  padding: 13px;
+  background: var(--navy3);
+  border: 1.5px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  color: var(--cream);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all var(--ease);
+  margin-top: 6px;
+}
+
+.btn-check:hover { background: rgba(244,124,58,0.15); border-color: var(--orange); }
+
+/* ── CHALLENGE ── */
+.challenge-card { padding: 18px; }
+
+.challenge-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #a78bfa;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.challenge-question {
+  font-size: 14px;
+  color: var(--cream);
+  line-height: 1.6;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+
+.challenge-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.challenge-opt {
+  padding: 13px 16px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.05);
+  border: 1.5px solid rgba(255,255,255,0.1);
+  color: var(--cream);
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+  font-weight: 500;
+}
+
+.challenge-opt:active { transform: scale(0.98); }
+
+.challenge-opt.opt-correct {
+  border-color: var(--green);
+  background: rgba(46,204,138,0.15);
+  color: var(--green);
+  font-weight: 700;
+}
+
+.challenge-opt.opt-wrong {
+  border-color: var(--red);
+  background: rgba(232,69,90,0.12);
+  color: var(--red);
+}
+
+.challenge-feedback {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 13px;
+  line-height: 1.5;
+  display: none;
+  animation: fadeDown 0.25s ease;
+}
+
+.challenge-feedback.show { display: block; }
+.challenge-feedback strong { font-weight: 700; }
+.challenge-feedback.fb-correct { background: rgba(46,204,138,0.12); color: var(--green); }
+.challenge-feedback.fb-wrong   { background: rgba(232,69,90,0.1);   color: var(--red); }
+
+/* ── NEXT BUTTON ── */
+.next-wrap {
+  padding: 0 0 8px;
+}
+
+.btn-next {
+  width: 100%;
+  padding: 17px;
+  background: var(--orange);
+  border: none;
+  border-radius: 14px;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all var(--ease);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.btn-next.unlocked {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.btn-next.unlocked:active { opacity: 0.85; transform: scale(0.98); }
+
+/* ── DIVIDER ── */
+.divider {
+  height: 1px;
+  background: rgba(255,255,255,0.06);
+  margin: 0 18px;
+}
+
+/* ── COMPLETE SCREEN ── */
+.complete-screen {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding: 40px 24px;
+  text-align: center;
+  gap: 12px;
+}
+
+.complete-screen.show { display: flex; }
+
+.complete-emoji { font-size: 64px; margin-bottom: 8px; }
+
+.complete-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--cream);
+  margin-bottom: 4px;
+}
+
+.complete-sub {
+  font-size: 15px;
+  color: rgba(253,246,236,0.5);
+  line-height: 1.6;
+  max-width: 280px;
+}
+
+.btn-continue {
+  margin-top: 16px;
+  padding: 16px 32px;
+  background: var(--orange);
+  border: none;
+  border-radius: 14px;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <button class="btn-back" onclick="history.back()">‹</button>
+  <div class="header-info">
+    <div class="header-sup">Módulo 0 · Fundamentos</div>
+    <div class="header-title">El Alfabeto y la Pronunciación</div>
+  </div>
+  <div class="header-count" id="lesson-count">Les 1 / 7</div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main" id="main-content">
+
+  <!-- 1. INTRO -->
+  <div class="card lesson-intro">
+    <div class="lesson-tag">📖 Lección 1</div>
+    <div class="lesson-title">El Alfabeto Neerlandés</div>
+    <div class="lesson-desc">
+      El neerlandés usa el mismo alfabeto que el español — 26 letras. Pero varias se pronuncian diferente. Dominar la pronunciación desde el inicio te ayudará a leer, escribir y entender todo lo que viene después.
+    </div>
+  </div>
+
+  <!-- 2. ALPHABET GRID -->
+  <div class="card">
+    <div class="card-body" style="padding-bottom:8px">
+      <div class="section-label">🔤 El Alfabeto</div>
+      Toca cada letra para escuchar cómo se llama en neerlandés.
+    </div>
+    <div class="alphabet-grid" id="alphabet-grid"></div>
+  </div>
+
+  <!-- 3. PRONUNCIACIÓN CLAVE -->
+  <div class="card">
+    <div class="card-body" style="padding-bottom: 4px">
+      <div class="section-label">🔊 Pronunciación Clave</div>
+      Estas letras y combinaciones suenan diferente al español:
+    </div>
+
+    <!-- LIGHTBULB TIP -->
+    <div class="tip-toggle" id="tip1-toggle" onclick="toggleTip('tip1')">
+      <div class="bulb-wrap">
+        <span class="bulb-icon">💡</span>
+        <div class="bulb-glow"></div>
+      </div>
+      <span class="tip-label">¿Por qué son diferentes?</span>
+      <span class="tip-arrow">▾</span>
+    </div>
+    <div class="tip-content" id="tip1-content">
+      El neerlandés viene del <strong>germánico antiguo</strong>, igual que el alemán y el inglés. Por eso muchos sonidos son guturales (de la garganta) o nasales, muy diferentes al español que viene del latín. La buena noticia: una vez que aprendes los patrones, <em>son siempre consistentes</em> — no cambian como en inglés.
+    </div>
+
+    <div class="pron-list">
+      <div class="pron-row">
+        <div class="pron-letter">G / CH</div>
+        <div class="pron-info">
+          <div class="pron-sound">Como la <strong>J</strong> española — gutural</div>
+          <div class="pron-example">goed (jut) · gaan (jaan) ·acht (ajt)</div>
+        </div>
+      </div>
+      <div class="pron-row">
+        <div class="pron-letter">W</div>
+        <div class="pron-info">
+          <div class="pron-sound">Entre <strong>V</strong> y <strong>W</strong> — labial suave</div>
+          <div class="pron-example">wonen (vonen) · water (vaater)</div>
+        </div>
+      </div>
+      <div class="pron-row">
+        <div class="pron-letter">IJ / EI</div>
+        <div class="pron-info">
+          <div class="pron-sound">Como <strong>AI</strong> en español</div>
+          <div class="pron-example">rijden (raiden) · zijn (zain)</div>
+        </div>
+      </div>
+      <div class="pron-row">
+        <div class="pron-letter">OE</div>
+        <div class="pron-info">
+          <div class="pron-sound">Como <strong>U</strong> española</div>
+          <div class="pron-example">boek (buk) · doen (dun)</div>
+        </div>
+      </div>
+      <div class="pron-row">
+        <div class="pron-letter">UI</div>
+        <div class="pron-info">
+          <div class="pron-sound">Como <strong>AU</strong> con labios redondeados</div>
+          <div class="pron-example">huis (haus) · uit (aut)</div>
+        </div>
+      </div>
+      <div class="pron-row">
+        <div class="pron-letter">EU</div>
+        <div class="pron-info">
+          <div class="pron-sound">Como <strong>EU</strong> francesa — labios en O, lengua en E</div>
+          <div class="pron-example">neus (neus) · leuk (leuk)</div>
+        </div>
+      </div>
+      <div class="pron-row">
+        <div class="pron-letter">AA/EE/OO</div>
+        <div class="pron-info">
+          <div class="pron-sound">Vocal <strong>larga</strong> — doble duración</div>
+          <div class="pron-example">naam (naaam) · been (bein) · groot (jroot)</div>
+        </div>
+      </div>
+      <div class="pron-row">
+        <div class="pron-letter">D final</div>
+        <div class="pron-info">
+          <div class="pron-sound">Suena como <strong>T</strong> al final de palabra</div>
+          <div class="pron-example">land (lant) · hond (hont)</div>
+        </div>
+      </div>
+      <div class="pron-row">
+        <div class="pron-letter">SCH</div>
+        <div class="pron-info">
+          <div class="pron-sound">Como <strong>SJ</strong> — S + J juntas</div>
+          <div class="pron-example">school (sjool) · schrijven (sjraiven)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. EJEMPLOS EN CONTEXTO -->
+  <div class="card">
+    <div class="card-body" style="padding-bottom: 8px">
+      <div class="section-label">✅ Ejemplos en contexto</div>
+      Observa cómo los sonidos que aprendiste aparecen en palabras reales:
+    </div>
+    <div class="examples-list">
+      <div class="example-row">
+        <div class="example-icon">🏠</div>
+        <div class="example-content">
+          <div class="example-nl"><strong>huis</strong> — pronunciado: <em>haus</em></div>
+          <div class="example-es">casa — UI suena como AU</div>
+        </div>
+      </div>
+      <div class="example-row">
+        <div class="example-icon">👋</div>
+        <div class="example-content">
+          <div class="example-nl"><strong>goedemorgen</strong> — pronunciado: <em>jude-morjen</em></div>
+          <div class="example-es">buenos días — G suena como J</div>
+        </div>
+      </div>
+      <div class="example-row">
+        <div class="example-icon">📚</div>
+        <div class="example-content">
+          <div class="example-nl"><strong>schrijven</strong> — pronunciado: <em>sjraiven</em></div>
+          <div class="example-es">escribir — SCH suena como SJ, IJ suena como AI</div>
+        </div>
+      </div>
+      <div class="example-row">
+        <div class="example-icon">🌍</div>
+        <div class="example-content">
+          <div class="example-nl"><strong>Nederland</strong> — pronunciado: <em>NEI-der-lant</em></div>
+          <div class="example-es">Países Bajos — D final suena como T</div>
+        </div>
+      </div>
+      <div class="example-row">
+        <div class="example-icon">🚲</div>
+        <div class="example-content">
+          <div class="example-nl"><strong>fiets</strong> — pronunciado: <em>fits</em></div>
+          <div class="example-es">bicicleta — IE suena como I larga</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TIP 2 -->
+    <div class="tip-toggle" id="tip2-toggle" onclick="toggleTip('tip2')">
+      <div class="bulb-wrap">
+        <span class="bulb-icon">💡</span>
+        <div class="bulb-glow"></div>
+      </div>
+      <span class="tip-label">Truco para aprender la pronunciación</span>
+      <span class="tip-arrow">▾</span>
+    </div>
+    <div class="tip-content" id="tip2-content">
+      No intentes memorizar todos los sonidos a la vez. <strong>Aprende los 3 más diferentes primero:</strong> <em>G/CH como J</em>, <em>IJ/EI como AI</em>, y <em>OE como U</em>. Con solo esos tres ya podrás leer el 70% de las palabras correctamente. Los demás los irás incorporando naturalmente al leer y escuchar.
+    </div>
+  </div>
+
+  <!-- 5. EJERCICIO — ORDENAR PALABRAS -->
+  <div class="card">
+    <div class="exercise-card">
+      <div class="exercise-label">✏️ Ejercicio — ¿Cómo se pronuncia?</div>
+      <div class="exercise-instruction">Ordena las sílabas para formar la pronunciación correcta</div>
+
+      <!-- Exercise 1 -->
+      <div id="ex1" class="exercise-block" style="margin-bottom: 20px">
+        <div style="font-size:13px; font-weight:600; color:var(--cream); margin-bottom:4px">
+          🏠 <strong style="color:var(--orange)">huis</strong> — ¿Cómo suena?
+        </div>
+        <div class="exercise-translation">La pronunciación correcta de "huis"</div>
+        <div class="answer-slots" id="ex1-slots"></div>
+        <div class="word-bank" id="ex1-bank"></div>
+        <div class="exercise-feedback" id="ex1-feedback"></div>
+        <button class="btn-check" onclick="checkExercise(1)">Comprobar</button>
+      </div>
+
+      <div class="divider" style="margin: 0 0 20px 0"></div>
+
+      <!-- Exercise 2 -->
+      <div id="ex2" class="exercise-block">
+        <div style="font-size:13px; font-weight:600; color:var(--cream); margin-bottom:4px">
+          👋 <strong style="color:var(--orange)">goedemorgen</strong> — ¿Cómo suena?
+        </div>
+        <div class="exercise-translation">La pronunciación correcta de "goedemorgen"</div>
+        <div class="answer-slots" id="ex2-slots"></div>
+        <div class="word-bank" id="ex2-bank"></div>
+        <div class="exercise-feedback" id="ex2-feedback"></div>
+        <button class="btn-check" onclick="checkExercise(2)">Comprobar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. CHALLENGE -->
+  <div class="card">
+    <div class="challenge-card">
+      <div class="challenge-label">🎯 Reto</div>
+      <div class="challenge-question" id="challenge-question"></div>
+      <div class="challenge-options" id="challenge-options"></div>
+      <div class="challenge-feedback" id="challenge-feedback"></div>
+    </div>
+  </div>
+
+  <!-- 7. NEXT BUTTON -->
+  <div class="next-wrap">
+    <button class="btn-next" id="btn-next" onclick="goNext()">
+      Siguiente lección &nbsp;→
+    </button>
+  </div>
+
+</div>
+
+<!-- COMPLETE SCREEN -->
+<div class="complete-screen" id="complete-screen">
+  <div class="complete-emoji">🎉</div>
+  <div class="complete-title">¡Lección completada!</div>
+  <div class="complete-sub">Ya conoces el alfabeto y los sonidos clave del neerlandés. ¡Eso es la base de todo!</div>
+  <button class="btn-continue" onclick="window.location.href='les-2.html'">
+    Continuar → Saludos y despedidas
+  </button>
+</div>
+
+<script>
+// ══════════════════════════════════════
+// ALPHABET DATA
+// ══════════════════════════════════════
+const ALPHABET = [
+  {l:'A a', s:'aa'}, {l:'B b', s:'beh'}, {l:'C c', s:'seh'},
+  {l:'D d', s:'deh'}, {l:'E e', s:'eh'}, {l:'F f', s:'ef'},
+  {l:'G g', s:'jeh'}, {l:'H h', s:'haa'}, {l:'I i', s:'ie'},
+  {l:'J j', s:'yeh'}, {l:'K k', s:'kaa'}, {l:'L l', s:'el'},
+  {l:'M m', s:'em'}, {l:'N n', s:'en'}, {l:'O o', s:'oh'},
+  {l:'P p', s:'peh'}, {l:'Q q', s:'kuu'}, {l:'R r', s:'er'},
+  {l:'S s', s:'es'}, {l:'T t', s:'teh'}, {l:'U u', s:'uu'},
+  {l:'V v', s:'veh'}, {l:'W w', s:'weh'}, {l:'X x', s:'eks'},
+  {l:'Y y', s:'ei'}, {l:'Z z', s:'zet'},
+];
+
+// ══════════════════════════════════════
+// EXERCISES DATA
+// ══════════════════════════════════════
+const EXERCISES = {
+  1: {
+    answer: ['haus'],
+    options: ['haus', 'huis', 'huus', 'aus'],
+    correct: [0]
+  },
+  2: {
+    answer: ['ju', 'de', 'mor', 'jen'],
+    options: ['mor', 'ju', 'jen', 'de'],
+    correct: [0,1,2,3]
+  }
+};
+
+// ══════════════════════════════════════
+// CHALLENGE DATA
+// ══════════════════════════════════════
+const CHALLENGES = [
+  {
+    q: '¿Cómo se pronuncia la letra "G" en neerlandés?',
+    opts: [
+      'Como la G de "gato" en español',
+      'Como la J de "jardín" en español — gutural',
+      'Como la G de "George" en inglés',
+      'No se pronuncia, es muda'
+    ],
+    correct: 1,
+    fb: '✅ ¡Correcto! La G en neerlandés suena como nuestra J española — gutural, de la garganta. Por ejemplo: <strong>goed</strong> se pronuncia <strong>jut</strong>.'
+  },
+  {
+    q: '¿Qué sonido hace la combinación "OE" en neerlandés?',
+    opts: [
+      'Como "OE" en español — dos vocales separadas',
+      'Como "OI" — similar a "oiga"',
+      'Como "U" española — una sola vocal',
+      'Como "UE" — igual que en "bueno"'
+    ],
+    correct: 2,
+    fb: '✅ ¡Exacto! "OE" suena como nuestra <strong>U</strong>. Por eso <strong>boek</strong> (libro) se pronuncia <strong>buk</strong> y <strong>doen</strong> (hacer) se pronuncia <strong>dun</strong>.'
+  },
+  {
+    q: 'La palabra "land" (país) en neerlandés — ¿cómo termina?',
+    opts: [
+      'Termina en D — como se escribe',
+      'Termina en T — la D final suena T',
+      'La D es muda — termina en N',
+      'Termina en ND juntas'
+    ],
+    correct: 1,
+    fb: '✅ ¡Muy bien! En neerlandés la <strong>D al final de palabra siempre suena T</strong>. Por eso <strong>land</strong> → <strong>lant</strong>, <strong>hond</strong> (perro) → <strong>hont</strong>.'
+  }
+];
+
+// ══════════════════════════════════════
+// STATE
+// ══════════════════════════════════════
+let ex1Done = false;
+let ex2Done = false;
+let challengeDone = false;
+let currentChallenge = 0;
+let challengeCorrect = 0;
+
+// Slot data
+let slots = { 1: [], 2: [] };
+let banks = { 1: [], 2: [] };
+
+// ══════════════════════════════════════
+// INIT
+// ══════════════════════════════════════
+function init() {
+  buildAlphabet();
+  buildExercise(1);
+  buildExercise(2);
+  buildChallenge();
+}
+
+// ══════════════════════════════════════
+// ALPHABET
+// ══════════════════════════════════════
+function buildAlphabet() {
+  const grid = document.getElementById('alphabet-grid');
+  ALPHABET.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'letter-card';
+    card.innerHTML = `
+      <div class="letter-main">${item.l}</div>
+      <div class="letter-sound">${item.s}</div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+// ══════════════════════════════════════
+// TIP TOGGLE
+// ══════════════════════════════════════
+function toggleTip(id) {
+  const toggle = document.getElementById(id + '-toggle');
+  const content = document.getElementById(id + '-content');
+  toggle.classList.toggle('open');
+  content.classList.toggle('open');
+}
+
+// ══════════════════════════════════════
+// EXERCISES
+// ══════════════════════════════════════
+function buildExercise(num) {
+  const ex = EXERCISES[num];
+  const slotsEl = document.getElementById(`ex${num}-slots`);
+  const bankEl = document.getElementById(`ex${num}-bank`);
+
+  // Init slot state
+  slots[num] = new Array(ex.answer.length).fill(null);
+
+  // Build answer slots
+  ex.answer.forEach((_, i) => {
+    const slot = document.createElement('div');
+    slot.className = 'answer-slot';
+    slot.id = `ex${num}-slot-${i}`;
+    slot.onclick = () => removeFromSlot(num, i);
+    slotsEl.appendChild(slot);
+  });
+
+  // Build word bank (shuffled)
+  const shuffled = [...ex.options].sort(() => Math.random() - 0.5);
+  banks[num] = shuffled;
+
+  shuffled.forEach((word, i) => {
+    const chip = document.createElement('button');
+    chip.className = 'word-chip';
+    chip.textContent = word;
+    chip.id = `ex${num}-chip-${i}`;
+    chip.onclick = () => addToSlot(num, word, i);
+    bankEl.appendChild(chip);
+  });
+}
+
+function addToSlot(num, word, chipIdx) {
+  const ex = EXERCISES[num];
+  // Find first empty slot
+  const emptyIdx = slots[num].findIndex(s => s === null);
+  if (emptyIdx === -1) return;
+
+  // Place word
+  slots[num][emptyIdx] = { word, chipIdx };
+
+  // Update slot UI
+  const slotEl = document.getElementById(`ex${num}-slot-${emptyIdx}`);
+  slotEl.textContent = word;
+  slotEl.classList.add('filled');
+
+  // Mark chip as used
+  document.getElementById(`ex${num}-chip-${chipIdx}`).classList.add('used');
+}
+
+function removeFromSlot(num, slotIdx) {
+  if (slots[num][slotIdx] === null) return;
+
+  // Check if already checked (locked)
+  const slotEl = document.getElementById(`ex${num}-slot-${slotIdx}`);
+  if (slotEl.classList.contains('slot-correct') || slotEl.classList.contains('slot-wrong')) return;
+
+  const { chipIdx } = slots[num][slotIdx];
+
+  // Clear slot
+  slots[num][slotIdx] = null;
+  slotEl.textContent = '';
+  slotEl.classList.remove('filled');
+
+  // Re-enable chip
+  document.getElementById(`ex${num}-chip-${chipIdx}`).classList.remove('used');
+}
+
+function checkExercise(num) {
+  const ex = EXERCISES[num];
+  const filled = slots[num].every(s => s !== null);
+
+  if (!filled) {
+    const fb = document.getElementById(`ex${num}-feedback`);
+    fb.textContent = '⚠️ Coloca todas las sílabas primero.';
+    fb.className = 'exercise-feedback feedback-wrong show';
+    return;
+  }
+
+  const userAnswer = slots[num].map(s => s.word);
+  const isCorrect = JSON.stringify(userAnswer) === JSON.stringify(ex.answer);
+
+  const fb = document.getElementById(`ex${num}-feedback`);
+
+  ex.answer.forEach((correctWord, i) => {
+    const slotEl = document.getElementById(`ex${num}-slot-${i}`);
+    if (userAnswer[i] === correctWord) {
+      slotEl.classList.remove('filled');
+      slotEl.classList.add('slot-correct');
+    } else {
+      slotEl.classList.remove('filled');
+      slotEl.classList.add('slot-wrong');
+    }
+  });
+
+  if (isCorrect) {
+    fb.textContent = '✅ ¡Perfecto! Pronunciación correcta.';
+    fb.className = 'exercise-feedback feedback-correct show';
+    if (num === 1) ex1Done = true;
+    if (num === 2) ex2Done = true;
+  } else {
+    fb.innerHTML = `❌ No del todo. La respuesta es: <strong>${ex.answer.join(' · ')}</strong>`;
+    fb.className = 'exercise-feedback feedback-wrong show';
+    // Allow retry — reset after 1.5s
+    setTimeout(() => resetExercise(num), 1800);
+  }
+
+  checkUnlock();
+}
+
+function resetExercise(num) {
+  const ex = EXERCISES[num];
+  slots[num] = new Array(ex.answer.length).fill(null);
+
+  ex.answer.forEach((_, i) => {
+    const slotEl = document.getElementById(`ex${num}-slot-${i}`);
+    slotEl.textContent = '';
+    slotEl.className = 'answer-slot';
+  });
+
+  banks[num].forEach((_, i) => {
+    document.getElementById(`ex${num}-chip-${i}`).classList.remove('used');
+  });
+
+  document.getElementById(`ex${num}-feedback`).className = 'exercise-feedback';
+}
+
+// ══════════════════════════════════════
+// CHALLENGE
+// ══════════════════════════════════════
+function buildChallenge() {
+  showChallenge(0);
+}
+
+function showChallenge(idx) {
+  if (idx >= CHALLENGES.length) {
+    challengeDone = true;
+    checkUnlock();
+    return;
+  }
+
+  const ch = CHALLENGES[idx];
+  document.getElementById('challenge-question').textContent = ch.q;
+
+  const optsEl = document.getElementById('challenge-options');
+  optsEl.innerHTML = '';
+
+  ch.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'challenge-opt';
+    btn.textContent = opt;
+    btn.onclick = () => answerChallenge(idx, i, btn);
+    optsEl.appendChild(btn);
+  });
+
+  document.getElementById('challenge-feedback').className = 'challenge-feedback';
+  document.getElementById('challenge-feedback').innerHTML = '';
+}
+
+function answerChallenge(chIdx, optIdx, btn) {
+  const ch = CHALLENGES[chIdx];
+  const allOpts = document.querySelectorAll('.challenge-opt');
+  allOpts.forEach(b => b.style.pointerEvents = 'none');
+
+  const fb = document.getElementById('challenge-feedback');
+
+  if (optIdx === ch.correct) {
+    btn.classList.add('opt-correct');
+    fb.innerHTML = ch.fb;
+    fb.className = 'challenge-feedback fb-correct show';
+    challengeCorrect++;
+  } else {
+    btn.classList.add('opt-wrong');
+    allOpts[ch.correct].classList.add('opt-correct');
+    fb.innerHTML = `❌ No exactamente. ${ch.fb}`;
+    fb.className = 'challenge-feedback fb-wrong show';
+  }
+
+  // After 2s, go to next challenge
+  setTimeout(() => {
+    currentChallenge++;
+    showChallenge(currentChallenge);
+  }, 2200);
+}
+
+// ══════════════════════════════════════
+// UNLOCK & PROGRESS
+// ══════════════════════════════════════
+function checkUnlock() {
+  const done = ex1Done && ex2Done && challengeDone;
+  const btn = document.getElementById('btn-next');
+  if (done) {
+    btn.classList.add('unlocked');
+    updateProgress(100);
+  } else {
+    // Partial progress
+    let p = 0;
+    if (ex1Done) p += 33;
+    if (ex2Done) p += 33;
+    if (challengeDone) p += 34;
+    updateProgress(p);
+  }
+}
+
+function updateProgress(pct) {
+  document.getElementById('progress-fill').style.width = pct + '%';
+}
+
+function goNext() {
+  document.getElementById('main-content').style.display = 'none';
+  document.getElementById('complete-screen').classList.add('show');
+}
+
+// ══════════════════════════════════════
+// START
+// ══════════════════════════════════════
+init();
+</script>
+</body>
+</html>
+
