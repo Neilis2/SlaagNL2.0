@@ -1,0 +1,331 @@
+<!-- LES 5 - DIMINUTIVOS -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SlaagNL — M1 · Les 5</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0d1f3c;--navy2:#162d54;--navy3:#1e3a6e;--orange:#f47c3a;--cream:#fdf6ec;--green:#2ecc8a;--red:#e8455a;--purple:#a78bfa;--blue:#60a5fa;--border:rgba(255,255,255,0.07);--ease:0.22s cubic-bezier(0.4,0,0.2,1);}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
+body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);min-height:100vh;-webkit-font-smoothing:antialiased;}
+.header{display:flex;align-items:center;gap:10px;padding:14px 16px;background:var(--navy2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50;}
+.btn-back{background:none;border:none;color:var(--orange);font-size:24px;cursor:pointer;padding:0 8px 0 0;line-height:1;flex-shrink:0;}
+.header-info{flex:1;min-width:0;}
+.header-sup{font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:2px;}
+.header-title{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.header-count{font-size:12px;color:rgba(253,246,236,0.4);font-weight:600;flex-shrink:0;}
+.progress-wrap{height:3px;background:rgba(255,255,255,0.08);}
+.progress-fill{height:100%;background:var(--orange);transition:width 0.5s ease;}
+.main{padding:16px 16px 40px;display:flex;flex-direction:column;gap:14px;max-width:600px;margin:0 auto;}
+.card{background:var(--navy2);border-radius:18px;border:1px solid var(--border);overflow:hidden;}
+.card-body{padding:18px;font-size:14px;line-height:1.75;color:rgba(253,246,236,0.85);}
+.card-body strong{color:var(--orange);}
+.card-body em{color:#a8e6cf;font-style:normal;font-weight:600;}
+.section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--orange);margin-bottom:10px;}
+.lesson-intro{padding:20px 18px 18px;}
+.lesson-tag{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--orange);background:rgba(244,124,58,0.12);border:1px solid rgba(244,124,58,0.2);padding:4px 10px;border-radius:99px;margin-bottom:12px;}
+.lesson-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--cream);margin-bottom:8px;line-height:1.2;}
+.lesson-desc{font-size:14px;color:rgba(253,246,236,0.7);line-height:1.7;}
+
+/* SUFFIX TABLE */
+.suffix-table{margin:0 18px 18px;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);}
+.suffix-header{display:grid;grid-template-columns:1fr 2fr 2fr;background:rgba(244,124,58,0.12);padding:10px 14px;}
+.suffix-header div{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--orange);}
+.suffix-row{display:grid;grid-template-columns:1fr 2fr 2fr;padding:10px 14px;border-top:1px solid rgba(255,255,255,0.05);font-size:13px;align-items:center;}
+.suffix-row:nth-child(even){background:rgba(255,255,255,0.02);}
+.suffix-tag{font-family:'Playfair Display',serif;font-size:16px;font-weight:900;color:var(--orange);}
+.suffix-rule{color:rgba(253,246,236,0.6);font-size:12px;}
+.suffix-example{color:var(--cream);font-weight:600;cursor:pointer;user-select:none;}
+.suffix-example:active{opacity:0.7;}
+
+.phrase-list{padding:0 18px 18px;display:flex;flex-direction:column;gap:8px;}
+.phrase-row{display:flex;align-items:center;gap:12px;padding:12px 14px;background:rgba(255,255,255,0.03);border-radius:14px;border:1px solid rgba(255,255,255,0.06);cursor:pointer;transition:all 0.18s;position:relative;user-select:none;}
+.phrase-row:active{transform:scale(0.97);}
+.phrase-row.playing{border-color:var(--orange);background:rgba(244,124,58,0.08);}
+.phrase-icon{font-size:18px;flex-shrink:0;}
+.phrase-content{flex:1;}
+.phrase-nl{font-size:14px;font-weight:700;color:var(--cream);margin-bottom:2px;}
+.phrase-nl .het{color:var(--orange);}
+.phrase-es{font-size:12px;color:rgba(253,246,236,0.4);font-style:italic;}
+.phrase-sound-btn{width:30px;height:30px;border-radius:50%;background:rgba(244,124,58,0.12);border:1px solid rgba(244,124,58,0.25);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.phrase-row.playing .phrase-sound-btn{background:var(--orange);border-color:var(--orange);}
+.pron-bubble{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--navy3);border:1px solid var(--orange);border-radius:10px;padding:6px 14px;font-size:12px;font-weight:700;color:var(--orange);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 0.2s;z-index:10;}
+.pron-bubble::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--orange);}
+.pron-bubble.show{opacity:1;}
+
+.tip-toggle{display:flex;align-items:center;gap:10px;padding:13px 18px;background:rgba(244,124,58,0.06);border-top:1px solid rgba(255,255,255,0.06);cursor:pointer;user-select:none;}
+.bulb-wrap{position:relative;width:28px;height:28px;flex-shrink:0;}
+.bulb-icon{font-size:22px;line-height:28px;display:block;text-align:center;transition:transform 0.3s ease;}
+.bulb-glow{position:absolute;inset:-4px;border-radius:50%;background:radial-gradient(circle,rgba(244,196,58,0.35),transparent 70%);opacity:0;transition:opacity 0.3s ease;pointer-events:none;}
+.tip-toggle.open .bulb-glow{opacity:1;}
+.tip-toggle.open .bulb-icon{transform:scale(1.15);filter:brightness(1.3);}
+@keyframes bulbPulse{0%,100%{opacity:0.5}50%{opacity:1}}
+.tip-toggle:not(.open) .bulb-glow{opacity:0.3;animation:bulbPulse 2s infinite;}
+.tip-label{font-size:13px;font-weight:600;color:var(--orange);flex:1;}
+.tip-arrow{color:rgba(244,124,58,0.6);font-size:16px;transition:transform 0.3s ease;}
+.tip-toggle.open .tip-arrow{transform:rotate(180deg);}
+.tip-content{display:none;padding:14px 18px;font-size:13px;line-height:1.7;color:rgba(253,246,236,0.7);background:rgba(244,124,58,0.04);border-top:1px solid rgba(255,255,255,0.04);}
+.tip-content.open{display:block;}
+.tip-content strong{color:var(--orange);}
+.tip-content em{color:#a8e6cf;font-style:normal;font-weight:600;}
+
+/* MATCH EXERCISE */
+.exercise-card{padding:18px;}
+.exercise-label{font-size:10px;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+.exercise-instruction{font-size:13px;color:rgba(253,246,236,0.5);margin-bottom:16px;font-style:italic;}
+.match-container{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px;}
+.match-col{display:flex;flex-direction:column;gap:8px;}
+.match-col-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(253,246,236,0.4);margin-bottom:4px;}
+.match-item{padding:12px 14px;border-radius:12px;border:2px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);font-size:14px;font-weight:700;cursor:pointer;transition:all 0.18s;user-select:none;text-align:center;font-family:inherit;}
+.match-item:active{transform:scale(0.94);}
+.match-item.selected{border-color:var(--orange);background:rgba(244,124,58,0.15);color:var(--orange);}
+.match-item.matched-correct{border-color:var(--green);background:rgba(46,204,138,0.12);color:var(--green);pointer-events:none;}
+.match-item.matched-wrong{border-color:var(--red);background:rgba(232,69,90,0.1);color:var(--red);animation:shake 0.3s ease;}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-5px);}75%{transform:translateX(5px);}}
+.match-feedback{text-align:center;padding:12px;border-radius:12px;font-size:13px;font-weight:700;display:none;margin-bottom:10px;}
+.match-feedback.show{display:block;}
+.match-feedback.ok{background:rgba(46,204,138,0.12);color:var(--green);}
+.match-feedback.err{background:rgba(232,69,90,0.1);color:var(--red);}
+.match-score{text-align:center;padding:14px;background:rgba(46,204,138,0.08);border-radius:14px;border:1px solid rgba(46,204,138,0.2);font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--green);display:none;}
+.match-score.show{display:block;}
+
+.challenge-card{padding:18px;}
+.challenge-label{font-size:10px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.challenge-question{font-size:14px;color:var(--cream);line-height:1.6;margin-bottom:14px;font-weight:600;}
+.challenge-options{display:flex;flex-direction:column;gap:8px;}
+.challenge-opt{padding:13px 16px;border-radius:12px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);color:var(--cream);font-size:13px;text-align:left;cursor:pointer;transition:all 0.15s;font-family:inherit;font-weight:500;}
+.challenge-opt.opt-correct{border-color:var(--green);background:rgba(46,204,138,0.15);color:var(--green);font-weight:700;}
+.challenge-opt.opt-wrong{border-color:var(--red);background:rgba(232,69,90,0.12);color:var(--red);}
+.challenge-feedback{margin-top:12px;padding:12px 14px;border-radius:12px;font-size:13px;line-height:1.5;display:none;}
+.challenge-feedback.show{display:block;}
+.challenge-feedback strong{font-weight:700;}
+.challenge-feedback.fb-correct{background:rgba(46,204,138,0.12);color:var(--green);}
+.challenge-feedback.fb-wrong{background:rgba(232,69,90,0.1);color:var(--red);}
+.next-wrap{padding:0 0 8px;}
+.btn-next{width:100%;padding:17px;background:var(--orange);border:none;border-radius:14px;color:white;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;opacity:0.4;pointer-events:none;}
+.btn-next.unlocked{opacity:1;pointer-events:all;}
+.complete-screen{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;padding:40px 24px;text-align:center;gap:12px;}
+.complete-screen.show{display:flex;}
+.complete-emoji{font-size:64px;margin-bottom:8px;}
+.complete-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--cream);margin-bottom:4px;}
+.complete-sub{font-size:15px;color:rgba(253,246,236,0.5);line-height:1.6;max-width:280px;}
+.btn-continue{margin-top:16px;padding:16px 32px;background:var(--orange);border:none;border-radius:14px;color:white;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;}
+</style>
+</head>
+<body>
+<div class="header">
+  <button class="btn-back" onclick="history.back()">‹</button>
+  <div class="header-info">
+    <div class="header-sup">Módulo 1 · Artículos</div>
+    <div class="header-title">Diminutivos — Verkleinwoorden</div>
+  </div>
+  <div class="header-count">Les 5 / 6</div>
+</div>
+<div class="progress-wrap"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+
+<div class="main" id="main-content">
+  <div class="card lesson-intro">
+    <div class="lesson-tag">📖 Lección 5</div>
+    <div class="lesson-title">Diminutivos</div>
+    <div class="lesson-desc">Los neerlandeses usan muchísimo los diminutivos — para hacer algo más pequeño, más amable o más íntimo. La regla de oro: <strong>todos los diminutivos son siempre het</strong>, sin excepción.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-body" style="padding-bottom:8px"><div class="section-label">🤏 Las 5 terminaciones del diminutivo</div></div>
+    <div class="suffix-table">
+      <div class="suffix-header"><div>Sufijo</div><div>Cuándo</div><div>Ejemplo</div></div>
+      <div class="suffix-row"><div class="suffix-tag">-je</div><div class="suffix-rule">La mayoría de palabras</div><div class="suffix-example" onclick="speakWord('het huisje')">huis → het huisje</div></div>
+      <div class="suffix-row"><div class="suffix-tag">-tje</div><div class="suffix-rule">Terminan en vocal larga, l, n, r</div><div class="suffix-example" onclick="speakWord('het boompje')">boom → het boompje</div></div>
+      <div class="suffix-row"><div class="suffix-tag">-pje</div><div class="suffix-rule">Terminan en -m precedida de vocal corta</div><div class="suffix-example" onclick="speakWord('het filmpje')">film → het filmpje</div></div>
+      <div class="suffix-row"><div class="suffix-tag">-etje</div><div class="suffix-rule">Terminan en consonante doble o -ng</div><div class="suffix-example" onclick="speakWord('het ringetje')">ring → het ringetje</div></div>
+      <div class="suffix-row"><div class="suffix-tag">-kje</div><div class="suffix-rule">Terminan en -ing</div><div class="suffix-example" onclick="speakWord('het koningkje')">koning → het koningkje</div></div>
+    </div>
+
+    <div class="tip-toggle" id="tip1-toggle" onclick="toggleTip('tip1')">
+      <div class="bulb-wrap"><span class="bulb-icon">💡</span><div class="bulb-glow"></div></div>
+      <span class="tip-label">¿Para qué usan los diminutivos los holandeses?</span>
+      <span class="tip-arrow">▾</span>
+    </div>
+    <div class="tip-content" id="tip1-content">
+      Los holandeses usan diminutivos constantemente — no solo para cosas pequeñas sino para sonar <strong>amables, íntimos o informales</strong>. Por ejemplo: <em>een kopje koffie</em> (una tacita de café) suena más acogedor que <em>een kop koffie</em>. También en nombres: <em>Jannetje, Pietje</em>. Y para el precio: <em>een tientje</em> (diez euros). Es un rasgo muy característico del neerlandés.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body" style="padding-bottom:8px"><div class="section-label">✅ Diminutivos más comunes — toca para escuchar</div></div>
+    <div class="phrase-list" style="padding-top:0">
+      <div class="phrase-row" onclick="speak('een kopje koffie','en KOP-ye KO-fi',this)"><div class="pron-bubble"></div><div class="phrase-icon">☕</div><div class="phrase-content"><div class="phrase-nl">een <span class="het">kopje</span> koffie</div><div class="phrase-es">una tacita de café</div></div><div class="phrase-sound-btn">🔊</div></div>
+      <div class="phrase-row" onclick="speak('het meisje','het MAIS-ye',this)"><div class="pron-bubble"></div><div class="phrase-icon">👧</div><div class="phrase-content"><div class="phrase-nl"><span class="het">het</span> meisje</div><div class="phrase-es">la niña / la chica</div></div><div class="phrase-sound-btn">🔊</div></div>
+      <div class="phrase-row" onclick="speak('het jongetje','het YONG-e-tye',this)"><div class="pron-bubble"></div><div class="phrase-icon">👦</div><div class="phrase-content"><div class="phrase-nl"><span class="het">het</span> jongetje</div><div class="phrase-es">el niño pequeño</div></div><div class="phrase-sound-btn">🔊</div></div>
+      <div class="phrase-row" onclick="speak('het huisje','het HOUS-ye',this)"><div class="pron-bubble"></div><div class="phrase-icon">🏡</div><div class="phrase-content"><div class="phrase-nl"><span class="het">het</span> huisje</div><div class="phrase-es">la casita</div></div><div class="phrase-sound-btn">🔊</div></div>
+      <div class="phrase-row" onclick="speak('even een momentje','EI-ven en mo-MENT-ye',this)"><div class="pron-bubble"></div><div class="phrase-icon">⏱️</div><div class="phrase-content"><div class="phrase-nl">even een <span class="het">momentje</span></div><div class="phrase-es">un momentito — expresión muy común</div></div><div class="phrase-sound-btn">🔊</div></div>
+    </div>
+  </div>
+
+  <!-- MATCH EXERCISE -->
+  <div class="card">
+    <div class="exercise-card">
+      <div class="exercise-label">🔗 Ejercicio — Empareja con su diminutivo</div>
+      <div class="exercise-instruction">Toca una palabra de la columna izquierda y luego su diminutivo correcto en la derecha.</div>
+      <div class="match-container">
+        <div class="match-col">
+          <div class="match-col-label">Palabra</div>
+          <div id="match-left"></div>
+        </div>
+        <div class="match-col">
+          <div class="match-col-label">Diminutivo</div>
+          <div id="match-right"></div>
+        </div>
+      </div>
+      <div class="match-feedback" id="match-feedback"></div>
+      <div class="match-score" id="match-score"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="challenge-card">
+      <div class="challenge-label">🎯 Reto</div>
+      <div class="challenge-question" id="ch-q"></div>
+      <div class="challenge-options" id="ch-opts"></div>
+      <div class="challenge-feedback" id="ch-fb"></div>
+    </div>
+  </div>
+
+  <div class="next-wrap">
+    <button class="btn-next" id="btn-next" onclick="goNext()">Última lección &nbsp;→</button>
+  </div>
+</div>
+
+<div class="complete-screen" id="complete-screen">
+  <div class="complete-emoji">🤏</div>
+  <div class="complete-title">¡Lección completada!</div>
+  <div class="complete-sub">¡Ya dominas los diminutivos! Última lección: sustantivos en contexto real.</div>
+  <button class="btn-continue" onclick="window.location.href='les-6.html'">Continuar → Sustantivos en contexto →</button>
+</div>
+
+<script>
+let currentRow=null,bubbleTimers={};
+function speak(text,pron,el){
+  window.speechSynthesis.cancel();
+  if(currentRow)clearBubble(currentRow);
+  const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';u.rate=0.85;
+  showBubble(el,pron);el.classList.add('playing');currentRow=el;
+  u.onend=()=>{el.classList.remove('playing');clearTimeout(bubbleTimers.r);bubbleTimers.r=setTimeout(()=>clearBubble(el),2000);};
+  u.onerror=()=>{el.classList.remove('playing');clearBubble(el);};
+  window.speechSynthesis.speak(u);
+}
+function speakWord(text){window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';u.rate=0.85;window.speechSynthesis.speak(u);}
+function showBubble(el,pron){const b=el.querySelector('.pron-bubble');if(!b)return;b.textContent=pron;b.classList.add('show');}
+function clearBubble(el){if(!el)return;el.classList.remove('playing');const b=el.querySelector('.pron-bubble');if(b)b.classList.remove('show');}
+function toggleTip(id){document.getElementById(id+'-toggle').classList.toggle('open');document.getElementById(id+'-content').classList.toggle('open');}
+
+const MATCH_PAIRS=[
+  {word:'huis',dim:'huisje'},
+  {word:'kop',dim:'kopje'},
+  {word:'boom',dim:'boompje'},
+  {word:'ring',dim:'ringetje'},
+  {word:'film',dim:'filmpje'},
+  {word:'man',dim:'mannetje'},
+];
+
+let selectedLeft=null,matchedCount=0,matchDone=false,chDone=false,chIdx=0;
+
+function buildMatch(){
+  const leftEl=document.getElementById('match-left');
+  const rightEl=document.getElementById('match-right');
+  const shuffledRight=[...MATCH_PAIRS].sort(()=>Math.random()-0.5);
+
+  MATCH_PAIRS.forEach((pair,i)=>{
+    const btn=document.createElement('button');
+    btn.className='match-item';btn.textContent=pair.word;btn.id=`ml-${i}`;
+    btn.onclick=()=>selectLeft(i,btn);
+    leftEl.appendChild(btn);
+  });
+
+  shuffledRight.forEach((pair,i)=>{
+    const origIdx=MATCH_PAIRS.findIndex(p=>p.dim===pair.dim);
+    const btn=document.createElement('button');
+    btn.className='match-item';btn.textContent=pair.dim;btn.id=`mr-${origIdx}`;
+    btn.dataset.idx=origIdx;
+    btn.onclick=()=>selectRight(origIdx,btn);
+    rightEl.appendChild(btn);
+  });
+}
+
+function selectLeft(idx,btn){
+  document.querySelectorAll('#match-left .match-item').forEach(b=>{
+    if(!b.classList.contains('matched-correct'))b.classList.remove('selected');
+  });
+  if(selectedLeft===idx){selectedLeft=null;return;}
+  selectedLeft=idx;
+  btn.classList.add('selected');
+}
+
+function selectRight(idx,btn){
+  if(selectedLeft===null)return;
+  const fb=document.getElementById('match-feedback');
+  const leftBtn=document.getElementById(`ml-${selectedLeft}`);
+
+  if(selectedLeft===idx){
+    leftBtn.classList.remove('selected');
+    leftBtn.classList.add('matched-correct');
+    btn.classList.add('matched-correct');
+    fb.textContent=`✅ ¡Correcto! ${MATCH_PAIRS[idx].word} → het ${MATCH_PAIRS[idx].dim}`;
+    fb.className='match-feedback ok show';
+    matchedCount++;
+    speakWord(`het ${MATCH_PAIRS[idx].dim}`);
+  } else {
+    btn.classList.add('matched-wrong');
+    fb.textContent=`❌ No es ese. Busca el diminutivo de "${MATCH_PAIRS[selectedLeft].word}"`;
+    fb.className='match-feedback err show';
+    setTimeout(()=>btn.classList.remove('matched-wrong'),500);
+    return;
+  }
+
+  selectedLeft=null;
+
+  if(matchedCount>=MATCH_PAIRS.length){
+    document.getElementById('match-score').textContent='🎉 ¡Todos emparejados correctamente!';
+    document.getElementById('match-score').classList.add('show');
+    matchDone=true;checkUnlock();
+  }
+}
+
+const CHALLENGES=[
+  {q:'"de kop koffie" vs "het kopje koffie" — ¿cuál suena más natural entre holandeses?',opts:['de kop koffie — es más formal','het kopje koffie — los holandeses siempre usan el diminutivo aquí','Son exactamente iguales','Ninguna, se dice anders'],correct:1,fb:'✅ ¡Correcto! <strong>een kopje koffie</strong> es lo natural — el diminutivo da un tono acogedor e íntimo. "kop" sin diminutivo suena brusco.'},
+  {q:'¿Cuál es el artículo de "het meisje"?',opts:['de meisje','het meisje','een meisje (sin artículo definido)','Depende del contexto'],correct:1,fb:'✅ ¡Exacto! Todo diminutivo es <strong>het</strong>. Aunque <em>de vrouw</em> es de, su diminutivo <em>het vrouwtje</em> es het. Sin excepción.'},
+  {q:'"Doe even een momentje" — ¿qué significa esta expresión?',opts:['¡Espera un momento!','Buen día','¿Tienes un momento?','Es un error gramatical'],correct:0,fb:'✅ ¡Bien! <strong>even een momentje</strong> = "espera un momento / un segundo". Es una expresión cotidiana muy común en neerlandés — escucharás esto todos los días.'},
+];
+
+function buildChallenge(){showChallenge(0);}
+function showChallenge(idx){
+  if(idx>=CHALLENGES.length){chDone=true;checkUnlock();return;}
+  const ch=CHALLENGES[idx];
+  document.getElementById('ch-q').textContent=ch.q;
+  const el=document.getElementById('ch-opts');el.innerHTML='';
+  ch.opts.forEach((o,i)=>{const b=document.createElement('button');b.className='challenge-opt';b.textContent=o;b.onclick=()=>answerCh(idx,i,b);el.appendChild(b);});
+  document.getElementById('ch-fb').className='challenge-feedback';
+  document.getElementById('ch-fb').innerHTML='';
+}
+function answerCh(cIdx,optIdx,btn){
+  const ch=CHALLENGES[cIdx];
+  document.querySelectorAll('.challenge-opt').forEach(b=>b.style.pointerEvents='none');
+  const fb=document.getElementById('ch-fb');
+  if(optIdx===ch.correct){btn.classList.add('opt-correct');fb.innerHTML=ch.fb;fb.className='challenge-feedback fb-correct show';}
+  else{btn.classList.add('opt-wrong');document.querySelectorAll('.challenge-opt')[ch.correct].classList.add('opt-correct');fb.innerHTML=`❌ No exactamente. ${ch.fb}`;fb.className='challenge-feedback fb-wrong show';}
+  setTimeout(()=>{chIdx++;showChallenge(chIdx);},2200);
+}
+function checkUnlock(){
+  let p=0;if(matchDone)p+=50;if(chDone)p+=50;
+  document.getElementById('progress-fill').style.width=p+'%';
+  if(matchDone&&chDone)document.getElementById('btn-next').classList.add('unlocked');
+}
+function goNext(){document.getElementById('main-content').style.display='none';document.getElementById('complete-screen').classList.add('show');}
+buildMatch();buildChallenge();
+</script>
+</body>
+</html>
+
