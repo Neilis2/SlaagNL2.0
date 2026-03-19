@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SlaagNL — M1 · Les 4</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0d1f3c;--navy2:#162d54;--navy3:#1e3a6e;--orange:#f47c3a;--cream:#fdf6ec;--green:#2ecc8a;--red:#e8455a;--purple:#a78bfa;--blue:#60a5fa;--border:rgba(255,255,255,0.07);--ease:0.22s cubic-bezier(0.4,0,0.2,1);}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
+body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);min-height:100vh;-webkit-font-smoothing:antialiased;}
+.header{display:flex;align-items:center;gap:10px;padding:14px 16px;background:var(--navy2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50;}
+.btn-back{background:none;border:none;color:var(--orange);font-size:24px;cursor:pointer;padding:0 8px 0 0;line-height:1;flex-shrink:0;}
+.header-info{flex:1;min-width:0;}
+.header-sup{font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:2px;}
+.header-title{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.header-count{font-size:12px;color:rgba(253,246,236,0.4);font-weight:600;flex-shrink:0;}
+.progress-wrap{height:3px;background:rgba(255,255,255,0.08);}
+.progress-fill{height:100%;background:var(--orange);transition:width 0.5s ease;}
+.main{padding:16px 16px 40px;display:flex;flex-direction:column;gap:14px;max-width:600px;margin:0 auto;}
+.card{background:var(--navy2);border-radius:18px;border:1px solid var(--border);overflow:hidden;}
+.card-body{padding:18px;font-size:14px;line-height:1.75;color:rgba(253,246,236,0.85);}
+.card-body strong{color:var(--orange);}
+.card-body em{color:#a8e6cf;font-style:normal;font-weight:600;}
+.section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--orange);margin-bottom:10px;}
+.lesson-intro{padding:20px 18px 18px;}
+.lesson-tag{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--orange);background:rgba(244,124,58,0.12);border:1px solid rgba(244,124,58,0.2);padding:4px 10px;border-radius:99px;margin-bottom:12px;}
+.lesson-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--cream);margin-bottom:8px;line-height:1.2;}
+.lesson-desc{font-size:14px;color:rgba(253,246,236,0.7);line-height:1.7;}
+
+/* RULE CARDS */
+.rule-list{padding:0 18px 18px;display:flex;flex-direction:column;gap:10px;}
+.rule-card{border-radius:14px;padding:14px 16px;}
+.rule-en{background:rgba(96,165,250,0.08);border:1px solid rgba(96,165,250,0.2);}
+.rule-s{background:rgba(46,204,138,0.08);border:1px solid rgba(46,204,138,0.2);}
+.rule-apos{background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.2);}
+.rule-title{font-size:14px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+.rule-en .rule-title{color:var(--blue);}
+.rule-s .rule-title{color:var(--green);}
+.rule-apos .rule-title{color:var(--purple);}
+.rule-desc{font-size:12px;color:rgba(253,246,236,0.6);line-height:1.5;margin-bottom:8px;}
+.rule-examples{display:flex;flex-wrap:wrap;gap:6px;}
+.rule-ex{padding:4px 10px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;user-select:none;transition:all 0.15s;}
+.rule-en .rule-ex{background:rgba(96,165,250,0.12);color:var(--blue);}
+.rule-s .rule-ex{background:rgba(46,204,138,0.12);color:var(--green);}
+.rule-apos .rule-ex{background:rgba(167,139,250,0.12);color:var(--purple);}
+.rule-ex:active{transform:scale(0.94);}
+
+.tip-toggle{display:flex;align-items:center;gap:10px;padding:13px 18px;background:rgba(244,124,58,0.06);border-top:1px solid rgba(255,255,255,0.06);cursor:pointer;user-select:none;}
+.bulb-wrap{position:relative;width:28px;height:28px;flex-shrink:0;}
+.bulb-icon{font-size:22px;line-height:28px;display:block;text-align:center;transition:transform 0.3s ease;}
+.bulb-glow{position:absolute;inset:-4px;border-radius:50%;background:radial-gradient(circle,rgba(244,196,58,0.35),transparent 70%);opacity:0;transition:opacity 0.3s ease;pointer-events:none;}
+.tip-toggle.open .bulb-glow{opacity:1;}
+.tip-toggle.open .bulb-icon{transform:scale(1.15);filter:brightness(1.3);}
+@keyframes bulbPulse{0%,100%{opacity:0.5}50%{opacity:1}}
+.tip-toggle:not(.open) .bulb-glow{opacity:0.3;animation:bulbPulse 2s infinite;}
+.tip-label{font-size:13px;font-weight:600;color:var(--orange);flex:1;}
+.tip-arrow{color:rgba(244,124,58,0.6);font-size:16px;transition:transform 0.3s ease;}
+.tip-toggle.open .tip-arrow{transform:rotate(180deg);}
+.tip-content{display:none;padding:14px 18px;font-size:13px;line-height:1.7;color:rgba(253,246,236,0.7);background:rgba(244,124,58,0.04);border-top:1px solid rgba(255,255,255,0.04);}
+.tip-content.open{display:block;}
+.tip-content strong{color:var(--orange);}
+.tip-content em{color:#a8e6cf;font-style:normal;font-weight:600;}
+
+/* TEXT INPUT EXERCISE */
+.exercise-card{padding:18px;}
+.exercise-label{font-size:10px;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+.exercise-instruction{font-size:13px;color:rgba(253,246,236,0.5);margin-bottom:16px;font-style:italic;}
+.write-block{margin-bottom:16px;}
+.write-singular{font-size:15px;font-weight:700;color:var(--cream);margin-bottom:8px;}
+.write-singular span{color:var(--orange);}
+.write-row{display:flex;gap:10px;align-items:center;}
+.write-label{font-size:13px;color:rgba(253,246,236,0.4);flex-shrink:0;}
+.write-input{flex:1;padding:11px 14px;border-radius:12px;border:2px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:var(--cream);font-family:'Syne',sans-serif;font-size:14px;font-weight:700;outline:none;transition:border-color 0.2s;}
+.write-input:focus{border-color:var(--orange);}
+.write-input.correct{border-color:var(--green);background:rgba(46,204,138,0.08);}
+.write-input.wrong{border-color:var(--red);background:rgba(232,69,90,0.08);}
+.write-submit{padding:11px 16px;background:var(--navy3);border:1.5px solid rgba(255,255,255,0.1);border-radius:12px;color:var(--cream);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:all 0.18s;flex-shrink:0;}
+.write-submit:hover{border-color:var(--orange);}
+.write-feedback{font-size:12px;font-weight:600;margin-top:6px;min-height:16px;}
+.write-feedback.ok{color:var(--green);}
+.write-feedback.err{color:var(--red);}
+.write-hint{font-size:11px;color:rgba(253,246,236,0.3);margin-top:2px;}
+.divider{height:1px;background:rgba(255,255,255,0.06);margin:10px 0 14px;}
+.ex-total{text-align:center;padding:12px;background:rgba(46,204,138,0.08);border-radius:12px;border:1px solid rgba(46,204,138,0.2);font-size:14px;font-weight:700;color:var(--green);display:none;}
+.ex-total.show{display:block;}
+
+.challenge-card{padding:18px;}
+.challenge-label{font-size:10px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.challenge-question{font-size:14px;color:var(--cream);line-height:1.6;margin-bottom:14px;font-weight:600;}
+.challenge-options{display:flex;flex-direction:column;gap:8px;}
+.challenge-opt{padding:13px 16px;border-radius:12px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);color:var(--cream);font-size:13px;text-align:left;cursor:pointer;transition:all 0.15s;font-family:inherit;font-weight:500;}
+.challenge-opt.opt-correct{border-color:var(--green);background:rgba(46,204,138,0.15);color:var(--green);font-weight:700;}
+.challenge-opt.opt-wrong{border-color:var(--red);background:rgba(232,69,90,0.12);color:var(--red);}
+.challenge-feedback{margin-top:12px;padding:12px 14px;border-radius:12px;font-size:13px;line-height:1.5;display:none;}
+.challenge-feedback.show{display:block;}
+.challenge-feedback strong{font-weight:700;}
+.challenge-feedback.fb-correct{background:rgba(46,204,138,0.12);color:var(--green);}
+.challenge-feedback.fb-wrong{background:rgba(232,69,90,0.1);color:var(--red);}
+.next-wrap{padding:0 0 8px;}
+.btn-next{width:100%;padding:17px;background:var(--orange);border:none;border-radius:14px;color:white;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;opacity:0.4;pointer-events:none;}
+.btn-next.unlocked{opacity:1;pointer-events:all;}
+.complete-screen{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;padding:40px 24px;text-align:center;gap:12px;}
+.complete-screen.show{display:flex;}
+.complete-emoji{font-size:64px;margin-bottom:8px;}
+.complete-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--cream);margin-bottom:4px;}
+.complete-sub{font-size:15px;color:rgba(253,246,236,0.5);line-height:1.6;max-width:280px;}
+.btn-continue{margin-top:16px;padding:16px 32px;background:var(--orange);border:none;border-radius:14px;color:white;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;}
+</style>
+</head>
+<body>
+<div class="header">
+  <button class="btn-back" onclick="history.back()">‹</button>
+  <div class="header-info">
+    <div class="header-sup">Módulo 1 · Artículos</div>
+    <div class="header-title">Plural — Meervoud</div>
+  </div>
+  <div class="header-count">Les 4 / 6</div>
+</div>
+<div class="progress-wrap"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+
+<div class="main" id="main-content">
+  <div class="card lesson-intro">
+    <div class="lesson-tag">📖 Lección 4</div>
+    <div class="lesson-title">El Plural — Meervoud</div>
+    <div class="lesson-desc">En neerlandés hay tres formas de hacer el plural: <strong>-en</strong>, <strong>-s</strong> y <strong>-'s</strong>. Y recuerda: el plural siempre usa <strong>de</strong>, sin importar el artículo singular.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-body" style="padding-bottom:8px"><div class="section-label">📦 Las 3 terminaciones del plural</div></div>
+    <div class="rule-list">
+      <div class="rule-card rule-en">
+        <div class="rule-title">📘 -en → la más común</div>
+        <div class="rule-desc">La mayoría de palabras. Si la última sílaba es corta, a veces se dobla la consonante.</div>
+        <div class="rule-examples">
+          <span class="rule-ex" onclick="speakWord('man mannen')">man → mannen</span>
+          <span class="rule-ex" onclick="speakWord('huis huizen')">huis → huizen</span>
+          <span class="rule-ex" onclick="speakWord('kind kinderen')">kind → kinderen</span>
+          <span class="rule-ex" onclick="speakWord('boek boeken')">boek → boeken</span>
+        </div>
+      </div>
+      <div class="rule-card rule-s">
+        <div class="rule-title">📗 -s → para palabras terminadas en vocal</div>
+        <div class="rule-desc">Palabras que terminan en -el, -em, -en, -er, -je o en vocal no acentuada.</div>
+        <div class="rule-examples">
+          <span class="rule-ex" onclick="speakWord('tafel tafels')">tafel → tafels</span>
+          <span class="rule-ex" onclick="speakWord('auto autos')">auto → autos</span>
+          <span class="rule-ex" onclick="speakWord('fiets fietsen')">fiets → fietsen</span>
+          <span class="rule-ex" onclick="speakWord('meisje meisjes')">meisje → meisjes</span>
+        </div>
+      </div>
+      <div class="rule-card rule-apos">
+        <div class="rule-title">📙 -'s → palabras terminadas en a, i, o, u, y</div>
+        <div class="rule-desc">Vocal abierta al final — se añade apóstrofe para evitar confusión de pronunciación.</div>
+        <div class="rule-examples">
+          <span class="rule-ex" onclick="speakWord("foto foto's")">foto → foto's</span>
+          <span class="rule-ex" onclick="speakWord("taxi taxi's")">taxi → taxi's</span>
+          <span class="rule-ex" onclick="speakWord("menu menu's")">menu → menu's</span>
+          <span class="rule-ex" onclick="speakWord("baby baby's")">baby → baby's</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip-toggle" id="tip1-toggle" onclick="toggleTip('tip1')">
+      <div class="bulb-wrap"><span class="bulb-icon">💡</span><div class="bulb-glow"></div></div>
+      <span class="tip-label">El cambio ortográfico — vocal larga/corta</span>
+      <span class="tip-arrow">▾</span>
+    </div>
+    <div class="tip-content" id="tip1-content">
+      Al añadir -en a veces cambia la ortografía para mantener la pronunciación: <br><br>
+      • Vocal larga doble → simple: <strong>maan → manen</strong> (no maanen) <br>
+      • Consonante doble cuando la vocal es corta: <strong>man → mannen</strong> (no manen) <br>
+      • La Z y S a veces cambian: <strong>huis → huizen</strong> (la S suena Z en plural) <br><br>
+      Estos cambios parecen complicados pero con práctica los sentirás naturales.
+    </div>
+  </div>
+
+  <!-- WRITE EXERCISE -->
+  <div class="card">
+    <div class="exercise-card">
+      <div class="exercise-label">✍️ Ejercicio — Escribe el plural</div>
+      <div class="exercise-instruction">Escribe el plural correcto de cada palabra. Toca Enter o el botón ✓ para comprobar.</div>
+      <div id="write-exercises"></div>
+      <div class="ex-total" id="ex-total"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="challenge-card">
+      <div class="challenge-label">🎯 Reto</div>
+      <div class="challenge-question" id="ch-q"></div>
+      <div class="challenge-options" id="ch-opts"></div>
+      <div class="challenge-feedback" id="ch-fb"></div>
+    </div>
+  </div>
+
+  <div class="next-wrap">
+    <button class="btn-next" id="btn-next" onclick="goNext()">Siguiente lección &nbsp;→</button>
+  </div>
+</div>
+
+<div class="complete-screen" id="complete-screen">
+  <div class="complete-emoji">📦</div>
+  <div class="complete-title">¡Lección completada!</div>
+  <div class="complete-sub">¡Ya dominas el plural neerlandés! Siguiente: los diminutivos.</div>
+  <button class="btn-continue" onclick="window.location.href='les-5.html'">Continuar → Diminutivos →</button>
+</div>
+
+<script>
+function speakWord(text){window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';u.rate=0.85;window.speechSynthesis.speak(u);}
+function toggleTip(id){document.getElementById(id+'-toggle').classList.toggle('open');document.getElementById(id+'-content').classList.toggle('open');}
+
+const WRITE_EX=[
+  {singular:'de man',plural:'mannen',hint:'-en · consonante doble porque vocal corta'},
+  {singular:'het huis',plural:'huizen',hint:'-en · S cambia a Z en plural'},
+  {singular:'de tafel',plural:'tafels',hint:'-s · termina en -el'},
+  {singular:"de foto",plural:"foto's",hint:"-'s · termina en vocal abierta -o"},
+  {singular:'het kind',plural:'kinderen',hint:'-eren · plural irregular'},
+  {singular:'de auto',plural:"auto's",hint:"-'s · termina en vocal abierta -o"},
+  {singular:'de boom',plural:'bomen',hint:'-en · vocal doble se simplifica: aa→a'},
+  {singular:'het meisje',plural:'meisjes',hint:'-s · diminutivos toman -s'},
+];
+
+let writeAnswers=new Array(WRITE_EX.length).fill(null);
+let writeCorrect=0,writeDone=false,chDone=false,chIdx=0;
+
+function buildWrite(){
+  const container=document.getElementById('write-exercises');
+  WRITE_EX.forEach((ex,i)=>{
+    const div=document.createElement('div');
+    div.className='write-block';
+    div.innerHTML=`
+      <div class="write-singular">Singular: <span>${ex.singular}</span></div>
+      <div class="write-row">
+        <div class="write-label">Plural:</div>
+        <input class="write-input" id="wi-${i}" type="text" placeholder="escribe aquí..." autocomplete="off" autocorrect="off" spellcheck="false" onkeydown="if(event.key==='Enter')checkWrite(${i})">
+        <button class="write-submit" onclick="checkWrite(${i})">✓</button>
+      </div>
+      <div class="write-feedback" id="wf-${i}"></div>
+      <div class="write-hint" id="wh-${i}"></div>
+    `;
+    if(i<WRITE_EX.length-1){const d=document.createElement('div');d.className='divider';div.appendChild(d);}
+    container.appendChild(div);
+  });
+}
+
+function checkWrite(i){
+  if(writeAnswers[i]!==null)return;
+  const ex=WRITE_EX[i];
+  const inp=document.getElementById(`wi-${i}`);
+  const fb=document.getElementById(`wf-${i}`);
+  const hint=document.getElementById(`wh-${i}`);
+  const val=inp.value.trim().toLowerCase();
+  if(!val)return;
+
+  inp.disabled=true;
+  writeAnswers[i]=val===ex.plural.toLowerCase();
+
+  if(writeAnswers[i]){
+    inp.classList.add('correct');
+    fb.textContent='✅ ¡Correcto!';fb.className='write-feedback ok';
+    writeCorrect++;
+  } else {
+    inp.classList.add('wrong');
+    fb.textContent=`❌ Era: ${ex.plural}`;fb.className='write-feedback err';
+    hint.textContent='💡 '+ex.hint;
+  }
+
+  if(writeAnswers.every(a=>a!==null)){
+    const total=document.getElementById('ex-total');
+    total.textContent=`✅ Completado: ${writeCorrect} / ${WRITE_EX.length} correctas`;
+    total.classList.add('show');
+    writeDone=true;checkUnlock();
+  }
+}
+
+const CHALLENGES=[
+  {q:'¿Cuál es el plural correcto de "de foto"?',opts:["fotos","foto's","foten","fotoen"],correct:1,fb:`✅ ¡Correcto! <strong>foto's</strong> — termina en vocal abierta -o, así que lleva apóstrofe: <em>foto's, taxi's, menu's</em>.`},
+  {q:'¿Por qué "man" se convierte en "mannen" y no en "manen"?',opts:['Es irregular','La vocal corta necesita consonante doble para mantener el sonido','Es una excepción','Solo pasa con personas'],correct:1,fb:'✅ ¡Exacto! La vocal de <em>man</em> es corta. Si escribieras <em>manen</em>, sonaría "maanen" (vocal larga). La consonante doble <strong>nn</strong> mantiene la vocal corta.'},
+  {q:'El plural de "het kind" es "kinderen" — ¿por qué?',opts:['Es irregular — hay que memorizarlo','Termina en -eren porque es neutro','Es un error, debería ser "kinds"','Porque es una persona joven'],correct:0,fb:'✅ ¡Bien! <strong>kinderen</strong> es un plural irregular — hay que memorizarlo. También: <em>ei → eieren, rund → runderen</em>. Son pocos y los más comunes.'},
+];
+
+function buildChallenge(){showChallenge(0);}
+function showChallenge(idx){
+  if(idx>=CHALLENGES.length){chDone=true;checkUnlock();return;}
+  const ch=CHALLENGES[idx];
+  document.getElementById('ch-q').textContent=ch.q;
+  const el=document.getElementById('ch-opts');el.innerHTML='';
+  ch.opts.forEach((o,i)=>{const b=document.createElement('button');b.className='challenge-opt';b.textContent=o;b.onclick=()=>answerCh(idx,i,b);el.appendChild(b);});
+  document.getElementById('ch-fb').className='challenge-feedback';
+  document.getElementById('ch-fb').innerHTML='';
+}
+function answerCh(cIdx,optIdx,btn){
+  const ch=CHALLENGES[cIdx];
+  document.querySelectorAll('.challenge-opt').forEach(b=>b.style.pointerEvents='none');
+  const fb=document.getElementById('ch-fb');
+  if(optIdx===ch.correct){btn.classList.add('opt-correct');fb.innerHTML=ch.fb;fb.className='challenge-feedback fb-correct show';}
+  else{btn.classList.add('opt-wrong');document.querySelectorAll('.challenge-opt')[ch.correct].classList.add('opt-correct');fb.innerHTML=`❌ No exactamente. ${ch.fb}`;fb.className='challenge-feedback fb-wrong show';}
+  setTimeout(()=>{chIdx++;showChallenge(chIdx);},2200);
+}
+function checkUnlock(){
+  let p=0;if(writeDone)p+=50;if(chDone)p+=50;
+  document.getElementById('progress-fill').style.width=p+'%';
+  if(writeDone&&chDone)document.getElementById('btn-next').classList.add('unlocked');
+}
+function goNext(){document.getElementById('main-content').style.display='none';document.getElementById('complete-screen').classList.add('show');}
+buildWrite();buildChallenge();
+</script>
+</body>
+</html>
+
