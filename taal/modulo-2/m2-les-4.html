@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>SlaagNL — M2 · Les 4</title><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"><style>
+:root{--navy:#0d1f3c;--navy2:#162d54;--navy3:#1e3a6e;--orange:#f47c3a;--cream:#fdf6ec;--green:#2ecc8a;--red:#e8455a;--purple:#a78bfa;--blue:#60a5fa;--border:rgba(255,255,255,0.07);--ease:0.22s cubic-bezier(0.4,0,0.2,1);}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
+body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);min-height:100vh;-webkit-font-smoothing:antialiased;}
+.header{display:flex;align-items:center;gap:10px;padding:14px 16px;background:var(--navy2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50;}
+.btn-back{background:none;border:none;color:var(--orange);font-size:24px;cursor:pointer;padding:0 8px 0 0;line-height:1;flex-shrink:0;}
+.header-info{flex:1;min-width:0;}
+.header-sup{font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:2px;}
+.header-title{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.header-count{font-size:12px;color:rgba(253,246,236,0.4);font-weight:600;flex-shrink:0;}
+.progress-wrap{height:3px;background:rgba(255,255,255,0.08);}
+.progress-fill{height:100%;background:var(--orange);transition:width 0.5s ease;}
+.main{padding:16px 16px 40px;display:flex;flex-direction:column;gap:14px;max-width:600px;margin:0 auto;}
+.card{background:var(--navy2);border-radius:18px;border:1px solid var(--border);overflow:hidden;}
+.card-body{padding:18px;font-size:14px;line-height:1.75;color:rgba(253,246,236,0.85);}
+.card-body strong{color:var(--orange);}
+.card-body em{color:#a8e6cf;font-style:normal;font-weight:600;}
+.section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--orange);margin-bottom:10px;}
+.lesson-intro{padding:20px 18px 18px;}
+.lesson-tag{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--orange);background:rgba(244,124,58,0.12);border:1px solid rgba(244,124,58,0.2);padding:4px 10px;border-radius:99px;margin-bottom:12px;}
+.lesson-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--cream);margin-bottom:8px;line-height:1.2;}
+.lesson-desc{font-size:14px;color:rgba(253,246,236,0.7);line-height:1.7;}
+
+/* ARTICLE SHOWCASE */
+.article-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:18px;}
+.art-card{border-radius:14px;padding:16px 10px;text-align:center;cursor:pointer;transition:all 0.18s;user-select:none;position:relative;}
+.art-card:active{transform:scale(0.95);}
+.art-de{background:rgba(96,165,250,0.1);border:2px solid rgba(96,165,250,0.3);}
+.art-het{background:rgba(244,124,58,0.1);border:2px solid rgba(244,124,58,0.3);}
+.art-een{background:rgba(46,204,138,0.1);border:2px solid rgba(46,204,138,0.3);}
+.art-nl{font-family:'Playfair Display',serif;font-size:26px;font-weight:900;margin-bottom:4px;}
+.art-de .art-nl{color:var(--blue);}
+.art-het .art-nl{color:var(--orange);}
+.art-een .art-nl{color:var(--green);}
+.art-es{font-size:11px;opacity:0.55;margin-bottom:6px;}
+.art-use{font-size:10px;font-weight:600;line-height:1.4;opacity:0.7;}
+.pron-bubble{position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--navy3);border:1px solid var(--orange);border-radius:10px;padding:5px 12px;font-size:11px;font-weight:700;color:var(--orange);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 0.2s;z-index:10;}
+.pron-bubble::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:4px solid transparent;border-top-color:var(--orange);}
+.pron-bubble.show{opacity:1;}
+
+/* PHRASE ROWS */
+.phrase-list{padding:0 18px 18px;display:flex;flex-direction:column;gap:8px;}
+.phrase-row{display:flex;align-items:center;gap:12px;padding:12px 14px;background:rgba(255,255,255,0.03);border-radius:14px;border:1px solid rgba(255,255,255,0.06);cursor:pointer;transition:all 0.18s;position:relative;user-select:none;}
+.phrase-row:active{transform:scale(0.97);background:rgba(244,124,58,0.08);}
+.phrase-row.playing{border-color:var(--orange);background:rgba(244,124,58,0.08);}
+.phrase-icon{font-size:18px;flex-shrink:0;}
+.phrase-content{flex:1;}
+.phrase-nl{font-size:14px;font-weight:700;color:var(--cream);margin-bottom:2px;}
+.phrase-nl .de{color:var(--blue);}
+.phrase-nl .het{color:var(--orange);}
+.phrase-nl .een{color:var(--green);}
+.phrase-es{font-size:12px;color:rgba(253,246,236,0.4);font-style:italic;}
+.phrase-sound-btn{width:30px;height:30px;border-radius:50%;background:rgba(244,124,58,0.12);border:1px solid rgba(244,124,58,0.25);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.phrase-row.playing .phrase-sound-btn{background:var(--orange);border-color:var(--orange);animation:pulse-ring 1s infinite;}
+@keyframes pulse-ring{0%{box-shadow:0 0 0 0 rgba(244,124,58,0.5);}70%{box-shadow:0 0 0 8px rgba(244,124,58,0);}100%{box-shadow:0 0 0 0 rgba(244,124,58,0);}}
+
+/* TIP */
+.tip-toggle{display:flex;align-items:center;gap:10px;padding:13px 18px;background:rgba(244,124,58,0.06);border-top:1px solid rgba(255,255,255,0.06);cursor:pointer;user-select:none;transition:background var(--ease);}
+.tip-toggle:hover{background:rgba(244,124,58,0.1);}
+.bulb-wrap{position:relative;width:28px;height:28px;flex-shrink:0;}
+.bulb-icon{font-size:22px;line-height:28px;display:block;text-align:center;transition:transform 0.3s ease;}
+.bulb-glow{position:absolute;inset:-4px;border-radius:50%;background:radial-gradient(circle,rgba(244,196,58,0.35),transparent 70%);opacity:0;transition:opacity 0.3s ease;pointer-events:none;}
+.tip-toggle.open .bulb-glow{opacity:1;}
+.tip-toggle.open .bulb-icon{transform:scale(1.15);filter:brightness(1.3);}
+@keyframes bulbPulse{0%,100%{opacity:0.5}50%{opacity:1}}
+.tip-toggle:not(.open) .bulb-glow{opacity:0.3;animation:bulbPulse 2s infinite;}
+.tip-label{font-size:13px;font-weight:600;color:var(--orange);flex:1;}
+.tip-arrow{color:rgba(244,124,58,0.6);font-size:16px;transition:transform 0.3s ease;}
+.tip-toggle.open .tip-arrow{transform:rotate(180deg);}
+.tip-content{display:none;padding:14px 18px;font-size:13px;line-height:1.7;color:rgba(253,246,236,0.7);background:rgba(244,124,58,0.04);border-top:1px solid rgba(255,255,255,0.04);animation:fadeDown 0.25s ease;}
+.tip-content.open{display:block;}
+.tip-content strong{color:var(--orange);}
+.tip-content em{color:#a8e6cf;font-style:normal;font-weight:600;}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+
+/* DRAG TO COLUMN EXERCISE */
+.exercise-card{padding:18px;}
+.exercise-label{font-size:10px;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+.exercise-instruction{font-size:13px;color:rgba(253,246,236,0.5);margin-bottom:16px;font-style:italic;line-height:1.5;}
+
+.word-pool{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;min-height:44px;padding:10px;background:rgba(0,0,0,0.15);border-radius:12px;border:1.5px dashed rgba(255,255,255,0.1);}
+.drag-chip{padding:9px 16px;border-radius:20px;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.15);color:var(--cream);font-size:13px;font-weight:700;cursor:pointer;transition:all 0.15s;user-select:none;font-family:inherit;}
+.drag-chip:active{transform:scale(0.94);}
+.drag-chip.used{opacity:0.2;pointer-events:none;}
+
+.columns{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;}
+.drop-col{border-radius:14px;padding:10px 8px;min-height:120px;}
+.drop-col.col-de{background:rgba(96,165,250,0.06);border:2px solid rgba(96,165,250,0.2);}
+.drop-col.col-het{background:rgba(244,124,58,0.06);border:2px solid rgba(244,124,58,0.2);}
+.drop-col.col-een{background:rgba(46,204,138,0.06);border:2px solid rgba(46,204,138,0.2);}
+.col-header{font-family:'Playfair Display',serif;font-size:16px;font-weight:900;text-align:center;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,0.06);}
+.col-de .col-header{color:var(--blue);}
+.col-het .col-header{color:var(--orange);}
+.col-een .col-header{color:var(--green);}
+.placed-chip{padding:6px 10px;border-radius:10px;font-size:12px;font-weight:700;margin-bottom:6px;text-align:center;cursor:pointer;transition:all 0.15s;}
+.placed-chip.col-de-chip{background:rgba(96,165,250,0.15);color:var(--blue);border:1px solid rgba(96,165,250,0.25);}
+.placed-chip.col-het-chip{background:rgba(244,124,58,0.15);color:var(--orange);border:1px solid rgba(244,124,58,0.25);}
+.placed-chip.col-een-chip{background:rgba(46,204,138,0.15);color:var(--green);border:1px solid rgba(46,204,138,0.25);}
+.placed-chip.chip-correct{opacity:1;cursor:default;}
+.placed-chip.chip-wrong{border-color:var(--red);color:var(--red);background:rgba(232,69,90,0.1);animation:shake 0.3s ease;}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-5px);}75%{transform:translateX(5px);}}
+
+.ex-feedback{padding:10px 14px;border-radius:10px;font-size:13px;font-weight:600;display:none;margin-bottom:8px;}
+.ex-feedback.show{display:block;}
+.feedback-correct{background:rgba(46,204,138,0.15);color:var(--green);}
+.feedback-wrong{background:rgba(232,69,90,0.12);color:var(--red);}
+.btn-check{width:100%;padding:13px;background:var(--navy3);border:1.5px solid rgba(255,255,255,0.1);border-radius:12px;color:var(--cream);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:all var(--ease);margin-top:4px;}
+.btn-check:hover{background:rgba(244,124,58,0.15);border-color:var(--orange);}
+
+/* CHALLENGE */
+.challenge-card{padding:18px;}
+.challenge-label{font-size:10px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.challenge-question{font-size:14px;color:var(--cream);line-height:1.6;margin-bottom:14px;font-weight:600;}
+.challenge-options{display:flex;flex-direction:column;gap:8px;}
+.challenge-opt{padding:13px 16px;border-radius:12px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);color:var(--cream);font-size:13px;text-align:left;cursor:pointer;transition:all 0.15s;font-family:inherit;font-weight:500;}
+.challenge-opt:active{transform:scale(0.98);}
+.challenge-opt.opt-correct{border-color:var(--green);background:rgba(46,204,138,0.15);color:var(--green);font-weight:700;}
+.challenge-opt.opt-wrong{border-color:var(--red);background:rgba(232,69,90,0.12);color:var(--red);}
+.challenge-feedback{margin-top:12px;padding:12px 14px;border-radius:12px;font-size:13px;line-height:1.5;display:none;animation:fadeDown 0.25s ease;}
+.challenge-feedback.show{display:block;}
+.challenge-feedback strong{font-weight:700;}
+.challenge-feedback.fb-correct{background:rgba(46,204,138,0.12);color:var(--green);}
+.challenge-feedback.fb-wrong{background:rgba(232,69,90,0.1);color:var(--red);}
+
+.next-wrap{padding:0 0 8px;}
+.btn-next{width:100%;padding:17px;background:var(--orange);border:none;border-radius:14px;color:white;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;transition:all var(--ease);display:flex;align-items:center;justify-content:center;gap:8px;opacity:0.4;pointer-events:none;}
+.btn-next.unlocked{opacity:1;pointer-events:all;}
+.btn-next.unlocked:active{opacity:0.85;transform:scale(0.98);}
+.complete-screen{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;padding:40px 24px;text-align:center;gap:12px;}
+.complete-screen.show{display:flex;}
+.complete-emoji{font-size:64px;margin-bottom:8px;}
+.complete-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--cream);margin-bottom:4px;}
+.complete-sub{font-size:15px;color:rgba(253,246,236,0.5);line-height:1.6;max-width:280px;}
+.btn-continue{margin-top:16px;padding:16px 32px;background:var(--orange);border:none;border-radius:14px;color:white;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;}
+
+.de{color:var(--blue);font-weight:700;}
+.het{color:var(--orange);font-weight:700;}
+.phrase-speed{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;cursor:pointer;transition:all 0.18s;user-select:none;}
+.phrase-speed:active{background:rgba(96,165,250,0.18);border-color:var(--blue);}
+.phrase-btns{display:flex;gap:6px;flex-shrink:0;align-items:center;}
+.tip-inline{margin:8px 0 4px;padding:10px 14px;background:rgba(244,196,58,0.07);border:1px solid rgba(244,196,58,0.18);border-radius:12px;font-size:12px;color:rgba(253,246,236,0.72);line-height:1.6;}
+.tip-inline strong{color:#f4c842;}
+.word-pool{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;min-height:44px;padding:10px;background:rgba(0,0,0,0.15);border-radius:12px;border:1.5px dashed rgba(255,255,255,0.1);}
+.drag-chip{padding:9px 16px;border-radius:20px;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.15);color:var(--cream);font-size:13px;font-weight:700;cursor:pointer;transition:all 0.15s;user-select:none;font-family:inherit;}
+.drag-chip:active{transform:scale(0.94);} .drag-chip.used{opacity:0.2;pointer-events:none;}
+.answer-zone{display:flex;flex-wrap:wrap;gap:8px;min-height:50px;padding:12px;background:rgba(0,0,0,0.2);border-radius:14px;border:1.5px dashed rgba(255,255,255,0.1);margin-bottom:10px;align-items:center;}
+.placed-word{padding:8px 14px;border-radius:10px;background:rgba(244,124,58,0.12);border:1.5px solid rgba(244,124,58,0.3);color:var(--orange);font-size:13px;font-weight:700;cursor:pointer;transition:all 0.15s;}
+.placed-word.word-correct{border-color:var(--green);background:rgba(46,204,138,0.12);color:var(--green);cursor:default;}
+.placed-word.word-wrong{border-color:var(--red);background:rgba(232,69,90,0.1);color:var(--red);}
+.inline-fb{font-size:12px;font-weight:600;min-height:18px;} .inline-fb.ok{color:var(--green);} .inline-fb.err{color:var(--red);}
+.btn-check{width:100%;padding:13px;background:var(--navy3);border:1.5px solid rgba(255,255,255,0.1);border-radius:12px;color:var(--cream);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:all var(--ease);margin-top:4px;}
+.btn-check:hover{background:rgba(244,124,58,0.15);border-color:var(--orange);}
+.divider{height:1px;background:rgba(255,255,255,0.06);margin:10px 0 16px;}
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 18px 18px;}
+.compare-card{border-radius:14px;padding:14px;} .compare-niet{background:rgba(232,69,90,0.07);border:1px solid rgba(232,69,90,0.2);}
+.compare-geen{background:rgba(96,165,250,0.07);border:1px solid rgba(96,165,250,0.2);}
+.compare-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;margin-bottom:4px;}
+.compare-niet .compare-title{color:var(--red);} .compare-geen .compare-title{color:var(--blue);}
+.compare-sub{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;opacity:.5;margin-bottom:6px;}
+.compare-rule{font-size:12px;color:rgba(253,246,236,0.65);line-height:1.5;}
+.compare-examples{margin-top:8px;display:flex;flex-direction:column;gap:5px;}
+.compare-ex{font-size:12px;font-weight:700;padding:5px 10px;border-radius:8px;cursor:pointer;user-select:none;transition:all 0.15s;}
+.compare-niet .compare-ex{background:rgba(232,69,90,0.1);color:var(--red);} .compare-geen .compare-ex{background:rgba(96,165,250,0.1);color:var(--blue);} .compare-ex:active{opacity:0.7;}
+.choice-row{display:flex;gap:10px;margin-bottom:10px;}
+.choice-btn{flex:1;padding:14px;border-radius:14px;font-family:'Playfair Display',serif;font-size:20px;font-weight:900;cursor:pointer;transition:all 0.18s;text-align:center;border:2px solid;} .choice-btn:active{transform:scale(0.95);}
+.niet-btn{background:rgba(232,69,90,0.08);border-color:rgba(232,69,90,0.3);color:var(--red);}
+.geen-btn{background:rgba(96,165,250,0.08);border-color:rgba(96,165,250,0.3);color:var(--blue);}
+.choice-btn.opt-correct{border-color:var(--green)!important;background:rgba(46,204,138,0.15)!important;color:var(--green)!important;}
+.choice-btn.opt-wrong{border-color:var(--red)!important;background:rgba(232,69,90,0.15)!important;}
+.adj-opts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;}
+.adj-opt{padding:9px 18px;border-radius:20px;background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,255,255,0.13);color:var(--cream);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:all 0.15s;}
+.adj-opt:active{transform:scale(0.94);} .adj-opt.opt-correct{border-color:var(--green);background:rgba(46,204,138,0.12);color:var(--green);} .adj-opt.opt-wrong{border-color:var(--red);background:rgba(232,69,90,0.1);color:var(--red);}
+.rule-table{margin:0 18px 18px;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);}
+.rule-header{display:grid;grid-template-columns:1.2fr 0.8fr 1fr;background:rgba(244,124,58,0.1);padding:10px 14px;}
+.rule-header div{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--orange);}
+.rule-row{display:grid;grid-template-columns:1.2fr 0.8fr 1fr;padding:11px 14px;border-top:1px solid rgba(255,255,255,0.05);font-size:13px;align-items:center;}
+.rule-row:nth-child(even){background:rgba(255,255,255,0.02);} .rule-row.rule-exception{background:rgba(46,204,138,0.05);border-left:3px solid var(--green);}
+.rule-condition{color:rgba(253,246,236,0.5);font-size:12px;} .rule-form-e{color:var(--orange);font-weight:700;} .rule-form-no{color:var(--green);font-weight:700;}
+.rule-eg{font-size:12px;font-weight:700;color:var(--cream);cursor:pointer;} .rule-eg:active{opacity:.7;}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 18px 18px;}
+.modal-card{border-radius:14px;padding:13px 14px;cursor:pointer;user-select:none;transition:all 0.18s;} .modal-card:active{transform:scale(0.97);}
+.modal-kunnen{background:rgba(244,124,58,0.07);border:1px solid rgba(244,124,58,0.22);}
+.modal-willen{background:rgba(96,165,250,0.07);border:1px solid rgba(96,165,250,0.22);}
+.modal-moeten{background:rgba(46,204,138,0.07);border:1px solid rgba(46,204,138,0.22);}
+.modal-mogen{background:rgba(167,139,250,0.07);border:1px solid rgba(167,139,250,0.22);}
+.modal-hoeven{background:rgba(244,196,58,0.07);border:1px solid rgba(244,196,58,0.22);}
+.modal-name{font-family:'Playfair Display',serif;font-size:18px;font-weight:900;margin-bottom:3px;}
+.modal-kunnen .modal-name{color:var(--orange);} .modal-willen .modal-name{color:var(--blue);}
+.modal-moeten .modal-name{color:var(--green);} .modal-mogen .modal-name{color:var(--purple);} .modal-hoeven .modal-name{color:#f4c842;}
+.modal-es{font-size:11px;opacity:.5;margin-bottom:5px;} .modal-conj{font-size:11px;color:rgba(253,246,236,0.55);line-height:1.5;}
+.omdat-box{padding:14px;border-radius:14px;margin-bottom:10px;} .omdat-box.omb{background:rgba(244,124,58,0.07);border:1px solid rgba(244,124,58,0.22);}
+.omdat-box.wantb{background:rgba(96,165,250,0.07);border:1px solid rgba(96,165,250,0.22);}
+.omdat-box-title{font-size:13px;font-weight:700;margin-bottom:6px;} .omb .omdat-box-title{color:var(--orange);} .wantb .omdat-box-title{color:var(--blue);}
+.omdat-box-rule{font-size:12px;color:rgba(253,246,236,0.65);line-height:1.6;margin-bottom:8px;}
+.omdat-box-ex{font-size:13px;font-weight:700;color:var(--cream);padding:8px 12px;background:rgba(0,0,0,0.2);border-radius:10px;cursor:pointer;user-select:none;} .omdat-box-ex:active{opacity:.8;}
+.omdat-box-es{font-size:11px;color:rgba(253,246,236,0.35);font-style:italic;margin-top:4px;}
+.aux-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 18px 18px;}
+.aux-card{border-radius:14px;padding:14px;} .aux-heb{background:rgba(244,124,58,0.07);border:1px solid rgba(244,124,58,0.22);}
+.aux-zijn{background:rgba(96,165,250,0.07);border:1px solid rgba(96,165,250,0.22);}
+.aux-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:900;margin-bottom:4px;}
+.aux-heb .aux-title{color:var(--orange);} .aux-zijn .aux-title{color:var(--blue);}
+.aux-sub{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;opacity:.5;margin-bottom:6px;}
+.aux-rule{font-size:12px;color:rgba(253,246,236,0.65);line-height:1.5;margin-bottom:8px;}
+.aux-ex{font-size:12px;font-weight:700;padding:5px 10px;border-radius:8px;cursor:pointer;margin-bottom:4px;user-select:none;transition:all .15s;}
+.aux-heb .aux-ex{background:rgba(244,124,58,0.1);color:var(--orange);} .aux-zijn .aux-ex{background:rgba(96,165,250,0.1);color:var(--blue);} .aux-ex:active{opacity:.7;}
+.opt-btn{padding:13px 16px;border-radius:12px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);color:var(--cream);font-size:13px;text-align:left;cursor:pointer;transition:all 0.15s;font-family:inherit;font-weight:600;width:100%;margin-bottom:8px;}
+.opt-btn:last-child{margin-bottom:0;} .opt-btn:active{transform:scale(0.98);} .opt-btn:hover{border-color:rgba(244,124,58,0.4);}
+.opt-btn.opt-correct{border-color:var(--green);background:rgba(46,204,138,0.12);color:var(--green);font-weight:700;}
+.opt-btn.opt-wrong{border-color:var(--red);background:rgba(232,69,90,0.1);color:var(--red);}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-5px);}75%{transform:translateX(5px);}}
+</style></head>
+<body>
+<div class="header"><button class="btn-back" onclick="history.back()">‹</button>
+<div class="header-info"><div class="header-sup">Módulo 2 · Gramática</div><div class="header-title">Adjetivos</div></div>
+<div class="header-count">Les 4 / 8</div></div>
+<div class="progress-wrap"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+<div class="main" id="main-content">
+
+  <div class="card lesson-intro">
+    <div class="lesson-tag">📖 Lección 4</div>
+    <div class="lesson-title">Adjetivos</div>
+    <div class="lesson-desc">Los adjetivos en neerlandés a veces llevan <strong>-e</strong> al final y a veces no. Depende del artículo y de la posición del adjetivo.</div>
+  </div>
+  <div class="card">
+    <div class="card-body" style="padding-bottom:8px"><div class="section-label">📋 Las reglas de la -e</div></div>
+    <div class="rule-table">
+      <div class="rule-header"><div>Situación</div><div>Forma</div><div>Ejemplo</div></div>
+      <div class="rule-row"><div class="rule-condition"><span class="de">de</span> + adj + noun</div><div class="rule-form-e">adj + -e</div><div class="rule-eg" onclick="speakWord('de grote man')"><span class="de">de</span> groot<u>e</u> man</div></div>
+      <div class="rule-row"><div class="rule-condition"><span class="het">het</span> + adj + noun</div><div class="rule-form-e">adj + -e</div><div class="rule-eg" onclick="speakWord('het grote huis')"><span class="het">het</span> groot<u>e</u> huis</div></div>
+      <div class="rule-row"><div class="rule-condition">een + de-woord</div><div class="rule-form-e">adj + -e</div><div class="rule-eg" onclick="speakWord('een grote man')">een groot<u>e</u> man</div></div>
+      <div class="rule-row rule-exception"><div class="rule-condition">⚠️ een + het-woord</div><div class="rule-form-no">adj (sin -e)</div><div class="rule-eg" onclick="speakWord('een groot huis')">een <u>groot</u> huis</div></div>
+      <div class="rule-row"><div class="rule-condition">predicativo (zijn + adj)</div><div class="rule-form-no">adj (sin -e)</div><div class="rule-eg" onclick="speakWord('het huis is groot')"><span class="het">het</span> huis is <u>groot</u></div></div>
+    </div>
+        <div class="tip-toggle" id="tip4a-toggle" onclick="toggleTip('tip4a')">
+      <div class="bulb-wrap"><span class="bulb-icon">💡</span><div class="bulb-glow"></div></div>
+      <span class="tip-label">La única excepción</span><span class="tip-arrow">▾</span>
+    </div>
+    <div class="tip-content" id="tip4a-content">La regla general: adjetivo antes del sustantivo → lleva <strong>-e</strong>. Excepción única: <em>een + het-woord</em> → sin -e. <em>een groot huis · een klein kind · een mooi boek</em>. Todos los demás casos (incluyendo <em>een grote man</em> porque man=de-woord) llevan -e.</div>
+  </div>
+  <div class="card">
+    <div class="card-body" style="padding-bottom:8px"><div class="section-label">✅ Ejemplos — toca 🔊 · 🐢</div></div>
+    <div class="phrase-list" style="padding-top:0">
+            <div class="phrase-row" onclick="speak('de grote stad','de GRO-te STAD',this)">
+        <div class="pron-bubble"></div><div class="phrase-icon">🏙️</div>
+        <div class="phrase-content"><div class="phrase-nl"><span class="de">de</span> grote stad</div><div class="phrase-es">la ciudad grande — de + adj+e</div></div>
+        <div class="phrase-btns">
+          <div class="phrase-speed" onclick="event.stopPropagation();speak('de grote stad','de GRO-te STAD',this.closest('.phrase-row'),0.5)" title="Lento">🐢</div>
+          <div class="phrase-sound-btn">🔊</div>
+        </div>
+      </div>
+            <div class="phrase-row" onclick="speak('het grote huis','het GRO-te HUIS',this)">
+        <div class="pron-bubble"></div><div class="phrase-icon">🏠</div>
+        <div class="phrase-content"><div class="phrase-nl"><span class="het">het</span> grote huis</div><div class="phrase-es">la casa grande — het + adj+e</div></div>
+        <div class="phrase-btns">
+          <div class="phrase-speed" onclick="event.stopPropagation();speak('het grote huis','het GRO-te HUIS',this.closest('.phrase-row'),0.5)" title="Lento">🐢</div>
+          <div class="phrase-sound-btn">🔊</div>
+        </div>
+      </div>
+            <div class="phrase-row" onclick="speak('een groot huis','een GROOT HUIS',this)">
+        <div class="pron-bubble"></div><div class="phrase-icon">🏡</div>
+        <div class="phrase-content"><div class="phrase-nl">een groot huis</div><div class="phrase-es">una casa grande — ⚠️ een + het-woord = SIN -e</div></div>
+        <div class="phrase-btns">
+          <div class="phrase-speed" onclick="event.stopPropagation();speak('een groot huis','een GROOT HUIS',this.closest('.phrase-row'),0.5)" title="Lento">🐢</div>
+          <div class="phrase-sound-btn">🔊</div>
+        </div>
+      </div>
+            <div class="phrase-row" onclick="speak('een grote stad','een GRO-te STAD',this)">
+        <div class="pron-bubble"></div><div class="phrase-icon">🌆</div>
+        <div class="phrase-content"><div class="phrase-nl">een grote stad</div><div class="phrase-es">una ciudad grande — een + de-woord = CON -e</div></div>
+        <div class="phrase-btns">
+          <div class="phrase-speed" onclick="event.stopPropagation();speak('een grote stad','een GRO-te STAD',this.closest('.phrase-row'),0.5)" title="Lento">🐢</div>
+          <div class="phrase-sound-btn">🔊</div>
+        </div>
+      </div>
+            <div class="phrase-row" onclick="speak('De stad is groot','de STAD is GROOT',this)">
+        <div class="pron-bubble"></div><div class="phrase-icon">📏</div>
+        <div class="phrase-content"><div class="phrase-nl"><span class="de">De</span> stad is groot.</div><div class="phrase-es">La ciudad es grande — predicativo, SIN -e</div></div>
+        <div class="phrase-btns">
+          <div class="phrase-speed" onclick="event.stopPropagation();speak('De stad is groot','de STAD is GROOT',this.closest('.phrase-row'),0.5)" title="Lento">🐢</div>
+          <div class="phrase-sound-btn">🔊</div>
+        </div>
+      </div>
+    </div>
+        <div class="tip-toggle" id="tip4b-toggle" onclick="toggleTip('tip4b')">
+      <div class="bulb-wrap"><span class="bulb-icon">💡</span><div class="bulb-glow"></div></div>
+      <span class="tip-label">Cambios ortográficos al añadir -e</span><span class="tip-arrow">▾</span>
+    </div>
+    <div class="tip-content" id="tip4b-content">Al añadir -e pueden ocurrir cambios: vocal larga doble se simplifica (<em>groot→grote</em>), consonante final se dobla (<em>dik→dikke</em>), la -f cambia a -v (<em>lief→lieve</em>).</div>
+  </div>
+  <div class="card"><div class="exercise-card">
+    <div class="exercise-label">🎨 Ejercicio — ¿Con o sin -e?</div>
+    <div class="exercise-instruction">Elige la forma correcta del adjetivo para cada frase.</div>
+    <div id="adj-container"></div>
+  </div></div>
+    <div class="card"><div class="challenge-card">
+      <div class="challenge-label">🎯 Reto</div>
+      <div class="challenge-question" id="ch-q"></div>
+      <div class="challenge-options" id="ch-opts"></div>
+      <div class="challenge-feedback" id="ch-fb"></div>
+    </div></div>
+<div class="next-wrap"><button class="btn-next" id="btn-next" onclick="goNext()">Siguiente lección &nbsp;→</button></div>
+</div>
+<div class="complete-screen" id="complete-screen">
+<div class="complete-emoji">🎨</div><div class="complete-title">¡Lección completada!</div>
+<div class="complete-sub">Ya dominas los adjetivos. ¡Siguiente: porque!</div>
+<button class="btn-continue" onclick="window.location.href='les-5.html'">Continuar → Omdat y Want →</button>
+</div>
+<script>let currentRow=null,bubbleTimers={};
+function speak(text,pron,el,rate){rate=rate||0.85;window.speechSynthesis.cancel();if(currentRow)clearBubble(currentRow);const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';u.rate=rate;showBubble(el,pron);el.classList.add('playing');currentRow=el;u.onend=()=>{el.classList.remove('playing');clearTimeout(bubbleTimers.r);bubbleTimers.r=setTimeout(()=>clearBubble(el),2000);};u.onerror=()=>{el.classList.remove('playing');clearBubble(el);};window.speechSynthesis.speak(u);}
+function speakWord(text,rate){window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';u.rate=rate||0.85;window.speechSynthesis.speak(u);}
+function showBubble(el,pron){const b=el.querySelector('.pron-bubble');if(!b)return;b.textContent=pron||'🔊';b.classList.add('show');}
+function clearBubble(el){if(!el)return;el.classList.remove('playing');const b=el.querySelector('.pron-bubble');if(b)b.classList.remove('show');}
+function toggleTip(id){document.getElementById(id+'-toggle').classList.toggle('open');document.getElementById(id+'-content').classList.toggle('open');}
+function buildChallenge(){showChallenge(0);}
+function showChallenge(idx){if(idx>=CHALLENGES.length){chDone=true;checkUnlock();return;}const ch=CHALLENGES[idx];document.getElementById('ch-q').textContent=ch.q;const el=document.getElementById('ch-opts');el.innerHTML='';ch.opts.forEach((o,i)=>{const b=document.createElement('button');b.className='challenge-opt';b.textContent=o;b.onclick=()=>answerCh(idx,i,b);el.appendChild(b);});document.getElementById('ch-fb').className='challenge-feedback';document.getElementById('ch-fb').innerHTML='';}
+function answerCh(cIdx,optIdx,btn){const ch=CHALLENGES[cIdx];document.querySelectorAll('.challenge-opt').forEach(b=>b.style.pointerEvents='none');const fb=document.getElementById('ch-fb');if(optIdx===ch.correct){btn.classList.add('opt-correct');fb.innerHTML=ch.fb;fb.className='challenge-feedback fb-correct show';}else{btn.classList.add('opt-wrong');document.querySelectorAll('.challenge-opt')[ch.correct].classList.add('opt-correct');fb.innerHTML='❌ No exactamente. '+ch.fb;fb.className='challenge-feedback fb-wrong show';}setTimeout(()=>{chIdx++;showChallenge(chIdx);},2200);}
+function checkUnlock(){let p=0;if(exDone)p+=50;if(chDone)p+=50;document.getElementById('progress-fill').style.width=p+'%';if(exDone&&chDone)document.getElementById('btn-next').classList.add('unlocked');}
+function goNext(){localStorage.setItem('slaagnl_m2_4','done');document.getElementById('main-content').style.display='none';document.getElementById('complete-screen').classList.add('show');}
+const ADJ_EX=[
+  {before:'Ik woon in een',adj:['groot','grote'],after:'stad.',correct:1,hint:'een + de-woord (stad=de) → +e'},
+  {before:'Hij heeft een',adj:['klein','kleine'],after:'huis.',correct:0,hint:'een + het-woord → SIN -e'},
+  {before:'De',adj:['nieuw','nieuwe'],after:'auto is mooi.',correct:1,hint:'de + adj → +e'},
+  {before:'Het is een',adj:['mooi','mooie'],after:'dag.',correct:1,hint:'een + de-woord (dag=de) → +e'},
+  {before:'Het kind is',adj:['klein','kleine'],after:'.',correct:0,hint:'predicativo → SIN -e'},
+  {before:'Zij heeft een',adj:['goed','goede'],after:'baan.',correct:1,hint:'een + de-woord (baan=de) → +e'},
+];
+const CHALLENGES=[
+  {q:'¿Cuál es la ÚNICA situación donde el adjetivo NO lleva -e antes del sustantivo?',opts:['Siempre lleva -e','Cuando el sustantivo es de-woord','Con "een" + het-woord','Cuando va después de zijn'],correct:2,fb:'✅ <strong>een + het-woord</strong> es la única excepción: <em>een groot huis, een klein kind</em>. Todos los demás casos llevan -e.'},
+  {q:'"De mooie vrouw" vs "een mooie vrouw" — ¿cuál es correcta?',opts:['Solo la primera','Solo la segunda','Ambas son correctas','Ninguna'],correct:2,fb:'✅ ¡Ambas! Con de → mooie ✓. Con een + de-woord (vrouw=de) → mooie ✓. La excepción solo es een + het-woord.'},
+  {q:'¿Cómo se dice "una buena ciudad"? (stad=de)',opts:['een goed stad','een goede stad','een goeden stad','de goed stad'],correct:1,fb:'✅ <strong>een goede stad</strong> — stad es de-woord, entonces con een + de-woord el adjetivo lleva -e.'},
+];
+let adjAnswers=new Array(ADJ_EX.length).fill(null),adjCorrect=0,exDone=false,chDone=false,chIdx=0;
+function buildAdj(){
+  const c=document.getElementById('adj-container');
+  ADJ_EX.forEach((ex,i)=>{
+    const div=document.createElement('div');
+    div.innerHTML=`<div style="font-size:15px;font-weight:600;color:var(--cream);margin-bottom:10px;line-height:2;">${ex.before} <span id="adjb-${i}" style="display:inline-block;min-width:80px;border-bottom:2px solid rgba(255,255,255,0.2);margin:0 4px;text-align:center;color:rgba(255,255,255,0.4);font-style:italic;">___</span> ${ex.after}</div>
+    <div class="adj-opts" id="ajopts-${i}"></div><div class="inline-fb" id="ajfb-${i}"></div>`;
+    if(i<ADJ_EX.length-1){const d=document.createElement('div');d.className='divider';div.appendChild(d);}
+    c.appendChild(div);
+    ex.adj.forEach((a,ai)=>{const btn=document.createElement('button');btn.className='adj-opt';btn.textContent=a;btn.onclick=()=>answerAdj(i,ai,btn,ex);document.getElementById(`ajopts-${i}`).appendChild(btn);});
+  });
+}
+function answerAdj(i,ai,btn,ex){
+  if(adjAnswers[i]!==null)return;adjAnswers[i]=ai;
+  document.getElementById(`ajopts-${i}`).querySelectorAll('.adj-opt').forEach(b=>b.style.pointerEvents='none');
+  const blank=document.getElementById(`adjb-${i}`);const fb=document.getElementById(`ajfb-${i}`);
+  blank.textContent=ex.adj[ai];
+  if(ai===ex.correct){btn.classList.add('opt-correct');blank.style.cssText='color:var(--green);border-color:var(--green);display:inline-block;min-width:80px;margin:0 4px;text-align:center;font-weight:700;';fb.textContent='✅ ¡Correcto! '+ex.hint;fb.className='inline-fb ok';adjCorrect++;if(adjCorrect>=ADJ_EX.length){exDone=true;checkUnlock();}}
+  else{btn.classList.add('opt-wrong');blank.style.cssText='color:var(--red);border-color:var(--red);display:inline-block;min-width:80px;margin:0 4px;text-align:center;font-weight:700;';setTimeout(()=>{blank.textContent=ex.adj[ex.correct];blank.style.cssText='color:var(--green);border-color:var(--green);display:inline-block;min-width:80px;margin:0 4px;text-align:center;font-weight:700;';},500);fb.textContent='❌ Era: '+ex.adj[ex.correct]+' — '+ex.hint;fb.className='inline-fb err';if(adjAnswers.every(a=>a!==null)){exDone=true;checkUnlock();}}
+}
+buildAdj();buildChallenge();</script></body></html>

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>SlaagNL — M2 · Les 8</title><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"><style>
+:root{--navy:#0d1f3c;--navy2:#162d54;--navy3:#1e3a6e;--orange:#f47c3a;--cream:#fdf6ec;--green:#2ecc8a;--red:#e8455a;--purple:#a78bfa;--blue:#60a5fa;--border:rgba(255,255,255,0.07);--ease:0.22s cubic-bezier(0.4,0,0.2,1);}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
+body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);min-height:100vh;-webkit-font-smoothing:antialiased;}
+.header{display:flex;align-items:center;gap:10px;padding:14px 16px;background:var(--navy2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50;}
+.btn-back{background:none;border:none;color:var(--orange);font-size:24px;cursor:pointer;padding:0 8px 0 0;line-height:1;flex-shrink:0;}
+.header-info{flex:1;min-width:0;}
+.header-sup{font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:2px;}
+.header-title{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.header-count{font-size:12px;color:rgba(253,246,236,0.4);font-weight:600;flex-shrink:0;}
+.progress-wrap{height:3px;background:rgba(255,255,255,0.08);}
+.progress-fill{height:100%;background:var(--orange);transition:width 0.5s ease;}
+.main{padding:16px 16px 40px;display:flex;flex-direction:column;gap:14px;max-width:600px;margin:0 auto;}
+.card{background:var(--navy2);border-radius:18px;border:1px solid var(--border);overflow:hidden;}
+.card-body{padding:18px;font-size:14px;line-height:1.75;color:rgba(253,246,236,0.85);}
+.card-body strong{color:var(--orange);}
+.card-body em{color:#a8e6cf;font-style:normal;font-weight:600;}
+.section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--orange);margin-bottom:10px;}
+.lesson-intro{padding:20px 18px 18px;}
+.lesson-tag{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--orange);background:rgba(244,124,58,0.12);border:1px solid rgba(244,124,58,0.2);padding:4px 10px;border-radius:99px;margin-bottom:12px;}
+.lesson-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--cream);margin-bottom:8px;line-height:1.2;}
+.lesson-desc{font-size:14px;color:rgba(253,246,236,0.7);line-height:1.7;}
+
+/* ARTICLE SHOWCASE */
+.article-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:18px;}
+.art-card{border-radius:14px;padding:16px 10px;text-align:center;cursor:pointer;transition:all 0.18s;user-select:none;position:relative;}
+.art-card:active{transform:scale(0.95);}
+.art-de{background:rgba(96,165,250,0.1);border:2px solid rgba(96,165,250,0.3);}
+.art-het{background:rgba(244,124,58,0.1);border:2px solid rgba(244,124,58,0.3);}
+.art-een{background:rgba(46,204,138,0.1);border:2px solid rgba(46,204,138,0.3);}
+.art-nl{font-family:'Playfair Display',serif;font-size:26px;font-weight:900;margin-bottom:4px;}
+.art-de .art-nl{color:var(--blue);}
+.art-het .art-nl{color:var(--orange);}
+.art-een .art-nl{color:var(--green);}
+.art-es{font-size:11px;opacity:0.55;margin-bottom:6px;}
+.art-use{font-size:10px;font-weight:600;line-height:1.4;opacity:0.7;}
+.pron-bubble{position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--navy3);border:1px solid var(--orange);border-radius:10px;padding:5px 12px;font-size:11px;font-weight:700;color:var(--orange);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 0.2s;z-index:10;}
+.pron-bubble::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:4px solid transparent;border-top-color:var(--orange);}
+.pron-bubble.show{opacity:1;}
+
+/* PHRASE ROWS */
+.phrase-list{padding:0 18px 18px;display:flex;flex-direction:column;gap:8px;}
+.phrase-row{display:flex;align-items:center;gap:12px;padding:12px 14px;background:rgba(255,255,255,0.03);border-radius:14px;border:1px solid rgba(255,255,255,0.06);cursor:pointer;transition:all 0.18s;position:relative;user-select:none;}
+.phrase-row:active{transform:scale(0.97);background:rgba(244,124,58,0.08);}
+.phrase-row.playing{border-color:var(--orange);background:rgba(244,124,58,0.08);}
+.phrase-icon{font-size:18px;flex-shrink:0;}
+.phrase-content{flex:1;}
+.phrase-nl{font-size:14px;font-weight:700;color:var(--cream);margin-bottom:2px;}
+.phrase-nl .de{color:var(--blue);}
+.phrase-nl .het{color:var(--orange);}
+.phrase-nl .een{color:var(--green);}
+.phrase-es{font-size:12px;color:rgba(253,246,236,0.4);font-style:italic;}
+.phrase-sound-btn{width:30px;height:30px;border-radius:50%;background:rgba(244,124,58,0.12);border:1px solid rgba(244,124,58,0.25);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.phrase-row.playing .phrase-sound-btn{background:var(--orange);border-color:var(--orange);animation:pulse-ring 1s infinite;}
+@keyframes pulse-ring{0%{box-shadow:0 0 0 0 rgba(244,124,58,0.5);}70%{box-shadow:0 0 0 8px rgba(244,124,58,0);}100%{box-shadow:0 0 0 0 rgba(244,124,58,0);}}
+
+/* TIP */
+.tip-toggle{display:flex;align-items:center;gap:10px;padding:13px 18px;background:rgba(244,124,58,0.06);border-top:1px solid rgba(255,255,255,0.06);cursor:pointer;user-select:none;transition:background var(--ease);}
+.tip-toggle:hover{background:rgba(244,124,58,0.1);}
+.bulb-wrap{position:relative;width:28px;height:28px;flex-shrink:0;}
+.bulb-icon{font-size:22px;line-height:28px;display:block;text-align:center;transition:transform 0.3s ease;}
+.bulb-glow{position:absolute;inset:-4px;border-radius:50%;background:radial-gradient(circle,rgba(244,196,58,0.35),transparent 70%);opacity:0;transition:opacity 0.3s ease;pointer-events:none;}
+.tip-toggle.open .bulb-glow{opacity:1;}
+.tip-toggle.open .bulb-icon{transform:scale(1.15);filter:brightness(1.3);}
+@keyframes bulbPulse{0%,100%{opacity:0.5}50%{opacity:1}}
+.tip-toggle:not(.open) .bulb-glow{opacity:0.3;animation:bulbPulse 2s infinite;}
+.tip-label{font-size:13px;font-weight:600;color:var(--orange);flex:1;}
+.tip-arrow{color:rgba(244,124,58,0.6);font-size:16px;transition:transform 0.3s ease;}
+.tip-toggle.open .tip-arrow{transform:rotate(180deg);}
+.tip-content{display:none;padding:14px 18px;font-size:13px;line-height:1.7;color:rgba(253,246,236,0.7);background:rgba(244,124,58,0.04);border-top:1px solid rgba(255,255,255,0.04);animation:fadeDown 0.25s ease;}
+.tip-content.open{display:block;}
+.tip-content strong{color:var(--orange);}
+.tip-content em{color:#a8e6cf;font-style:normal;font-weight:600;}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+
+/* DRAG TO COLUMN EXERCISE */
+.exercise-card{padding:18px;}
+.exercise-label{font-size:10px;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+.exercise-instruction{font-size:13px;color:rgba(253,246,236,0.5);margin-bottom:16px;font-style:italic;line-height:1.5;}
+
+.word-pool{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;min-height:44px;padding:10px;background:rgba(0,0,0,0.15);border-radius:12px;border:1.5px dashed rgba(255,255,255,0.1);}
+.drag-chip{padding:9px 16px;border-radius:20px;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.15);color:var(--cream);font-size:13px;font-weight:700;cursor:pointer;transition:all 0.15s;user-select:none;font-family:inherit;}
+.drag-chip:active{transform:scale(0.94);}
+.drag-chip.used{opacity:0.2;pointer-events:none;}
+
+.columns{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;}
+.drop-col{border-radius:14px;padding:10px 8px;min-height:120px;}
+.drop-col.col-de{background:rgba(96,165,250,0.06);border:2px solid rgba(96,165,250,0.2);}
+.drop-col.col-het{background:rgba(244,124,58,0.06);border:2px solid rgba(244,124,58,0.2);}
+.drop-col.col-een{background:rgba(46,204,138,0.06);border:2px solid rgba(46,204,138,0.2);}
+.col-header{font-family:'Playfair Display',serif;font-size:16px;font-weight:900;text-align:center;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,0.06);}
+.col-de .col-header{color:var(--blue);}
+.col-het .col-header{color:var(--orange);}
+.col-een .col-header{color:var(--green);}
+.placed-chip{padding:6px 10px;border-radius:10px;font-size:12px;font-weight:700;margin-bottom:6px;text-align:center;cursor:pointer;transition:all 0.15s;}
+.placed-chip.col-de-chip{background:rgba(96,165,250,0.15);color:var(--blue);border:1px solid rgba(96,165,250,0.25);}
+.placed-chip.col-het-chip{background:rgba(244,124,58,0.15);color:var(--orange);border:1px solid rgba(244,124,58,0.25);}
+.placed-chip.col-een-chip{background:rgba(46,204,138,0.15);color:var(--green);border:1px solid rgba(46,204,138,0.25);}
+.placed-chip.chip-correct{opacity:1;cursor:default;}
+.placed-chip.chip-wrong{border-color:var(--red);color:var(--red);background:rgba(232,69,90,0.1);animation:shake 0.3s ease;}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-5px);}75%{transform:translateX(5px);}}
+
+.ex-feedback{padding:10px 14px;border-radius:10px;font-size:13px;font-weight:600;display:none;margin-bottom:8px;}
+.ex-feedback.show{display:block;}
+.feedback-correct{background:rgba(46,204,138,0.15);color:var(--green);}
+.feedback-wrong{background:rgba(232,69,90,0.12);color:var(--red);}
+.btn-check{width:100%;padding:13px;background:var(--navy3);border:1.5px solid rgba(255,255,255,0.1);border-radius:12px;color:var(--cream);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:all var(--ease);margin-top:4px;}
+.btn-check:hover{background:rgba(244,124,58,0.15);border-color:var(--orange);}
+
+/* CHALLENGE */
+.challenge-card{padding:18px;}
+.challenge-label{font-size:10px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.challenge-question{font-size:14px;color:var(--cream);line-height:1.6;margin-bottom:14px;font-weight:600;}
+.challenge-options{display:flex;flex-direction:column;gap:8px;}
+.challenge-opt{padding:13px 16px;border-radius:12px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);color:var(--cream);font-size:13px;text-align:left;cursor:pointer;transition:all 0.15s;font-family:inherit;font-weight:500;}
+.challenge-opt:active{transform:scale(0.98);}
+.challenge-opt.opt-correct{border-color:var(--green);background:rgba(46,204,138,0.15);color:var(--green);font-weight:700;}
+.challenge-opt.opt-wrong{border-color:var(--red);background:rgba(232,69,90,0.12);color:var(--red);}
+.challenge-feedback{margin-top:12px;padding:12px 14px;border-radius:12px;font-size:13px;line-height:1.5;display:none;animation:fadeDown 0.25s ease;}
+.challenge-feedback.show{display:block;}
+.challenge-feedback strong{font-weight:700;}
+.challenge-feedback.fb-correct{background:rgba(46,204,138,0.12);color:var(--green);}
+.challenge-feedback.fb-wrong{background:rgba(232,69,90,0.1);color:var(--red);}
+
+.next-wrap{padding:0 0 8px;}
+.btn-next{width:100%;padding:17px;background:var(--orange);border:none;border-radius:14px;color:white;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;transition:all var(--ease);display:flex;align-items:center;justify-content:center;gap:8px;opacity:0.4;pointer-events:none;}
+.btn-next.unlocked{opacity:1;pointer-events:all;}
+.btn-next.unlocked:active{opacity:0.85;transform:scale(0.98);}
+.complete-screen{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;padding:40px 24px;text-align:center;gap:12px;}
+.complete-screen.show{display:flex;}
+.complete-emoji{font-size:64px;margin-bottom:8px;}
+.complete-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--cream);margin-bottom:4px;}
+.complete-sub{font-size:15px;color:rgba(253,246,236,0.5);line-height:1.6;max-width:280px;}
+.btn-continue{margin-top:16px;padding:16px 32px;background:var(--orange);border:none;border-radius:14px;color:white;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;}
+
+.de{color:var(--blue);font-weight:700;}.het{color:var(--orange);font-weight:700;}
+.phrase-speed{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;cursor:pointer;transition:all 0.18s;user-select:none;}
+.phrase-speed:active{background:rgba(96,165,250,0.18);border-color:var(--blue);}
+.phrase-btns{display:flex;gap:6px;flex-shrink:0;align-items:center;}
+.tip-inline{margin:8px 0 4px;padding:10px 14px;background:rgba(244,196,58,0.07);border:1px solid rgba(244,196,58,0.18);border-radius:12px;font-size:12px;color:rgba(253,246,236,0.72);line-height:1.6;}.tip-inline strong{color:#f4c842;}
+.word-pool{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;min-height:44px;padding:10px;background:rgba(0,0,0,0.15);border-radius:12px;border:1.5px dashed rgba(255,255,255,0.1);}
+.drag-chip{padding:9px 16px;border-radius:20px;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.15);color:var(--cream);font-size:13px;font-weight:700;cursor:pointer;transition:all 0.15s;user-select:none;font-family:inherit;}
+.drag-chip:active{transform:scale(0.94);}.drag-chip.used{opacity:0.2;pointer-events:none;}
+.answer-zone{display:flex;flex-wrap:wrap;gap:8px;min-height:50px;padding:12px;background:rgba(0,0,0,0.2);border-radius:14px;border:1.5px dashed rgba(255,255,255,0.1);margin-bottom:10px;align-items:center;}
+.placed-word{padding:8px 14px;border-radius:10px;background:rgba(244,124,58,0.12);border:1.5px solid rgba(244,124,58,0.3);color:var(--orange);font-size:13px;font-weight:700;cursor:pointer;transition:all 0.15s;}
+.placed-word.word-correct{border-color:var(--green);background:rgba(46,204,138,0.12);color:var(--green);cursor:default;}
+.placed-word.word-wrong{border-color:var(--red);background:rgba(232,69,90,0.1);color:var(--red);}
+.inline-fb{font-size:12px;font-weight:600;min-height:18px;}.inline-fb.ok{color:var(--green);}.inline-fb.err{color:var(--red);}
+.btn-check{width:100%;padding:13px;background:var(--navy3);border:1.5px solid rgba(255,255,255,0.1);border-radius:12px;color:var(--cream);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:all var(--ease);margin-top:4px;}
+.btn-check:hover{background:rgba(244,124,58,0.15);border-color:var(--orange);}
+.divider{height:1px;background:rgba(255,255,255,0.06);margin:10px 0 16px;}
+.opt-btn{padding:13px 16px;border-radius:12px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);color:var(--cream);font-size:13px;text-align:left;cursor:pointer;transition:all 0.15s;font-family:inherit;font-weight:600;width:100%;margin-bottom:8px;}
+.opt-btn:last-child{margin-bottom:0;}.opt-btn:active{transform:scale(0.98);}.opt-btn:hover{border-color:rgba(244,124,58,0.4);}
+.opt-btn.opt-correct{border-color:var(--green);background:rgba(46,204,138,0.12);color:var(--green);font-weight:700;}
+.opt-btn.opt-wrong{border-color:var(--red);background:rgba(232,69,90,0.1);color:var(--red);}
+.omdat-box{padding:14px;border-radius:14px;margin-bottom:10px;}.omdat-box.omb{background:rgba(244,124,58,0.07);border:1px solid rgba(244,124,58,0.22);}
+.omdat-box.wantb{background:rgba(96,165,250,0.07);border:1px solid rgba(96,165,250,0.22);}
+.omdat-box-title{font-size:13px;font-weight:700;margin-bottom:6px;}.omb .omdat-box-title{color:var(--orange);}.wantb .omdat-box-title{color:var(--blue);}
+.omdat-box-rule{font-size:12px;color:rgba(253,246,236,0.65);line-height:1.6;margin-bottom:8px;}
+.omdat-box-ex{font-size:13px;font-weight:700;color:var(--cream);padding:8px 12px;background:rgba(0,0,0,0.2);border-radius:10px;cursor:pointer;user-select:none;}.omdat-box-ex:active{opacity:.8;}
+.omdat-box-es{font-size:11px;color:rgba(253,246,236,0.35);font-style:italic;margin-top:4px;}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 18px 18px;}
+.modal-card{border-radius:14px;padding:13px 14px;cursor:pointer;user-select:none;transition:all 0.18s;}.modal-card:active{transform:scale(0.97);}
+.modal-kunnen{background:rgba(244,124,58,0.07);border:1px solid rgba(244,124,58,0.22);}
+.modal-willen{background:rgba(96,165,250,0.07);border:1px solid rgba(96,165,250,0.22);}
+.modal-moeten{background:rgba(46,204,138,0.07);border:1px solid rgba(46,204,138,0.22);}
+.modal-mogen{background:rgba(167,139,250,0.07);border:1px solid rgba(167,139,250,0.22);}
+.modal-hoeven{background:rgba(244,196,58,0.07);border:1px solid rgba(244,196,58,0.22);}
+.modal-name{font-family:'Playfair Display',serif;font-size:18px;font-weight:900;margin-bottom:3px;}
+.modal-kunnen .modal-name{color:var(--orange);}.modal-willen .modal-name{color:var(--blue);}
+.modal-moeten .modal-name{color:var(--green);}.modal-mogen .modal-name{color:var(--purple);}.modal-hoeven .modal-name{color:#f4c842;}
+.modal-es{font-size:11px;opacity:.5;margin-bottom:5px;}.modal-conj{font-size:11px;color:rgba(253,246,236,0.55);line-height:1.5;}
+.aux-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 18px 18px;}
+.aux-card{border-radius:14px;padding:14px;}.aux-heb{background:rgba(244,124,58,0.07);border:1px solid rgba(244,124,58,0.22);}
+.aux-zijn{background:rgba(96,165,250,0.07);border:1px solid rgba(96,165,250,0.22);}
+.aux-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:900;margin-bottom:4px;}
+.aux-heb .aux-title{color:var(--orange);}.aux-zijn .aux-title{color:var(--blue);}
+.aux-sub{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;opacity:.5;margin-bottom:6px;}
+.aux-rule{font-size:12px;color:rgba(253,246,236,0.65);line-height:1.5;margin-bottom:8px;}
+.aux-ex{font-size:12px;font-weight:700;padding:5px 10px;border-radius:8px;cursor:pointer;margin-bottom:4px;user-select:none;transition:all .15s;}
+.aux-heb .aux-ex{background:rgba(244,124,58,0.1);color:var(--orange);}.aux-zijn .aux-ex{background:rgba(96,165,250,0.1);color:var(--blue);}.aux-ex:active{opacity:.7;}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-5px);}75%{transform:translateX(5px);}}
+</style></head>
+<body>
+<div class="header"><button class="btn-back" onclick="history.back()">‹</button>
+<div class="header-info"><div class="header-sup">Módulo 2 · Gramática</div><div class="header-title">Tiempo Pasado — VVT</div></div>
+<div class="header-count">Les 8 / 8</div></div>
+<div class="progress-wrap"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+<div class="main" id="main-content">
+
+  <div class="card lesson-intro">
+    <div class="lesson-tag">📖 Lección 8</div>
+    <div class="lesson-title">Tiempo Pasado — VVT</div>
+    <div class="lesson-desc">El pasado compuesto: <strong>hebben o zijn</strong> (conjugado) + <em>voltooid deelwoord</em> (participio). Con esto puedes contar lo que hiciste — esencial para el Spreken del examen.</div>
+  </div>
+  <div class="card">
+    <div class="card-body" style="padding-bottom:4px"><div class="section-label">⏰ Hebben o zijn — esa es la pregunta</div></div>
+    <div class="aux-grid">
+      <div class="aux-card aux-heb">
+        <div class="aux-title">hebben</div>
+        <div class="aux-sub">la mayoría de verbos</div>
+        <div class="aux-rule">Acciones transitivas y la mayoría de verbos.</div>
+        <div class="aux-ex" onclick="speakWord('Ik heb gewerkt')">Ik heb gewerkt.</div>
+        <div class="aux-ex" onclick="speakWord('Zij heeft geleerd')">Zij heeft geleerd.</div>
+        <div class="aux-ex" onclick="speakWord('Wij hebben gewoond')">Wij hebben gewoond.</div>
+      </div>
+      <div class="aux-card aux-zijn">
+        <div class="aux-title">zijn</div>
+        <div class="aux-sub">movimiento y cambio</div>
+        <div class="aux-rule">Verbos de movimiento o cambio de estado.</div>
+        <div class="aux-ex" onclick="speakWord('Ik ben gegaan')">Ik ben gegaan.</div>
+        <div class="aux-ex" onclick="speakWord('Zij is gekomen')">Zij is gekomen.</div>
+        <div class="aux-ex" onclick="speakWord('Hij is geweest')">Hij is geweest.</div>
+      </div>
+    </div>
+        <div class="tip-toggle" id="tip8a-toggle" onclick="toggleTip('tip8a')">
+      <div class="bulb-wrap"><span class="bulb-icon">💡</span><div class="bulb-glow"></div></div>
+      <span class="tip-label">Cómo formar el participio</span><span class="tip-arrow">▾</span>
+    </div>
+    <div class="tip-content" id="tip8a-content">1. Saca el <strong>stam</strong>: infinitivo sin -en → <em>werken → werk</em><br>2. Añade <strong>ge-</strong> delante<br>3. Añade <strong>-t o -d</strong>. Truco: <em>'t kofschip</em> — si la última letra del stam está en esta palabra → -t, si no → -d.<br><em>werken → gewerkt · leven → geleefd · gaan → gegaan · zijn → geweest</em></div>
+  </div>
+  <div class="card">
+    <div class="card-body" style="padding-bottom:8px"><div class="section-label">✅ Ejemplos — toca 🔊 · 🐢</div></div>
+    <div class="phrase-list" style="padding-top:0">
+            <div class="phrase-row" onclick="speak('Gisteren heb ik Nederlands geleerd','GIS-te-ren heb ik ne-der-LANDS ge-LEERD',this)">
+        <div class="pron-bubble"></div><div class="phrase-icon">📚</div>
+        <div class="phrase-content"><div class="phrase-nl">Gisteren heb ik Nederlands geleerd.</div><div class="phrase-es">Ayer aprendí neerlandés. (hebben)</div></div>
+        <div class="phrase-btns">
+          <div class="phrase-speed" onclick="event.stopPropagation();speak('Gisteren heb ik Nederlands geleerd','GIS-te-ren heb ik ne-der-LANDS ge-LEERD',this.closest('.phrase-row'),0.5)" title="Lento">🐢</div>
+          <div class="phrase-sound-btn">🔊</div>
+        </div>
+      </div>
+            <div class="phrase-row" onclick="speak('Zij is naar Amsterdam gegaan','zij is naar am-ster-DAM ge-GAAN',this)">
+        <div class="pron-bubble"></div><div class="phrase-icon">🚆</div>
+        <div class="phrase-content"><div class="phrase-nl">Zij is naar Amsterdam gegaan.</div><div class="phrase-es">Ella fue a Ámsterdam. (beweging → zijn)</div></div>
+        <div class="phrase-btns">
+          <div class="phrase-speed" onclick="event.stopPropagation();speak('Zij is naar Amsterdam gegaan','zij is naar am-ster-DAM ge-GAAN',this.closest('.phrase-row'),0.5)" title="Lento">🐢</div>
+          <div class="phrase-sound-btn">🔊</div>
+        </div>
+      </div>
+            <div class="phrase-row" onclick="speak('Wij hebben drie jaar in Spanje gewoond','wij HEB-ben drie jaar in SPAN-je ge-WOOND',this)">
+        <div class="pron-bubble"></div><div class="phrase-icon">🏠</div>
+        <div class="phrase-content"><div class="phrase-nl">Wij hebben drie jaar in Spanje gewoond.</div><div class="phrase-es">Vivimos tres años en España.</div></div>
+        <div class="phrase-btns">
+          <div class="phrase-speed" onclick="event.stopPropagation();speak('Wij hebben drie jaar in Spanje gewoond','wij HEB-ben drie jaar in SPAN-je ge-WOOND',this.closest('.phrase-row'),0.5)" title="Lento">🐢</div>
+          <div class="phrase-sound-btn">🔊</div>
+        </div>
+      </div>
+            <div class="phrase-row" onclick="speak('Hij is ziek geweest','hij is ZIEK ge-WEEST',this)">
+        <div class="pron-bubble"></div><div class="phrase-icon">🤒</div>
+        <div class="phrase-content"><div class="phrase-nl">Hij is ziek geweest.</div><div class="phrase-es">Estuvo enfermo. (cambio de estado → zijn)</div></div>
+        <div class="phrase-btns">
+          <div class="phrase-speed" onclick="event.stopPropagation();speak('Hij is ziek geweest','hij is ZIEK ge-WEEST',this.closest('.phrase-row'),0.5)" title="Lento">🐢</div>
+          <div class="phrase-sound-btn">🔊</div>
+        </div>
+      </div>
+    </div>
+        <div class="tip-toggle" id="tip8b-toggle" onclick="toggleTip('tip8b')">
+      <div class="bulb-wrap"><span class="bulb-icon">💡</span><div class="bulb-glow"></div></div>
+      <span class="tip-label">El participio va siempre al final</span><span class="tip-arrow">▾</span>
+    </div>
+    <div class="tip-content" id="tip8b-content">Orden: sujeto + auxiliar (pos.2) + complementos + participio (al final). <em>Gisteren heb ik in Amsterdam gewerkt.</em> El auxiliar sigue la regla V2, el participio siempre al final.</div>
+  </div>
+  <div class="card"><div class="exercise-card">
+    <div class="exercise-label">⏰ Ejercicio — Forma el pasado correcto</div>
+    <div class="exercise-instruction">Elige primero el auxiliar y luego el participio correcto.</div>
+    <div id="past-container"></div>
+  </div></div>
+  <div class="card"><div class="challenge-card">
+    <div class="challenge-label">🏆 Reto Final — Módulo 2</div>
+    <div class="challenge-question" id="ch-q"></div>
+    <div class="challenge-options" id="ch-opts"></div>
+    <div class="challenge-feedback" id="ch-fb"></div>
+  </div></div>
+<div class="next-wrap"><button class="btn-next" id="btn-next" onclick="goNext()">Ir al Módulo 3 &nbsp;→</button></div>
+</div>
+<div class="complete-screen" id="complete-screen">
+<div class="complete-emoji">🏆</div><div class="complete-title">¡Lección completada!</div>
+<div class="complete-sub">¡Módulo 2 completado! Dominas la gramática base del neerlandés.</div>
+<button class="btn-continue" onclick="window.location.href='../modulo-3/index.html'">Continuar → Módulo 3 →</button>
+</div>
+<script>let currentRow=null,bubbleTimers={};
+function speak(text,pron,el,rate){rate=rate||0.85;window.speechSynthesis.cancel();if(currentRow)clearBubble(currentRow);const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';u.rate=rate;showBubble(el,pron);el.classList.add('playing');currentRow=el;u.onend=()=>{el.classList.remove('playing');clearTimeout(bubbleTimers.r);bubbleTimers.r=setTimeout(()=>clearBubble(el),2000);};u.onerror=()=>{el.classList.remove('playing');clearBubble(el);};window.speechSynthesis.speak(u);}
+function speakWord(text,rate){window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';u.rate=rate||0.85;window.speechSynthesis.speak(u);}
+function showBubble(el,pron){const b=el.querySelector('.pron-bubble');if(!b)return;b.textContent=pron||'🔊';b.classList.add('show');}
+function clearBubble(el){if(!el)return;el.classList.remove('playing');const b=el.querySelector('.pron-bubble');if(b)b.classList.remove('show');}
+function toggleTip(id){document.getElementById(id+'-toggle').classList.toggle('open');document.getElementById(id+'-content').classList.toggle('open');}
+function buildChallenge(){showChallenge(0);}
+function showChallenge(idx){if(idx>=CHALLENGES.length){chDone=true;checkUnlock();return;}const ch=CHALLENGES[idx];document.getElementById('ch-q').textContent=ch.q;const el=document.getElementById('ch-opts');el.innerHTML='';ch.opts.forEach((o,i)=>{const b=document.createElement('button');b.className='challenge-opt';b.textContent=o;b.onclick=()=>answerCh(idx,i,b);el.appendChild(b);});document.getElementById('ch-fb').className='challenge-feedback';document.getElementById('ch-fb').innerHTML='';}
+function answerCh(cIdx,optIdx,btn){const ch=CHALLENGES[cIdx];document.querySelectorAll('.challenge-opt').forEach(b=>b.style.pointerEvents='none');const fb=document.getElementById('ch-fb');if(optIdx===ch.correct){btn.classList.add('opt-correct');fb.innerHTML=ch.fb;fb.className='challenge-feedback fb-correct show';}else{btn.classList.add('opt-wrong');document.querySelectorAll('.challenge-opt')[ch.correct].classList.add('opt-correct');fb.innerHTML='❌ No exactamente. '+ch.fb;fb.className='challenge-feedback fb-wrong show';}setTimeout(()=>{chIdx++;showChallenge(chIdx);},2200);}
+function checkUnlock(){let p=0;if(exDone)p+=50;if(chDone)p+=50;document.getElementById('progress-fill').style.width=p+'%';if(exDone&&chDone)document.getElementById('btn-next').classList.add('unlocked');}
+function goNext(){localStorage.setItem('slaagnl_m2_8','done');document.getElementById('main-content').style.display='none';document.getElementById('complete-screen').classList.add('show');}
+const PAST_EX=[
+  {q:'Ik ___ gisteren hard ___.',auxOpts:['heb','ben'],partOpts:['gewerkt','gegaan','geworden'],auxCorrect:0,partCorrect:0,hint:'werken → hebben + gewerkt'},
+  {q:'Zij ___ naar de winkel ___.',auxOpts:['heeft','is'],partOpts:['gegaan','geweest','gewerkt'],auxCorrect:1,partCorrect:0,hint:'gaan (beweging) → zijn + gegaan'},
+  {q:'Wij ___ drie jaar in Amsterdam ___.',auxOpts:['hebben','zijn'],partOpts:['gewoond','gegaan','geleefd'],auxCorrect:0,partCorrect:0,hint:'wonen → hebben + gewoond'},
+  {q:'Hij ___ ziek ___.',auxOpts:['heeft','is'],partOpts:['gewerkt','geweest','gegaan'],auxCorrect:1,partCorrect:1,hint:'zijn → zijn + geweest (cambio de estado)'},
+];
+const CHALLENGES=[
+  {q:'¿Con qué auxiliar se usa "gaan" en pasado?',opts:['hebben: ik heb gegaan','zijn: ik ben gegaan (beweging)','zijn: ik ben gegaan (cualquier verbo)','hebben: hij heeft gegaan'],correct:1,fb:'✅ Verbos de <strong>movimiento</strong> usan zijn: <em>ik ben gegaan, ik ben gekomen, ik ben gevlogen</em>.'},
+  {q:'¿Cuál es el participio de "werken"?',opts:['gewerken','gewerkt','werkend','gewerkd'],correct:1,fb:"✅ <strong>gewerkt</strong> — stam: werk. La k está en 't kofschip → termina en -t."},
+  {q:'¿Cuál es correcta para "Ayer ella vivió en Amsterdam"?',opts:['Gisteren zij heeft gewoond in Amsterdam.','Gisteren heeft zij gewoond in Amsterdam.','Gisteren is zij gewoond in Amsterdam.','Gisteren heeft zij gewonen in Amsterdam.'],correct:1,fb:'✅ <strong>Gisteren heeft zij gewoond in Amsterdam.</strong> — gisteren (pos.1) + heeft (pos.2) + sujeto + participio al final. Wonen usa hebben.'},
+];
+let pastDone=new Array(PAST_EX.length).fill(false),pastCorrect=0,exDone=false,chDone=false,chIdx=0;
+function buildPast(){
+  const c=document.getElementById('past-container');
+  PAST_EX.forEach((ex,i)=>{
+    const div=document.createElement('div');
+    div.innerHTML=`<div style="font-size:14px;font-weight:700;color:var(--cream);margin-bottom:12px;">${i+1}. ${ex.q}</div>
+    <div style="font-size:11px;color:rgba(253,246,236,0.35);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;">Auxiliar</div>
+    <div style="display:flex;gap:8px;margin-bottom:12px;" id="aux-${i}"></div>
+    <div style="font-size:11px;color:rgba(253,246,236,0.35);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;">Participio</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;opacity:0.3;transition:opacity 0.3s;" id="part-${i}"></div>
+    <div class="inline-fb" id="pfb-${i}"></div>`;
+    if(i<PAST_EX.length-1){const d=document.createElement('div');d.className='divider';div.appendChild(d);}
+    c.appendChild(div);
+    let auxPicked=null;
+    ex.auxOpts.forEach((a,ai)=>{
+      const b=document.createElement('button');
+      b.style.cssText='padding:10px 20px;border-radius:12px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);color:var(--cream);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;';
+      b.textContent=a;
+      b.onclick=()=>{if(auxPicked!==null)return;auxPicked=ai;document.getElementById(`aux-${i}`).querySelectorAll('button').forEach(bb=>bb.style.pointerEvents='none');if(ai===ex.auxCorrect){b.style.borderColor='var(--green)';b.style.color='var(--green)';}else{b.style.borderColor='var(--red)';b.style.color='var(--red)';document.getElementById(`aux-${i}`).querySelectorAll('button')[ex.auxCorrect].style.borderColor='var(--green)';document.getElementById(`aux-${i}`).querySelectorAll('button')[ex.auxCorrect].style.color='var(--green)';}document.getElementById(`part-${i}`).style.opacity='1';};
+      document.getElementById(`aux-${i}`).appendChild(b);
+    });
+    ex.partOpts.forEach((p,pi)=>{
+      const b=document.createElement('button');
+      b.style.cssText='padding:9px 16px;border-radius:12px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);color:var(--cream);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;';
+      b.textContent=p;
+      b.onclick=()=>{if(pastDone[i])return;pastDone[i]=true;document.getElementById(`part-${i}`).querySelectorAll('button').forEach(bb=>bb.style.pointerEvents='none');const fb=document.getElementById(`pfb-${i}`);const auxOk=auxPicked===ex.auxCorrect;const partOk=pi===ex.partCorrect;if(auxOk&&partOk){b.style.borderColor='var(--green)';b.style.color='var(--green)';fb.textContent='✅ ¡Correcto! '+ex.hint;fb.className='inline-fb ok';pastCorrect++;if(pastCorrect>=PAST_EX.length){exDone=true;checkUnlock();}}else{if(partOk){b.style.borderColor='var(--orange)';b.style.color='var(--orange)';}else{b.style.borderColor='var(--red)';b.style.color='var(--red)';document.getElementById(`part-${i}`).querySelectorAll('button')[ex.partCorrect].style.borderColor='var(--green)';document.getElementById(`part-${i}`).querySelectorAll('button')[ex.partCorrect].style.color='var(--green)';}fb.textContent='❌ Era: '+ex.auxOpts[ex.auxCorrect]+' + '+ex.partOpts[ex.partCorrect]+'. '+ex.hint;fb.className='inline-fb err';if(pastDone.every(d=>d)){exDone=true;checkUnlock();}}};
+      document.getElementById(`part-${i}`).appendChild(b);
+    });
+  });
+}
+buildPast();buildChallenge();</script></body></html>
