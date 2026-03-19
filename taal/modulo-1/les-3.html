@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SlaagNL — M1 · Les 3</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0d1f3c;--navy2:#162d54;--navy3:#1e3a6e;--orange:#f47c3a;--cream:#fdf6ec;--green:#2ecc8a;--red:#e8455a;--purple:#a78bfa;--blue:#60a5fa;--yellow:#f4c842;--border:rgba(255,255,255,0.07);--ease:0.22s cubic-bezier(0.4,0,0.2,1);}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
+body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);min-height:100vh;-webkit-font-smoothing:antialiased;}
+.header{display:flex;align-items:center;gap:10px;padding:14px 16px;background:var(--navy2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50;}
+.btn-back{background:none;border:none;color:var(--orange);font-size:24px;cursor:pointer;padding:0 8px 0 0;line-height:1;flex-shrink:0;}
+.header-info{flex:1;min-width:0;}
+.header-sup{font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:2px;}
+.header-title{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.header-count{font-size:12px;color:rgba(253,246,236,0.4);font-weight:600;flex-shrink:0;}
+.progress-wrap{height:3px;background:rgba(255,255,255,0.08);}
+.progress-fill{height:100%;background:var(--orange);transition:width 0.5s ease;}
+.main{padding:16px 16px 40px;display:flex;flex-direction:column;gap:14px;max-width:600px;margin:0 auto;}
+.card{background:var(--navy2);border-radius:18px;border:1px solid var(--border);overflow:hidden;}
+.card-body{padding:18px;font-size:14px;line-height:1.75;color:rgba(253,246,236,0.85);}
+.card-body strong{color:var(--orange);}
+.card-body em{color:#a8e6cf;font-style:normal;font-weight:600;}
+.section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--orange);margin-bottom:10px;}
+.lesson-intro{padding:20px 18px 18px;}
+.lesson-tag{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--orange);background:rgba(244,124,58,0.12);border:1px solid rgba(244,124,58,0.2);padding:4px 10px;border-radius:99px;margin-bottom:12px;}
+.lesson-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--cream);margin-bottom:8px;line-height:1.2;}
+.lesson-desc{font-size:14px;color:rgba(253,246,236,0.7);line-height:1.7;}
+.cat-list{padding:0 18px 18px;display:flex;flex-direction:column;gap:10px;}
+.cat-card{padding:14px 16px;background:rgba(244,124,58,0.06);border:1px solid rgba(244,124,58,0.2);border-radius:14px;}
+.cat-title{font-size:13px;font-weight:700;color:var(--orange);margin-bottom:6px;}
+.cat-examples{display:flex;flex-wrap:wrap;gap:6px;}
+.cat-word{padding:4px 10px;border-radius:20px;background:rgba(244,124,58,0.12);border:1px solid rgba(244,124,58,0.2);font-size:12px;font-weight:600;color:var(--cream);cursor:pointer;transition:all 0.15s;user-select:none;}
+.cat-word:active{transform:scale(0.94);}
+.phrase-list{padding:0 18px 18px;display:flex;flex-direction:column;gap:8px;}
+.phrase-row{display:flex;align-items:center;gap:12px;padding:12px 14px;background:rgba(255,255,255,0.03);border-radius:14px;border:1px solid rgba(255,255,255,0.06);cursor:pointer;transition:all 0.18s;position:relative;user-select:none;}
+.phrase-row:active{transform:scale(0.97);}
+.phrase-row.playing{border-color:var(--orange);background:rgba(244,124,58,0.08);}
+.phrase-icon{font-size:18px;flex-shrink:0;}
+.phrase-content{flex:1;}
+.phrase-nl{font-size:14px;font-weight:700;color:var(--cream);margin-bottom:2px;}
+.phrase-nl .het{color:var(--orange);}
+.phrase-es{font-size:12px;color:rgba(253,246,236,0.4);font-style:italic;}
+.phrase-sound-btn{width:30px;height:30px;border-radius:50%;background:rgba(244,124,58,0.12);border:1px solid rgba(244,124,58,0.25);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.phrase-row.playing .phrase-sound-btn{background:var(--orange);border-color:var(--orange);}
+.pron-bubble{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--navy3);border:1px solid var(--orange);border-radius:10px;padding:6px 14px;font-size:12px;font-weight:700;color:var(--orange);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 0.2s;z-index:10;}
+.pron-bubble::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--orange);}
+.pron-bubble.show{opacity:1;}
+.tip-toggle{display:flex;align-items:center;gap:10px;padding:13px 18px;background:rgba(244,124,58,0.06);border-top:1px solid rgba(255,255,255,0.06);cursor:pointer;user-select:none;}
+.bulb-wrap{position:relative;width:28px;height:28px;flex-shrink:0;}
+.bulb-icon{font-size:22px;line-height:28px;display:block;text-align:center;transition:transform 0.3s ease;}
+.bulb-glow{position:absolute;inset:-4px;border-radius:50%;background:radial-gradient(circle,rgba(244,196,58,0.35),transparent 70%);opacity:0;transition:opacity 0.3s ease;pointer-events:none;}
+.tip-toggle.open .bulb-glow{opacity:1;}
+.tip-toggle.open .bulb-icon{transform:scale(1.15);filter:brightness(1.3);}
+@keyframes bulbPulse{0%,100%{opacity:0.5}50%{opacity:1}}
+.tip-toggle:not(.open) .bulb-glow{opacity:0.3;animation:bulbPulse 2s infinite;}
+.tip-label{font-size:13px;font-weight:600;color:var(--orange);flex:1;}
+.tip-arrow{color:rgba(244,124,58,0.6);font-size:16px;transition:transform 0.3s ease;}
+.tip-toggle.open .tip-arrow{transform:rotate(180deg);}
+.tip-content{display:none;padding:14px 18px;font-size:13px;line-height:1.7;color:rgba(253,246,236,0.7);background:rgba(244,124,58,0.04);border-top:1px solid rgba(255,255,255,0.04);}
+.tip-content.open{display:block;}
+.tip-content strong{color:var(--orange);}
+.tip-content em{color:#a8e6cf;font-style:normal;font-weight:600;}
+
+/* INTRUDER EXERCISE */
+.exercise-card{padding:18px;}
+.exercise-label{font-size:10px;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+.exercise-instruction{font-size:13px;color:rgba(253,246,236,0.5);margin-bottom:16px;font-style:italic;}
+.intruder-round{margin-bottom:18px;}
+.intruder-label{font-size:12px;color:rgba(253,246,236,0.4);margin-bottom:8px;font-style:italic;}
+.intruder-options{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px;}
+.intruder-opt{padding:10px 16px;border-radius:14px;background:rgba(244,124,58,0.08);border:2px solid rgba(244,124,58,0.2);color:var(--cream);font-size:14px;font-weight:700;cursor:pointer;transition:all 0.18s;font-family:inherit;user-select:none;}
+.intruder-opt:active{transform:scale(0.94);}
+.intruder-opt.correct-intrude{border-color:var(--green);background:rgba(46,204,138,0.15);color:var(--green);}
+.intruder-opt.wrong-intrude{border-color:var(--red);background:rgba(232,69,90,0.12);color:var(--red);animation:shake 0.3s ease;}
+.intruder-opt.is-het{border-color:var(--orange);background:rgba(244,124,58,0.12);color:var(--orange);}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-5px);}75%{transform:translateX(5px);}}
+.intruder-feedback{font-size:12px;font-weight:600;min-height:16px;}
+.intruder-feedback.ok{color:var(--green);}
+.intruder-feedback.err{color:var(--red);}
+.intruder-score{text-align:center;padding:14px;background:rgba(46,204,138,0.08);border-radius:14px;border:1px solid rgba(46,204,138,0.2);font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:var(--green);display:none;}
+.intruder-score.show{display:block;}
+
+.challenge-card{padding:18px;}
+.challenge-label{font-size:10px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.challenge-question{font-size:14px;color:var(--cream);line-height:1.6;margin-bottom:14px;font-weight:600;}
+.challenge-options{display:flex;flex-direction:column;gap:8px;}
+.challenge-opt{padding:13px 16px;border-radius:12px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);color:var(--cream);font-size:13px;text-align:left;cursor:pointer;transition:all 0.15s;font-family:inherit;font-weight:500;}
+.challenge-opt.opt-correct{border-color:var(--green);background:rgba(46,204,138,0.15);color:var(--green);font-weight:700;}
+.challenge-opt.opt-wrong{border-color:var(--red);background:rgba(232,69,90,0.12);color:var(--red);}
+.challenge-feedback{margin-top:12px;padding:12px 14px;border-radius:12px;font-size:13px;line-height:1.5;display:none;}
+.challenge-feedback.show{display:block;}
+.challenge-feedback strong{font-weight:700;}
+.challenge-feedback.fb-correct{background:rgba(46,204,138,0.12);color:var(--green);}
+.challenge-feedback.fb-wrong{background:rgba(232,69,90,0.1);color:var(--red);}
+.next-wrap{padding:0 0 8px;}
+.btn-next{width:100%;padding:17px;background:var(--orange);border:none;border-radius:14px;color:white;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;opacity:0.4;pointer-events:none;}
+.btn-next.unlocked{opacity:1;pointer-events:all;}
+.complete-screen{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;padding:40px 24px;text-align:center;gap:12px;}
+.complete-screen.show{display:flex;}
+.complete-emoji{font-size:64px;margin-bottom:8px;}
+.complete-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--cream);margin-bottom:4px;}
+.complete-sub{font-size:15px;color:rgba(253,246,236,0.5);line-height:1.6;max-width:280px;}
+.btn-continue{margin-top:16px;padding:16px 32px;background:var(--orange);border:none;border-radius:14px;color:white;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;}
+.divider{height:1px;background:rgba(255,255,255,0.06);margin:4px 18px 14px;}
+</style>
+</head>
+<body>
+<div class="header">
+  <button class="btn-back" onclick="history.back()">‹</button>
+  <div class="header-info">
+    <div class="header-sup">Módulo 1 · Artículos</div>
+    <div class="header-title">Palabras HET</div>
+  </div>
+  <div class="header-count">Les 3 / 6</div>
+</div>
+<div class="progress-wrap"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+
+<div class="main" id="main-content">
+  <div class="card lesson-intro">
+    <div class="lesson-tag">📖 Lección 3</div>
+    <div class="lesson-title">Palabras HET</div>
+    <div class="lesson-desc">Menos palabras usan het que de, pero hay categorías claras que te ayudarán a reconocerlas. La más importante: <strong>todos los diminutivos son siempre het</strong>.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-body" style="padding-bottom:8px">
+      <div class="section-label">🟡 Categorías que SIEMPRE son HET</div>
+    </div>
+    <div class="cat-list">
+      <div class="cat-card">
+        <div class="cat-title">🤏 Diminutivos (-je) — SIEMPRE het</div>
+        <div class="cat-examples">
+          <span class="cat-word" onclick="speakWord('het huisje')">het huisje</span>
+          <span class="cat-word" onclick="speakWord('het kopje')">het kopje</span>
+          <span class="cat-word" onclick="speakWord('het meisje')">het meisje</span>
+          <span class="cat-word" onclick="speakWord('het jongetje')">het jongetje</span>
+        </div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-title">🗣️ Idiomas</div>
+        <div class="cat-examples">
+          <span class="cat-word" onclick="speakWord('het Nederlands')">het Nederlands</span>
+          <span class="cat-word" onclick="speakWord('het Spaans')">het Spaans</span>
+          <span class="cat-word" onclick="speakWord('het Engels')">het Engels</span>
+          <span class="cat-word" onclick="speakWord('het Frans')">het Frans</span>
+        </div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-title">⚽ Deportes y actividades</div>
+        <div class="cat-examples">
+          <span class="cat-word" onclick="speakWord('het voetbal')">het voetbal</span>
+          <span class="cat-word" onclick="speakWord('het zwemmen')">het zwemmen</span>
+          <span class="cat-word" onclick="speakWord('het fietsen')">het fietsen</span>
+        </div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-title">🔩 Metales y materiales</div>
+        <div class="cat-examples">
+          <span class="cat-word" onclick="speakWord('het goud')">het goud</span>
+          <span class="cat-word" onclick="speakWord('het zilver')">het zilver</span>
+          <span class="cat-word" onclick="speakWord('het hout')">het hout</span>
+          <span class="cat-word" onclick="speakWord('het glas')">het glas</span>
+        </div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-title">📐 Palabras terminadas en -ment, -sel, -um</div>
+        <div class="cat-examples">
+          <span class="cat-word" onclick="speakWord('het document')">het document</span>
+          <span class="cat-word" onclick="speakWord('het voedsel')">het voedsel</span>
+          <span class="cat-word" onclick="speakWord('het museum')">het museum</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip-toggle" id="tip1-toggle" onclick="toggleTip('tip1')">
+      <div class="bulb-wrap"><span class="bulb-icon">💡</span><div class="bulb-glow"></div></div>
+      <span class="tip-label">La regla de oro — diminutivos</span>
+      <span class="tip-arrow">▾</span>
+    </div>
+    <div class="tip-content" id="tip1-content">
+      La regla más importante: <strong>todo diminutivo (-je) es SIEMPRE het</strong>, sin excepción. <em>de man → het mannetje · de vrouw → het vrouwtje · de auto → het autootje</em>. Esto es 100% consistente — si la palabra termina en -je, es het, punto. En la vida cotidiana los holandeses usan muchísimos diminutivos.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body" style="padding-bottom:8px">
+      <div class="section-label">📋 Palabras HET más comunes del examen</div>
+    </div>
+    <div class="phrase-list" style="padding-top:0">
+      <div class="phrase-row" onclick="speak('het huis','het hous',this)"><div class="pron-bubble"></div><div class="phrase-icon">🏠</div><div class="phrase-content"><div class="phrase-nl"><span class="het">het</span> huis</div><div class="phrase-es">la casa</div></div><div class="phrase-sound-btn">🔊</div></div>
+      <div class="phrase-row" onclick="speak('het kind','het kint',this)"><div class="pron-bubble"></div><div class="phrase-icon">👶</div><div class="phrase-content"><div class="phrase-nl"><span class="het">het</span> kind</div><div class="phrase-es">el niño / la niña</div></div><div class="phrase-sound-btn">🔊</div></div>
+      <div class="phrase-row" onclick="speak('het werk','het verk',this)"><div class="pron-bubble"></div><div class="phrase-icon">💼</div><div class="phrase-content"><div class="phrase-nl"><span class="het">het</span> werk</div><div class="phrase-es">el trabajo</div></div><div class="phrase-sound-btn">🔊</div></div>
+      <div class="phrase-row" onclick="speak('het land','het lant',this)"><div class="pron-bubble"></div><div class="phrase-icon">🌍</div><div class="phrase-content"><div class="phrase-nl"><span class="het">het</span> land</div><div class="phrase-es">el país</div></div><div class="phrase-sound-btn">🔊</div></div>
+      <div class="phrase-row" onclick="speak('het leven','het LEI-ven',this)"><div class="pron-bubble"></div><div class="phrase-icon">✨</div><div class="phrase-content"><div class="phrase-nl"><span class="het">het</span> leven</div><div class="phrase-es">la vida</div></div><div class="phrase-sound-btn">🔊</div></div>
+      <div class="phrase-row" onclick="speak('het jaar','het yaar',this)"><div class="pron-bubble"></div><div class="phrase-icon">📅</div><div class="phrase-content"><div class="phrase-nl"><span class="het">het</span> jaar</div><div class="phrase-es">el año</div></div><div class="phrase-sound-btn">🔊</div></div>
+    </div>
+
+    <div class="tip-toggle" id="tip2-toggle" onclick="toggleTip('tip2')">
+      <div class="bulb-wrap"><span class="bulb-icon">💡</span><div class="bulb-glow"></div></div>
+      <span class="tip-label">Truco de memorización</span>
+      <span class="tip-arrow">▾</span>
+    </div>
+    <div class="tip-content" id="tip2-content">
+      Para las palabras het sin regla clara, el mejor truco es <strong>aprenderlas siempre con su artículo</strong>: no memorizas "huis" sino "<em>het huis</em>". Es como aprender el género en español — memorizas "la casa" no "casa". Con el tiempo lo sientes naturalmente.
+    </div>
+  </div>
+
+  <!-- INTRUDER EXERCISE -->
+  <div class="card">
+    <div class="exercise-card">
+      <div class="exercise-label">🔍 Ejercicio — Encuentra el intruso</div>
+      <div class="exercise-instruction">En cada grupo hay una palabra que NO es het. ¡Encuéntrala! Toca la que no pertenece.</div>
+      <div id="intruder-rounds"></div>
+      <div class="intruder-score" id="intruder-score"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="challenge-card">
+      <div class="challenge-label">🎯 Reto</div>
+      <div class="challenge-question" id="ch-q"></div>
+      <div class="challenge-options" id="ch-opts"></div>
+      <div class="challenge-feedback" id="ch-fb"></div>
+    </div>
+  </div>
+
+  <div class="next-wrap">
+    <button class="btn-next" id="btn-next" onclick="goNext()">Siguiente lección &nbsp;→</button>
+  </div>
+</div>
+
+<div class="complete-screen" id="complete-screen">
+  <div class="complete-emoji">🟡</div>
+  <div class="complete-title">¡Lección completada!</div>
+  <div class="complete-sub">Ya conoces las categorías het. ¡Ahora aprenderemos cómo hacer plurales!</div>
+  <button class="btn-continue" onclick="window.location.href='les-4.html'">Continuar → Plural →</button>
+</div>
+
+<script>
+let currentRow=null,bubbleTimers={};
+function speak(text,pron,el){
+  window.speechSynthesis.cancel();
+  if(currentRow)clearBubble(currentRow);
+  const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';u.rate=0.85;
+  showBubble(el,pron);el.classList.add('playing');currentRow=el;
+  u.onend=()=>{el.classList.remove('playing');clearTimeout(bubbleTimers.r);bubbleTimers.r=setTimeout(()=>clearBubble(el),2000);};
+  u.onerror=()=>{el.classList.remove('playing');clearBubble(el);};
+  window.speechSynthesis.speak(u);
+}
+function speakWord(text){window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';u.rate=0.85;window.speechSynthesis.speak(u);}
+function showBubble(el,pron){const b=el.querySelector('.pron-bubble');if(!b)return;b.textContent=pron;b.classList.add('show');}
+function clearBubble(el){if(!el)return;el.classList.remove('playing');const b=el.querySelector('.pron-bubble');if(b)b.classList.remove('show');}
+function toggleTip(id){document.getElementById(id+'-toggle').classList.toggle('open');document.getElementById(id+'-content').classList.toggle('open');}
+
+const INTRUDER_ROUNDS=[
+  {words:['het huis','het kind','het werk','de man'],intruder:3,hint:'"man" es de — es una persona'},
+  {words:['het jaar','het land','de straat','het leven'],intruder:2,hint:'"straat" es de — calles son de'},
+  {words:['het huisje','het mannetje','het kopje','de vrouw'],intruder:3,hint:'"vrouw" es de — los diminutivos (-je) son het, vrouw no lo es'},
+  {words:['het Nederlands','het Spaans','de taal','het Engels'],intruder:2,hint:'"taal" es de — el nombre genérico "idioma" es de, pero los idiomas específicos son het'},
+  {words:['het goud','het hout','het glas','de winkel'],intruder:3,hint:'"winkel" es de — las tiendas son de'},
+];
+
+let intruderScore=0,intruderDone=false,chDone=false,chIdx=0;
+let roundsAnswered=0;
+
+function buildIntruder(){
+  const container=document.getElementById('intruder-rounds');
+  INTRUDER_ROUNDS.forEach((round,ri)=>{
+    const div=document.createElement('div');
+    div.className='intruder-round';
+    div.innerHTML=`
+      <div class="intruder-label">Grupo ${ri+1} — ¿Cuál NO es het?</div>
+      <div class="intruder-options" id="ir-${ri}"></div>
+      <div class="intruder-feedback" id="irf-${ri}"></div>
+    `;
+    if(ri<INTRUDER_ROUNDS.length-1){const d=document.createElement('div');d.className='divider';div.appendChild(d);}
+    container.appendChild(div);
+
+    const optsEl=div.querySelector(`#ir-${ri}`);
+    round.words.forEach((word,wi)=>{
+      const btn=document.createElement('button');
+      btn.className='intruder-opt';
+      btn.textContent=word;
+      btn.onclick=()=>answerIntruder(ri,wi,btn,round);
+      optsEl.appendChild(btn);
+    });
+  });
+}
+
+function answerIntruder(ri,wi,btn,round){
+  const optsEl=document.getElementById(`ir-${ri}`);
+  Array.from(optsEl.children).forEach(b=>b.style.pointerEvents='none');
+  const fb=document.getElementById(`irf-${ri}`);
+
+  if(wi===round.intruder){
+    btn.classList.add('correct-intrude');
+    // Mark others as het
+    Array.from(optsEl.children).forEach((b,i)=>{if(i!==round.intruder)b.classList.add('is-het');});
+    fb.textContent='✅ ¡Correcto! '+round.hint;
+    fb.className='intruder-feedback ok';
+    intruderScore++;
+  } else {
+    btn.classList.add('wrong-intrude');
+    const correctBtn=optsEl.children[round.intruder];
+    setTimeout(()=>correctBtn.classList.add('correct-intrude'),500);
+    fb.textContent='❌ Era: '+round.words[round.intruder]+' — '+round.hint;
+    fb.className='intruder-feedback err';
+  }
+
+  roundsAnswered++;
+  if(roundsAnswered>=INTRUDER_ROUNDS.length){
+    const scoreEl=document.getElementById('intruder-score');
+    scoreEl.textContent=`${intruderScore} / ${INTRUDER_ROUNDS.length} correctas 🎉`;
+    scoreEl.classList.add('show');
+    intruderDone=true;checkUnlock();
+  }
+}
+
+const CHALLENGES=[
+  {q:'¿Por qué "het meisje" (la chica) es het y no de?',opts:['Porque es una chica joven','Porque termina en -je, los diminutivos son siempre het','Porque es het al azar','Porque es femenino'],correct:1,fb:'✅ ¡Exacto! <strong>meisje</strong> termina en <em>-je</em> — todo diminutivo es het, sin excepción. Aunque de vrouw (la mujer) es de, het vrouwtje es het.'},
+  {q:'"Ik spreek het Spaans" — ¿por qué het?',opts:['Es un error, debería ser de','Los idiomas específicos son het','Spaans es neutro','Solo cuando va con spreek'],correct:1,fb:'✅ ¡Correcto! Los idiomas específicos usan <strong>het</strong>: het Nederlands, het Spaans, het Engels. Pero el genérico <em>de taal</em> (el idioma) es de.'},
+  {q:'¿Cuál de estas es una categoría que SIEMPRE usa het?',opts:['Personas y profesiones','Palabras terminadas en -heid','Diminutivos en -je','Ríos y montañas'],correct:2,fb:'✅ ¡Bien! Los <strong>diminutivos en -je</strong> son SIEMPRE het, es la única regla het que no tiene excepción. Las otras opciones son categorías de.'},
+];
+
+function buildChallenge(){showChallenge(0);}
+function showChallenge(idx){
+  if(idx>=CHALLENGES.length){chDone=true;checkUnlock();return;}
+  const ch=CHALLENGES[idx];
+  document.getElementById('ch-q').textContent=ch.q;
+  const el=document.getElementById('ch-opts');el.innerHTML='';
+  ch.opts.forEach((o,i)=>{const b=document.createElement('button');b.className='challenge-opt';b.textContent=o;b.onclick=()=>answerCh(idx,i,b);el.appendChild(b);});
+  document.getElementById('ch-fb').className='challenge-feedback';
+  document.getElementById('ch-fb').innerHTML='';
+}
+function answerCh(cIdx,optIdx,btn){
+  const ch=CHALLENGES[cIdx];
+  document.querySelectorAll('.challenge-opt').forEach(b=>b.style.pointerEvents='none');
+  const fb=document.getElementById('ch-fb');
+  if(optIdx===ch.correct){btn.classList.add('opt-correct');fb.innerHTML=ch.fb;fb.className='challenge-feedback fb-correct show';}
+  else{btn.classList.add('opt-wrong');document.querySelectorAll('.challenge-opt')[ch.correct].classList.add('opt-correct');fb.innerHTML=`❌ No exactamente. ${ch.fb}`;fb.className='challenge-feedback fb-wrong show';}
+  setTimeout(()=>{chIdx++;showChallenge(chIdx);},2200);
+}
+function checkUnlock(){
+  let p=0;if(intruderDone)p+=50;if(chDone)p+=50;
+  document.getElementById('progress-fill').style.width=p+'%';
+  if(intruderDone&&chDone)document.getElementById('btn-next').classList.add('unlocked');
+}
+function goNext(){document.getElementById('main-content').style.display='none';document.getElementById('complete-screen').classList.add('show');}
+buildIntruder();buildChallenge();
+</script>
+</body>
+</html>
+
