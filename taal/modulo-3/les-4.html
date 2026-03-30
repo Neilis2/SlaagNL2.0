@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SlaagNL — Números y Tiempo · Les 4</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0d1f3c;--navy2:#162d54;--navy3:#1e3a6e;--orange:#f47c3a;--cream:#fdf6ec;--green:#2ecc8a;--red:#e8455a;--purple:#a78bfa;--blue:#60a5fa;--yellow:#f4c842;--border:rgba(255,255,255,0.07);--ease:0.22s cubic-bezier(0.4,0,0.2,1);}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}html{-webkit-text-size-adjust:100%;}
+body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);min-height:100vh;-webkit-font-smoothing:antialiased;}
+.header{display:flex;align-items:center;gap:10px;padding:14px 16px;background:var(--navy2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50;}
+.btn-back{background:none;border:none;color:var(--orange);font-size:24px;cursor:pointer;padding:0 8px 0 0;line-height:1;flex-shrink:0;}
+.header-info{flex:1;min-width:0;}
+.header-sup{font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:2px;}
+.header-title{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.header-count{font-size:12px;color:rgba(253,246,236,0.4);font-weight:600;flex-shrink:0;}
+.progress-wrap{height:3px;background:rgba(255,255,255,0.08);}
+.progress-fill{height:100%;background:var(--orange);transition:width 0.5s ease;}
+.main{padding:16px 16px 40px;display:flex;flex-direction:column;gap:14px;max-width:600px;margin:0 auto;}
+.card{background:var(--navy2);border-radius:18px;border:1px solid var(--border);overflow:hidden;}
+.card-body{padding:18px;font-size:14px;line-height:1.75;color:rgba(253,246,236,0.85);}
+.card-body strong{color:var(--orange);}
+.section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--orange);margin-bottom:10px;}
+.lesson-intro{padding:20px 18px 18px;}
+.lesson-tag{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--orange);background:rgba(244,124,58,0.12);border:1px solid rgba(244,124,58,0.2);padding:4px 10px;border-radius:99px;margin-bottom:12px;}
+.lesson-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--cream);margin-bottom:8px;line-height:1.2;}
+.lesson-desc{font-size:14px;color:rgba(253,246,236,0.7);line-height:1.7;}
+.phrase-list{padding:0 18px 18px;display:flex;flex-direction:column;gap:8px;}
+.phrase-row{display:flex;align-items:center;gap:12px;padding:12px 14px;background:rgba(255,255,255,0.03);border-radius:14px;border:1px solid rgba(255,255,255,0.06);cursor:pointer;transition:all 0.18s;position:relative;user-select:none;}
+.phrase-row:active{transform:scale(0.97);background:rgba(244,124,58,0.08);}
+.phrase-row.playing{border-color:var(--orange);background:rgba(244,124,58,0.08);}
+.phrase-icon{font-size:18px;flex-shrink:0;}
+.phrase-content{flex:1;}
+.phrase-nl{font-size:14px;font-weight:700;color:var(--cream);margin-bottom:2px;}
+.phrase-nl strong{color:var(--orange);}
+.phrase-es{font-size:12px;color:rgba(253,246,236,0.4);font-style:italic;}
+.play-btn{width:30px;height:30px;border-radius:50%;background:rgba(244,124,58,0.12);border:1px solid rgba(244,124,58,0.25);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;color:var(--orange);}
+.phrase-row.playing .play-btn{background:var(--orange);color:white;animation:pulse-ring 1s infinite;}
+@keyframes pulse-ring{0%{box-shadow:0 0 0 0 rgba(244,124,58,0.5);}70%{box-shadow:0 0 0 8px rgba(244,124,58,0);}100%{box-shadow:0 0 0 0 rgba(244,124,58,0);}}
+.tip-toggle{display:flex;align-items:center;gap:10px;padding:13px 18px;background:rgba(244,124,58,0.06);border-top:1px solid rgba(255,255,255,0.06);cursor:pointer;user-select:none;transition:background var(--ease);}
+.bulb-wrap{position:relative;width:28px;height:28px;flex-shrink:0;}
+.bulb-icon{font-size:22px;line-height:28px;display:block;text-align:center;}
+.bulb-glow{position:absolute;inset:-4px;border-radius:50%;background:radial-gradient(circle,rgba(244,196,58,0.35),transparent 70%);opacity:0;transition:opacity 0.3s;pointer-events:none;}
+.tip-toggle.open .bulb-glow{opacity:1;}
+@keyframes bulbPulse{0%,100%{opacity:0.5}50%{opacity:1}}
+.tip-toggle:not(.open) .bulb-glow{opacity:0.3;animation:bulbPulse 2s infinite;}
+.tip-label{font-size:13px;font-weight:600;color:var(--orange);flex:1;}
+.tip-arrow{color:rgba(244,124,58,0.6);font-size:16px;transition:transform 0.3s;}
+.tip-toggle.open .tip-arrow{transform:rotate(180deg);}
+.tip-content{display:none;padding:14px 18px;font-size:13px;line-height:1.7;color:rgba(253,246,236,0.7);background:rgba(244,124,58,0.04);border-top:1px solid rgba(255,255,255,0.04);}
+.tip-content.open{display:block;}
+.tip-content strong{color:var(--orange);}
+.tip-content em{color:#a8e6cf;font-style:normal;font-weight:600;}
+.exercise-card{padding:18px;}
+.exercise-label{font-size:10px;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+.exercise-instruction{font-size:13px;color:rgba(253,246,236,0.5);margin-bottom:14px;font-style:italic;}
+.opt-btn{padding:13px 16px;border-radius:12px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);color:var(--cream);font-size:13px;text-align:left;cursor:pointer;transition:all 0.15s;font-family:inherit;font-weight:500;width:100%;margin-bottom:8px;}
+.opt-btn:last-child{margin-bottom:0;}
+.opt-btn.opt-correct{border-color:var(--green);background:rgba(46,204,138,0.15);color:var(--green);font-weight:700;}
+.opt-btn.opt-wrong{border-color:var(--red);background:rgba(232,69,90,0.12);color:var(--red);}
+.inline-fb{font-size:12px;font-weight:600;min-height:18px;margin-top:6px;}
+.inline-fb.ok{color:var(--green);}.inline-fb.err{color:var(--red);}
+.divider{height:1px;background:rgba(255,255,255,0.06);margin:14px 0;}
+.challenge-card{padding:18px;}
+.challenge-label{font-size:10px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.challenge-question{font-size:14px;color:var(--cream);line-height:1.6;margin-bottom:14px;font-weight:600;}
+.challenge-options{display:flex;flex-direction:column;gap:8px;}
+.challenge-opt{padding:13px 16px;border-radius:12px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);color:var(--cream);font-size:13px;text-align:left;cursor:pointer;transition:all 0.15s;font-family:inherit;font-weight:500;}
+.challenge-opt.opt-correct{border-color:var(--green);background:rgba(46,204,138,0.15);color:var(--green);font-weight:700;}
+.challenge-opt.opt-wrong{border-color:var(--red);background:rgba(232,69,90,0.12);color:var(--red);}
+.challenge-feedback{margin-top:12px;padding:12px 14px;border-radius:12px;font-size:13px;line-height:1.5;display:none;}
+.challenge-feedback.show{display:block;}
+.challenge-feedback.fb-correct{background:rgba(46,204,138,0.12);color:var(--green);}
+.challenge-feedback.fb-wrong{background:rgba(232,69,90,0.1);color:var(--red);}
+.next-wrap{padding:0 0 8px;}
+.btn-next{width:100%;padding:17px;background:var(--orange);border:none;border-radius:14px;color:white;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;transition:all var(--ease);display:flex;align-items:center;justify-content:center;gap:8px;opacity:0.4;pointer-events:none;}
+.btn-next.unlocked{opacity:1;pointer-events:all;}
+.complete-screen{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;padding:40px 24px;text-align:center;gap:12px;}
+.complete-screen.show{display:flex;}
+.complete-emoji{font-size:64px;margin-bottom:8px;}
+.complete-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--cream);margin-bottom:4px;}
+.complete-sub{font-size:15px;color:rgba(253,246,236,0.5);line-height:1.6;max-width:280px;}
+.btn-continue{margin-top:16px;padding:16px 32px;background:var(--orange);border:none;border-radius:14px;color:white;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;}
+</style>
+</head>
+<body>
+<div class="header">
+  <button class="btn-back" onclick="window.location.href='index.html'">‹</button>
+  <div class="header-info">
+    <div class="header-sup">Números y Tiempo</div>
+    <div class="header-title">Días de la Semana</div>
+  </div>
+  <div class="header-count">Les 4 / 7</div>
+</div>
+<div class="progress-wrap"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+<div class="main" id="main-content">
+
+  <div class="card lesson-intro">
+    <div class="lesson-tag">📖 Lección 4</div>
+    <div class="lesson-title">Días de la Semana</div>
+    <div class="lesson-desc">Los siete días de la semana en neerlandés. La semana empieza el lunes (maandag). Aprende a decir qué día es y cuándo tienes cosas.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-body" style="padding-bottom:8px"><div class="section-label">✅ Frases clave — toca para escuchar</div></div>
+    <div class="phrase-list" style="padding-top:0">
+      <div class="phrase-row" onclick="speakRow('Vandaag is het maandag',this)">
+        <div class="phrase-icon">📅</div>
+        <div class="phrase-content"><div class="phrase-nl">Vandaag is het maandag.</div><div class="phrase-es">Hoy es lunes.</div></div>
+        <div class="play-btn">▶</div>
+      </div>
+      <div class="phrase-row" onclick="speakRow('Op woensdag werk ik thuis',this)">
+        <div class="phrase-icon">🏠</div>
+        <div class="phrase-content"><div class="phrase-nl">Op woensdag werk ik thuis.</div><div class="phrase-es">El miércoles trabajo desde casa.</div></div>
+        <div class="play-btn">▶</div>
+      </div>
+      <div class="phrase-row" onclick="speakRow('Zaterdag ga ik naar de markt',this)">
+        <div class="phrase-icon">🛒</div>
+        <div class="phrase-content"><div class="phrase-nl">Zaterdag ga ik naar de markt.</div><div class="phrase-es">El sábado voy al mercado.</div></div>
+        <div class="play-btn">▶</div>
+      </div>
+      <div class="phrase-row" onclick="speakRow('Op vrijdag hebben we een afspraak',this)">
+        <div class="phrase-icon">📋</div>
+        <div class="phrase-content"><div class="phrase-nl">Op vrijdag hebben we een afspraak.</div><div class="phrase-es">El viernes tenemos una cita.</div></div>
+        <div class="play-btn">▶</div>
+      </div>
+      <div class="phrase-row" onclick="speakRow('Morgen is het dinsdag',this)">
+        <div class="phrase-icon">☀️</div>
+        <div class="phrase-content"><div class="phrase-nl">Morgen is het dinsdag.</div><div class="phrase-es">Mañana es martes.</div></div>
+        <div class="play-btn">▶</div>
+      </div>
+    </div>
+    <div class="tip-toggle" id="tip1-toggle" onclick="toggleTip('tip1')">
+      <div class="bulb-wrap"><span class="bulb-icon">💡</span><div class="bulb-glow"></div></div>
+      <span class="tip-label">Op + día para decir "el lunes"</span>
+      <span class="tip-arrow">▾</span>
+    </div>
+    <div class="tip-content" id="tip1-content">Para decir que algo ocurre un día específico usa <strong>op</strong>: <em>op maandag</em> = el lunes.<br>Para decir "los lunes" (habitualmente): <em>op maandag</em> también.<br>Ayer = <strong>gisteren</strong> · hoy = <strong>vandaag</strong> · mañana = <strong>morgen</strong>.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-body" style="padding-bottom:8px"><div class="section-label">📅 Los siete días — toca para escuchar</div></div>
+    <div class="phrase-list" style="padding-top:0">
+      <div class="phrase-row" onclick="speakRow('Maandag',this)">
+        <div class="phrase-icon">📅</div>
+        <div class="phrase-content"><div class="phrase-nl"><strong>Maandag</strong></div><div class="phrase-es">lunes — MAANdag</div></div>
+        <div class="play-btn">▶</div>
+      </div>
+      <div class="phrase-row" onclick="speakRow('Dinsdag',this)">
+        <div class="phrase-icon">📅</div>
+        <div class="phrase-content"><div class="phrase-nl"><strong>Dinsdag</strong></div><div class="phrase-es">martes — DINSdag</div></div>
+        <div class="play-btn">▶</div>
+      </div>
+      <div class="phrase-row" onclick="speakRow('Woensdag',this)">
+        <div class="phrase-icon">📅</div>
+        <div class="phrase-content"><div class="phrase-nl"><strong>Woensdag</strong></div><div class="phrase-es">miércoles — WUNSdag</div></div>
+        <div class="play-btn">▶</div>
+      </div>
+      <div class="phrase-row" onclick="speakRow('Donderdag',this)">
+        <div class="phrase-icon">📅</div>
+        <div class="phrase-content"><div class="phrase-nl"><strong>Donderdag</strong></div><div class="phrase-es">jueves — DONderdag</div></div>
+        <div class="play-btn">▶</div>
+      </div>
+      <div class="phrase-row" onclick="speakRow('Vrijdag',this)">
+        <div class="phrase-icon">📅</div>
+        <div class="phrase-content"><div class="phrase-nl"><strong>Vrijdag</strong></div><div class="phrase-es">viernes — FRAIdag</div></div>
+        <div class="play-btn">▶</div>
+      </div>
+      <div class="phrase-row" onclick="speakRow('Zaterdag',this)">
+        <div class="phrase-icon">📅</div>
+        <div class="phrase-content"><div class="phrase-nl"><strong>Zaterdag</strong></div><div class="phrase-es">sábado — SAATerdag</div></div>
+        <div class="play-btn">▶</div>
+      </div>
+      <div class="phrase-row" onclick="speakRow('Zondag',this)">
+        <div class="phrase-icon">📅</div>
+        <div class="phrase-content"><div class="phrase-nl"><strong>Zondag</strong></div><div class="phrase-es">domingo — ZONdag</div></div>
+        <div class="play-btn">▶</div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="exercise-card">
+      <div class="exercise-label">✏️ Ejercicio</div>
+      <div class="exercise-instruction">Elige la opción correcta para cada pregunta.</div>
+      <div id="ex-container"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="challenge-card">
+      <div class="challenge-label">🎯 Reto</div>
+      <div class="challenge-question" id="ch-q"></div>
+      <div class="challenge-options" id="ch-opts"></div>
+      <div class="challenge-feedback" id="ch-fb"></div>
+    </div>
+  </div>
+
+  <div class="next-wrap">
+    <button class="btn-next" id="btn-next" onclick="goNext()">Siguiente lección &nbsp;→</button>
+  </div>
+</div>
+
+<div class="complete-screen" id="complete-screen">
+  <div class="complete-emoji">📅</div>
+  <div class="complete-title">¡Lección completada!</div>
+  <div class="complete-sub">Ya conoces los días de la semana.</div>
+  <button class="btn-continue" onclick="window.location.href='les-5.html'">Continuar → Meses del Año →</button>
+</div>
+
+<script>
+const EX=[{"q": "¿Cómo se dice "miércoles"?", "opts": ["dinsdag", "woensdag", "donderdag", "vrijdag"], "correct": 1, "fb": "✅ woensdag = miércoles"}, {"q": "¿Cuál es el primer día de la semana holandesa?", "opts": ["zondag", "zaterdag", "maandag", "dinsdag"], "correct": 2, "fb": "✅ maandag = lunes. La semana neerlandesa empieza el lunes."}, {"q": ""Op zaterdag..." significa...", "opts": ["el viernes", "el sábado", "el domingo", "los sábados"], "correct": 1, "fb": "✅ op zaterdag = el sábado (o los sábados habitualmente)."}, {"q": "¿Cómo se dice "el jueves"?", "opts": ["woensdag", "vrijdag", "donderdag", "dinsdag"], "correct": 2, "fb": "✅ donderdag = jueves"}];
+const CHALLENGES=[{"q": "¿Cuál es el orden correcto de los días?", "opts": ["ma-di-wo-do-vr-za-zo", "zo-ma-di-wo-do-vr-za", "ma-wo-di-do-vr-za-zo", "di-wo-do-ma-vr-za-zo"], "correct": 0, "fb": "✅ ma(andag)-di(nsdag)-wo(ensdag)-do(nderdag)-vr(ijdag)-za(terdag)-zo(ndag)"}, {"q": ""Op donderdag heb ik Nederlands" — ¿qué día?", "opts": ["miércoles", "jueves", "viernes", "martes"], "correct": 1, "fb": "✅ donderdag = jueves. Op donderdag = el jueves."}];
+
+let exCorrect=0,exDone=false,chIdx=0,chDone=false,currentRow=null;
+let nlVoice=null;
+function loadNLVoice(){const v=window.speechSynthesis.getVoices();nlVoice=v.find(x=>x.lang==='nl-NL'&&x.localService)||v.find(x=>x.lang==='nl-NL')||v.find(x=>x.lang.startsWith('nl'))||null;}
+if(window.speechSynthesis.onvoiceschanged!==undefined)window.speechSynthesis.onvoiceschanged=loadNLVoice;
+loadNLVoice();
+function makeUtter(text,rate=0.82){const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';u.rate=rate;if(nlVoice)u.voice=nlVoice;return u;}
+function speakRow(text,el){window.speechSynthesis.cancel();if(currentRow)currentRow.classList.remove('playing');const u=makeUtter(text,0.8);el.classList.add('playing');currentRow=el;u.onend=()=>el.classList.remove('playing');u.onerror=()=>el.classList.remove('playing');window.speechSynthesis.speak(u);}
+function toggleTip(id){document.getElementById(id+'-toggle').classList.toggle('open');document.getElementById(id+'-content').classList.toggle('open');}
+function buildEx(){
+  const c=document.getElementById('ex-container');
+  EX.forEach((ex,i)=>{
+    const div=document.createElement('div');
+    div.innerHTML=`<div style="font-size:14px;font-weight:600;color:var(--cream);margin-bottom:10px;">${i+1}. ${ex.q}</div><div style="display:flex;flex-direction:column;gap:8px;" id="eopts-${i}"></div><div class="inline-fb" id="efb-${i}"></div>`;
+    if(i<EX.length-1){const d=document.createElement('div');d.className='divider';div.appendChild(d);}
+    c.appendChild(div);
+    ex.opts.forEach((o,oi)=>{
+      const b=document.createElement('button');b.className='opt-btn';b.textContent=o;
+      b.onclick=()=>{
+        document.getElementById(`eopts-${i}`).querySelectorAll('.opt-btn').forEach(x=>x.style.pointerEvents='none');
+        const fb=document.getElementById(`efb-${i}`);
+        if(oi===ex.correct){b.classList.add('opt-correct');fb.textContent=ex.fb;fb.className='inline-fb ok';exCorrect++;if(exCorrect>=EX.length){exDone=true;checkUnlock();}}
+        else{b.classList.add('opt-wrong');document.getElementById(`eopts-${i}`).querySelectorAll('.opt-btn')[ex.correct].classList.add('opt-correct');fb.textContent='❌ Era: '+ex.opts[ex.correct];fb.className='inline-fb err';}
+      };
+      document.getElementById(`eopts-${i}`).appendChild(b);
+    });
+  });
+}
+function buildChallenge(){showChallenge(0);}
+function showChallenge(idx){
+  if(idx>=CHALLENGES.length){chDone=true;checkUnlock();return;}
+  const ch=CHALLENGES[idx];document.getElementById('ch-q').textContent=ch.q;
+  const el=document.getElementById('ch-opts');el.innerHTML='';
+  ch.opts.forEach((o,i)=>{const b=document.createElement('button');b.className='challenge-opt';b.textContent=o;b.onclick=()=>answerCh(idx,i,b);el.appendChild(b);});
+  document.getElementById('ch-fb').className='challenge-feedback';document.getElementById('ch-fb').innerHTML='';
+}
+function answerCh(cIdx,optIdx,btn){
+  const ch=CHALLENGES[cIdx];document.querySelectorAll('.challenge-opt').forEach(b=>b.style.pointerEvents='none');
+  const fb=document.getElementById('ch-fb');
+  if(optIdx===ch.correct){btn.classList.add('opt-correct');fb.innerHTML=ch.fb;fb.className='challenge-feedback fb-correct show';}
+  else{btn.classList.add('opt-wrong');document.querySelectorAll('.challenge-opt')[ch.correct].classList.add('opt-correct');fb.innerHTML='❌ '+ch.fb;fb.className='challenge-feedback fb-wrong show';}
+  setTimeout(()=>{chIdx++;showChallenge(chIdx);},2200);
+}
+function checkUnlock(){let p=0;if(exDone)p+=50;if(chDone)p+=50;document.getElementById('progress-fill').style.width=p+'%';if(exDone&&chDone)document.getElementById('btn-next').classList.add('unlocked');}
+function goNext(){localStorage.setItem('slaagnl_m3_4','done');document.getElementById('main-content').style.display='none';document.getElementById('complete-screen').classList.add('show');}
+function restoreProgress(){if(localStorage.getItem('slaagnl_m3_4')==='done'){exDone=true;chDone=true;checkUnlock();}}
+buildEx();buildChallenge();restoreProgress();
+
+</script>
+</body>
+</html>
