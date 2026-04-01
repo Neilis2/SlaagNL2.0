@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SlaagNL — Números y Tiempo · Les 1</title>
+<title>SlaagNL — Números y Tiempo</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--navy:#0d1f3c;--navy2:#162d54;--navy3:#1e3a6e;--orange:#f47c3a;--cream:#fdf6ec;--green:#2ecc8a;--red:#e8455a;--purple:#a78bfa;--blue:#60a5fa;--yellow:#f4c842;--border:rgba(255,255,255,0.07);--ease:0.22s cubic-bezier(0.4,0,0.2,1);}
+:root{--navy:#0d1f3c;--navy2:#162d54;--navy3:#1e3a6e;--orange:#f47c3a;--cream:#fdf6ec;--green:#2ecc8a;--red:#e8455a;--purple:#a78bfa;--muted:#6b7a99;--border:rgba(255,255,255,0.07);--ease:0.22s cubic-bezier(0.4,0,0.2,1);}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 html{-webkit-text-size-adjust:100%;}
 body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);min-height:100vh;-webkit-font-smoothing:antialiased;}
@@ -14,281 +14,139 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
 .btn-back{background:none;border:none;color:var(--orange);font-size:24px;cursor:pointer;padding:0 8px 0 0;line-height:1;flex-shrink:0;}
 .header-info{flex:1;min-width:0;}
 .header-sup{font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:2px;}
-.header-title{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.header-count{font-size:12px;color:rgba(253,246,236,0.4);font-weight:600;flex-shrink:0;}
-.progress-wrap{height:3px;background:rgba(255,255,255,0.08);}
-.progress-fill{height:100%;background:var(--orange);transition:width 0.5s ease;}
-.main{padding:16px 16px 40px;display:flex;flex-direction:column;gap:14px;max-width:600px;margin:0 auto;}
-.card{background:var(--navy2);border-radius:18px;border:1px solid var(--border);overflow:hidden;}
-.card-body{padding:18px;font-size:14px;line-height:1.75;color:rgba(253,246,236,0.85);}
-.card-body strong{color:var(--orange);}
-.section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--orange);margin-bottom:10px;}
-.lesson-intro{padding:20px 18px 18px;}
-.lesson-tag{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--orange);background:rgba(244,124,58,0.12);border:1px solid rgba(244,124,58,0.2);padding:4px 10px;border-radius:99px;margin-bottom:12px;}
-.lesson-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--cream);margin-bottom:8px;line-height:1.2;}
-.lesson-desc{font-size:14px;color:rgba(253,246,236,0.7);line-height:1.7;}
-
-/* NUMBER GRID */
-.number-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:16px;}
-.num-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:12px 6px;text-align:center;cursor:pointer;transition:all var(--ease);user-select:none;}
-.num-card:active{transform:scale(0.93);background:rgba(244,124,58,0.12);border-color:var(--orange);}
-.num-card.playing{border-color:var(--orange);background:rgba(244,124,58,0.1);}
-.num-digit{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--orange);line-height:1;margin-bottom:4px;}
-.num-nl{font-size:12px;font-weight:700;color:var(--cream);margin-bottom:2px;}
-.num-ph{font-size:10px;color:rgba(253,246,236,0.4);}
-
-/* PHRASE ROWS */
-.phrase-list{padding:0 18px 18px;display:flex;flex-direction:column;gap:8px;}
-.phrase-row{display:flex;align-items:center;gap:12px;padding:12px 14px;background:rgba(255,255,255,0.03);border-radius:14px;border:1px solid rgba(255,255,255,0.06);cursor:pointer;transition:all 0.18s;position:relative;user-select:none;}
-.phrase-row:active{transform:scale(0.97);background:rgba(244,124,58,0.08);}
-.phrase-row.playing{border-color:var(--orange);background:rgba(244,124,58,0.08);}
-.phrase-icon{font-size:18px;flex-shrink:0;}
-.phrase-content{flex:1;}
-.phrase-nl{font-size:14px;font-weight:700;color:var(--cream);margin-bottom:2px;}
-.phrase-nl strong{color:var(--orange);}
-.phrase-es{font-size:12px;color:rgba(253,246,236,0.4);font-style:italic;}
-.play-btn{width:30px;height:30px;border-radius:50%;background:rgba(244,124,58,0.12);border:1px solid rgba(244,124,58,0.25);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;color:var(--orange);}
-.phrase-row.playing .play-btn{background:var(--orange);color:white;border-color:var(--orange);animation:pulse-ring 1s infinite;}
-@keyframes pulse-ring{0%{box-shadow:0 0 0 0 rgba(244,124,58,0.5);}70%{box-shadow:0 0 0 8px rgba(244,124,58,0);}100%{box-shadow:0 0 0 0 rgba(244,124,58,0);}}
-
-/* TIP */
-.tip-toggle{display:flex;align-items:center;gap:10px;padding:13px 18px;background:rgba(244,124,58,0.06);border-top:1px solid rgba(255,255,255,0.06);cursor:pointer;user-select:none;transition:background var(--ease);}
-.tip-toggle:hover{background:rgba(244,124,58,0.1);}
-.bulb-wrap{position:relative;width:28px;height:28px;flex-shrink:0;}
-.bulb-icon{font-size:22px;line-height:28px;display:block;text-align:center;transition:transform 0.3s ease;}
-.bulb-glow{position:absolute;inset:-4px;border-radius:50%;background:radial-gradient(circle,rgba(244,196,58,0.35),transparent 70%);opacity:0;transition:opacity 0.3s ease;pointer-events:none;}
-.tip-toggle.open .bulb-glow{opacity:1;}
-.tip-toggle.open .bulb-icon{transform:scale(1.15);filter:brightness(1.3);}
-@keyframes bulbPulse{0%,100%{opacity:0.5}50%{opacity:1}}
-.tip-toggle:not(.open) .bulb-glow{opacity:0.3;animation:bulbPulse 2s infinite;}
-.tip-label{font-size:13px;font-weight:600;color:var(--orange);flex:1;}
-.tip-arrow{color:rgba(244,124,58,0.6);font-size:16px;transition:transform 0.3s ease;}
-.tip-toggle.open .tip-arrow{transform:rotate(180deg);}
-.tip-content{display:none;padding:14px 18px;font-size:13px;line-height:1.7;color:rgba(253,246,236,0.7);background:rgba(244,124,58,0.04);border-top:1px solid rgba(255,255,255,0.04);}
-.tip-content.open{display:block;}
-.tip-content strong{color:var(--orange);}
-.tip-content em{color:#a8e6cf;font-style:normal;font-weight:600;}
-
-/* EXERCISE */
-.exercise-card{padding:18px;}
-.exercise-label{font-size:10px;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
-.exercise-instruction{font-size:13px;color:rgba(253,246,236,0.5);margin-bottom:14px;font-style:italic;}
-.challenge-opts{display:flex;flex-direction:column;gap:8px;}
-.opt-btn{padding:13px 16px;border-radius:12px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);color:var(--cream);font-size:13px;text-align:left;cursor:pointer;transition:all 0.15s;font-family:inherit;font-weight:500;width:100%;}
-.opt-btn:active{transform:scale(0.98);}
-.opt-btn.opt-correct{border-color:var(--green);background:rgba(46,204,138,0.15);color:var(--green);font-weight:700;}
-.opt-btn.opt-wrong{border-color:var(--red);background:rgba(232,69,90,0.12);color:var(--red);}
-.inline-fb{font-size:12px;font-weight:600;min-height:18px;margin-top:6px;}
-.inline-fb.ok{color:var(--green);}
-.inline-fb.err{color:var(--red);}
-.divider{height:1px;background:rgba(255,255,255,0.06);margin:14px 0;}
-
-/* CHALLENGE */
-.challenge-card{padding:18px;}
-.challenge-label{font-size:10px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
-.challenge-question{font-size:14px;color:var(--cream);line-height:1.6;margin-bottom:14px;font-weight:600;}
-.challenge-options{display:flex;flex-direction:column;gap:8px;}
-.challenge-opt{padding:13px 16px;border-radius:12px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);color:var(--cream);font-size:13px;text-align:left;cursor:pointer;transition:all 0.15s;font-family:inherit;font-weight:500;}
-.challenge-opt.opt-correct{border-color:var(--green);background:rgba(46,204,138,0.15);color:var(--green);font-weight:700;}
-.challenge-opt.opt-wrong{border-color:var(--red);background:rgba(232,69,90,0.12);color:var(--red);}
-.challenge-feedback{margin-top:12px;padding:12px 14px;border-radius:12px;font-size:13px;line-height:1.5;display:none;}
-.challenge-feedback.show{display:block;}
-.challenge-feedback.fb-correct{background:rgba(46,204,138,0.12);color:var(--green);}
-.challenge-feedback.fb-wrong{background:rgba(232,69,90,0.1);color:var(--red);}
-
-/* NEXT */
-.next-wrap{padding:0 0 8px;}
-.btn-next{width:100%;padding:17px;background:var(--orange);border:none;border-radius:14px;color:white;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;transition:all var(--ease);display:flex;align-items:center;justify-content:center;gap:8px;opacity:0.4;pointer-events:none;}
-.btn-next.unlocked{opacity:1;pointer-events:all;}
-.btn-next.unlocked:active{opacity:0.85;transform:scale(0.98);}
-.complete-screen{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;padding:40px 24px;text-align:center;gap:12px;}
-.complete-screen.show{display:flex;}
-.complete-emoji{font-size:64px;margin-bottom:8px;}
-.complete-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--cream);margin-bottom:4px;}
-.complete-sub{font-size:15px;color:rgba(253,246,236,0.5);line-height:1.6;max-width:280px;}
-.btn-continue{margin-top:16px;padding:16px 32px;background:var(--orange);border:none;border-radius:14px;color:white;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;}
+.header-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--cream);}
+.hero{padding:24px 20px 20px;background:linear-gradient(160deg,var(--navy2),var(--navy3));border-bottom:1px solid var(--border);}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--orange);background:rgba(244,124,58,0.12);border:1px solid rgba(244,124,58,0.2);padding:4px 10px;border-radius:99px;margin-bottom:12px;}
+.hero-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:var(--cream);line-height:1.2;margin-bottom:8px;}
+.hero-desc{font-size:13px;color:rgba(253,246,236,0.6);line-height:1.6;margin-bottom:18px;}
+.progress-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+.progress-label{font-size:11px;font-weight:700;color:rgba(253,246,236,0.5);text-transform:uppercase;letter-spacing:0.8px;}
+.progress-pct{font-size:11px;font-weight:700;color:var(--orange);margin-left:auto;}
+.progress-bar{height:6px;background:rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--orange),#f4c842);border-radius:10px;transition:width 0.6s ease;}
+.stats-row{display:flex;gap:12px;margin-top:16px;}
+.stat-pill{flex:1;padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:12px;text-align:center;}
+.stat-pill-num{font-family:'Playfair Display',serif;font-size:18px;font-weight:900;line-height:1;}
+.stat-pill-num.done{color:var(--green);}.stat-pill-num.locked{color:var(--muted);}.stat-pill-num.total{color:var(--orange);}
+.stat-pill-label{font-size:10px;color:rgba(253,246,236,0.4);text-transform:uppercase;letter-spacing:0.8px;margin-top:3px;}
+.lessons-wrap{padding:16px 16px 40px;display:flex;flex-direction:column;gap:10px;max-width:600px;margin:0 auto;}
+.les-card{display:flex;align-items:center;gap:14px;padding:16px;background:var(--navy2);border-radius:18px;border:1px solid var(--border);cursor:pointer;transition:all var(--ease);text-decoration:none;color:inherit;position:relative;overflow:hidden;}
+.les-card.available:active{transform:scale(0.98);}
+.les-card.available:hover{border-color:rgba(244,124,58,0.3);}
+.les-card.completed{border-color:rgba(46,204,138,0.2);background:rgba(46,204,138,0.04);}
+.les-card.locked{opacity:0.55;cursor:not-allowed;}
+.les-card.available::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(244,124,58,0.04),transparent);animation:shimmer 3s infinite;}
+@keyframes shimmer{0%{transform:translateX(-100%);}100%{transform:translateX(100%);}}
+.les-status{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.les-status.done{background:rgba(46,204,138,0.15);border:2px solid rgba(46,204,138,0.3);}
+.les-status.current{background:rgba(244,124,58,0.15);border:2px solid rgba(244,124,58,0.4);animation:pulse-border 2s infinite;}
+.les-status.locked-s{background:rgba(255,255,255,0.04);border:2px solid rgba(255,255,255,0.08);}
+@keyframes pulse-border{0%,100%{border-color:rgba(244,124,58,0.4);}50%{border-color:rgba(244,124,58,0.9);}}
+.les-content{flex:1;min-width:0;}
+.les-num{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;}
+.les-num.done{color:var(--green);}.les-num.current{color:var(--orange);}.les-num.locked-t{color:rgba(253,246,236,0.3);}
+.les-title{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--cream);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.les-card.locked .les-title{color:rgba(253,246,236,0.4);}
+.les-desc{font-size:12px;color:rgba(253,246,236,0.4);line-height:1.4;}
+.les-xp{font-size:11px;font-weight:700;color:var(--orange);background:rgba(244,124,58,0.1);border:1px solid rgba(244,124,58,0.2);padding:3px 8px;border-radius:99px;margin-top:4px;display:inline-block;}
+.les-card.completed .les-xp{color:var(--green);background:rgba(46,204,138,0.1);border-color:rgba(46,204,138,0.2);}
+.les-arrow{font-size:18px;flex-shrink:0;transition:transform var(--ease);}
+.les-card.available:hover .les-arrow{transform:translateX(4px);}
+.les-card.locked .les-arrow{opacity:0.2;}
+.connector{width:2px;height:10px;background:rgba(255,255,255,0.06);margin:0 auto;border-radius:2px;}
+.premium-banner{margin:0 0 10px;padding:16px;background:linear-gradient(135deg,rgba(167,139,250,0.12),rgba(244,124,58,0.08));border:1px solid rgba(167,139,250,0.25);border-radius:16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all var(--ease);}
+.premium-banner:active{transform:scale(0.98);}
+.premium-icon{font-size:28px;flex-shrink:0;}
+.premium-text{flex:1;}
+.premium-title{font-size:13px;font-weight:700;color:var(--purple);margin-bottom:2px;}
+.premium-sub{font-size:11px;color:rgba(253,246,236,0.45);line-height:1.4;}
+.premium-arrow{font-size:16px;color:var(--purple);flex-shrink:0;}
 </style>
 </head>
 <body>
 <div class="header">
-  <button class="btn-back" onclick="window.location.href='index.html'">‹</button>
+  <button class="btn-back" onclick="window.location.href='../../index.html'">‹</button>
   <div class="header-info">
     <div class="header-sup">Números y Tiempo</div>
-    <div class="header-title">Números 1-20</div>
-  </div>
-  <div class="header-count">Les 1 / 7</div>
-</div>
-<div class="progress-wrap"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
-<div class="main" id="main-content">
-
-  <div class="card lesson-intro">
-    <div class="lesson-tag">📖 Lección 1</div>
-    <div class="lesson-title">Números 1 — 20</div>
-    <div class="lesson-desc">Los números del 1 al 20 son la base de todo. Toca cada número para escucharlo en neerlandés.</div>
-  </div>
-
-  <div class="card">
-    <div class="card-body" style="padding-bottom:4px"><div class="section-label">🔢 Los números — toca para escuchar</div></div>
-    <div class="number-grid" id="num-grid"></div>
-    <div class="tip-toggle" id="tip1-toggle" onclick="toggleTip('tip1')">
-      <div class="bulb-wrap"><span class="bulb-icon">💡</span><div class="bulb-glow"></div></div>
-      <span class="tip-label">Patrones clave del 11 al 20</span>
-      <span class="tip-arrow">▾</span>
-    </div>
-    <div class="tip-content" id="tip1-content">
-      Del 13 al 19 se forma con el número + <strong>tien</strong>: <em>dertien, veertien, vijftien...</em><br>
-      <strong>11 = elf</strong> y <strong>12 = twaalf</strong> son irregulares — hay que memorizarlos.<br>
-      <strong>20 = twintig</strong> — base para los siguientes decenas.
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-body" style="padding-bottom:8px"><div class="section-label">✅ En contexto — toca para escuchar</div></div>
-    <div class="phrase-list" style="padding-top:0">
-      <div class="phrase-row" onclick="speakRow('Ik ben dertig jaar oud',this)">
-        <div class="phrase-icon">👤</div>
-        <div class="phrase-content"><div class="phrase-nl">Ik ben <strong>twintig</strong> jaar oud.</div><div class="phrase-es">Tengo veinte años.</div></div>
-        <div class="play-btn">▶</div>
-      </div>
-      <div class="phrase-row" onclick="speakRow('Ik woon op nummer vijftien',this)">
-        <div class="phrase-icon">🏠</div>
-        <div class="phrase-content"><div class="phrase-nl">Ik woon op nummer <strong>vijftien</strong>.</div><div class="phrase-es">Vivo en el número quince.</div></div>
-        <div class="play-btn">▶</div>
-      </div>
-      <div class="phrase-row" onclick="speakRow('Er zijn twaalf maanden in een jaar',this)">
-        <div class="phrase-icon">📅</div>
-        <div class="phrase-content"><div class="phrase-nl">Er zijn <strong>twaalf</strong> maanden in een jaar.</div><div class="phrase-es">Hay doce meses en un año.</div></div>
-        <div class="play-btn">▶</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="exercise-card">
-      <div class="exercise-label">✏️ Ejercicio — ¿Qué número es?</div>
-      <div class="exercise-instruction">Elige la traducción correcta para cada número en neerlandés.</div>
-      <div id="ex-container"></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="challenge-card">
-      <div class="challenge-label">🎯 Reto</div>
-      <div class="challenge-question" id="ch-q"></div>
-      <div class="challenge-options" id="ch-opts"></div>
-      <div class="challenge-feedback" id="ch-fb"></div>
-    </div>
-  </div>
-
-  <div class="next-wrap">
-    <button class="btn-next" id="btn-next" onclick="goNext()">Siguiente lección &nbsp;→</button>
+    <div class="header-title">Módulo 3</div>
   </div>
 </div>
-
-<div class="complete-screen" id="complete-screen">
-  <div class="complete-emoji">1️⃣</div>
-  <div class="complete-title">¡Lección completada!</div>
-  <div class="complete-sub">Ya conoces los números del 1 al 20. ¡Ahora hasta el 100!</div>
-  <button class="btn-continue" onclick="window.location.href='les-2.html'">Continuar → Números 21-100 →</button>
+<div class="hero">
+  <div class="hero-tag">🔢 Módulo 3</div>
+  <div class="hero-title">Números y Tiempo</div>
+  <div class="hero-desc">Aprende a contar, decir la hora, los días, meses y fechas. Esencial para el examen y para la vida diaria en los Países Bajos.</div>
+  <div class="progress-row">
+    <span class="progress-label">Tu progreso</span>
+    <span class="progress-pct" id="prog-pct">0%</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+  <div class="stats-row">
+    <div class="stat-pill"><div class="stat-pill-num done" id="stat-done">0</div><div class="stat-pill-label">Completadas</div></div>
+    <div class="stat-pill"><div class="stat-pill-num locked" id="stat-locked">7</div><div class="stat-pill-label">Bloqueadas</div></div>
+    <div class="stat-pill"><div class="stat-pill-num total">7</div><div class="stat-pill-label">Total</div></div>
+  </div>
 </div>
-
+<div class="lessons-wrap" id="lessons-list"></div>
 <script>
-const NUMBERS=[
-  {n:1,nl:'één',ph:'ein'},{n:2,nl:'twee',ph:'tvei'},{n:3,nl:'drie',ph:'dri'},
-  {n:4,nl:'vier',ph:'fir'},{n:5,nl:'vijf',ph:'faif'},{n:6,nl:'zes',ph:'ses'},
-  {n:7,nl:'zeven',ph:'seiven'},{n:8,nl:'acht',ph:'ajt'},{n:9,nl:'negen',ph:'neijen'},
-  {n:10,nl:'tien',ph:'tin'},{n:11,nl:'elf',ph:'elf'},{n:12,nl:'twaalf',ph:'tvaalf'},
-  {n:13,nl:'dertien',ph:'dertín'},{n:14,nl:'veertien',ph:'feertín'},{n:15,nl:'vijftien',ph:'faiftín'},
-  {n:16,nl:'zestien',ph:'sestín'},{n:17,nl:'zeventien',ph:'seivtín'},{n:18,nl:'achttien',ph:'ajtín'},
-  {n:19,nl:'negentien',ph:'neijentín'},{n:20,nl:'twintig',ph:'tvintej'},
+const LESSONS=[
+  {num:1,file:'les-1.html',icon:'1️⃣',title:'Números 1-20',desc:'Een, twee, drie... twintig — base de todo',xp:'+50 XP'},
+  {num:2,file:'les-2.html',icon:'🔢',title:'Números 21-100 y más',desc:'Tientallen, honderd, duizend y combinaciones',xp:'+50 XP'},
+  {num:3,file:'les-3.html',icon:'🕐',title:'La Hora',desc:'Kwart over, half, kwart voor — el reloj neerlandés',xp:'+50 XP'},
+  {num:4,file:'les-4.html',icon:'📅',title:'Días de la Semana',desc:'Maandag tot zondag — con pronunciación',xp:'+50 XP'},
+  {num:5,file:'les-5.html',icon:'🗓️',title:'Meses del Año',desc:'Januari tot december — los doce meses',xp:'+50 XP'},
+  {num:6,file:'les-6.html',icon:'📆',title:'Fechas Completas',desc:'Op maandag 3 maart — cómo leer y decir fechas',xp:'+50 XP'},
+  {num:7,file:'les-7.html',icon:'⏰',title:'¿Cuándo?',desc:"'s ochtends, gisteren, volgende week y más",xp:'+100 XP'},
 ];
-const EX=[
-  {q:'¿Cómo se dice "7" en neerlandés?',opts:['zes','zeven','acht','negen'],correct:1,fb:'✅ 7 = zeven (seiven)'},
-  {q:'¿Cuánto es "twaalf"?',opts:['10','11','12','13'],correct:2,fb:'✅ twaalf = 12'},
-  {q:'¿Cómo se dice "15"?',opts:['veertien','vijftien','zestien','vijf'],correct:1,fb:'✅ 15 = vijftien (faiftín)'},
-  {q:'¿Qué número es "twintig"?',opts:['10','15','18','20'],correct:3,fb:'✅ twintig = 20'},
-];
-const CHALLENGES=[
-  {q:'"Elf" y "twaalf" son irregulares. ¿Cuáles son?',opts:['9 y 10','10 y 11','11 y 12','12 y 13'],correct:2,fb:'✅ elf = 11, twaalf = 12. Son los únicos irregulares — el resto sigue el patrón número + tien.'},
-  {q:'¿Cómo se forma el número 17 en neerlandés?',opts:['zeven + tien = zeventien','tien + zeven = tienzeven','zeven + teen = zeventeen','sieben + zehn'],correct:0,fb:'✅ zeventien — número + tien. El patrón es consistente del 13 al 19.'},
-];
-let exCorrect=0,exDone=false,chIdx=0,chDone=false;
-let currentRow=null;
-let nlVoice=null;
-function loadNLVoice(){const v=window.speechSynthesis.getVoices();nlVoice=v.find(x=>x.lang==='nl-NL'&&x.localService)||v.find(x=>x.lang==='nl-NL')||v.find(x=>x.lang.startsWith('nl'))||null;}
-if(window.speechSynthesis.onvoiceschanged!==undefined)window.speechSynthesis.onvoiceschanged=loadNLVoice;
-loadNLVoice();
-function makeUtter(text,rate=0.82){const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';u.rate=rate;if(nlVoice)u.voice=nlVoice;return u;}
-
-function buildGrid(){
-  const g=document.getElementById('num-grid');
-  NUMBERS.forEach((num,i)=>{
-    const c=document.createElement('div');
-    c.className='num-card';
-    c.id=`nc-${i}`;
-    c.innerHTML=`<div class="num-digit">${num.n}</div><div class="num-nl">${num.nl}</div><div class="num-ph">${num.ph}</div>`;
-    c.onclick=()=>{
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(makeUtter(num.nl,0.75));
-      c.classList.add('playing');
-      setTimeout(()=>c.classList.remove('playing'),700);
-    };
-    g.appendChild(c);
+const KEY_PREFIX='slaagnl_m3_';
+function isDone(num){return localStorage.getItem(KEY_PREFIX+num)==='done';}
+function isPremium(){return localStorage.getItem('slaagnl_premium')==='true'||localStorage.getItem('slaagnl_plan')==='completo'||localStorage.getItem('slaagnl_plan')==='enfocado';}
+function getStatus(num){
+  if(isDone(num))return'completed';
+  if(isPremium())return'available';
+  if(num===1)return'available';
+  if(isDone(num-1))return'available';
+  return'locked';
+}
+function buildList(){
+  const container=document.getElementById('lessons-list');
+  container.innerHTML='';
+  let doneCount=0;
+  LESSONS.forEach((les,i)=>{
+    const status=getStatus(les.num);
+    if(status==='completed')doneCount++;
+    if(i>0){const conn=document.createElement('div');conn.className='connector';container.appendChild(conn);}
+    const card=document.createElement(status==='locked'?'div':'a');
+    card.className=`les-card ${status==='completed'?'completed':status==='available'?'available':'locked'}`;
+    if(status!=='locked')card.href=les.file;
+    let statusIcon,statusClass,numClass;
+    if(status==='completed'){statusIcon='✅';statusClass='done';numClass='done';}
+    else if(status==='available'){statusIcon=les.icon;statusClass='current';numClass='current';}
+    else{statusIcon='🔒';statusClass='locked-s';numClass='locked-t';}
+    card.innerHTML=`
+      <div class="les-status ${statusClass}">${statusIcon}</div>
+      <div class="les-content">
+        <div class="les-num ${numClass}">Lección ${les.num}${status==='completed'?' · Completada':status==='locked'?' · Bloqueada':''}</div>
+        <div class="les-title">${les.title}</div>
+        <div class="les-desc">${les.desc}</div>
+        <div class="les-xp">${status==='completed'?'✓ Completada':les.xp}</div>
+      </div>
+      <div class="les-arrow">${status==='locked'?'🔒':'›'}</div>`;
+    container.appendChild(card);
   });
+  const pct=Math.round(doneCount/LESSONS.length*100);
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('prog-pct').textContent=pct+'%';
+  document.getElementById('stat-done').textContent=doneCount;
+  document.getElementById('stat-locked').textContent=LESSONS.length-doneCount;
+  if(!isPremium()&&doneCount<LESSONS.length){
+    const banner=document.createElement('div');
+    banner.className='premium-banner';
+    banner.innerHTML=`<div class="premium-icon">⭐</div><div class="premium-text"><div class="premium-title">Desbloquea todo con Premium</div><div class="premium-sub">Accede a todas las lecciones sin esperar.</div></div><div class="premium-arrow">›</div>`;
+    banner.onclick=()=>window.location.href='../../index.html';
+    container.appendChild(banner);
+  }
 }
-
-function speakRow(text,el){
-  window.speechSynthesis.cancel();
-  if(currentRow){currentRow.classList.remove('playing');}
-  const u=makeUtter(text,0.82);
-  el.classList.add('playing');currentRow=el;
-  u.onend=()=>el.classList.remove('playing');
-  u.onerror=()=>el.classList.remove('playing');
-  window.speechSynthesis.speak(u);
-}
-
-function buildEx(){
-  const c=document.getElementById('ex-container');
-  EX.forEach((ex,i)=>{
-    const div=document.createElement('div');
-    div.innerHTML=`<div style="font-size:14px;font-weight:600;color:var(--cream);margin-bottom:10px;">${i+1}. ${ex.q}</div><div style="display:flex;flex-direction:column;gap:8px;" id="eopts-${i}"></div><div class="inline-fb" id="efb-${i}"></div>`;
-    if(i<EX.length-1){const d=document.createElement('div');d.className='divider';div.appendChild(d);}
-    c.appendChild(div);
-    ex.opts.forEach((o,oi)=>{
-      const b=document.createElement('button');b.className='opt-btn';b.textContent=o;
-      b.onclick=()=>{
-        document.getElementById(`eopts-${i}`).querySelectorAll('.opt-btn').forEach(x=>x.style.pointerEvents='none');
-        const fb=document.getElementById(`efb-${i}`);
-        if(oi===ex.correct){b.classList.add('opt-correct');fb.textContent=ex.fb;fb.className='inline-fb ok';exCorrect++;if(exCorrect>=EX.length){exDone=true;checkUnlock();}}
-        else{b.classList.add('opt-wrong');document.getElementById(`eopts-${i}`).querySelectorAll('.opt-btn')[ex.correct].classList.add('opt-correct');fb.textContent='❌ Era: '+ex.opts[ex.correct];fb.className='inline-fb err';}
-      };
-      document.getElementById(`eopts-${i}`).appendChild(b);
-    });
-  });
-}
-
-function buildChallenge(){showChallenge(0);}
-function showChallenge(idx){
-  if(idx>=CHALLENGES.length){chDone=true;checkUnlock();return;}
-  const ch=CHALLENGES[idx];
-  document.getElementById('ch-q').textContent=ch.q;
-  const el=document.getElementById('ch-opts');el.innerHTML='';
-  ch.opts.forEach((o,i)=>{const b=document.createElement('button');b.className='challenge-opt';b.textContent=o;b.onclick=()=>answerCh(idx,i,b);el.appendChild(b);});
-  document.getElementById('ch-fb').className='challenge-feedback';document.getElementById('ch-fb').innerHTML='';
-}
-function answerCh(cIdx,optIdx,btn){
-  const ch=CHALLENGES[cIdx];
-  document.querySelectorAll('.challenge-opt').forEach(b=>b.style.pointerEvents='none');
-  const fb=document.getElementById('ch-fb');
-  if(optIdx===ch.correct){btn.classList.add('opt-correct');fb.innerHTML=ch.fb;fb.className='challenge-feedback fb-correct show';}
-  else{btn.classList.add('opt-wrong');document.querySelectorAll('.challenge-opt')[ch.correct].classList.add('opt-correct');fb.innerHTML='❌ '+ch.fb;fb.className='challenge-feedback fb-wrong show';}
-  setTimeout(()=>{chIdx++;showChallenge(chIdx);},2200);
-}
-function toggleTip(id){document.getElementById(id+'-toggle').classList.toggle('open');document.getElementById(id+'-content').classList.toggle('open');}
-function checkUnlock(){let p=0;if(exDone)p+=50;if(chDone)p+=50;document.getElementById('progress-fill').style.width=p+'%';if(exDone&&chDone)document.getElementById('btn-next').classList.add('unlocked');}
-function goNext(){localStorage.setItem('slaagnl_m3_1','done');document.getElementById('main-content').style.display='none';document.getElementById('complete-screen').classList.add('show');}
-function restoreProgress(){if(localStorage.getItem('slaagnl_m3_1')==='done'){exDone=true;chDone=true;checkUnlock();}}
-buildGrid();buildEx();buildChallenge();restoreProgress();
+buildList();
 </script>
 </body>
 </html>
