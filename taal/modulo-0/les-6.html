@@ -142,6 +142,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
 .complete-sub{font-size:15px;color:rgba(253,246,236,0.5);line-height:1.6;max-width:280px;}
 .btn-continue{margin-top:16px;padding:16px 32px;background:var(--orange);border:none;border-radius:14px;color:white;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;}
 .divider{height:1px;background:rgba(255,255,255,0.06);margin:4px 18px 14px;}
+.btn-lento{background:none;border:none;cursor:pointer;font-size:16px;padding:2px;line-height:1;opacity:0.85;vertical-align:middle;flex-shrink:0;}
+.btn-lento:active{opacity:0.5;}
 </style>
 </head>
 <body>
@@ -193,7 +195,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
           <div class="phrase-nl">Ik <strong>heet</strong> Neilis en ik <strong>woon</strong> in Spanje</div>
           <div class="phrase-es">Me llamo Neilis y vivo en España</div>
         </div>
-        <div class="phrase-sound-btn">🔊</div>
+        <div class="phrase-sound-btn">▶️</div>
+        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button>
       </div>
       <div class="phrase-row" onclick="speak('Hij werkt elke dag en zij heeft een kind', 'hay verkt EL-ke daj en zay hept en kint', this)">
         <div class="pron-bubble"></div>
@@ -202,7 +205,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
           <div class="phrase-nl">Hij <strong>werkt</strong> elke dag en zij <strong>heeft</strong> een kind</div>
           <div class="phrase-es">Él trabaja cada día y ella tiene un hijo</div>
         </div>
-        <div class="phrase-sound-btn">🔊</div>
+        <div class="phrase-sound-btn">▶️</div>
+        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button>
       </div>
       <div class="phrase-row" onclick="speak('Wij zijn getrouwd en wij wonen in Amsterdam', 'vay zain je-TRAUT en vay VOO-nen in AM-ster-dam', this)">
         <div class="pron-bubble"></div>
@@ -211,7 +215,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
           <div class="phrase-nl">Wij <strong>zijn</strong> getrouwd en wij <strong>wonen</strong> in Amsterdam</div>
           <div class="phrase-es">Estamos casados y vivimos en Ámsterdam</div>
         </div>
-        <div class="phrase-sound-btn">🔊</div>
+        <div class="phrase-sound-btn">▶️</div>
+        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button>
       </div>
       <div class="phrase-row" onclick="speak('Hoe heet u en waar woont u', 'hu heit uu en vaar voont uu', this)">
         <div class="pron-bubble"></div>
@@ -220,7 +225,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
           <div class="phrase-nl">Hoe <strong>heet</strong> u en waar <strong>woont</strong> u?</div>
           <div class="phrase-es">¿Cómo se llama y dónde vive usted?</div>
         </div>
-        <div class="phrase-sound-btn">🔊</div>
+        <div class="phrase-sound-btn">▶️</div>
+        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button>
       </div>
     </div>
 
@@ -342,7 +348,7 @@ function speak(text, pron, rowEl){
   window.speechSynthesis.cancel();
   if(currentRow) clearBubble(currentRow);
   const utter=new SpeechSynthesisUtterance(text);
-  utter.lang='nl-NL';if(nlVoice)utter.voice=nlVoice; utter.rate=0.85;
+  utter.lang='nl-NL';if(nlVoice)utter.voice=nlVoice; utter.rate=0.65;
   showBubble(rowEl, pron);
   rowEl.classList.add('playing'); currentRow=rowEl;
   utter.onend=()=>{ rowEl.classList.remove('playing'); clearTimeout(bubbleTimers['r']); bubbleTimers['r']=setTimeout(()=>clearBubble(rowEl),2000); };
@@ -396,7 +402,7 @@ function buildVerbTabs(){
         <div class="conj-person">${c.p}</div>
         <div class="conj-form">${c.f}</div>
         <div class="conj-es">${c.es}</div>
-        <div class="conj-sound">🔊</div>
+        <div class="conj-sound">▶️</div>
       `;
       row.onclick=()=>speakConj(`${c.p} ${c.f}`, c.ph, row);
       table.appendChild(row);
@@ -409,7 +415,7 @@ function speakConj(text,ph,row){
   window.speechSynthesis.cancel();
   if(currentRow) clearBubble(currentRow);
   const utter=new SpeechSynthesisUtterance(text);
-  utter.lang='nl-NL';if(nlVoice)utter.voice=nlVoice; utter.rate=0.85;
+  utter.lang='nl-NL';if(nlVoice)utter.voice=nlVoice; utter.rate=0.65;
   showBubble(row, ph); row.classList.add('playing'); currentRow=row;
   utter.onend=()=>{ row.classList.remove('playing'); clearTimeout(conjTimers['c']); conjTimers['c']=setTimeout(()=>clearBubble(row),2000); };
   utter.onerror=()=>{ row.classList.remove('playing'); clearBubble(row); };
@@ -501,6 +507,39 @@ function checkUnlock(){
 function goNext(){ document.getElementById('main-content').style.display='none'; document.getElementById('complete-screen').classList.add('show'); }
 
 buildVerbTabs(); buildConjEx(); buildChallenge();
+
+// ══════════════════════════════════════
+// LENTO PLAYBACK
+// ══════════════════════════════════════
+function speakLento(e, btn){
+  e.stopPropagation();
+  const row=btn.closest('[onclick]');
+  if(!row) return;
+  const onclick=row.getAttribute('onclick')||'';
+  const m=onclick.match(/\w+\('([^']+)'(?:,\s*'([^']*)')?/);
+  if(!m) return;
+  const text=m[1], pron=m[2]||'';
+  window.speechSynthesis.cancel();
+  if(typeof currentRow!=='undefined'&&currentRow&&typeof clearBubble==='function') clearBubble(currentRow);
+  row.classList.add('playing');
+  if(typeof currentRow!=='undefined') currentRow=row;
+  if(typeof showBubble==='function'&&pron) showBubble(row,pron);
+  const words=text.split(/\s+/).filter(w=>w.length>0);
+  let i=0;
+  function next(){
+    if(i>=words.length){
+      row.classList.remove('playing');
+      if(typeof clearBubble==='function') setTimeout(()=>clearBubble(row),2000);
+      return;
+    }
+    const u=new SpeechSynthesisUtterance(words[i]);
+    u.lang='nl-NL';if(nlVoice)u.voice=nlVoice;u.rate=0.5;
+    u.onend=()=>{i++;if(i<words.length)setTimeout(next,750);else{row.classList.remove('playing');if(typeof clearBubble==='function')setTimeout(()=>clearBubble(row),2000);}};
+    u.onerror=()=>{row.classList.remove('playing');if(typeof clearBubble==='function')clearBubble(row);};
+    window.speechSynthesis.speak(u);
+  }
+  next();
+}
 </script>
 </body>
 </html>

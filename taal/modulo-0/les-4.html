@@ -173,6 +173,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
 .context-tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;padding:3px 8px;border-radius:99px;margin-bottom:10px;}
 .tag-formal{background:rgba(167,139,250,0.15);color:#a78bfa;border:1px solid rgba(167,139,250,0.25);}
 .tag-info{background:rgba(244,124,58,0.12);color:var(--orange);border:1px solid rgba(244,124,58,0.2);}
+.btn-lento{background:none;border:none;cursor:pointer;font-size:16px;padding:2px;line-height:1;opacity:0.85;vertical-align:middle;flex-shrink:0;}
+.btn-lento:active{opacity:0.5;}
 </style>
 </head>
 <body>
@@ -307,7 +309,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
           <div class="phrase-nl"><strong>U</strong> bent heel vriendelijk</div>
           <div class="phrase-es">Usted es muy amable</div>
         </div>
-        <div class="phrase-sound-btn">🔊</div>
+        <div class="phrase-sound-btn">▶️</div>
+        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button>
       </div>
       <div class="phrase-row" onclick="speak('Hoe gaat het met u', 'hu jaat het met uu', this)">
         <div class="pron-bubble"></div>
@@ -316,7 +319,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
           <div class="phrase-nl">Hoe gaat het met <strong>u</strong>?</div>
           <div class="phrase-es">¿Cómo está usted?</div>
         </div>
-        <div class="phrase-sound-btn">🔊</div>
+        <div class="phrase-sound-btn">▶️</div>
+        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button>
       </div>
     </div>
 
@@ -343,7 +347,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
           <div class="phrase-nl"><strong>Het</strong> regent vandaag</div>
           <div class="phrase-es">Hoy llueve (lit. "ello llueve")</div>
         </div>
-        <div class="phrase-sound-btn">🔊</div>
+        <div class="phrase-sound-btn">▶️</div>
+        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button>
       </div>
       <div class="phrase-row" onclick="speak('Het is koud', 'het is kaut', this)">
         <div class="pron-bubble"></div>
@@ -352,7 +357,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
           <div class="phrase-nl"><strong>Het</strong> is koud</div>
           <div class="phrase-es">Hace frío (lit. "ello es frío")</div>
         </div>
-        <div class="phrase-sound-btn">🔊</div>
+        <div class="phrase-sound-btn">▶️</div>
+        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button>
       </div>
       <div class="phrase-row" onclick="speak('Het huis is groot', 'het hous is jroot', this)">
         <div class="pron-bubble"></div>
@@ -361,7 +367,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
           <div class="phrase-nl"><strong>Het</strong> huis is groot</div>
           <div class="phrase-es">La casa es grande</div>
         </div>
-        <div class="phrase-sound-btn">🔊</div>
+        <div class="phrase-sound-btn">▶️</div>
+        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button>
       </div>
     </div>
 
@@ -393,7 +400,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
           <div class="phrase-nl"><strong>Ik</strong> woon in Nederland</div>
           <div class="phrase-es">Yo vivo en los Países Bajos</div>
         </div>
-        <div class="phrase-sound-btn">🔊</div>
+        <div class="phrase-sound-btn">▶️</div>
+        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button>
       </div>
       <div class="phrase-row" onclick="speak('Jij spreekt Nederlands', 'yay spreikt NEI-der-lants', this)">
         <div class="pron-bubble"></div>
@@ -402,7 +410,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
           <div class="phrase-nl"><strong>Jij</strong> spreekt Nederlands</div>
           <div class="phrase-es">Tú hablas neerlandés</div>
         </div>
-        <div class="phrase-sound-btn">🔊</div>
+        <div class="phrase-sound-btn">▶️</div>
+        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button>
       </div>
       <div class="phrase-row" onclick="speak('Hij werkt elke dag', 'hay verkt EL-ke daj', this)">
         <div class="pron-bubble"></div>
@@ -411,7 +420,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
           <div class="phrase-nl"><strong>Hij</strong> werkt elke dag</div>
           <div class="phrase-es">Él trabaja cada día</div>
         </div>
-        <div class="phrase-sound-btn">🔊</div>
+        <div class="phrase-sound-btn">▶️</div>
+        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button>
       </div>
       <div class="phrase-row" onclick="speak('Zij woont in Amsterdam', 'zay voont in AM-ster-dam', this)">
         <div class="pron-bubble"></div>
@@ -420,7 +430,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
           <div class="phrase-nl"><strong>Zij</strong> woont in Amsterdam</div>
           <div class="phrase-es">Ella vive en Ámsterdam</div>
         </div>
-        <div class="phrase-sound-btn">🔊</div>
+        <div class="phrase-sound-btn">▶️</div>
+        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button>
       </div>
       <div class="phrase-row" onclick="speak('Wij leren Nederlands', 'vay LEI-ren NEI-der-lants', this)">
         <div class="pron-bubble"></div>
@@ -429,7 +440,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
           <div class="phrase-nl"><strong>Wij</strong> leren Nederlands</div>
           <div class="phrase-es">Nosotros aprendemos neerlandés</div>
         </div>
-        <div class="phrase-sound-btn">🔊</div>
+        <div class="phrase-sound-btn">▶️</div>
+        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button>
       </div>
       <div class="phrase-row" onclick="speak('Jullie zijn welkom', 'YUL-li zain VEL-kom', this)">
         <div class="pron-bubble"></div>
@@ -438,7 +450,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
           <div class="phrase-nl"><strong>Jullie</strong> zijn welkom</div>
           <div class="phrase-es">Vosotros / ustedes son bienvenidos</div>
         </div>
-        <div class="phrase-sound-btn">🔊</div>
+        <div class="phrase-sound-btn">▶️</div>
+        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button>
       </div>
       <div class="phrase-row" onclick="speak('Zij werken hard', 'zay VER-ken hart', this)">
         <div class="pron-bubble"></div>
@@ -447,7 +460,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
           <div class="phrase-nl"><strong>Zij</strong> werken hard</div>
           <div class="phrase-es">Ellos trabajan duro</div>
         </div>
-        <div class="phrase-sound-btn">🔊</div>
+        <div class="phrase-sound-btn">▶️</div>
+        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button>
       </div>
     </div>
   </div>
@@ -551,7 +565,7 @@ function speak(text, pron, rowEl) {
   window.speechSynthesis.cancel();
   if (currentRow) clearBubble(currentRow);
   const utter = new SpeechSynthesisUtterance(text);
-  utter.lang = 'nl-NL';if(nlVoice)utter.voice=nlVoice; utter.rate = 0.85;
+  utter.lang = 'nl-NL';if(nlVoice)utter.voice=nlVoice; utter.rate = 0.65;
   showBubble(rowEl, pron);
   rowEl.classList.add('playing');
   currentRow = rowEl;
@@ -587,7 +601,7 @@ function buildPronounGrid() {
       <div class="pronoun-bubble" id="pb-${i}"></div>
       <div class="pronoun-top">
         <span class="pronoun-person">${p.person}</span>
-        <span class="pronoun-sound-icon">🔊</span>
+        <span class="pronoun-sound-icon">▶️</span>
       </div>
       <div class="pronoun-nl">${p.nl}</div>
       ${p.weak ? `<div class="pronoun-weak">débil: ${p.weak}</div>` : ''}
@@ -602,7 +616,7 @@ let pronTimers = {};
 function tapPronoun(p, idx, card) {
   window.speechSynthesis.cancel();
   const utter = new SpeechSynthesisUtterance(p.speak);
-  utter.lang = 'nl-NL';if(nlVoice)utter.voice=nlVoice; utter.rate = 0.8;
+  utter.lang = 'nl-NL';if(nlVoice)utter.voice=nlVoice; utter.rate = 0.65;
   window.speechSynthesis.speak(utter);
 
   card.classList.add('playing');
@@ -742,6 +756,39 @@ function goNext() {
 buildPronounGrid();
 buildFillEx();
 buildChallenge();
+
+// ══════════════════════════════════════
+// LENTO PLAYBACK
+// ══════════════════════════════════════
+function speakLento(e, btn){
+  e.stopPropagation();
+  const row=btn.closest('[onclick]');
+  if(!row) return;
+  const onclick=row.getAttribute('onclick')||'';
+  const m=onclick.match(/\w+\('([^']+)'(?:,\s*'([^']*)')?/);
+  if(!m) return;
+  const text=m[1], pron=m[2]||'';
+  window.speechSynthesis.cancel();
+  if(typeof currentRow!=='undefined'&&currentRow&&typeof clearBubble==='function') clearBubble(currentRow);
+  row.classList.add('playing');
+  if(typeof currentRow!=='undefined') currentRow=row;
+  if(typeof showBubble==='function'&&pron) showBubble(row,pron);
+  const words=text.split(/\s+/).filter(w=>w.length>0);
+  let i=0;
+  function next(){
+    if(i>=words.length){
+      row.classList.remove('playing');
+      if(typeof clearBubble==='function') setTimeout(()=>clearBubble(row),2000);
+      return;
+    }
+    const u=new SpeechSynthesisUtterance(words[i]);
+    u.lang='nl-NL';if(nlVoice)u.voice=nlVoice;u.rate=0.5;
+    u.onend=()=>{i++;if(i<words.length)setTimeout(next,750);else{row.classList.remove('playing');if(typeof clearBubble==='function')setTimeout(()=>clearBubble(row),2000);}};
+    u.onerror=()=>{row.classList.remove('playing');if(typeof clearBubble==='function')clearBubble(row);};
+    window.speechSynthesis.speak(u);
+  }
+  next();
+}
 </script>
 </body>
 </html>
