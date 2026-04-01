@@ -565,7 +565,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
 </div>
 
 <script>let nlVoice=null;
-function loadNLVoice(){const v=window.speechSynthesis.getVoices();nlVoice=v.find(x=>x.lang==='nl-NL'&&x.localService)||v.find(x=>x.lang==='nl-NL')||v.find(x=>x.lang.startsWith('nl'))||null;}
+function loadNLVoice(){const v=window.speechSynthesis.getVoices();nlVoice=v.find(x=>x.lang==='nl-NL'&&x.localService&&/(google|microsoft)/i.test(x.name))||v.find(x=>x.lang==='nl-NL'&&x.localService)||v.find(x=>x.lang==='nl-NL'&&/(google|microsoft)/i.test(x.name))||v.find(x=>x.lang==='nl-NL')||v.find(x=>x.lang.startsWith('nl'))||null;}
 if(window.speechSynthesis.onvoiceschanged!==undefined)window.speechSynthesis.onvoiceschanged=loadNLVoice;
 loadNLVoice();
 

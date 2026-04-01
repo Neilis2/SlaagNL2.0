@@ -234,7 +234,7 @@ const CHALLENGES=[{"q": "¿Cuál es la preposición correcta para los meses?", "
 
 let exCorrect=0,exDone=false,chIdx=0,chDone=false,currentRow=null;
 let nlVoice=null;
-function loadNLVoice(){const v=window.speechSynthesis.getVoices();nlVoice=v.find(x=>x.lang==='nl-NL'&&x.localService)||v.find(x=>x.lang==='nl-NL')||v.find(x=>x.lang.startsWith('nl'))||null;}
+function loadNLVoice(){const v=window.speechSynthesis.getVoices();nlVoice=v.find(x=>x.lang==='nl-NL'&&x.localService&&/(google|microsoft)/i.test(x.name))||v.find(x=>x.lang==='nl-NL'&&x.localService)||v.find(x=>x.lang==='nl-NL'&&/(google|microsoft)/i.test(x.name))||v.find(x=>x.lang==='nl-NL')||v.find(x=>x.lang.startsWith('nl'))||null;}
 if(window.speechSynthesis.onvoiceschanged!==undefined)window.speechSynthesis.onvoiceschanged=loadNLVoice;
 loadNLVoice();
 function makeUtter(text,rate=0.82){const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';u.rate=rate;if(nlVoice)u.voice=nlVoice;return u;}
