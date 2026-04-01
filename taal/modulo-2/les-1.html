@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="nl">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>SlaagNL — M2 · Les 1</title><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -376,9 +376,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
   <div class="complete-sub">Ya conoces la regla V2. ¡Siguiente: la inversión!</div>
   <button class="btn-continue" onclick="window.location.href='les-2.html'">Continuar → La Inversión →</button>
 </div>
-<script>let currentRow=null,bubbleTimers={};
-function speak(text,pron,el,rate){rate=rate||0.85;window.speechSynthesis.cancel();if(currentRow)clearBubble(currentRow);const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';u.rate=rate;showBubble(el,pron);el.classList.add('playing');currentRow=el;u.onend=()=>{el.classList.remove('playing');clearTimeout(bubbleTimers.r);bubbleTimers.r=setTimeout(()=>clearBubble(el),2000);};u.onerror=()=>{el.classList.remove('playing');clearBubble(el);};window.speechSynthesis.speak(u);}
-function speakWord(text,rate){window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';u.rate=rate||0.85;window.speechSynthesis.speak(u);}
+<script>let nlVoice=null;
+function loadNLVoice(){const v=window.speechSynthesis.getVoices();nlVoice=v.find(x=>x.lang==='nl-NL'&&x.localService)||v.find(x=>x.lang==='nl-NL')||v.find(x=>x.lang.startsWith('nl'))||null;}
+if(window.speechSynthesis.onvoiceschanged!==undefined)window.speechSynthesis.onvoiceschanged=loadNLVoice;
+loadNLVoice();
+let currentRow=null,bubbleTimers={};
+function speak(text,pron,el,rate){rate=rate||0.85;window.speechSynthesis.cancel();if(currentRow)clearBubble(currentRow);const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';if(nlVoice)u.voice=nlVoice;u.rate=rate;showBubble(el,pron);el.classList.add('playing');currentRow=el;u.onend=()=>{el.classList.remove('playing');clearTimeout(bubbleTimers.r);bubbleTimers.r=setTimeout(()=>clearBubble(el),2000);};u.onerror=()=>{el.classList.remove('playing');clearBubble(el);};window.speechSynthesis.speak(u);}
+function speakWord(text,rate){window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';if(nlVoice)u.voice=nlVoice;u.rate=rate||0.85;window.speechSynthesis.speak(u);}
 function showBubble(el,pron){const b=el.querySelector('.pron-bubble');if(!b)return;b.textContent=pron||'🔊';b.classList.add('show');}
 function clearBubble(el){if(!el)return;el.classList.remove('playing');const b=el.querySelector('.pron-bubble');if(b)b.classList.remove('show');}
 function toggleTip(id){document.getElementById(id+'-toggle').classList.toggle('open');document.getElementById(id+'-content').classList.toggle('open');}

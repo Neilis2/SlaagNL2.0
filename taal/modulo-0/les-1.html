@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="nl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -494,7 +494,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
   </button>
 </div>
 
-<script>
+<script>let nlVoice=null;
+function loadNLVoice(){const v=window.speechSynthesis.getVoices();nlVoice=v.find(x=>x.lang==='nl-NL'&&x.localService)||v.find(x=>x.lang==='nl-NL')||v.find(x=>x.lang.startsWith('nl'))||null;}
+if(window.speechSynthesis.onvoiceschanged!==undefined)window.speechSynthesis.onvoiceschanged=loadNLVoice;
+loadNLVoice();
+
 // ══════════════════════════════════════
 // ALPHABET DATA
 // ══════════════════════════════════════
@@ -604,7 +608,7 @@ function buildAlphabet(){
 function tapLetter(item, idx){
   // Speak
   const utter=new SpeechSynthesisUtterance(item.speak);
-  utter.lang='nl-NL'; utter.rate=0.8; utter.pitch=1;
+  utter.lang='nl-NL';if(nlVoice)utter.voice=nlVoice; utter.rate=0.8; utter.pitch=1;
   window.speechSynthesis.cancel();
   window.speechSynthesis.speak(utter);
 
@@ -632,7 +636,7 @@ function speakPron(text, pron, rowEl){
   if(currentPronRow) clearPronBubble(currentPronRow);
 
   const utter=new SpeechSynthesisUtterance(text);
-  utter.lang='nl-NL'; utter.rate=0.8;
+  utter.lang='nl-NL';if(nlVoice)utter.voice=nlVoice; utter.rate=0.8;
   showPronBubble(rowEl, pron);
   rowEl.classList.add('playing');
   currentPronRow=rowEl;
@@ -667,7 +671,7 @@ function speakExample(text, pron, rowEl){
   if(currentPronRow) clearPronBubble(currentPronRow);
 
   const utter=new SpeechSynthesisUtterance(text);
-  utter.lang='nl-NL'; utter.rate=0.8;
+  utter.lang='nl-NL';if(nlVoice)utter.voice=nlVoice; utter.rate=0.8;
   showPronBubble(rowEl, pron);
   rowEl.classList.add('playing');
   currentPronRow=rowEl;

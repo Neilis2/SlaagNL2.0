@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="nl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -321,13 +321,17 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
   <button class="btn-continue" onclick="window.location.href='les-2.html'">Continuar → Palabras DE →</button>
 </div>
 
-<script>
+<script>let nlVoice=null;
+function loadNLVoice(){const v=window.speechSynthesis.getVoices();nlVoice=v.find(x=>x.lang==='nl-NL'&&x.localService)||v.find(x=>x.lang==='nl-NL')||v.find(x=>x.lang.startsWith('nl'))||null;}
+if(window.speechSynthesis.onvoiceschanged!==undefined)window.speechSynthesis.onvoiceschanged=loadNLVoice;
+loadNLVoice();
+
 // TTS
 let currentRow=null,bubbleTimers={};
 function speak(text,pron,el){
   window.speechSynthesis.cancel();
   if(currentRow)clearBubble(currentRow);
-  const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';u.rate=0.85;
+  const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';if(nlVoice)u.voice=nlVoice;u.rate=0.85;
   showBubble(el,pron);el.classList.add('playing');currentRow=el;
   u.onend=()=>{el.classList.remove('playing');clearTimeout(bubbleTimers.r);bubbleTimers.r=setTimeout(()=>clearBubble(el),2000);};
   u.onerror=()=>{el.classList.remove('playing');clearBubble(el);};
@@ -335,7 +339,7 @@ function speak(text,pron,el){
 }
 function speakArt(text,pron,el){
   window.speechSynthesis.cancel();
-  const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';u.rate=0.8;
+  const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';if(nlVoice)u.voice=nlVoice;u.rate=0.8;
   const b=el.querySelector('.pron-bubble');
   if(b){b.textContent=pron;b.classList.add('show');clearTimeout(bubbleTimers.a);bubbleTimers.a=setTimeout(()=>b.classList.remove('show'),2500);}
   window.speechSynthesis.speak(u);

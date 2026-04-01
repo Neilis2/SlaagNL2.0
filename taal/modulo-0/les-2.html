@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="nl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -820,7 +820,11 @@ body {
   </button>
 </div>
 
-<script>
+<script>let nlVoice=null;
+function loadNLVoice(){const v=window.speechSynthesis.getVoices();nlVoice=v.find(x=>x.lang==='nl-NL'&&x.localService)||v.find(x=>x.lang==='nl-NL')||v.find(x=>x.lang.startsWith('nl'))||null;}
+if(window.speechSynthesis.onvoiceschanged!==undefined)window.speechSynthesis.onvoiceschanged=loadNLVoice;
+loadNLVoice();
+
 // ══════════════════════════════════════
 // TEXT TO SPEECH
 // ══════════════════════════════════════
@@ -841,7 +845,7 @@ function speak(text, pron, rowEl) {
   if (currentRow) clearBubble(currentRow);
 
   const utter = new SpeechSynthesisUtterance(text);
-  utter.lang = 'nl-NL';
+  utter.lang = 'nl-NL';if(nlVoice)utter.voice=nlVoice;
   utter.rate = 0.85;
   utter.pitch = 1;
 
