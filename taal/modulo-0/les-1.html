@@ -63,39 +63,33 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
 .letter-name{font-size:11px;color:var(--orange);font-weight:700;margin-bottom:1px;}
 .letter-phonetic{font-size:10px;color:rgba(253,246,236,0.5);font-weight:500;}
 
-/* Letter note modal — central popup */
-.letter-modal-overlay{
-  display:none;
-  position:fixed;
-  inset:0;
-  z-index:200;
-  align-items:center;
-  justify-content:center;
-  background:rgba(0,0,0,0.5);
-  backdrop-filter:blur(2px);
-}
-.letter-modal-overlay.show{display:flex;}
-.letter-modal-box{
+/* Note bubble — appears below card */
+.letter-note-bubble{
+  position:absolute;
+  top:calc(100% + 8px);
+  left:50%;transform:translateX(-50%);
   background:var(--navy3);
-  border:2px solid var(--orange);
-  border-radius:16px;
-  padding:20px 24px;
-  max-width:320px;
-  width:90%;
-  text-align:center;
-  font-size:13px;
-  font-weight:600;
+  border:1px solid var(--orange);
+  border-radius:10px;
+  padding:7px 12px;
+  font-size:11px;font-weight:600;
   color:var(--cream);
-  line-height:1.65;
-  animation:fadeModalIn 0.2s ease;
+  white-space:nowrap;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.2s;
+  z-index:20;
+  text-align:center;
+  max-width:180px;
+  white-space:normal;
+  line-height:1.4;
 }
-.letter-modal-letter{font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:var(--orange);margin-bottom:8px;}
-@keyframes fadeModalIn{from{opacity:0;transform:scale(0.9);}to{opacity:1;transform:scale(1);}}
-
-/* Dual TTS buttons */
-.pron-btns{display:flex;align-items:center;gap:4px;flex-shrink:0;}
-.btn-lento{background:none;border:none;cursor:pointer;font-size:16px;padding:2px;line-height:1;opacity:0.85;vertical-align:middle;}
-.btn-lento:active{opacity:0.5;}
+.letter-note-bubble::before{
+  content:'';position:absolute;
+  bottom:100%;left:50%;transform:translateX(-50%);
+  border:5px solid transparent;
+  border-bottom-color:var(--orange);
+}
+.letter-note-bubble.show{opacity:1;}
 
 /* ── PRONUNCIATION RULES ── */
 .pron-list{padding:14px 18px 18px;display:flex;flex-direction:column;gap:10px;}
@@ -266,7 +260,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
   <!-- PRONUNCIACIÓN CLAVE -->
   <div class="card">
     <div class="card-body" style="padding-bottom:4px">
-      <div class="section-label">▶️ Pronunciación Clave</div>
+      <div class="section-label">🔊 Pronunciación Clave</div>
       Estas combinaciones de letras son especiales. Toca cada fila para escuchar:
     </div>
 
@@ -287,7 +281,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
           <div class="pron-sound">Como la <strong>J</strong> española — gutural de la garganta</div>
           <div class="pron-example">goed (jut) · gaan (jaan) · acht (ajt)</div>
         </div>
-        <div class="pron-btns"><span style="font-size:16px;color:var(--orange);">▶️</span><button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
+        <div style="font-size:14px;color:var(--orange);flex-shrink:0;">🔊</div>
       </div>
       <div class="pron-row" onclick="speakPron('water wonen', 'vaater · vonen', this)">
         <div class="pron-bubble"></div>
@@ -296,7 +290,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
           <div class="pron-sound">Como la <strong>V</strong> española — labial suave</div>
           <div class="pron-example">wonen (vonen) · water (vaater)</div>
         </div>
-        <div class="pron-btns"><span style="font-size:16px;color:var(--orange);">▶️</span><button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
+        <div style="font-size:14px;color:var(--orange);flex-shrink:0;">🔊</div>
       </div>
       <div class="pron-row" onclick="speakPron('vader van veel', 'faader · fan · feel', this)">
         <div class="pron-bubble"></div>
@@ -305,7 +299,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
           <div class="pron-sound">Como la <strong>F</strong> suave — casi entre F y V</div>
           <div class="pron-example">vader (faader) · van (fan) · veel (feel)</div>
         </div>
-        <div class="pron-btns"><span style="font-size:16px;color:var(--orange);">▶️</span><button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
+        <div style="font-size:14px;color:var(--orange);flex-shrink:0;">🔊</div>
       </div>
       <div class="pron-row" onclick="speakPron('rijden zijn', 'raiden · zain', this)">
         <div class="pron-bubble"></div>
@@ -314,7 +308,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
           <div class="pron-sound">Como <strong>AI</strong> en español</div>
           <div class="pron-example">rijden (raiden) · zijn (zain)</div>
         </div>
-        <div class="pron-btns"><span style="font-size:16px;color:var(--orange);">▶️</span><button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
+        <div style="font-size:14px;color:var(--orange);flex-shrink:0;">🔊</div>
       </div>
       <div class="pron-row" onclick="speakPron('boek doen', 'buk · dun', this)">
         <div class="pron-bubble"></div>
@@ -323,7 +317,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
           <div class="pron-sound">Como la <strong>U</strong> española</div>
           <div class="pron-example">boek (buk) · doen (dun)</div>
         </div>
-        <div class="pron-btns"><span style="font-size:16px;color:var(--orange);">▶️</span><button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
+        <div style="font-size:14px;color:var(--orange);flex-shrink:0;">🔊</div>
       </div>
       <div class="pron-row" onclick="speakPron('huis uit', 'haus · aut', this)">
         <div class="pron-bubble"></div>
@@ -332,7 +326,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
           <div class="pron-sound">Como <strong>AU</strong> con labios redondeados</div>
           <div class="pron-example">huis (haus) · uit (aut)</div>
         </div>
-        <div class="pron-btns"><span style="font-size:16px;color:var(--orange);">▶️</span><button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
+        <div style="font-size:14px;color:var(--orange);flex-shrink:0;">🔊</div>
       </div>
       <div class="pron-row" onclick="speakPron('neus leuk', 'neus · leuk', this)">
         <div class="pron-bubble"></div>
@@ -341,7 +335,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
           <div class="pron-sound">Como <strong>EU</strong> francesa — labios en O, lengua en E</div>
           <div class="pron-example">neus (neus) · leuk (leuk)</div>
         </div>
-        <div class="pron-btns"><span style="font-size:16px;color:var(--orange);">▶️</span><button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
+        <div style="font-size:14px;color:var(--orange);flex-shrink:0;">🔊</div>
       </div>
       <div class="pron-row" onclick="speakPron('naam been groot', 'naaam · bein · jroot', this)">
         <div class="pron-bubble"></div>
@@ -350,7 +344,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
           <div class="pron-sound">Vocal <strong>larga</strong> — doble duración</div>
           <div class="pron-example">naam (naaam) · been (bein) · groot (jroot)</div>
         </div>
-        <div class="pron-btns"><span style="font-size:16px;color:var(--orange);">▶️</span><button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
+        <div style="font-size:14px;color:var(--orange);flex-shrink:0;">🔊</div>
       </div>
       <div class="pron-row" onclick="speakPron('land hond', 'lant · hont', this)">
         <div class="pron-bubble"></div>
@@ -359,7 +353,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
           <div class="pron-sound">Suena como <strong>T</strong> al final de palabra</div>
           <div class="pron-example">land (lant) · hond (hont)</div>
         </div>
-        <div class="pron-btns"><span style="font-size:16px;color:var(--orange);">▶️</span><button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
+        <div style="font-size:14px;color:var(--orange);flex-shrink:0;">🔊</div>
       </div>
       <div class="pron-row" onclick="speakPron('school schrijven', 'sjool · sjraiven', this)">
         <div class="pron-bubble"></div>
@@ -368,7 +362,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
           <div class="pron-sound">Como <strong>SJ</strong> — S + J juntas</div>
           <div class="pron-example">school (sjool) · schrijven (sjraiven)</div>
         </div>
-        <div class="pron-btns"><span style="font-size:16px;color:var(--orange);">▶️</span><button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
+        <div style="font-size:14px;color:var(--orange);flex-shrink:0;">🔊</div>
       </div>
     </div>
   </div>
@@ -386,9 +380,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
         <div class="example-content">
           <div class="example-nl"><strong>huis</strong></div>
           <div class="example-es">casa</div>
-          <div class="example-sound">▶️ haus — UI suena AU</div>
+          <div class="example-sound">🔊 haus — UI suena AU</div>
         </div>
-      <button class="btn-lento" onclick="speakLento(event,this)">🐢</button>
       </div>
       <div class="example-row" onclick="speakExample('goedemorgen', 'jude-morjen — G suena J', this)">
         <div class="pron-bubble"></div>
@@ -396,9 +389,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
         <div class="example-content">
           <div class="example-nl"><strong>goedemorgen</strong></div>
           <div class="example-es">buenos días</div>
-          <div class="example-sound">▶️ jude-morjen — G suena J</div>
+          <div class="example-sound">🔊 jude-morjen — G suena J</div>
         </div>
-      <button class="btn-lento" onclick="speakLento(event,this)">🐢</button>
       </div>
       <div class="example-row" onclick="speakExample('schrijven', 'sjraiven — SCH=SJ, IJ=AI', this)">
         <div class="pron-bubble"></div>
@@ -406,9 +398,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
         <div class="example-content">
           <div class="example-nl"><strong>schrijven</strong></div>
           <div class="example-es">escribir</div>
-          <div class="example-sound">▶️ sjraiven — SCH=SJ, IJ=AI</div>
+          <div class="example-sound">🔊 sjraiven — SCH=SJ, IJ=AI</div>
         </div>
-      <button class="btn-lento" onclick="speakLento(event,this)">🐢</button>
       </div>
       <div class="example-row" onclick="speakExample('Nederland', 'NEI-der-lant — D final = T', this)">
         <div class="pron-bubble"></div>
@@ -416,9 +407,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
         <div class="example-content">
           <div class="example-nl"><strong>Nederland</strong></div>
           <div class="example-es">Países Bajos</div>
-          <div class="example-sound">▶️ NEI-der-lant — D final = T</div>
+          <div class="example-sound">🔊 NEI-der-lant — D final = T</div>
         </div>
-      <button class="btn-lento" onclick="speakLento(event,this)">🐢</button>
       </div>
       <div class="example-row" onclick="speakExample('fiets', 'fits — IE = I larga', this)">
         <div class="pron-bubble"></div>
@@ -426,9 +416,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
         <div class="example-content">
           <div class="example-nl"><strong>fiets</strong></div>
           <div class="example-es">bicicleta</div>
-          <div class="example-sound">▶️ fits — IE = I larga</div>
+          <div class="example-sound">🔊 fits — IE = I larga</div>
         </div>
-      <button class="btn-lento" onclick="speakLento(event,this)">🐢</button>
       </div>
     </div>
 
@@ -505,15 +494,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
   </button>
 </div>
 
-
-<!-- LETTER NOTE MODAL -->
-<div class="letter-modal-overlay" id="letter-modal" onclick="if(event.target===this)this.classList.remove('show')">
-  <div class="letter-modal-box">
-    <div class="letter-modal-letter" id="letter-modal-char"></div>
-    <div id="letter-modal-text"></div>
-  </div>
-</div>
-
 <script>let nlVoice=null;
 function loadNLVoice(){const v=window.speechSynthesis.getVoices();nlVoice=v.find(x=>x.lang==='nl-NL'&&x.localService)||v.find(x=>x.lang==='nl-NL')||v.find(x=>x.lang.startsWith('nl'))||null;}
 if(window.speechSynthesis.onvoiceschanged!==undefined)window.speechSynthesis.onvoiceschanged=loadNLVoice;
@@ -524,30 +504,30 @@ loadNLVoice();
 // ══════════════════════════════════════
 const ALPHABET = [
   { l:'A a', name:'A',    ph:'Aa',           speak:'a',           note:null },
-  { l:'B b', name:'Bee',  ph:'Bei',          speak:'bei',          note:null },
-  { l:'C c', name:'Cee',  ph:'Cei',          speak:'cei',          note:'Suena como S antes de E/I, como K antes de A/O/U. Ej: cel (sel) · café (kafé)' },
-  { l:'D d', name:'Dee',  ph:'Dei',          speak:'dei',          note:'Al final de palabra suena T. Ej: land → lant · hond → hont' },
-  { l:'E e', name:'Ee',   ph:'Ee (cerrada)', speak:'ei',           note:'La E neerlandesa es más cerrada que la española, casi como "ei" corta.' },
+  { l:'B b', name:'Bee',  ph:'Bei',          speak:'be',          note:null },
+  { l:'C c', name:'Cee',  ph:'Cei',          speak:'ce',          note:'Suena como S antes de E/I, como K antes de A/O/U. Ej: cel (sel) · café (kafé)' },
+  { l:'D d', name:'Dee',  ph:'Dei',          speak:'de',          note:'Al final de palabra suena T. Ej: land → lant · hond → hont' },
+  { l:'E e', name:'Ee',   ph:'Ee (cerrada)', speak:'e',           note:'La E neerlandesa es más cerrada que la española, casi como "ei" corta.' },
   { l:'F f', name:'Ef',   ph:'Ef',           speak:'ef',          note:null },
-  { l:'G g', name:'Gee',  ph:'Jei (gutural)', speak:'gei',         note:'Sonido gutural de la garganta, como la J de "jardín". Ej: goed → jut · gaan → jaan' },
+  { l:'G g', name:'Gee',  ph:'Jei (gutural)', speak:'ge',         note:'Sonido gutural de la garganta, como la J de "jardín". Ej: goed → jut · gaan → jaan' },
   { l:'H h', name:'Ha',   ph:'Ha (aspirada)', speak:'ha',         note:'Se pronuncia como una H aspirada suave, parecida a la J muy suave de "hijo". No es muda como en español.' },
   { l:'I i', name:'I',    ph:'I (corta)',     speak:'i',           note:'La I corta es breve. La IE larga suena como I española larga. Ej: fiets → fits' },
-  { l:'J j', name:'Jee',  ph:'Yei',          speak:'jei',          note:'Se pronuncia como la Y española de "yema" o "yo". NUNCA como la J española. Ej: ja → ya · jij → yay' },
+  { l:'J j', name:'Jee',  ph:'Yei',          speak:'je',          note:'Se pronuncia como la Y española de "yema" o "yo". NUNCA como la J española. Ej: ja → ya · jij → yay' },
   { l:'K k', name:'Ka',   ph:'Ka',           speak:'ka',          note:null },
   { l:'L l', name:'El',   ph:'El',           speak:'el',          note:null },
   { l:'M m', name:'Em',   ph:'Em',           speak:'em',          note:null },
   { l:'N n', name:'En',   ph:'En',           speak:'en',          note:'Al final de palabra la N casi no se pronuncia. Ej: hebben → HEB-be' },
-  { l:'O o', name:'Oo',   ph:'Oo',           speak:'oo',           note:null },
-  { l:'P p', name:'Pee',  ph:'Pei',          speak:'pei',          note:null },
-  { l:'Q q', name:'Ku',   ph:'Kü',           speak:'qu',          note:'Labios en forma de O pero lengua en posición de E. Sonido entre K y KW. Muy rara en neerlandés.' },
+  { l:'O o', name:'Oo',   ph:'Oo',           speak:'o',           note:null },
+  { l:'P p', name:'Pee',  ph:'Pei',          speak:'pe',          note:null },
+  { l:'Q q', name:'Ku',   ph:'Kü',           speak:'ku',          note:'Labios en forma de O pero lengua en posición de E. Sonido entre K y KW. Muy rara en neerlandés.' },
   { l:'R r', name:'Er',   ph:'Er',           speak:'er',          note:'La R neerlandesa es suave, casi gutural o rodada suave. Diferente a la R española vibrante fuerte.' },
   { l:'S s', name:'Es',   ph:'Es',           speak:'es',          note:null },
-  { l:'T t', name:'Tee',  ph:'Tei',          speak:'tei',          note:null },
+  { l:'T t', name:'Tee',  ph:'Tei',          speak:'te',          note:null },
   { l:'U u', name:'U',    ph:'Ü (silbada)',  speak:'u',           note:'Como la Ü alemana: labios redondeados en O pero pronuncia E. Diferente a la U española normal.' },
-  { l:'V v', name:'Vee',  ph:'Fei',          speak:'vei',          note:'Se pronuncia como F suave, casi entre F y V. Ej: vader → faader · van → fan · veel → feel' },
-  { l:'W w', name:'Wee',  ph:'Vei',          speak:'wei',          note:'Se pronuncia como V española suave, labial. Ej: wonen → vonen · water → vaater' },
+  { l:'V v', name:'Vee',  ph:'Fei',          speak:'ve',          note:'Se pronuncia como F suave, casi entre F y V. Ej: vader → faader · van → fan · veel → feel' },
+  { l:'W w', name:'Wee',  ph:'Vei',          speak:'we',          note:'Se pronuncia como V española suave, labial. Ej: wonen → vonen · water → vaater' },
   { l:'X x', name:'Ix',   ph:'Iks',          speak:'ix',          note:'Muy rara en neerlandés. Suena como KS. Solo en palabras extranjeras.' },
-  { l:'Y y', name:'Ypsilon / Griekse IJ', ph:'I-Griekse', speak:'ypsilon', note:'Se llama "Griekse IJ" (Y griega). Muy rara en neerlandés nativo. Solo en palabras extranjeras como "yoghurt".' },
+  { l:'Y y', name:'Ypsilon / Griekse IJ', ph:'I-Griekse', speak:'y', note:'Se llama "Griekse IJ" (Y griega). Muy rara en neerlandés nativo. Solo en palabras extranjeras como "yoghurt".' },
   { l:'Z z', name:'Zet',  ph:'Set',          speak:'zet',         note:'Se pronuncia como S, NO como la Z española (que no existe en neerlandés). Ej: zijn → zain (suena casi "sain")' },
 ];
 
@@ -617,6 +597,7 @@ function buildAlphabet(){
       <div class="letter-main">${item.l}</div>
       <div class="letter-name">${item.name}</div>
       <div class="letter-phonetic">${item.ph}</div>
+      ${item.note ? `<div class="letter-note-bubble" id="lnote-${idx}">${item.note}</div>` : ''}
     `;
 
     card.onclick=()=>tapLetter(item, idx);
@@ -627,7 +608,7 @@ function buildAlphabet(){
 function tapLetter(item, idx){
   // Speak
   const utter=new SpeechSynthesisUtterance(item.speak);
-  utter.lang='nl-NL';if(nlVoice)utter.voice=nlVoice; utter.rate=0.65; utter.pitch=1;
+  utter.lang='nl-NL';if(nlVoice)utter.voice=nlVoice; utter.rate=0.8; utter.pitch=1;
   window.speechSynthesis.cancel();
   window.speechSynthesis.speak(utter);
 
@@ -636,9 +617,14 @@ function tapLetter(item, idx){
   card.classList.add('playing');
   setTimeout(()=>card.classList.remove('playing'),600);
 
-  // Show modal note if exists
+  // Show note bubble if exists
   if(item.note){
-    showLetterModal(item.l, item.note);
+    const bubble=document.getElementById(`lnote-${idx}`);
+    if(bubble){
+      bubble.classList.add('show');
+      clearTimeout(noteTimers[idx]);
+      noteTimers[idx]=setTimeout(()=>bubble.classList.remove('show'), 3500);
+    }
   }
 }
 
@@ -646,40 +632,22 @@ function tapLetter(item, idx){
 // PRONUNCIATION ROWS TTS
 // ══════════════════════════════════════
 function speakPron(text, pron, rowEl){
-  speakWithPauses(text, pron, rowEl, 0.65, 750);
-}
-
-function speakWithPauses(text, pron, rowEl, rate, pauseMs){
   window.speechSynthesis.cancel();
   if(currentPronRow) clearPronBubble(currentPronRow);
+
+  const utter=new SpeechSynthesisUtterance(text);
+  utter.lang='nl-NL';if(nlVoice)utter.voice=nlVoice; utter.rate=0.8;
   showPronBubble(rowEl, pron);
   rowEl.classList.add('playing');
   currentPronRow=rowEl;
 
-  const words=text.split(/\s+/).filter(w=>w.length>0);
-  let i=0;
-  function next(){
-    if(i>=words.length){
-      rowEl.classList.remove('playing');
-      clearTimeout(pronTimers['row']);
-      pronTimers['row']=setTimeout(()=>clearPronBubble(rowEl),2000);
-      return;
-    }
-    const utter=new SpeechSynthesisUtterance(words[i]);
-    utter.lang='nl-NL';if(nlVoice)utter.voice=nlVoice; utter.rate=rate;
-    utter.onend=()=>{
-      i++;
-      if(i<words.length) setTimeout(next, pauseMs);
-      else{
-        rowEl.classList.remove('playing');
-        clearTimeout(pronTimers['row']);
-        pronTimers['row']=setTimeout(()=>clearPronBubble(rowEl),2000);
-      }
-    };
-    utter.onerror=()=>{ rowEl.classList.remove('playing'); clearPronBubble(rowEl); };
-    window.speechSynthesis.speak(utter);
-  }
-  next();
+  utter.onend=()=>{
+    rowEl.classList.remove('playing');
+    clearTimeout(pronTimers['row']);
+    pronTimers['row']=setTimeout(()=>clearPronBubble(rowEl), 2000);
+  };
+  utter.onerror=()=>{ rowEl.classList.remove('playing'); clearPronBubble(rowEl); };
+  window.speechSynthesis.speak(utter);
 }
 
 function showPronBubble(el, text){
@@ -703,7 +671,7 @@ function speakExample(text, pron, rowEl){
   if(currentPronRow) clearPronBubble(currentPronRow);
 
   const utter=new SpeechSynthesisUtterance(text);
-  utter.lang='nl-NL';if(nlVoice)utter.voice=nlVoice; utter.rate=0.65;
+  utter.lang='nl-NL';if(nlVoice)utter.voice=nlVoice; utter.rate=0.8;
   showPronBubble(rowEl, pron);
   rowEl.classList.add('playing');
   currentPronRow=rowEl;
@@ -723,46 +691,6 @@ function speakExample(text, pron, rowEl){
 function toggleTip(id){
   document.getElementById(id+'-toggle').classList.toggle('open');
   document.getElementById(id+'-content').classList.toggle('open');
-}
-
-// ══════════════════════════════════════
-// LETTER MODAL
-// ══════════════════════════════════════
-let modalTimer=null;
-function showLetterModal(letter, note){
-  document.getElementById('letter-modal-char').textContent=letter;
-  document.getElementById('letter-modal-text').textContent=note;
-  const overlay=document.getElementById('letter-modal');
-  overlay.classList.add('show');
-  clearTimeout(modalTimer);
-  modalTimer=setTimeout(()=>overlay.classList.remove('show'),3000);
-}
-
-// ══════════════════════════════════════
-// LENTO PLAYBACK
-// ══════════════════════════════════════
-function speakLento(e, btn){
-  e.stopPropagation();
-  const row=btn.closest('.pron-row')||btn.closest('.example-row');
-  if(!row) return;
-  const onclick=row.getAttribute('onclick')||'';
-  const m=onclick.match(/\w+\('([^']+)'(?:,\s*'([^']*)')?/);
-  if(!m) return;
-  const text=m[1], pron=m[2]||'';
-  if(row.classList.contains('pron-row')){
-    speakWithPauses(text, pron, row, 0.5, 750);
-  } else {
-    window.speechSynthesis.cancel();
-    if(currentPronRow) clearPronBubble(currentPronRow);
-    const utter=new SpeechSynthesisUtterance(text);
-    utter.lang='nl-NL';if(nlVoice)utter.voice=nlVoice; utter.rate=0.5;
-    showPronBubble(row, pron);
-    row.classList.add('playing');
-    currentPronRow=row;
-    utter.onend=()=>{row.classList.remove('playing');clearTimeout(pronTimers['ex']);pronTimers['ex']=setTimeout(()=>clearPronBubble(row),2000);};
-    utter.onerror=()=>{row.classList.remove('playing');clearPronBubble(row);};
-    window.speechSynthesis.speak(utter);
-  }
 }
 
 // ══════════════════════════════════════

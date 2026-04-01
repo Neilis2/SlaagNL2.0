@@ -211,8 +211,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
 .opt-btn.opt-correct{border-color:var(--green);background:rgba(46,204,138,0.12);color:var(--green);font-weight:700;}
 .opt-btn.opt-wrong{border-color:var(--red);background:rgba(232,69,90,0.1);color:var(--red);}
 @keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-5px);}75%{transform:translateX(5px);}}
-.btn-lento{background:none;border:none;cursor:pointer;font-size:16px;padding:2px;line-height:1;opacity:0.85;vertical-align:middle;flex-shrink:0;}
-.btn-lento:active{opacity:0.5;}
 </style></head>
 <body>
 <div class="header"><button class="btn-back" onclick="history.back()">‹</button>
@@ -243,15 +241,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
     <div class="tip-content" id="tip4a-content">La regla general: adjetivo antes del sustantivo → lleva <strong>-e</strong>. Excepción única: <em>een + het-woord</em> → sin -e. <em>een groot huis · een klein kind · een mooi boek</em>. Todos los demás casos (incluyendo <em>een grote man</em> porque man=de-woord) llevan -e.</div>
   </div>
   <div class="card">
-    <div class="card-body" style="padding-bottom:8px"><div class="section-label">✅ Ejemplos — toca ▶️ · 🐢</div></div>
+    <div class="card-body" style="padding-bottom:8px"><div class="section-label">✅ Ejemplos — toca 🔊 · 🐢</div></div>
     <div class="phrase-list" style="padding-top:0">
             <div class="phrase-row" onclick="speak('de grote stad','de GRO-te STAD',this)">
         <div class="pron-bubble"></div><div class="phrase-icon">🏙️</div>
         <div class="phrase-content"><div class="phrase-nl"><span class="de">de</span> grote stad</div><div class="phrase-es">la ciudad grande — de + adj+e</div></div>
         <div class="phrase-btns">
           <div class="phrase-speed" onclick="event.stopPropagation();speak('de grote stad','de GRO-te STAD',this.closest('.phrase-row'),0.5)" title="Lento">🐢</div>
-          <div class="phrase-sound-btn">▶️</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button>
+          <div class="phrase-sound-btn">🔊</div>
         </div>
       </div>
             <div class="phrase-row" onclick="speak('het grote huis','het GRO-te HUIS',this)">
@@ -259,8 +256,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
         <div class="phrase-content"><div class="phrase-nl"><span class="het">het</span> grote huis</div><div class="phrase-es">la casa grande — het + adj+e</div></div>
         <div class="phrase-btns">
           <div class="phrase-speed" onclick="event.stopPropagation();speak('het grote huis','het GRO-te HUIS',this.closest('.phrase-row'),0.5)" title="Lento">🐢</div>
-          <div class="phrase-sound-btn">▶️</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button>
+          <div class="phrase-sound-btn">🔊</div>
         </div>
       </div>
             <div class="phrase-row" onclick="speak('een groot huis','een GROOT HUIS',this)">
@@ -268,8 +264,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
         <div class="phrase-content"><div class="phrase-nl">een groot huis</div><div class="phrase-es">una casa grande — ⚠️ een + het-woord = SIN -e</div></div>
         <div class="phrase-btns">
           <div class="phrase-speed" onclick="event.stopPropagation();speak('een groot huis','een GROOT HUIS',this.closest('.phrase-row'),0.5)" title="Lento">🐢</div>
-          <div class="phrase-sound-btn">▶️</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button>
+          <div class="phrase-sound-btn">🔊</div>
         </div>
       </div>
             <div class="phrase-row" onclick="speak('een grote stad','een GRO-te STAD',this)">
@@ -277,8 +272,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
         <div class="phrase-content"><div class="phrase-nl">een grote stad</div><div class="phrase-es">una ciudad grande — een + de-woord = CON -e</div></div>
         <div class="phrase-btns">
           <div class="phrase-speed" onclick="event.stopPropagation();speak('een grote stad','een GRO-te STAD',this.closest('.phrase-row'),0.5)" title="Lento">🐢</div>
-          <div class="phrase-sound-btn">▶️</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button>
+          <div class="phrase-sound-btn">🔊</div>
         </div>
       </div>
             <div class="phrase-row" onclick="speak('De stad is groot','de STAD is GROOT',this)">
@@ -286,8 +280,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
         <div class="phrase-content"><div class="phrase-nl"><span class="de">De</span> stad is groot.</div><div class="phrase-es">La ciudad es grande — predicativo, SIN -e</div></div>
         <div class="phrase-btns">
           <div class="phrase-speed" onclick="event.stopPropagation();speak('De stad is groot','de STAD is GROOT',this.closest('.phrase-row'),0.5)" title="Lento">🐢</div>
-          <div class="phrase-sound-btn">▶️</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button>
+          <div class="phrase-sound-btn">🔊</div>
         </div>
       </div>
     </div>
@@ -320,9 +313,9 @@ function loadNLVoice(){const v=window.speechSynthesis.getVoices();nlVoice=v.find
 if(window.speechSynthesis.onvoiceschanged!==undefined)window.speechSynthesis.onvoiceschanged=loadNLVoice;
 loadNLVoice();
 let currentRow=null,bubbleTimers={};
-function speak(text,pron,el,rate){rate=rate||0.65;window.speechSynthesis.cancel();if(currentRow)clearBubble(currentRow);const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';if(nlVoice)u.voice=nlVoice;u.rate=rate;showBubble(el,pron);el.classList.add('playing');currentRow=el;u.onend=()=>{el.classList.remove('playing');clearTimeout(bubbleTimers.r);bubbleTimers.r=setTimeout(()=>clearBubble(el),2000);};u.onerror=()=>{el.classList.remove('playing');clearBubble(el);};window.speechSynthesis.speak(u);}
-function speakWord(text,rate){window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';if(nlVoice)u.voice=nlVoice;u.rate=rate||0.65;window.speechSynthesis.speak(u);}
-function showBubble(el,pron){const b=el.querySelector('.pron-bubble');if(!b)return;b.textContent=pron||'▶️';b.classList.add('show');}
+function speak(text,pron,el,rate){rate=rate||0.85;window.speechSynthesis.cancel();if(currentRow)clearBubble(currentRow);const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';if(nlVoice)u.voice=nlVoice;u.rate=rate;showBubble(el,pron);el.classList.add('playing');currentRow=el;u.onend=()=>{el.classList.remove('playing');clearTimeout(bubbleTimers.r);bubbleTimers.r=setTimeout(()=>clearBubble(el),2000);};u.onerror=()=>{el.classList.remove('playing');clearBubble(el);};window.speechSynthesis.speak(u);}
+function speakWord(text,rate){window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';if(nlVoice)u.voice=nlVoice;u.rate=rate||0.85;window.speechSynthesis.speak(u);}
+function showBubble(el,pron){const b=el.querySelector('.pron-bubble');if(!b)return;b.textContent=pron||'🔊';b.classList.add('show');}
 function clearBubble(el){if(!el)return;el.classList.remove('playing');const b=el.querySelector('.pron-bubble');if(b)b.classList.remove('show');}
 function toggleTip(id){document.getElementById(id+'-toggle').classList.toggle('open');document.getElementById(id+'-content').classList.toggle('open');}
 function buildChallenge(){showChallenge(0);}
@@ -363,37 +356,4 @@ function answerAdj(i,ai,btn,ex){
   if(ai===ex.correct){btn.classList.add('opt-correct');blank.style.cssText='color:var(--green);border-color:var(--green);display:inline-block;min-width:80px;margin:0 4px;text-align:center;font-weight:700;';fb.textContent='✅ ¡Correcto! '+ex.hint;fb.className='inline-fb ok';adjCorrect++;if(adjCorrect>=ADJ_EX.length){exDone=true;checkUnlock();}}
   else{btn.classList.add('opt-wrong');blank.style.cssText='color:var(--red);border-color:var(--red);display:inline-block;min-width:80px;margin:0 4px;text-align:center;font-weight:700;';setTimeout(()=>{blank.textContent=ex.adj[ex.correct];blank.style.cssText='color:var(--green);border-color:var(--green);display:inline-block;min-width:80px;margin:0 4px;text-align:center;font-weight:700;';},500);fb.textContent='❌ Era: '+ex.adj[ex.correct]+' — '+ex.hint;fb.className='inline-fb err';if(adjAnswers.every(a=>a!==null)){exDone=true;checkUnlock();}}
 }
-buildAdj();buildChallenge();
-// ══════════════════════════════════════
-// LENTO PLAYBACK
-// ══════════════════════════════════════
-function speakLento(e, btn){
-  e.stopPropagation();
-  const row=btn.closest('[onclick]');
-  if(!row) return;
-  const onclick=row.getAttribute('onclick')||'';
-  const m=onclick.match(/\w+\('([^']+)'(?:,\s*'([^']*)')?/);
-  if(!m) return;
-  const text=m[1], pron=m[2]||'';
-  window.speechSynthesis.cancel();
-  if(typeof currentRow!=='undefined'&&currentRow&&typeof clearBubble==='function') clearBubble(currentRow);
-  row.classList.add('playing');
-  if(typeof currentRow!=='undefined') currentRow=row;
-  if(typeof showBubble==='function'&&pron) showBubble(row,pron);
-  const words=text.split(/\s+/).filter(w=>w.length>0);
-  let i=0;
-  function next(){
-    if(i>=words.length){
-      row.classList.remove('playing');
-      if(typeof clearBubble==='function') setTimeout(()=>clearBubble(row),2000);
-      return;
-    }
-    const u=new SpeechSynthesisUtterance(words[i]);
-    u.lang='nl-NL';if(nlVoice)u.voice=nlVoice;u.rate=0.5;
-    u.onend=()=>{i++;if(i<words.length)setTimeout(next,750);else{row.classList.remove('playing');if(typeof clearBubble==='function')setTimeout(()=>clearBubble(row),2000);}};
-    u.onerror=()=>{row.classList.remove('playing');if(typeof clearBubble==='function')clearBubble(row);};
-    window.speechSynthesis.speak(u);
-  }
-  next();
-}
-</script></body></html>
+buildAdj();buildChallenge();</script></body></html>

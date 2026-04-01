@@ -82,8 +82,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
 .complete-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--cream);margin-bottom:4px;}
 .complete-sub{font-size:15px;color:rgba(253,246,236,0.5);line-height:1.6;max-width:280px;}
 .btn-continue{margin-top:16px;padding:16px 32px;background:var(--orange);border:none;border-radius:14px;color:white;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;}
-.btn-lento{background:none;border:none;cursor:pointer;font-size:16px;padding:2px;line-height:1;opacity:0.85;vertical-align:middle;flex-shrink:0;}
-.btn-lento:active{opacity:0.5;}
 </style>
 </head>
 <body>
@@ -111,31 +109,26 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
         <div class="phrase-icon">🎂</div>
         <div class="phrase-content"><div class="phrase-nl">Ik ben geboren op vijf april.</div><div class="phrase-es">Nací el cinco de abril.</div></div>
         <div class="play-btn">▶</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button>
       </div>
       <div class="phrase-row" onclick="speakRow('Het examen is op tien juni',this)">
         <div class="phrase-icon">📋</div>
         <div class="phrase-content"><div class="phrase-nl">Het examen is op tien juni.</div><div class="phrase-es">El examen es el diez de junio.</div></div>
         <div class="play-btn">▶</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button>
       </div>
       <div class="phrase-row" onclick="speakRow('Op eerste januari is het Nieuwjaar',this)">
         <div class="phrase-icon">🎉</div>
         <div class="phrase-content"><div class="phrase-nl">Op eerste januari is het Nieuwjaar.</div><div class="phrase-es">El uno de enero es Año Nuevo.</div></div>
         <div class="play-btn">▶</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button>
       </div>
       <div class="phrase-row" onclick="speakRow('Mijn contract begint op één september',this)">
         <div class="phrase-icon">📄</div>
         <div class="phrase-content"><div class="phrase-nl">Mijn contract begint op één september.</div><div class="phrase-es">Mi contrato empieza el uno de septiembre.</div></div>
         <div class="play-btn">▶</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button>
       </div>
       <div class="phrase-row" onclick="speakRow('Vandaag is het donderdag drie maart',this)">
         <div class="phrase-icon">📅</div>
         <div class="phrase-content"><div class="phrase-nl">Vandaag is het donderdag drie maart.</div><div class="phrase-es">Hoy es jueves tres de marzo.</div></div>
         <div class="play-btn">▶</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button>
       </div>
     </div>
     <div class="tip-toggle" id="tip1-toggle" onclick="toggleTip('tip1')">
@@ -184,7 +177,7 @@ let nlVoice=null;
 function loadNLVoice(){const v=window.speechSynthesis.getVoices();nlVoice=v.find(x=>x.lang==='nl-NL'&&x.localService)||v.find(x=>x.lang==='nl-NL')||v.find(x=>x.lang.startsWith('nl'))||null;}
 if(window.speechSynthesis.onvoiceschanged!==undefined)window.speechSynthesis.onvoiceschanged=loadNLVoice;
 loadNLVoice();
-function makeUtter(text,rate=0.65){const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';u.rate=rate;if(nlVoice)u.voice=nlVoice;return u;}
+function makeUtter(text,rate=0.82){const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';u.rate=rate;if(nlVoice)u.voice=nlVoice;return u;}
 function speakRow(text,el){window.speechSynthesis.cancel();if(currentRow)currentRow.classList.remove('playing');const u=makeUtter(text,0.8);el.classList.add('playing');currentRow=el;u.onend=()=>el.classList.remove('playing');u.onerror=()=>el.classList.remove('playing');window.speechSynthesis.speak(u);}
 function toggleTip(id){document.getElementById(id+'-toggle').classList.toggle('open');document.getElementById(id+'-content').classList.toggle('open');}
 function buildEx(){
@@ -226,39 +219,6 @@ function goNext(){localStorage.setItem('slaagnl_m3_6','done');document.getElemen
 function restoreProgress(){if(localStorage.getItem('slaagnl_m3_6')==='done'){exDone=true;chDone=true;checkUnlock();}}
 buildEx();buildChallenge();restoreProgress();
 
-
-// ══════════════════════════════════════
-// LENTO PLAYBACK
-// ══════════════════════════════════════
-function speakLento(e, btn){
-  e.stopPropagation();
-  const row=btn.closest('[onclick]');
-  if(!row) return;
-  const onclick=row.getAttribute('onclick')||'';
-  const m=onclick.match(/\w+\('([^']+)'(?:,\s*'([^']*)')?/);
-  if(!m) return;
-  const text=m[1], pron=m[2]||'';
-  window.speechSynthesis.cancel();
-  if(typeof currentRow!=='undefined'&&currentRow&&typeof clearBubble==='function') clearBubble(currentRow);
-  row.classList.add('playing');
-  if(typeof currentRow!=='undefined') currentRow=row;
-  if(typeof showBubble==='function'&&pron) showBubble(row,pron);
-  const words=text.split(/\s+/).filter(w=>w.length>0);
-  let i=0;
-  function next(){
-    if(i>=words.length){
-      row.classList.remove('playing');
-      if(typeof clearBubble==='function') setTimeout(()=>clearBubble(row),2000);
-      return;
-    }
-    const u=new SpeechSynthesisUtterance(words[i]);
-    u.lang='nl-NL';if(nlVoice)u.voice=nlVoice;u.rate=0.5;
-    u.onend=()=>{i++;if(i<words.length)setTimeout(next,750);else{row.classList.remove('playing');if(typeof clearBubble==='function')setTimeout(()=>clearBubble(row),2000);}};
-    u.onerror=()=>{row.classList.remove('playing');if(typeof clearBubble==='function')clearBubble(row);};
-    window.speechSynthesis.speak(u);
-  }
-  next();
-}
 </script>
 </body>
 </html>

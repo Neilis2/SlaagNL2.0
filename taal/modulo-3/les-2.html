@@ -84,8 +84,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
 .complete-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--cream);margin-bottom:4px;}
 .complete-sub{font-size:15px;color:rgba(253,246,236,0.5);line-height:1.6;max-width:280px;}
 .btn-continue{margin-top:16px;padding:16px 32px;background:var(--orange);border:none;border-radius:14px;color:white;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;}
-.btn-lento{background:none;border:none;cursor:pointer;font-size:16px;padding:2px;line-height:1;opacity:0.85;vertical-align:middle;flex-shrink:0;}
-.btn-lento:active{opacity:0.5;}
 </style>
 </head>
 <body>
@@ -109,26 +107,16 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
   <div class="card">
     <div class="card-body" style="padding-bottom:4px"><div class="section-label">📐 Las decenas — toca para escuchar</div></div>
     <div class="num-table" style="padding-top:8px">
-      <div class="num-row" onclick="speakRow('twintig',this)"><div class="num-digit-big">20</div><div class="num-info"><div class="num-nl-big">twintig</div><div class="num-formula">tvintej</div></div><div class="play-btn">▶</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
-      <div class="num-row" onclick="speakRow('dertig',this)"><div class="num-digit-big">30</div><div class="num-info"><div class="num-nl-big">dertig</div><div class="num-formula">dertej</div></div><div class="play-btn">▶</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
-      <div class="num-row" onclick="speakRow('veertig',this)"><div class="num-digit-big">40</div><div class="num-info"><div class="num-nl-big">veertig</div><div class="num-formula">feertej</div></div><div class="play-btn">▶</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
-      <div class="num-row" onclick="speakRow('vijftig',this)"><div class="num-digit-big">50</div><div class="num-info"><div class="num-nl-big">vijftig</div><div class="num-formula">faifte j</div></div><div class="play-btn">▶</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
-      <div class="num-row" onclick="speakRow('zestig',this)"><div class="num-digit-big">60</div><div class="num-info"><div class="num-nl-big">zestig</div><div class="num-formula">sestej</div></div><div class="play-btn">▶</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
-      <div class="num-row" onclick="speakRow('zeventig',this)"><div class="num-digit-big">70</div><div class="num-info"><div class="num-nl-big">zeventig</div><div class="num-formula">seivtej</div></div><div class="play-btn">▶</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
-      <div class="num-row" onclick="speakRow('tachtig',this)"><div class="num-digit-big">80</div><div class="num-info"><div class="num-nl-big">tachtig</div><div class="num-formula">tajtej</div></div><div class="play-btn">▶</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
-      <div class="num-row" onclick="speakRow('negentig',this)"><div class="num-digit-big">90</div><div class="num-info"><div class="num-nl-big">negentig</div><div class="num-formula">neijentej</div></div><div class="play-btn">▶</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
-      <div class="num-row" onclick="speakRow('honderd',this)"><div class="num-digit-big">100</div><div class="num-info"><div class="num-nl-big">honderd</div><div class="num-formula">hondert</div></div><div class="play-btn">▶</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
-      <div class="num-row" onclick="speakRow('duizend',this)"><div class="num-digit-big">1000</div><div class="num-info"><div class="num-nl-big">duizend</div><div class="num-formula">dausent</div></div><div class="play-btn">▶</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
+      <div class="num-row" onclick="speakRow('twintig',this)"><div class="num-digit-big">20</div><div class="num-info"><div class="num-nl-big">twintig</div><div class="num-formula">tvintej</div></div><div class="play-btn">▶</div></div>
+      <div class="num-row" onclick="speakRow('dertig',this)"><div class="num-digit-big">30</div><div class="num-info"><div class="num-nl-big">dertig</div><div class="num-formula">dertej</div></div><div class="play-btn">▶</div></div>
+      <div class="num-row" onclick="speakRow('veertig',this)"><div class="num-digit-big">40</div><div class="num-info"><div class="num-nl-big">veertig</div><div class="num-formula">feertej</div></div><div class="play-btn">▶</div></div>
+      <div class="num-row" onclick="speakRow('vijftig',this)"><div class="num-digit-big">50</div><div class="num-info"><div class="num-nl-big">vijftig</div><div class="num-formula">faifte j</div></div><div class="play-btn">▶</div></div>
+      <div class="num-row" onclick="speakRow('zestig',this)"><div class="num-digit-big">60</div><div class="num-info"><div class="num-nl-big">zestig</div><div class="num-formula">sestej</div></div><div class="play-btn">▶</div></div>
+      <div class="num-row" onclick="speakRow('zeventig',this)"><div class="num-digit-big">70</div><div class="num-info"><div class="num-nl-big">zeventig</div><div class="num-formula">seivtej</div></div><div class="play-btn">▶</div></div>
+      <div class="num-row" onclick="speakRow('tachtig',this)"><div class="num-digit-big">80</div><div class="num-info"><div class="num-nl-big">tachtig</div><div class="num-formula">tajtej</div></div><div class="play-btn">▶</div></div>
+      <div class="num-row" onclick="speakRow('negentig',this)"><div class="num-digit-big">90</div><div class="num-info"><div class="num-nl-big">negentig</div><div class="num-formula">neijentej</div></div><div class="play-btn">▶</div></div>
+      <div class="num-row" onclick="speakRow('honderd',this)"><div class="num-digit-big">100</div><div class="num-info"><div class="num-nl-big">honderd</div><div class="num-formula">hondert</div></div><div class="play-btn">▶</div></div>
+      <div class="num-row" onclick="speakRow('duizend',this)"><div class="num-digit-big">1000</div><div class="num-info"><div class="num-nl-big">duizend</div><div class="num-formula">dausent</div></div><div class="play-btn">▶</div></div>
     </div>
     <div class="tip-toggle" id="tip1-toggle" onclick="toggleTip('tip1')">
       <div class="bulb-wrap"><span class="bulb-icon">💡</span><div class="bulb-glow"></div></div>
@@ -146,14 +134,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
   <div class="card">
     <div class="card-body" style="padding-bottom:4px"><div class="section-label">✅ Compuestos — toca para escuchar</div></div>
     <div class="num-table" style="padding-top:8px">
-      <div class="num-row" onclick="speakRow('drieëntwintig',this)"><div class="num-digit-big">23</div><div class="num-info"><div class="num-nl-big">drieëntwintig</div><div class="num-formula">drie + en + twintig</div></div><div class="play-btn">▶</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
-      <div class="num-row" onclick="speakRow('vijfenveertig',this)"><div class="num-digit-big">45</div><div class="num-info"><div class="num-nl-big">vijfenveertig</div><div class="num-formula">vijf + en + veertig</div></div><div class="play-btn">▶</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
-      <div class="num-row" onclick="speakRow('tweeënzestig',this)"><div class="num-digit-big">62</div><div class="num-info"><div class="num-nl-big">tweeënzestig</div><div class="num-formula">twee + en + zestig</div></div><div class="play-btn">▶</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
-      <div class="num-row" onclick="speakRow('drieëntachtig',this)"><div class="num-digit-big">83</div><div class="num-info"><div class="num-nl-big">drieëntachtig</div><div class="num-formula">drie + en + tachtig</div></div><div class="play-btn">▶</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
+      <div class="num-row" onclick="speakRow('drieëntwintig',this)"><div class="num-digit-big">23</div><div class="num-info"><div class="num-nl-big">drieëntwintig</div><div class="num-formula">drie + en + twintig</div></div><div class="play-btn">▶</div></div>
+      <div class="num-row" onclick="speakRow('vijfenveertig',this)"><div class="num-digit-big">45</div><div class="num-info"><div class="num-nl-big">vijfenveertig</div><div class="num-formula">vijf + en + veertig</div></div><div class="play-btn">▶</div></div>
+      <div class="num-row" onclick="speakRow('tweeënzestig',this)"><div class="num-digit-big">62</div><div class="num-info"><div class="num-nl-big">tweeënzestig</div><div class="num-formula">twee + en + zestig</div></div><div class="play-btn">▶</div></div>
+      <div class="num-row" onclick="speakRow('drieëntachtig',this)"><div class="num-digit-big">83</div><div class="num-info"><div class="num-nl-big">drieëntachtig</div><div class="num-formula">drie + en + tachtig</div></div><div class="play-btn">▶</div></div>
     </div>
   </div>
 
@@ -202,7 +186,7 @@ let nlVoice=null;
 function loadNLVoice(){const v=window.speechSynthesis.getVoices();nlVoice=v.find(x=>x.lang==='nl-NL'&&x.localService)||v.find(x=>x.lang==='nl-NL')||v.find(x=>x.lang.startsWith('nl'))||null;}
 if(window.speechSynthesis.onvoiceschanged!==undefined)window.speechSynthesis.onvoiceschanged=loadNLVoice;
 loadNLVoice();
-function makeUtter(text,rate=0.65){const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';u.rate=rate;if(nlVoice)u.voice=nlVoice;return u;}
+function makeUtter(text,rate=0.82){const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';u.rate=rate;if(nlVoice)u.voice=nlVoice;return u;}
 function speakRow(text,el){window.speechSynthesis.cancel();if(currentRow)currentRow.classList.remove('playing');const u=makeUtter(text,0.78);el.classList.add('playing');currentRow=el;u.onend=()=>el.classList.remove('playing');u.onerror=()=>el.classList.remove('playing');window.speechSynthesis.speak(u);}
 function toggleTip(id){document.getElementById(id+'-toggle').classList.toggle('open');document.getElementById(id+'-content').classList.toggle('open');}
 function buildEx(){
@@ -243,39 +227,6 @@ function checkUnlock(){let p=0;if(exDone)p+=50;if(chDone)p+=50;document.getEleme
 function goNext(){localStorage.setItem('slaagnl_m3_2','done');document.getElementById('main-content').style.display='none';document.getElementById('complete-screen').classList.add('show');}
 function restoreProgress(){if(localStorage.getItem('slaagnl_m3_2')==='done'){exDone=true;chDone=true;checkUnlock();}}
 buildEx();buildChallenge();restoreProgress();
-
-// ══════════════════════════════════════
-// LENTO PLAYBACK
-// ══════════════════════════════════════
-function speakLento(e, btn){
-  e.stopPropagation();
-  const row=btn.closest('[onclick]');
-  if(!row) return;
-  const onclick=row.getAttribute('onclick')||'';
-  const m=onclick.match(/\w+\('([^']+)'(?:,\s*'([^']*)')?/);
-  if(!m) return;
-  const text=m[1], pron=m[2]||'';
-  window.speechSynthesis.cancel();
-  if(typeof currentRow!=='undefined'&&currentRow&&typeof clearBubble==='function') clearBubble(currentRow);
-  row.classList.add('playing');
-  if(typeof currentRow!=='undefined') currentRow=row;
-  if(typeof showBubble==='function'&&pron) showBubble(row,pron);
-  const words=text.split(/\s+/).filter(w=>w.length>0);
-  let i=0;
-  function next(){
-    if(i>=words.length){
-      row.classList.remove('playing');
-      if(typeof clearBubble==='function') setTimeout(()=>clearBubble(row),2000);
-      return;
-    }
-    const u=new SpeechSynthesisUtterance(words[i]);
-    u.lang='nl-NL';if(nlVoice)u.voice=nlVoice;u.rate=0.5;
-    u.onend=()=>{i++;if(i<words.length)setTimeout(next,750);else{row.classList.remove('playing');if(typeof clearBubble==='function')setTimeout(()=>clearBubble(row),2000);}};
-    u.onerror=()=>{row.classList.remove('playing');if(typeof clearBubble==='function')clearBubble(row);};
-    window.speechSynthesis.speak(u);
-  }
-  next();
-}
 </script>
 </body>
 </html>

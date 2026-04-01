@@ -183,8 +183,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
 .aux-ex{font-size:12px;font-weight:700;padding:5px 10px;border-radius:8px;cursor:pointer;margin-bottom:4px;user-select:none;transition:all .15s;}
 .aux-heb .aux-ex{background:rgba(244,124,58,0.1);color:var(--orange);}.aux-zijn .aux-ex{background:rgba(96,165,250,0.1);color:var(--blue);}.aux-ex:active{opacity:.7;}
 @keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-5px);}75%{transform:translateX(5px);}}
-.btn-lento{background:none;border:none;cursor:pointer;font-size:16px;padding:2px;line-height:1;opacity:0.85;vertical-align:middle;flex-shrink:0;}
-.btn-lento:active{opacity:0.5;}
 </style></head>
 <body>
 <div class="header"><button class="btn-back" onclick="history.back()">‹</button>
@@ -206,8 +204,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
         <div class="phrase-content"><div class="phrase-nl">Er is een probleem.</div><div class="phrase-es">Hay un problema. — singular</div></div>
         <div class="phrase-btns">
           <div class="phrase-speed" onclick="event.stopPropagation();speak('Er is een probleem','er IS een PRO-bleem',this.closest('.phrase-row'),0.5)" title="Lento">🐢</div>
-          <div class="phrase-sound-btn">▶️</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button>
+          <div class="phrase-sound-btn">🔊</div>
         </div>
       </div>
             <div class="phrase-row" onclick="speak('Er zijn veel mensen in Amsterdam','er ZIJN veel MEN-sen in am-ster-DAM',this)">
@@ -215,8 +212,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
         <div class="phrase-content"><div class="phrase-nl">Er zijn veel mensen in Amsterdam.</div><div class="phrase-es">Hay muchas personas en Ámsterdam. — plural</div></div>
         <div class="phrase-btns">
           <div class="phrase-speed" onclick="event.stopPropagation();speak('Er zijn veel mensen in Amsterdam','er ZIJN veel MEN-sen in am-ster-DAM',this.closest('.phrase-row'),0.5)" title="Lento">🐢</div>
-          <div class="phrase-sound-btn">▶️</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button>
+          <div class="phrase-sound-btn">🔊</div>
         </div>
       </div>
             <div class="phrase-row" onclick="speak('Er is geen melk meer','er IS GEEN melk MEER',this)">
@@ -224,8 +220,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
         <div class="phrase-content"><div class="phrase-nl">Er is geen melk meer.</div><div class="phrase-es">No hay más leche.</div></div>
         <div class="phrase-btns">
           <div class="phrase-speed" onclick="event.stopPropagation();speak('Er is geen melk meer','er IS GEEN melk MEER',this.closest('.phrase-row'),0.5)" title="Lento">🐢</div>
-          <div class="phrase-sound-btn">▶️</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button>
+          <div class="phrase-sound-btn">🔊</div>
         </div>
       </div>
             <div class="phrase-row" onclick="speak('Er zijn drie appels op tafel','er ZIJN drie AP-pels op TA-fel',this)">
@@ -233,8 +228,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
         <div class="phrase-content"><div class="phrase-nl">Er zijn drie appels op tafel.</div><div class="phrase-es">Hay tres manzanas en la mesa.</div></div>
         <div class="phrase-btns">
           <div class="phrase-speed" onclick="event.stopPropagation();speak('Er zijn drie appels op tafel','er ZIJN drie AP-pels op TA-fel',this.closest('.phrase-row'),0.5)" title="Lento">🐢</div>
-          <div class="phrase-sound-btn">▶️</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button>
+          <div class="phrase-sound-btn">🔊</div>
         </div>
       </div>
     </div>
@@ -253,8 +247,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
         <div class="phrase-content"><div class="phrase-nl">Ik denk aan het werk → Ik denk eraan.</div><div class="phrase-es">Pienso en el trabajo → pienso en ello.</div></div>
         <div class="phrase-btns">
           <div class="phrase-speed" onclick="event.stopPropagation();speak('Ik denk aan het werk. Ik denk eraan.','ik DENK aan het WERK. ik DENK er-AAN',this.closest('.phrase-row'),0.5)" title="Lento">🐢</div>
-          <div class="phrase-sound-btn">▶️</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button>
+          <div class="phrase-sound-btn">🔊</div>
         </div>
       </div>
             <div class="phrase-row" onclick="speak('Ik woon in het huis. Ik woon erin.','ik WOON in het HUIS. ik WOON er-IN',this)">
@@ -262,8 +255,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
         <div class="phrase-content"><div class="phrase-nl">Ik woon in het huis → Ik woon erin.</div><div class="phrase-es">Vivo en la casa → vivo en ella.</div></div>
         <div class="phrase-btns">
           <div class="phrase-speed" onclick="event.stopPropagation();speak('Ik woon in het huis. Ik woon erin.','ik WOON in het HUIS. ik WOON er-IN',this.closest('.phrase-row'),0.5)" title="Lento">🐢</div>
-          <div class="phrase-sound-btn">▶️</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button>
+          <div class="phrase-sound-btn">🔊</div>
         </div>
       </div>
             <div class="phrase-row" onclick="speak('Ik rijd op de fiets. Ik rijd erop.','ik RIJD op de FIETS. ik RIJD er-OP',this)">
@@ -271,8 +263,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
         <div class="phrase-content"><div class="phrase-nl">Ik rijd op de fiets → Ik rijd erop.</div><div class="phrase-es">Monto en la bici → monto en ella.</div></div>
         <div class="phrase-btns">
           <div class="phrase-speed" onclick="event.stopPropagation();speak('Ik rijd op de fiets. Ik rijd erop.','ik RIJD op de FIETS. ik RIJD er-OP',this.closest('.phrase-row'),0.5)" title="Lento">🐢</div>
-          <div class="phrase-sound-btn">▶️</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button>
+          <div class="phrase-sound-btn">🔊</div>
         </div>
       </div>
     </div>
@@ -305,9 +296,9 @@ function loadNLVoice(){const v=window.speechSynthesis.getVoices();nlVoice=v.find
 if(window.speechSynthesis.onvoiceschanged!==undefined)window.speechSynthesis.onvoiceschanged=loadNLVoice;
 loadNLVoice();
 let currentRow=null,bubbleTimers={};
-function speak(text,pron,el,rate){rate=rate||0.65;window.speechSynthesis.cancel();if(currentRow)clearBubble(currentRow);const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';if(nlVoice)u.voice=nlVoice;u.rate=rate;showBubble(el,pron);el.classList.add('playing');currentRow=el;u.onend=()=>{el.classList.remove('playing');clearTimeout(bubbleTimers.r);bubbleTimers.r=setTimeout(()=>clearBubble(el),2000);};u.onerror=()=>{el.classList.remove('playing');clearBubble(el);};window.speechSynthesis.speak(u);}
-function speakWord(text,rate){window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';if(nlVoice)u.voice=nlVoice;u.rate=rate||0.65;window.speechSynthesis.speak(u);}
-function showBubble(el,pron){const b=el.querySelector('.pron-bubble');if(!b)return;b.textContent=pron||'▶️';b.classList.add('show');}
+function speak(text,pron,el,rate){rate=rate||0.85;window.speechSynthesis.cancel();if(currentRow)clearBubble(currentRow);const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';if(nlVoice)u.voice=nlVoice;u.rate=rate;showBubble(el,pron);el.classList.add('playing');currentRow=el;u.onend=()=>{el.classList.remove('playing');clearTimeout(bubbleTimers.r);bubbleTimers.r=setTimeout(()=>clearBubble(el),2000);};u.onerror=()=>{el.classList.remove('playing');clearBubble(el);};window.speechSynthesis.speak(u);}
+function speakWord(text,rate){window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';if(nlVoice)u.voice=nlVoice;u.rate=rate||0.85;window.speechSynthesis.speak(u);}
+function showBubble(el,pron){const b=el.querySelector('.pron-bubble');if(!b)return;b.textContent=pron||'🔊';b.classList.add('show');}
 function clearBubble(el){if(!el)return;el.classList.remove('playing');const b=el.querySelector('.pron-bubble');if(b)b.classList.remove('show');}
 function toggleTip(id){document.getElementById(id+'-toggle').classList.toggle('open');document.getElementById(id+'-content').classList.toggle('open');}
 function buildChallenge(){showChallenge(0);}
@@ -344,37 +335,4 @@ function answerER(i,oi,btn,ex){
   if(oi===ex.correct){btn.classList.add('opt-correct');fb.textContent='✅ ¡Correcto! '+ex.hint;fb.className='inline-fb ok';erCorrect++;if(erCorrect>=ER_EX.length){exDone=true;checkUnlock();}}
   else{btn.classList.add('opt-wrong');document.getElementById(`eropts-${i}`).querySelectorAll('.opt-btn')[ex.correct].classList.add('opt-correct');fb.textContent='❌ Era: '+ex.opts[ex.correct]+'. '+ex.hint;fb.className='inline-fb err';}
 }
-buildER();buildChallenge();
-// ══════════════════════════════════════
-// LENTO PLAYBACK
-// ══════════════════════════════════════
-function speakLento(e, btn){
-  e.stopPropagation();
-  const row=btn.closest('[onclick]');
-  if(!row) return;
-  const onclick=row.getAttribute('onclick')||'';
-  const m=onclick.match(/\w+\('([^']+)'(?:,\s*'([^']*)')?/);
-  if(!m) return;
-  const text=m[1], pron=m[2]||'';
-  window.speechSynthesis.cancel();
-  if(typeof currentRow!=='undefined'&&currentRow&&typeof clearBubble==='function') clearBubble(currentRow);
-  row.classList.add('playing');
-  if(typeof currentRow!=='undefined') currentRow=row;
-  if(typeof showBubble==='function'&&pron) showBubble(row,pron);
-  const words=text.split(/\s+/).filter(w=>w.length>0);
-  let i=0;
-  function next(){
-    if(i>=words.length){
-      row.classList.remove('playing');
-      if(typeof clearBubble==='function') setTimeout(()=>clearBubble(row),2000);
-      return;
-    }
-    const u=new SpeechSynthesisUtterance(words[i]);
-    u.lang='nl-NL';if(nlVoice)u.voice=nlVoice;u.rate=0.5;
-    u.onend=()=>{i++;if(i<words.length)setTimeout(next,750);else{row.classList.remove('playing');if(typeof clearBubble==='function')setTimeout(()=>clearBubble(row),2000);}};
-    u.onerror=()=>{row.classList.remove('playing');if(typeof clearBubble==='function')clearBubble(row);};
-    window.speechSynthesis.speak(u);
-  }
-  next();
-}
-</script></body></html>
+buildER();buildChallenge();</script></body></html>

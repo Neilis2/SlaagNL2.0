@@ -105,8 +105,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
 .complete-sub{font-size:15px;color:rgba(253,246,236,0.5);line-height:1.6;max-width:280px;}
 .btn-continue{margin-top:16px;padding:16px 32px;background:var(--orange);border:none;border-radius:14px;color:white;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;}
 .divider{height:1px;background:rgba(255,255,255,0.06);margin:4px 18px 14px;}
-.btn-lento{background:none;border:none;cursor:pointer;font-size:16px;padding:2px;line-height:1;opacity:0.85;vertical-align:middle;flex-shrink:0;}
-.btn-lento:active{opacity:0.5;}
 </style>
 </head>
 <body>
@@ -192,18 +190,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
       <div class="section-label">📋 Palabras HET más comunes del examen</div>
     </div>
     <div class="phrase-list" style="padding-top:0">
-      <div class="phrase-row" onclick="speak('het huis','het hous',this)"><div class="pron-bubble"></div><div class="phrase-icon">🏠</div><div class="phrase-content"><div class="phrase-nl"><span class="het">het</span> huis</div><div class="phrase-es">la casa</div></div><div class="phrase-sound-btn">▶️</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
-      <div class="phrase-row" onclick="speak('het kind','het kint',this)"><div class="pron-bubble"></div><div class="phrase-icon">👶</div><div class="phrase-content"><div class="phrase-nl"><span class="het">het</span> kind</div><div class="phrase-es">el niño / la niña</div></div><div class="phrase-sound-btn">▶️</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
-      <div class="phrase-row" onclick="speak('het werk','het verk',this)"><div class="pron-bubble"></div><div class="phrase-icon">💼</div><div class="phrase-content"><div class="phrase-nl"><span class="het">het</span> werk</div><div class="phrase-es">el trabajo</div></div><div class="phrase-sound-btn">▶️</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
-      <div class="phrase-row" onclick="speak('het land','het lant',this)"><div class="pron-bubble"></div><div class="phrase-icon">🌍</div><div class="phrase-content"><div class="phrase-nl"><span class="het">het</span> land</div><div class="phrase-es">el país</div></div><div class="phrase-sound-btn">▶️</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
-      <div class="phrase-row" onclick="speak('het leven','het LEI-ven',this)"><div class="pron-bubble"></div><div class="phrase-icon">✨</div><div class="phrase-content"><div class="phrase-nl"><span class="het">het</span> leven</div><div class="phrase-es">la vida</div></div><div class="phrase-sound-btn">▶️</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
-      <div class="phrase-row" onclick="speak('het jaar','het yaar',this)"><div class="pron-bubble"></div><div class="phrase-icon">📅</div><div class="phrase-content"><div class="phrase-nl"><span class="het">het</span> jaar</div><div class="phrase-es">el año</div></div><div class="phrase-sound-btn">▶️</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
+      <div class="phrase-row" onclick="speak('het huis','het hous',this)"><div class="pron-bubble"></div><div class="phrase-icon">🏠</div><div class="phrase-content"><div class="phrase-nl"><span class="het">het</span> huis</div><div class="phrase-es">la casa</div></div><div class="phrase-sound-btn">🔊</div></div>
+      <div class="phrase-row" onclick="speak('het kind','het kint',this)"><div class="pron-bubble"></div><div class="phrase-icon">👶</div><div class="phrase-content"><div class="phrase-nl"><span class="het">het</span> kind</div><div class="phrase-es">el niño / la niña</div></div><div class="phrase-sound-btn">🔊</div></div>
+      <div class="phrase-row" onclick="speak('het werk','het verk',this)"><div class="pron-bubble"></div><div class="phrase-icon">💼</div><div class="phrase-content"><div class="phrase-nl"><span class="het">het</span> werk</div><div class="phrase-es">el trabajo</div></div><div class="phrase-sound-btn">🔊</div></div>
+      <div class="phrase-row" onclick="speak('het land','het lant',this)"><div class="pron-bubble"></div><div class="phrase-icon">🌍</div><div class="phrase-content"><div class="phrase-nl"><span class="het">het</span> land</div><div class="phrase-es">el país</div></div><div class="phrase-sound-btn">🔊</div></div>
+      <div class="phrase-row" onclick="speak('het leven','het LEI-ven',this)"><div class="pron-bubble"></div><div class="phrase-icon">✨</div><div class="phrase-content"><div class="phrase-nl"><span class="het">het</span> leven</div><div class="phrase-es">la vida</div></div><div class="phrase-sound-btn">🔊</div></div>
+      <div class="phrase-row" onclick="speak('het jaar','het yaar',this)"><div class="pron-bubble"></div><div class="phrase-icon">📅</div><div class="phrase-content"><div class="phrase-nl"><span class="het">het</span> jaar</div><div class="phrase-es">el año</div></div><div class="phrase-sound-btn">🔊</div></div>
     </div>
 
     <div class="tip-toggle" id="tip2-toggle" onclick="toggleTip('tip2')">
@@ -256,13 +248,13 @@ let currentRow=null,bubbleTimers={};
 function speak(text,pron,el){
   window.speechSynthesis.cancel();
   if(currentRow)clearBubble(currentRow);
-  const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';if(nlVoice)u.voice=nlVoice;u.rate=0.65;
+  const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';if(nlVoice)u.voice=nlVoice;u.rate=0.85;
   showBubble(el,pron);el.classList.add('playing');currentRow=el;
   u.onend=()=>{el.classList.remove('playing');clearTimeout(bubbleTimers.r);bubbleTimers.r=setTimeout(()=>clearBubble(el),2000);};
   u.onerror=()=>{el.classList.remove('playing');clearBubble(el);};
   window.speechSynthesis.speak(u);
 }
-function speakWord(text){window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';if(nlVoice)u.voice=nlVoice;u.rate=0.65;window.speechSynthesis.speak(u);}
+function speakWord(text){window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';if(nlVoice)u.voice=nlVoice;u.rate=0.85;window.speechSynthesis.speak(u);}
 function showBubble(el,pron){const b=el.querySelector('.pron-bubble');if(!b)return;b.textContent=pron;b.classList.add('show');}
 function clearBubble(el){if(!el)return;el.classList.remove('playing');const b=el.querySelector('.pron-bubble');if(b)b.classList.remove('show');}
 function toggleTip(id){document.getElementById(id+'-toggle').classList.toggle('open');document.getElementById(id+'-content').classList.toggle('open');}
@@ -362,39 +354,6 @@ function checkUnlock(){
 }
 function goNext(){document.getElementById('main-content').style.display='none';document.getElementById('complete-screen').classList.add('show');}
 buildIntruder();buildChallenge();
-
-// ══════════════════════════════════════
-// LENTO PLAYBACK
-// ══════════════════════════════════════
-function speakLento(e, btn){
-  e.stopPropagation();
-  const row=btn.closest('[onclick]');
-  if(!row) return;
-  const onclick=row.getAttribute('onclick')||'';
-  const m=onclick.match(/\w+\('([^']+)'(?:,\s*'([^']*)')?/);
-  if(!m) return;
-  const text=m[1], pron=m[2]||'';
-  window.speechSynthesis.cancel();
-  if(typeof currentRow!=='undefined'&&currentRow&&typeof clearBubble==='function') clearBubble(currentRow);
-  row.classList.add('playing');
-  if(typeof currentRow!=='undefined') currentRow=row;
-  if(typeof showBubble==='function'&&pron) showBubble(row,pron);
-  const words=text.split(/\s+/).filter(w=>w.length>0);
-  let i=0;
-  function next(){
-    if(i>=words.length){
-      row.classList.remove('playing');
-      if(typeof clearBubble==='function') setTimeout(()=>clearBubble(row),2000);
-      return;
-    }
-    const u=new SpeechSynthesisUtterance(words[i]);
-    u.lang='nl-NL';if(nlVoice)u.voice=nlVoice;u.rate=0.5;
-    u.onend=()=>{i++;if(i<words.length)setTimeout(next,750);else{row.classList.remove('playing');if(typeof clearBubble==='function')setTimeout(()=>clearBubble(row),2000);}};
-    u.onerror=()=>{row.classList.remove('playing');if(typeof clearBubble==='function')clearBubble(row);};
-    window.speechSynthesis.speak(u);
-  }
-  next();
-}
 </script>
 </body>
 </html>

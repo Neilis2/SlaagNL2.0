@@ -119,8 +119,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
 .complete-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--cream);margin-bottom:4px;}
 .complete-sub{font-size:15px;color:rgba(253,246,236,0.5);line-height:1.6;max-width:300px;}
 .btn-continue{margin-top:16px;padding:16px 32px;background:var(--orange);border:none;border-radius:14px;color:white;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;}
-.btn-lento{background:none;border:none;cursor:pointer;font-size:16px;padding:2px;line-height:1;opacity:0.85;vertical-align:middle;flex-shrink:0;}
-.btn-lento:active{opacity:0.5;}
 </style>
 </head>
 <body>
@@ -145,16 +143,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
   <div class="card">
     <div class="card-body" style="padding-bottom:8px"><div class="section-label">✅ Frases reales del examen — toca para escuchar</div></div>
     <div class="phrase-list" style="padding-top:0">
-      <div class="phrase-row" onclick="speak('Ik huur een appartement in de stad','ik hüür en a-par-te-MENT in de stat',this)"><div class="pron-bubble"></div><div class="phrase-icon">🏠</div><div class="phrase-content"><div class="phrase-nl">Ik huur <span class="een">een</span> appartement in <span class="de">de</span> stad</div><div class="phrase-es">Alquilo un apartamento en la ciudad</div></div><div class="phrase-sound-btn">▶️</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
-      <div class="phrase-row" onclick="speak('Het huis heeft een grote tuin','het hous heft en JROO-te tuin',this)"><div class="pron-bubble"></div><div class="phrase-icon">🌳</div><div class="phrase-content"><div class="phrase-nl"><span class="het">Het</span> huis heeft een grote tuin</div><div class="phrase-es">La casa tiene un jardín grande</div></div><div class="phrase-sound-btn">▶️</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
-      <div class="phrase-row" onclick="speak('De kinderen gaan naar de school','de KIN-de-ren jaan naar de sjool',this)"><div class="pron-bubble"></div><div class="phrase-icon">🏫</div><div class="phrase-content"><div class="phrase-nl"><span class="de">De</span> kinderen gaan naar <span class="de">de</span> school</div><div class="phrase-es">Los niños van a la escuela</div></div><div class="phrase-sound-btn">▶️</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
-      <div class="phrase-row" onclick="speak('Ik werk bij een grote winkel in de stad','ik verk bai en JROO-te VIN-kel in de stat',this)"><div class="pron-bubble"></div><div class="phrase-icon">🛒</div><div class="phrase-content"><div class="phrase-nl">Ik werk bij <span class="een">een</span> grote winkel in <span class="de">de</span> stad</div><div class="phrase-es">Trabajo en una tienda grande en la ciudad</div></div><div class="phrase-sound-btn">▶️</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
-      <div class="phrase-row" onclick="speak('Het werk is zwaar maar het salaris is goed','het verk is zvaar maar het sa-LAA-ris is jut',this)"><div class="pron-bubble"></div><div class="phrase-icon">💼</div><div class="phrase-content"><div class="phrase-nl"><span class="het">Het</span> werk is zwaar maar <span class="het">het</span> salaris is goed</div><div class="phrase-es">El trabajo es duro pero el salario es bueno</div></div><div class="phrase-sound-btn">▶️</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
+      <div class="phrase-row" onclick="speak('Ik huur een appartement in de stad','ik hüür en a-par-te-MENT in de stat',this)"><div class="pron-bubble"></div><div class="phrase-icon">🏠</div><div class="phrase-content"><div class="phrase-nl">Ik huur <span class="een">een</span> appartement in <span class="de">de</span> stad</div><div class="phrase-es">Alquilo un apartamento en la ciudad</div></div><div class="phrase-sound-btn">🔊</div></div>
+      <div class="phrase-row" onclick="speak('Het huis heeft een grote tuin','het hous heft en JROO-te tuin',this)"><div class="pron-bubble"></div><div class="phrase-icon">🌳</div><div class="phrase-content"><div class="phrase-nl"><span class="het">Het</span> huis heeft een grote tuin</div><div class="phrase-es">La casa tiene un jardín grande</div></div><div class="phrase-sound-btn">🔊</div></div>
+      <div class="phrase-row" onclick="speak('De kinderen gaan naar de school','de KIN-de-ren jaan naar de sjool',this)"><div class="pron-bubble"></div><div class="phrase-icon">🏫</div><div class="phrase-content"><div class="phrase-nl"><span class="de">De</span> kinderen gaan naar <span class="de">de</span> school</div><div class="phrase-es">Los niños van a la escuela</div></div><div class="phrase-sound-btn">🔊</div></div>
+      <div class="phrase-row" onclick="speak('Ik werk bij een grote winkel in de stad','ik verk bai en JROO-te VIN-kel in de stat',this)"><div class="pron-bubble"></div><div class="phrase-icon">🛒</div><div class="phrase-content"><div class="phrase-nl">Ik werk bij <span class="een">een</span> grote winkel in <span class="de">de</span> stad</div><div class="phrase-es">Trabajo en una tienda grande en la ciudad</div></div><div class="phrase-sound-btn">🔊</div></div>
+      <div class="phrase-row" onclick="speak('Het werk is zwaar maar het salaris is goed','het verk is zvaar maar het sa-LAA-ris is jut',this)"><div class="pron-bubble"></div><div class="phrase-icon">💼</div><div class="phrase-content"><div class="phrase-nl"><span class="het">Het</span> werk is zwaar maar <span class="het">het</span> salaris is goed</div><div class="phrase-es">El trabajo es duro pero el salario es bueno</div></div><div class="phrase-sound-btn">🔊</div></div>
     </div>
 
     <div class="tip-toggle" id="tip1-toggle" onclick="toggleTip('tip1')">
@@ -182,42 +175,42 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
         <div class="bubble-who">Examinador</div>
         <div class="bubble-nl">Waar woont u?</div>
         <div class="bubble-es">¿Dónde vive usted?</div>
-        <div class="bubble-sound">▶️ toca para escuchar</div>
+        <div class="bubble-sound">🔊 toca para escuchar</div>
       </div>
       <div class="dialogue-bubble bubble-b" onclick="speak('Ik woon in een appartement in de stad','ik voon in en a-par-te-MENT in de stat',this)">
         <div class="pron-bubble"></div>
         <div class="bubble-who">Tú</div>
         <div class="bubble-nl">Ik woon in een appartement in de stad.</div>
         <div class="bubble-es">Vivo en un apartamento en la ciudad.</div>
-        <div class="bubble-sound">▶️ toca para escuchar</div>
+        <div class="bubble-sound">🔊 toca para escuchar</div>
       </div>
       <div class="dialogue-bubble bubble-a" onclick="speak('Heeft u een tuin','heft uu en tuin',this)">
         <div class="pron-bubble"></div>
         <div class="bubble-who">Examinador</div>
         <div class="bubble-nl">Heeft u een tuin?</div>
         <div class="bubble-es">¿Tiene usted jardín?</div>
-        <div class="bubble-sound">▶️ toca para escuchar</div>
+        <div class="bubble-sound">🔊 toca para escuchar</div>
       </div>
       <div class="dialogue-bubble bubble-b" onclick="speak('Nee ik heb geen tuin maar wel een balkon','nei ik hep jein tuin maar vel bal-KON',this)">
         <div class="pron-bubble"></div>
         <div class="bubble-who">Tú</div>
         <div class="bubble-nl">Nee, ik heb geen tuin maar wel een balkon.</div>
         <div class="bubble-es">No, no tengo jardín pero sí tengo un balcón.</div>
-        <div class="bubble-sound">▶️ toca para escuchar</div>
+        <div class="bubble-sound">🔊 toca para escuchar</div>
       </div>
       <div class="dialogue-bubble bubble-a" onclick="speak('Hoeveel kamers heeft het appartement','hu-FEEL KAA-mers heft het a-par-te-MENT',this)">
         <div class="pron-bubble"></div>
         <div class="bubble-who">Examinador</div>
         <div class="bubble-nl">Hoeveel kamers heeft het appartement?</div>
         <div class="bubble-es">¿Cuántas habitaciones tiene el apartamento?</div>
-        <div class="bubble-sound">▶️ toca para escuchar</div>
+        <div class="bubble-sound">🔊 toca para escuchar</div>
       </div>
       <div class="dialogue-bubble bubble-b" onclick="speak('Het heeft drie kamers een keuken en een badkamer','het heft dri KAA-mers en KEU-ken en en BAT-kaa-mer',this)">
         <div class="pron-bubble"></div>
         <div class="bubble-who">Tú</div>
         <div class="bubble-nl">Het heeft drie kamers, een keuken en een badkamer.</div>
         <div class="bubble-es">Tiene tres habitaciones, una cocina y un baño.</div>
-        <div class="bubble-sound">▶️ toca para escuchar</div>
+        <div class="bubble-sound">🔊 toca para escuchar</div>
       </div>
     </div>
   </div>
@@ -261,7 +254,7 @@ let currentRow=null,bubbleTimers={};
 function speak(text,pron,el){
   window.speechSynthesis.cancel();
   if(currentRow)clearBubble(currentRow);
-  const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';if(nlVoice)u.voice=nlVoice;u.rate=0.65;
+  const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';if(nlVoice)u.voice=nlVoice;u.rate=0.85;
   showBubble(el,pron);el.classList.add('playing');currentRow=el;
   u.onend=()=>{el.classList.remove('playing');clearTimeout(bubbleTimers.r);bubbleTimers.r=setTimeout(()=>clearBubble(el),2000);};
   u.onerror=()=>{el.classList.remove('playing');clearBubble(el);};
@@ -405,39 +398,6 @@ function checkUnlock(){
 }
 function goNext(){document.getElementById('main-content').style.display='none';document.getElementById('complete-screen').classList.add('show');}
 buildBuilders();buildChallenge();
-
-// ══════════════════════════════════════
-// LENTO PLAYBACK
-// ══════════════════════════════════════
-function speakLento(e, btn){
-  e.stopPropagation();
-  const row=btn.closest('[onclick]');
-  if(!row) return;
-  const onclick=row.getAttribute('onclick')||'';
-  const m=onclick.match(/\w+\('([^']+)'(?:,\s*'([^']*)')?/);
-  if(!m) return;
-  const text=m[1], pron=m[2]||'';
-  window.speechSynthesis.cancel();
-  if(typeof currentRow!=='undefined'&&currentRow&&typeof clearBubble==='function') clearBubble(currentRow);
-  row.classList.add('playing');
-  if(typeof currentRow!=='undefined') currentRow=row;
-  if(typeof showBubble==='function'&&pron) showBubble(row,pron);
-  const words=text.split(/\s+/).filter(w=>w.length>0);
-  let i=0;
-  function next(){
-    if(i>=words.length){
-      row.classList.remove('playing');
-      if(typeof clearBubble==='function') setTimeout(()=>clearBubble(row),2000);
-      return;
-    }
-    const u=new SpeechSynthesisUtterance(words[i]);
-    u.lang='nl-NL';if(nlVoice)u.voice=nlVoice;u.rate=0.5;
-    u.onend=()=>{i++;if(i<words.length)setTimeout(next,750);else{row.classList.remove('playing');if(typeof clearBubble==='function')setTimeout(()=>clearBubble(row),2000);}};
-    u.onerror=()=>{row.classList.remove('playing');if(typeof clearBubble==='function')clearBubble(row);};
-    window.speechSynthesis.speak(u);
-  }
-  next();
-}
 </script>
 </body>
 </html>
