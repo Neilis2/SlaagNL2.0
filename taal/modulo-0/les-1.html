@@ -495,7 +495,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
 </div>
 
 <script>let nlVoice=null;
-function loadNLVoice(){const v=window.speechSynthesis.getVoices();nlVoice=v.find(x=>x.lang==='nl-NL'&&x.localService&&/(google|microsoft)/i.test(x.name))||v.find(x=>x.lang==='nl-NL'&&x.localService)||v.find(x=>x.lang==='nl-NL'&&/(google|microsoft)/i.test(x.name))||v.find(x=>x.lang==='nl-NL')||v.find(x=>x.lang.startsWith('nl'))||null;}
+function loadNLVoice(){const v=window.speechSynthesis.getVoices();nlVoice=v.find(x=>x.lang==='nl-NL'&&x.localService)||v.find(x=>x.lang==='nl-NL')||v.find(x=>x.lang.startsWith('nl'))||null;}
 if(window.speechSynthesis.onvoiceschanged!==undefined)window.speechSynthesis.onvoiceschanged=loadNLVoice;
 loadNLVoice();
 
@@ -504,30 +504,30 @@ loadNLVoice();
 // ══════════════════════════════════════
 const ALPHABET = [
   { l:'A a', name:'A',    ph:'Aa',           speak:'a',           note:null },
-  { l:'B b', name:'Bee',  ph:'Bei',          speak:'bei',         note:null },
-  { l:'C c', name:'Cee',  ph:'Cei',          speak:'cei',         note:'Suena como S antes de E/I, como K antes de A/O/U. Ej: cel (sel) · café (kafé)' },
-  { l:'D d', name:'Dee',  ph:'Dei',          speak:'dei',         note:'Al final de palabra suena T. Ej: land → lant · hond → hont' },
-  { l:'E e', name:'Ee',   ph:'Ee (cerrada)', speak:'ei',          note:'La E neerlandesa es más cerrada que la española, casi como "ei" corta.' },
+  { l:'B b', name:'Bee',  ph:'Bei',          speak:'be',          note:null },
+  { l:'C c', name:'Cee',  ph:'Cei',          speak:'ce',          note:'Suena como S antes de E/I, como K antes de A/O/U. Ej: cel (sel) · café (kafé)' },
+  { l:'D d', name:'Dee',  ph:'Dei',          speak:'de',          note:'Al final de palabra suena T. Ej: land → lant · hond → hont' },
+  { l:'E e', name:'Ee',   ph:'Ee (cerrada)', speak:'e',           note:'La E neerlandesa es más cerrada que la española, casi como "ei" corta.' },
   { l:'F f', name:'Ef',   ph:'Ef',           speak:'ef',          note:null },
-  { l:'G g', name:'Gee',  ph:'Jei (gutural)', speak:'gei',        note:'Sonido gutural de la garganta, como la J de "jardín". Ej: goed → jut · gaan → jaan' },
+  { l:'G g', name:'Gee',  ph:'Jei (gutural)', speak:'ge',         note:'Sonido gutural de la garganta, como la J de "jardín". Ej: goed → jut · gaan → jaan' },
   { l:'H h', name:'Ha',   ph:'Ha (aspirada)', speak:'ha',         note:'Se pronuncia como una H aspirada suave, parecida a la J muy suave de "hijo". No es muda como en español.' },
   { l:'I i', name:'I',    ph:'I (corta)',     speak:'i',           note:'La I corta es breve. La IE larga suena como I española larga. Ej: fiets → fits' },
-  { l:'J j', name:'Jee',  ph:'Yei',          speak:'jei',         note:'Se pronuncia como la Y española de "yema" o "yo". NUNCA como la J española. Ej: ja → ya · jij → yay' },
+  { l:'J j', name:'Jee',  ph:'Yei',          speak:'je',          note:'Se pronuncia como la Y española de "yema" o "yo". NUNCA como la J española. Ej: ja → ya · jij → yay' },
   { l:'K k', name:'Ka',   ph:'Ka',           speak:'ka',          note:null },
   { l:'L l', name:'El',   ph:'El',           speak:'el',          note:null },
   { l:'M m', name:'Em',   ph:'Em',           speak:'em',          note:null },
   { l:'N n', name:'En',   ph:'En',           speak:'en',          note:'Al final de palabra la N casi no se pronuncia. Ej: hebben → HEB-be' },
-  { l:'O o', name:'Oo',   ph:'Oo',           speak:'oo',          note:null },
-  { l:'P p', name:'Pee',  ph:'Pei',          speak:'pei',         note:null },
-  { l:'Q q', name:'Ku',   ph:'Kü',           speak:'qu',          note:'Labios en forma de O pero lengua en posición de E. Sonido entre K y KW. Muy rara en neerlandés.' },
+  { l:'O o', name:'Oo',   ph:'Oo',           speak:'o',           note:null },
+  { l:'P p', name:'Pee',  ph:'Pei',          speak:'pe',          note:null },
+  { l:'Q q', name:'Ku',   ph:'Kü',           speak:'ku',          note:'Labios en forma de O pero lengua en posición de E. Sonido entre K y KW. Muy rara en neerlandés.' },
   { l:'R r', name:'Er',   ph:'Er',           speak:'er',          note:'La R neerlandesa es suave, casi gutural o rodada suave. Diferente a la R española vibrante fuerte.' },
   { l:'S s', name:'Es',   ph:'Es',           speak:'es',          note:null },
-  { l:'T t', name:'Tee',  ph:'Tei',          speak:'tei',         note:null },
+  { l:'T t', name:'Tee',  ph:'Tei',          speak:'te',          note:null },
   { l:'U u', name:'U',    ph:'Ü (silbada)',  speak:'u',           note:'Como la Ü alemana: labios redondeados en O pero pronuncia E. Diferente a la U española normal.' },
-  { l:'V v', name:'Vee',  ph:'Fei',          speak:'vei',         note:'Se pronuncia como F suave, casi entre F y V. Ej: vader → faader · van → fan · veel → feel' },
-  { l:'W w', name:'Wee',  ph:'Vei',          speak:'wei',         note:'Se pronuncia como V española suave, labial. Ej: wonen → vonen · water → vaater' },
+  { l:'V v', name:'Vee',  ph:'Fei',          speak:'ve',          note:'Se pronuncia como F suave, casi entre F y V. Ej: vader → faader · van → fan · veel → feel' },
+  { l:'W w', name:'Wee',  ph:'Vei',          speak:'we',          note:'Se pronuncia como V española suave, labial. Ej: wonen → vonen · water → vaater' },
   { l:'X x', name:'Ix',   ph:'Iks',          speak:'ix',          note:'Muy rara en neerlandés. Suena como KS. Solo en palabras extranjeras.' },
-  { l:'Y y', name:'Ypsilon / Griekse IJ', ph:'I-Griekse', speak:'ypsilon', note:'Se llama "Griekse IJ" (Y griega). Muy rara en neerlandés nativo. Solo en palabras extranjeras como "yoghurt".' },
+  { l:'Y y', name:'Ypsilon / Griekse IJ', ph:'I-Griekse', speak:'y', note:'Se llama "Griekse IJ" (Y griega). Muy rara en neerlandés nativo. Solo en palabras extranjeras como "yoghurt".' },
   { l:'Z z', name:'Zet',  ph:'Set',          speak:'zet',         note:'Se pronuncia como S, NO como la Z española (que no existe en neerlandés). Ej: zijn → zain (suena casi "sain")' },
 ];
 
@@ -608,7 +608,7 @@ function buildAlphabet(){
 function tapLetter(item, idx){
   // Speak
   const utter=new SpeechSynthesisUtterance(item.speak);
-  utter.lang='nl-NL';if(nlVoice)utter.voice=nlVoice; utter.rate=0.65; utter.pitch=1;
+  utter.lang='nl-NL';if(nlVoice)utter.voice=nlVoice; utter.rate=0.8; utter.pitch=1;
   window.speechSynthesis.cancel();
   window.speechSynthesis.speak(utter);
 
@@ -623,7 +623,7 @@ function tapLetter(item, idx){
     if(bubble){
       bubble.classList.add('show');
       clearTimeout(noteTimers[idx]);
-      noteTimers[idx]=setTimeout(()=>bubble.classList.remove('show'), 4000);
+      noteTimers[idx]=setTimeout(()=>bubble.classList.remove('show'), 3500);
     }
   }
 }
@@ -635,25 +635,19 @@ function speakPron(text, pron, rowEl){
   window.speechSynthesis.cancel();
   if(currentPronRow) clearPronBubble(currentPronRow);
 
+  const utter=new SpeechSynthesisUtterance(text);
+  utter.lang='nl-NL';if(nlVoice)utter.voice=nlVoice; utter.rate=0.8;
   showPronBubble(rowEl, pron);
   rowEl.classList.add('playing');
   currentPronRow=rowEl;
 
-  const words=text.trim().split(/\s+/);
-  function speakWord(idx){
-    if(idx>=words.length){
-      rowEl.classList.remove('playing');
-      clearTimeout(pronTimers['row']);
-      pronTimers['row']=setTimeout(()=>clearPronBubble(rowEl), 2000);
-      return;
-    }
-    const utter=new SpeechSynthesisUtterance(words[idx]);
-    utter.lang='nl-NL';if(nlVoice)utter.voice=nlVoice; utter.rate=0.65;
-    utter.onend=()=>{ setTimeout(()=>speakWord(idx+1), idx<words.length-1?750:0); };
-    utter.onerror=()=>{ rowEl.classList.remove('playing'); clearPronBubble(rowEl); };
-    window.speechSynthesis.speak(utter);
-  }
-  speakWord(0);
+  utter.onend=()=>{
+    rowEl.classList.remove('playing');
+    clearTimeout(pronTimers['row']);
+    pronTimers['row']=setTimeout(()=>clearPronBubble(rowEl), 2000);
+  };
+  utter.onerror=()=>{ rowEl.classList.remove('playing'); clearPronBubble(rowEl); };
+  window.speechSynthesis.speak(utter);
 }
 
 function showPronBubble(el, text){
@@ -677,7 +671,7 @@ function speakExample(text, pron, rowEl){
   if(currentPronRow) clearPronBubble(currentPronRow);
 
   const utter=new SpeechSynthesisUtterance(text);
-  utter.lang='nl-NL';if(nlVoice)utter.voice=nlVoice; utter.rate=0.65;
+  utter.lang='nl-NL';if(nlVoice)utter.voice=nlVoice; utter.rate=0.8;
   showPronBubble(rowEl, pron);
   rowEl.classList.add('playing');
   currentPronRow=rowEl;

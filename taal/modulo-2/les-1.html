@@ -299,11 +299,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
   <div class="card">
     <div class="card-body" style="padding-bottom:8px"><div class="section-label">✅ Frases — toca 🔊 para escuchar · 🐢 para lento</div></div>
     <div class="phrase-list" style="padding-top:0">
-            <div class="phrase-row" onclick="speak('Zij werkt in Amsterdam elke dag','zij WERKT in am-ster-DAM',this)">
+            <div class="phrase-row" onclick="speak('Zij woont in Amsterdam elke dag','zij WOONT in am-ster-DAM',this)">
         <div class="pron-bubble"></div><div class="phrase-icon">🏠</div>
-        <div class="phrase-content"><div class="phrase-nl">Zij werkt in Amsterdam elke dag.</div><div class="phrase-es">Ella trabaja en Ámsterdam cada día. — sujeto primero</div></div>
+        <div class="phrase-content"><div class="phrase-nl">Zij woont in Amsterdam elke dag.</div><div class="phrase-es">Ella vive en Ámsterdam cada día. — sujeto primero</div></div>
         <div class="phrase-btns">
-          <div class="phrase-speed" onclick="event.stopPropagation();speak('Zij werkt in Amsterdam elke dag','zij WERKT in am-ster-DAM',this.closest('.phrase-row'),0.5)" title="Lento">🐢</div>
+          <div class="phrase-speed" onclick="event.stopPropagation();speak('Zij woont in Amsterdam elke dag','zij WOONT in am-ster-DAM',this.closest('.phrase-row'),0.5)" title="Lento">🐢</div>
           <div class="phrase-sound-btn">🔊</div>
         </div>
       </div>
@@ -377,7 +377,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
   <button class="btn-continue" onclick="window.location.href='les-2.html'">Continuar → La Inversión →</button>
 </div>
 <script>let nlVoice=null;
-function loadNLVoice(){const v=window.speechSynthesis.getVoices();nlVoice=v.find(x=>x.lang==='nl-NL'&&x.localService&&/(google|microsoft)/i.test(x.name))||v.find(x=>x.lang==='nl-NL'&&x.localService)||v.find(x=>x.lang==='nl-NL'&&/(google|microsoft)/i.test(x.name))||v.find(x=>x.lang==='nl-NL')||v.find(x=>x.lang.startsWith('nl'))||null;}
+function loadNLVoice(){const v=window.speechSynthesis.getVoices();nlVoice=v.find(x=>x.lang==='nl-NL'&&x.localService)||v.find(x=>x.lang==='nl-NL')||v.find(x=>x.lang.startsWith('nl'))||null;}
 if(window.speechSynthesis.onvoiceschanged!==undefined)window.speechSynthesis.onvoiceschanged=loadNLVoice;
 loadNLVoice();
 let currentRow=null,bubbleTimers={};
