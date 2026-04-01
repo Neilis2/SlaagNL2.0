@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="nl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -286,7 +286,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
   <button class="btn-continue" onclick="window.location.href='les-6.html'">Continuar → Primeros verbos →</button>
 </div>
 
-<script>
+<script>let nlVoice=null;
+function loadNLVoice(){const v=window.speechSynthesis.getVoices();nlVoice=v.find(x=>x.lang==='nl-NL'&&x.localService)||v.find(x=>x.lang==='nl-NL')||v.find(x=>x.lang.startsWith('nl'))||null;}
+if(window.speechSynthesis.onvoiceschanged!==undefined)window.speechSynthesis.onvoiceschanged=loadNLVoice;
+loadNLVoice();
+
 // SENTENCES DATA
 const SENTENCES = [
   { id:'sv1', words:[
@@ -325,7 +329,7 @@ let currentRow=null;
 function speakWord(text, el) {
   window.speechSynthesis.cancel();
   const utter=new SpeechSynthesisUtterance(text);
-  utter.lang='nl-NL'; utter.rate=0.85;
+  utter.lang='nl-NL';if(nlVoice)utter.voice=nlVoice; utter.rate=0.85;
   el.style.transform='scale(0.94)';
   setTimeout(()=>el.style.transform='',200);
   window.speechSynthesis.speak(utter);

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="nl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -564,7 +564,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
   <button class="btn-continue" onclick="window.location.href='../modulo-1/index.html'">Continuar → Módulo 1: Artículos 🚀</button>
 </div>
 
-<script>
+<script>let nlVoice=null;
+function loadNLVoice(){const v=window.speechSynthesis.getVoices();nlVoice=v.find(x=>x.lang==='nl-NL'&&x.localService)||v.find(x=>x.lang==='nl-NL')||v.find(x=>x.lang.startsWith('nl'))||null;}
+if(window.speechSynthesis.onvoiceschanged!==undefined)window.speechSynthesis.onvoiceschanged=loadNLVoice;
+loadNLVoice();
+
 const EXERCISES = {
   1:{ answer:['Waar','woont','u?'], options:['woont','Waar','wonen','u?','ik'] },
   2:{ answer:['Wat','is','uw','beroep?'], options:['uw','Wat','beroep?','is','werk'] },
@@ -585,7 +589,7 @@ function speak(text,pron,rowEl){
   window.speechSynthesis.cancel();
   if(currentRow) clearBubble(currentRow);
   const utter=new SpeechSynthesisUtterance(text);
-  utter.lang='nl-NL'; utter.rate=0.85;
+  utter.lang='nl-NL';if(nlVoice)utter.voice=nlVoice; utter.rate=0.85;
   showBubble(rowEl,pron); rowEl.classList.add('playing'); currentRow=rowEl;
   utter.onend=()=>{ rowEl.classList.remove('playing'); clearTimeout(bubbleTimers['r']); bubbleTimers['r']=setTimeout(()=>clearBubble(rowEl),2000); };
   utter.onerror=()=>{ rowEl.classList.remove('playing'); clearBubble(rowEl); };

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="nl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -491,7 +491,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
   </button>
 </div>
 
-<script>
+<script>let nlVoice=null;
+function loadNLVoice(){const v=window.speechSynthesis.getVoices();nlVoice=v.find(x=>x.lang==='nl-NL'&&x.localService)||v.find(x=>x.lang==='nl-NL')||v.find(x=>x.lang.startsWith('nl'))||null;}
+if(window.speechSynthesis.onvoiceschanged!==undefined)window.speechSynthesis.onvoiceschanged=loadNLVoice;
+loadNLVoice();
+
 // ══════ PRONOUN DATA ══════
 const PRONOUNS = [
   { nl:'ik',     weak:null,   es:'yo',              person:'1ª singular', speak:'ik',     pron:'ik' },
@@ -547,7 +551,7 @@ function speak(text, pron, rowEl) {
   window.speechSynthesis.cancel();
   if (currentRow) clearBubble(currentRow);
   const utter = new SpeechSynthesisUtterance(text);
-  utter.lang = 'nl-NL'; utter.rate = 0.85;
+  utter.lang = 'nl-NL';if(nlVoice)utter.voice=nlVoice; utter.rate = 0.85;
   showBubble(rowEl, pron);
   rowEl.classList.add('playing');
   currentRow = rowEl;
@@ -598,7 +602,7 @@ let pronTimers = {};
 function tapPronoun(p, idx, card) {
   window.speechSynthesis.cancel();
   const utter = new SpeechSynthesisUtterance(p.speak);
-  utter.lang = 'nl-NL'; utter.rate = 0.8;
+  utter.lang = 'nl-NL';if(nlVoice)utter.voice=nlVoice; utter.rate = 0.8;
   window.speechSynthesis.speak(utter);
 
   card.classList.add('playing');
