@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SlaagNL — Números y Tiempo · Les 4</title>
+<title>SlaagNL — Números y Tiempo · Les 3</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--navy:#0d1f3c;--navy2:#162d54;--navy3:#1e3a6e;--orange:#f47c3a;--cream:#fdf6ec;--green:#2ecc8a;--red:#e8455a;--purple:#a78bfa;--blue:#60a5fa;--yellow:#f4c842;--border:rgba(255,255,255,0.07);--ease:0.22s cubic-bezier(0.4,0,0.2,1);}
@@ -89,96 +89,61 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
   <button class="btn-back" onclick="window.location.href='index.html'">‹</button>
   <div class="header-info">
     <div class="header-sup">Números y Tiempo</div>
-    <div class="header-title">Días de la Semana</div>
+    <div class="header-title">La Hora</div>
   </div>
-  <div class="header-count">Les 4 / 7</div>
+  <div class="header-count">Les 3 / 7</div>
 </div>
 <div class="progress-wrap"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
 <div class="main" id="main-content">
 
   <div class="card lesson-intro">
-    <div class="lesson-tag">📖 Lección 4</div>
-    <div class="lesson-title">Días de la Semana</div>
-    <div class="lesson-desc">Los siete días de la semana en neerlandés. La semana empieza el lunes (maandag). Aprende a decir qué día es y cuándo tienes cosas.</div>
+    <div class="lesson-tag">📖 Lección 3</div>
+    <div class="lesson-title">La Hora</div>
+    <div class="lesson-desc">En neerlandés la hora funciona diferente. El "half" (media) va referido a la hora siguiente, no a la anterior.</div>
   </div>
 
   <div class="card">
     <div class="card-body" style="padding-bottom:8px"><div class="section-label">✅ Frases clave — toca para escuchar</div></div>
     <div class="phrase-list" style="padding-top:0">
-      <div class="phrase-row" onclick="speakRow('Vandaag is het maandag',this)">
-        <div class="phrase-icon">📅</div>
-        <div class="phrase-content"><div class="phrase-nl">Vandaag is het maandag.</div><div class="phrase-es">Hoy es lunes.</div></div>
+      <div class="phrase-row" onclick="speakRow('Hoe laat is het',this)">
+        <div class="phrase-icon">⏰</div>
+        <div class="phrase-content"><div class="phrase-nl">Hoe laat is het?</div><div class="phrase-es">¿Qué hora es?</div></div>
         <div class="play-btn">▶</div>
       </div>
-      <div class="phrase-row" onclick="speakRow('Op woensdag werk ik thuis',this)">
-        <div class="phrase-icon">🏠</div>
-        <div class="phrase-content"><div class="phrase-nl">Op woensdag werk ik thuis.</div><div class="phrase-es">El miércoles trabajo desde casa.</div></div>
+      <div class="phrase-row" onclick="speakRow('Het is twee uur',this)">
+        <div class="phrase-icon">🕑</div>
+        <div class="phrase-content"><div class="phrase-nl">Het is twee uur.</div><div class="phrase-es">Son las dos.</div></div>
         <div class="play-btn">▶</div>
       </div>
-      <div class="phrase-row" onclick="speakRow('Zaterdag ga ik naar de markt',this)">
-        <div class="phrase-icon">🛒</div>
-        <div class="phrase-content"><div class="phrase-nl">Zaterdag ga ik naar de markt.</div><div class="phrase-es">El sábado voy al mercado.</div></div>
+      <div class="phrase-row" onclick="speakRow('Het is kwart over drie',this)">
+        <div class="phrase-icon">🕒</div>
+        <div class="phrase-content"><div class="phrase-nl">Het is kwart over drie.</div><div class="phrase-es">Son las tres y cuarto.</div></div>
         <div class="play-btn">▶</div>
       </div>
-      <div class="phrase-row" onclick="speakRow('Op vrijdag hebben we een afspraak',this)">
-        <div class="phrase-icon">📋</div>
-        <div class="phrase-content"><div class="phrase-nl">Op vrijdag hebben we een afspraak.</div><div class="phrase-es">El viernes tenemos una cita.</div></div>
+      <div class="phrase-row" onclick="speakRow('Het is half vijf',this)">
+        <div class="phrase-icon">🕓</div>
+        <div class="phrase-content"><div class="phrase-nl">Het is half vijf.</div><div class="phrase-es">Son las cuatro y media (half cinco).</div></div>
         <div class="play-btn">▶</div>
       </div>
-      <div class="phrase-row" onclick="speakRow('Morgen is het dinsdag',this)">
-        <div class="phrase-icon">☀️</div>
-        <div class="phrase-content"><div class="phrase-nl">Morgen is het dinsdag.</div><div class="phrase-es">Mañana es martes.</div></div>
+      <div class="phrase-row" onclick="speakRow('Het is kwart voor zes',this)">
+        <div class="phrase-icon">🕔</div>
+        <div class="phrase-content"><div class="phrase-nl">Het is kwart voor zes.</div><div class="phrase-es">Son las seis menos cuarto.</div></div>
+        <div class="play-btn">▶</div>
+      </div>
+      <div class="phrase-row" onclick="speakRow('Het is tien over acht',this)">
+        <div class="phrase-icon">🕗</div>
+        <div class="phrase-content"><div class="phrase-nl">Het is tien over acht.</div><div class="phrase-es">Son las ocho y diez.</div></div>
         <div class="play-btn">▶</div>
       </div>
     </div>
     <div class="tip-toggle" id="tip1-toggle" onclick="toggleTip('tip1')">
       <div class="bulb-wrap"><span class="bulb-icon">💡</span><div class="bulb-glow"></div></div>
-      <span class="tip-label">Op + día para decir "el lunes"</span>
+      <span class="tip-label">El truco del "half"</span>
       <span class="tip-arrow">▾</span>
     </div>
-    <div class="tip-content" id="tip1-content">Para decir que algo ocurre un día específico usa <strong>op</strong>: <em>op maandag</em> = el lunes.<br>Para decir "los lunes" (habitualmente): <em>op maandag</em> también.<br>Ayer = <strong>gisteren</strong> · hoy = <strong>vandaag</strong> · mañana = <strong>morgen</strong>.</div>
+    <div class="tip-content" id="tip1-content"><strong>half twee</strong> = las 13:30 (no las 2:30). El "half" indica media hora ANTES de la siguiente hora.<br>Entonces: half drie = 2:30 · half tien = 9:30 · half twaalf = 11:30.<br><strong>kwart over</strong> = cuarto pasado · <strong>kwart voor</strong> = cuarto para.</div>
   </div>
 
-  <div class="card">
-    <div class="card-body" style="padding-bottom:8px"><div class="section-label">📅 Los siete días — toca para escuchar</div></div>
-    <div class="phrase-list" style="padding-top:0">
-      <div class="phrase-row" onclick="speakRow('Maandag',this)">
-        <div class="phrase-icon">📅</div>
-        <div class="phrase-content"><div class="phrase-nl"><strong>Maandag</strong></div><div class="phrase-es">lunes — MAANdag</div></div>
-        <div class="play-btn">▶</div>
-      </div>
-      <div class="phrase-row" onclick="speakRow('Dinsdag',this)">
-        <div class="phrase-icon">📅</div>
-        <div class="phrase-content"><div class="phrase-nl"><strong>Dinsdag</strong></div><div class="phrase-es">martes — DINSdag</div></div>
-        <div class="play-btn">▶</div>
-      </div>
-      <div class="phrase-row" onclick="speakRow('Woensdag',this)">
-        <div class="phrase-icon">📅</div>
-        <div class="phrase-content"><div class="phrase-nl"><strong>Woensdag</strong></div><div class="phrase-es">miércoles — WUNSdag</div></div>
-        <div class="play-btn">▶</div>
-      </div>
-      <div class="phrase-row" onclick="speakRow('Donderdag',this)">
-        <div class="phrase-icon">📅</div>
-        <div class="phrase-content"><div class="phrase-nl"><strong>Donderdag</strong></div><div class="phrase-es">jueves — DONderdag</div></div>
-        <div class="play-btn">▶</div>
-      </div>
-      <div class="phrase-row" onclick="speakRow('Vrijdag',this)">
-        <div class="phrase-icon">📅</div>
-        <div class="phrase-content"><div class="phrase-nl"><strong>Vrijdag</strong></div><div class="phrase-es">viernes — FRAIdag</div></div>
-        <div class="play-btn">▶</div>
-      </div>
-      <div class="phrase-row" onclick="speakRow('Zaterdag',this)">
-        <div class="phrase-icon">📅</div>
-        <div class="phrase-content"><div class="phrase-nl"><strong>Zaterdag</strong></div><div class="phrase-es">sábado — SAATerdag</div></div>
-        <div class="play-btn">▶</div>
-      </div>
-      <div class="phrase-row" onclick="speakRow('Zondag',this)">
-        <div class="phrase-icon">📅</div>
-        <div class="phrase-content"><div class="phrase-nl"><strong>Zondag</strong></div><div class="phrase-es">domingo — ZONdag</div></div>
-        <div class="play-btn">▶</div>
-      </div>
-    </div>
-  </div>
   <div class="card">
     <div class="exercise-card">
       <div class="exercise-label">✏️ Ejercicio</div>
@@ -202,15 +167,15 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
 </div>
 
 <div class="complete-screen" id="complete-screen">
-  <div class="complete-emoji">📅</div>
+  <div class="complete-emoji">🕐</div>
   <div class="complete-title">¡Lección completada!</div>
-  <div class="complete-sub">Ya conoces los días de la semana.</div>
-  <button class="btn-continue" onclick="window.location.href='les-5.html'">Continuar → Meses del Año →</button>
+  <div class="complete-sub">Ya sabes decir la hora en neerlandés.</div>
+  <button class="btn-continue" onclick="window.location.href='les-4.html'">Continuar → Días de la Semana →</button>
 </div>
 
 <script>
-const EX=[{"q": "¿Cómo se dice "miércoles"?", "opts": ["dinsdag", "woensdag", "donderdag", "vrijdag"], "correct": 1, "fb": "✅ woensdag = miércoles"}, {"q": "¿Cuál es el primer día de la semana holandesa?", "opts": ["zondag", "zaterdag", "maandag", "dinsdag"], "correct": 2, "fb": "✅ maandag = lunes. La semana neerlandesa empieza el lunes."}, {"q": ""Op zaterdag..." significa...", "opts": ["el viernes", "el sábado", "el domingo", "los sábados"], "correct": 1, "fb": "✅ op zaterdag = el sábado (o los sábados habitualmente)."}, {"q": "¿Cómo se dice "el jueves"?", "opts": ["woensdag", "vrijdag", "donderdag", "dinsdag"], "correct": 2, "fb": "✅ donderdag = jueves"}];
-const CHALLENGES=[{"q": "¿Cuál es el orden correcto de los días?", "opts": ["ma-di-wo-do-vr-za-zo", "zo-ma-di-wo-do-vr-za", "ma-wo-di-do-vr-za-zo", "di-wo-do-ma-vr-za-zo"], "correct": 0, "fb": "✅ ma(andag)-di(nsdag)-wo(ensdag)-do(nderdag)-vr(ijdag)-za(terdag)-zo(ndag)"}, {"q": ""Op donderdag heb ik Nederlands" — ¿qué día?", "opts": ["miércoles", "jueves", "viernes", "martes"], "correct": 1, "fb": "✅ donderdag = jueves. Op donderdag = el jueves."}];
+const EX=[{"q": "¿Qué significa "half vier"?", "opts": ["Las 4:30", "Las 3:30", "Las 4:00", "Las 3:00"], "correct": 1, "fb": "✅ half vier = 3:30 — media hora antes de las cuatro."}, {"q": ""Kwart over twee" significa...", "opts": ["Las 2:45", "Las 2:15", "Las 1:45", "Las 2:30"], "correct": 1, "fb": "✅ kwart over twee = 2:15 — cuarto pasado las dos."}, {"q": "¿Cómo se dice "son las 5 menos cuarto"?", "opts": ["kwart over vijf", "kwart voor vijf", "half vijf", "vijf voor half"], "correct": 1, "fb": "✅ kwart voor vijf = cuarto para las cinco = 4:45."}, {"q": ""Het is tien voor half drie" es...", "opts": ["2:20", "2:40", "2:10", "3:20"], "correct": 0, "fb": "✅ tien voor half drie = 10 minutos antes de las 2:30 = 2:20."}];
+const CHALLENGES=[{"q": "¿Cómo se dice "son las 7:30" en neerlandés?", "opts": ["zeven en half", "half zeven", "half acht", "kwart over zeven"], "correct": 2, "fb": "✅ half acht = 7:30 — media hora ANTES de las ocho, no de las siete."}, {"q": "¿Qué hora indica "kwart voor tien"?", "opts": ["10:15", "10:45", "9:45", "9:15"], "correct": 2, "fb": "✅ kwart voor tien = 9:45 — cuarto de hora para las diez."}];
 
 let exCorrect=0,exDone=false,chIdx=0,chDone=false,currentRow=null;
 let nlVoice=null;
@@ -255,8 +220,8 @@ function answerCh(cIdx,optIdx,btn){
   setTimeout(()=>{chIdx++;showChallenge(chIdx);},2200);
 }
 function checkUnlock(){let p=0;if(exDone)p+=50;if(chDone)p+=50;document.getElementById('progress-fill').style.width=p+'%';if(exDone&&chDone)document.getElementById('btn-next').classList.add('unlocked');}
-function goNext(){localStorage.setItem('slaagnl_m3_4','done');document.getElementById('main-content').style.display='none';document.getElementById('complete-screen').classList.add('show');}
-function restoreProgress(){if(localStorage.getItem('slaagnl_m3_4')==='done'){exDone=true;chDone=true;checkUnlock();}}
+function goNext(){localStorage.setItem('slaagnl_m3_3','done');document.getElementById('main-content').style.display='none';document.getElementById('complete-screen').classList.add('show');}
+function restoreProgress(){if(localStorage.getItem('slaagnl_m3_3')==='done'){exDone=true;chDone=true;checkUnlock();}}
 buildEx();buildChallenge();restoreProgress();
 
 </script>
