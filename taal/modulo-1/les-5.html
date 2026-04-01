@@ -113,8 +113,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
 .complete-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--cream);margin-bottom:4px;}
 .complete-sub{font-size:15px;color:rgba(253,246,236,0.5);line-height:1.6;max-width:280px;}
 .btn-continue{margin-top:16px;padding:16px 32px;background:var(--orange);border:none;border-radius:14px;color:white;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;}
-.btn-lento{background:none;border:none;cursor:pointer;font-size:16px;padding:2px;line-height:1;opacity:0.85;vertical-align:middle;flex-shrink:0;}
-.btn-lento:active{opacity:0.5;}
 </style>
 </head>
 <body>
@@ -159,16 +157,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
   <div class="card">
     <div class="card-body" style="padding-bottom:8px"><div class="section-label">✅ Diminutivos más comunes — toca para escuchar</div></div>
     <div class="phrase-list" style="padding-top:0">
-      <div class="phrase-row" onclick="speak('een kopje koffie','en KOP-ye KO-fi',this)"><div class="pron-bubble"></div><div class="phrase-icon">☕</div><div class="phrase-content"><div class="phrase-nl">een <span class="het">kopje</span> koffie</div><div class="phrase-es">una tacita de café</div></div><div class="phrase-sound-btn">▶️</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
-      <div class="phrase-row" onclick="speak('het meisje','het MAIS-ye',this)"><div class="pron-bubble"></div><div class="phrase-icon">👧</div><div class="phrase-content"><div class="phrase-nl"><span class="het">het</span> meisje</div><div class="phrase-es">la niña / la chica</div></div><div class="phrase-sound-btn">▶️</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
-      <div class="phrase-row" onclick="speak('het jongetje','het YONG-e-tye',this)"><div class="pron-bubble"></div><div class="phrase-icon">👦</div><div class="phrase-content"><div class="phrase-nl"><span class="het">het</span> jongetje</div><div class="phrase-es">el niño pequeño</div></div><div class="phrase-sound-btn">▶️</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
-      <div class="phrase-row" onclick="speak('het huisje','het HOUS-ye',this)"><div class="pron-bubble"></div><div class="phrase-icon">🏡</div><div class="phrase-content"><div class="phrase-nl"><span class="het">het</span> huisje</div><div class="phrase-es">la casita</div></div><div class="phrase-sound-btn">▶️</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
-      <div class="phrase-row" onclick="speak('even een momentje','EI-ven en mo-MENT-ye',this)"><div class="pron-bubble"></div><div class="phrase-icon">⏱️</div><div class="phrase-content"><div class="phrase-nl">even een <span class="het">momentje</span></div><div class="phrase-es">un momentito — expresión muy común</div></div><div class="phrase-sound-btn">▶️</div>
-        <button class="btn-lento" onclick="speakLento(event,this)">🐢</button></div>
+      <div class="phrase-row" onclick="speak('een kopje koffie','en KOP-ye KO-fi',this)"><div class="pron-bubble"></div><div class="phrase-icon">☕</div><div class="phrase-content"><div class="phrase-nl">een <span class="het">kopje</span> koffie</div><div class="phrase-es">una tacita de café</div></div><div class="phrase-sound-btn">🔊</div></div>
+      <div class="phrase-row" onclick="speak('het meisje','het MAIS-ye',this)"><div class="pron-bubble"></div><div class="phrase-icon">👧</div><div class="phrase-content"><div class="phrase-nl"><span class="het">het</span> meisje</div><div class="phrase-es">la niña / la chica</div></div><div class="phrase-sound-btn">🔊</div></div>
+      <div class="phrase-row" onclick="speak('het jongetje','het YONG-e-tye',this)"><div class="pron-bubble"></div><div class="phrase-icon">👦</div><div class="phrase-content"><div class="phrase-nl"><span class="het">het</span> jongetje</div><div class="phrase-es">el niño pequeño</div></div><div class="phrase-sound-btn">🔊</div></div>
+      <div class="phrase-row" onclick="speak('het huisje','het HOUS-ye',this)"><div class="pron-bubble"></div><div class="phrase-icon">🏡</div><div class="phrase-content"><div class="phrase-nl"><span class="het">het</span> huisje</div><div class="phrase-es">la casita</div></div><div class="phrase-sound-btn">🔊</div></div>
+      <div class="phrase-row" onclick="speak('even een momentje','EI-ven en mo-MENT-ye',this)"><div class="pron-bubble"></div><div class="phrase-icon">⏱️</div><div class="phrase-content"><div class="phrase-nl">even een <span class="het">momentje</span></div><div class="phrase-es">un momentito — expresión muy común</div></div><div class="phrase-sound-btn">🔊</div></div>
     </div>
   </div>
 
@@ -222,13 +215,13 @@ let currentRow=null,bubbleTimers={};
 function speak(text,pron,el){
   window.speechSynthesis.cancel();
   if(currentRow)clearBubble(currentRow);
-  const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';if(nlVoice)u.voice=nlVoice;u.rate=0.65;
+  const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';if(nlVoice)u.voice=nlVoice;u.rate=0.85;
   showBubble(el,pron);el.classList.add('playing');currentRow=el;
   u.onend=()=>{el.classList.remove('playing');clearTimeout(bubbleTimers.r);bubbleTimers.r=setTimeout(()=>clearBubble(el),2000);};
   u.onerror=()=>{el.classList.remove('playing');clearBubble(el);};
   window.speechSynthesis.speak(u);
 }
-function speakWord(text){window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';if(nlVoice)u.voice=nlVoice;u.rate=0.65;window.speechSynthesis.speak(u);}
+function speakWord(text){window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='nl-NL';if(nlVoice)u.voice=nlVoice;u.rate=0.85;window.speechSynthesis.speak(u);}
 function showBubble(el,pron){const b=el.querySelector('.pron-bubble');if(!b)return;b.textContent=pron;b.classList.add('show');}
 function clearBubble(el){if(!el)return;el.classList.remove('playing');const b=el.querySelector('.pron-bubble');if(b)b.classList.remove('show');}
 function toggleTip(id){document.getElementById(id+'-toggle').classList.toggle('open');document.getElementById(id+'-content').classList.toggle('open');}
@@ -336,39 +329,6 @@ function checkUnlock(){
 }
 function goNext(){document.getElementById('main-content').style.display='none';document.getElementById('complete-screen').classList.add('show');}
 buildMatch();buildChallenge();
-
-// ══════════════════════════════════════
-// LENTO PLAYBACK
-// ══════════════════════════════════════
-function speakLento(e, btn){
-  e.stopPropagation();
-  const row=btn.closest('[onclick]');
-  if(!row) return;
-  const onclick=row.getAttribute('onclick')||'';
-  const m=onclick.match(/\w+\('([^']+)'(?:,\s*'([^']*)')?/);
-  if(!m) return;
-  const text=m[1], pron=m[2]||'';
-  window.speechSynthesis.cancel();
-  if(typeof currentRow!=='undefined'&&currentRow&&typeof clearBubble==='function') clearBubble(currentRow);
-  row.classList.add('playing');
-  if(typeof currentRow!=='undefined') currentRow=row;
-  if(typeof showBubble==='function'&&pron) showBubble(row,pron);
-  const words=text.split(/\s+/).filter(w=>w.length>0);
-  let i=0;
-  function next(){
-    if(i>=words.length){
-      row.classList.remove('playing');
-      if(typeof clearBubble==='function') setTimeout(()=>clearBubble(row),2000);
-      return;
-    }
-    const u=new SpeechSynthesisUtterance(words[i]);
-    u.lang='nl-NL';if(nlVoice)u.voice=nlVoice;u.rate=0.5;
-    u.onend=()=>{i++;if(i<words.length)setTimeout(next,750);else{row.classList.remove('playing');if(typeof clearBubble==='function')setTimeout(()=>clearBubble(row),2000);}};
-    u.onerror=()=>{row.classList.remove('playing');if(typeof clearBubble==='function')clearBubble(row);};
-    window.speechSynthesis.speak(u);
-  }
-  next();
-}
 </script>
 </body>
 </html>
