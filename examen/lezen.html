@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SlaagNL — Lezen</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0d1f3c;--navy2:#162d54;--navy3:#1e3a6e;--orange:#f47c3a;--cream:#fdf6ec;--green:#2ecc8a;--red:#e8455a;--purple:#a78bfa;--blue:#60a5fa;--yellow:#f4c842;--border:rgba(255,255,255,0.07);--ease:0.22s cubic-bezier(0.4,0,0.2,1);}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
+body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);min-height:100vh;-webkit-font-smoothing:antialiased;}
+.header{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--navy2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;}
+.btn-back{background:none;border:none;color:var(--orange);font-size:24px;cursor:pointer;padding:0 6px 0 0;line-height:1;flex-shrink:0;}
+.header-info{flex:1;}
+.header-sup{font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:1.2px;font-weight:700;}
+.header-title{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--cream);}
+.header-count{font-size:12px;color:rgba(253,246,236,0.45);font-weight:600;flex-shrink:0;}
+.qnav-wrap{background:var(--navy2);border-bottom:1px solid var(--border);padding:10px 14px;overflow-x:auto;scrollbar-width:none;}
+.qnav-wrap::-webkit-scrollbar{display:none;}
+.qnav{display:flex;gap:6px;width:max-content;}
+.qnum{width:30px;height:30px;border-radius:8px;border:1.5px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:rgba(253,246,236,0.4);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all var(--ease);flex-shrink:0;}
+.qnum.answered{background:rgba(244,124,58,0.15);border-color:rgba(244,124,58,0.4);color:var(--orange);}
+.qnum.current{background:var(--orange);border-color:var(--orange);color:white;}
+.main{padding:16px 16px 100px;max-width:600px;margin:0 auto;}
+.text-card{background:var(--navy2);border-radius:18px;border:1px solid var(--border);padding:18px;margin-bottom:14px;}
+.text-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--orange);margin-bottom:8px;}
+.text-type{font-size:11px;color:rgba(253,246,236,0.35);margin-bottom:10px;font-style:italic;}
+.text-content{font-size:13px;line-height:1.75;color:rgba(253,246,236,0.82);background:rgba(255,255,255,0.03);border-radius:12px;padding:14px 16px;border-left:3px solid rgba(244,124,58,0.3);}
+.text-content strong{color:var(--orange);}
+.q-card{background:var(--navy2);border-radius:18px;border:1px solid var(--border);overflow:hidden;margin-bottom:14px;}
+.q-header{padding:16px 18px 12px;display:flex;align-items:flex-start;gap:12px;}
+.q-num-badge{background:rgba(96,165,250,0.12);border:1px solid rgba(96,165,250,0.25);color:var(--blue);font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;flex-shrink:0;margin-top:2px;}
+.q-text{font-size:15px;font-weight:600;color:var(--cream);line-height:1.5;flex:1;}
+.q-opts{padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px;}
+.opt{display:flex;align-items:center;gap:12px;padding:13px 16px;border-radius:14px;border:1.5px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);cursor:pointer;transition:all var(--ease);user-select:none;}
+.opt:active{transform:scale(0.98);}
+.opt.selected{border-color:var(--orange);background:rgba(244,124,58,0.1);}
+.opt-label{width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:rgba(253,246,236,0.5);flex-shrink:0;}
+.opt.selected .opt-label{background:var(--orange);border-color:var(--orange);color:white;}
+.opt-text{font-size:14px;font-weight:500;color:var(--cream);line-height:1.4;flex:1;}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--navy2);border-top:1px solid var(--border);padding:12px 16px;display:flex;gap:10px;max-width:600px;margin:0 auto;}
+.btn-nav{flex:1;padding:13px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;border:none;}
+.btn-prev{background:rgba(255,255,255,0.06);color:rgba(253,246,236,0.6);border:1.5px solid rgba(255,255,255,0.1);}
+.btn-next-q{background:var(--navy3);color:var(--cream);border:1.5px solid rgba(255,255,255,0.12);}
+.btn-finish{background:var(--orange);color:white;}
+.results-screen{display:none;flex-direction:column;align-items:center;padding:24px 20px 80px;max-width:600px;margin:0 auto;}
+.results-screen.show{display:flex;}
+.results-emoji{font-size:64px;margin-bottom:8px;}
+.results-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:var(--cream);margin-bottom:6px;text-align:center;}
+.results-score{font-family:'Playfair Display',serif;font-size:48px;font-weight:900;color:var(--orange);margin:8px 0;}
+.results-bar-wrap{width:100%;height:10px;background:rgba(255,255,255,0.08);border-radius:99px;overflow:hidden;margin-bottom:6px;}
+.results-bar{height:100%;border-radius:99px;}
+.results-bar.pass{background:linear-gradient(90deg,var(--green),#1da86a);}
+.results-bar.fail{background:linear-gradient(90deg,var(--red),#c23348);}
+.results-verdict{font-size:13px;font-weight:700;margin-bottom:24px;}
+.results-verdict.pass{color:var(--green);}
+.results-verdict.fail{color:var(--red);}
+.results-breakdown{width:100%;background:var(--navy2);border-radius:16px;border:1px solid var(--border);overflow:hidden;margin-bottom:20px;}
+.breakdown-row{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border);font-size:13px;}
+.breakdown-row:last-child{border-bottom:none;}
+.breakdown-label{color:rgba(253,246,236,0.6);}
+.breakdown-val{font-weight:700;color:var(--cream);}
+.breakdown-val.ok{color:var(--green);}.breakdown-val.err{color:var(--red);}
+.btn-retry{padding:16px 32px;background:var(--orange);border:none;border-radius:14px;color:white;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:12px;width:100%;}
+.btn-back-home{padding:14px;background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.1);border-radius:14px;color:var(--cream);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;width:100%;}
+.timer-toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-80px);background:var(--navy3);border:1px solid rgba(244,196,58,0.4);color:var(--yellow);font-size:13px;font-weight:700;padding:12px 20px;border-radius:99px;z-index:999;transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1),opacity 0.4s;opacity:0;white-space:nowrap;}
+.timer-toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity 0.25s;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal-box{background:var(--navy2);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:28px 24px;width:100%;max-width:320px;text-align:center;transform:scale(0.92);transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1);}
+.modal-overlay.open .modal-box{transform:scale(1);}
+.modal-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:900;color:var(--cream);margin-bottom:8px;}
+.modal-sub{font-size:13px;color:rgba(253,246,236,0.5);margin-bottom:20px;line-height:1.5;}
+.modal-btns{display:flex;gap:10px;}
+.modal-btn{flex:1;padding:12px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;border:none;}
+.modal-btn.primary{background:var(--orange);color:white;}
+.modal-btn.secondary{background:rgba(255,255,255,0.06);color:var(--cream);border:1px solid var(--border);}
+</style>
+</head>
+<body>
+<div class="header">
+  <button class="btn-back" onclick="confirmExit()">‹</button>
+  <div class="header-info">
+    <div class="header-sup">Examen</div>
+    <div class="header-title">Lezen — Comprensión lectora</div>
+  </div>
+  <div class="header-count" id="hdr-count">1 / 19</div>
+</div>
+
+<div class="qnav-wrap" id="qnav-wrap">
+  <div class="qnav" id="qnav"></div>
+</div>
+
+<div class="main" id="main-content">
+  <div id="text-card-wrap"></div>
+  <div class="q-card" id="q-card"></div>
+</div>
+
+<div class="bottom-nav" id="bottom-nav">
+  <button class="btn-nav btn-prev" id="btn-prev" onclick="goQ(-1)">‹ Anterior</button>
+  <button class="btn-nav btn-next-q" id="btn-next-q" onclick="goQ(1)">Siguiente ›</button>
+  <button class="btn-nav btn-finish" onclick="confirmFinish()">Finalizar</button>
+</div>
+
+<div class="results-screen" id="results-screen"></div>
+<div class="timer-toast" id="timer-toast"></div>
+
+<div class="modal-overlay" id="confirm-modal">
+  <div class="modal-box">
+    <div class="modal-title" id="modal-title">¿Finalizar?</div>
+    <div class="modal-sub" id="modal-sub"></div>
+    <div class="modal-btns">
+      <button class="modal-btn secondary" onclick="closeModal()">Cancelar</button>
+      <button class="modal-btn primary" id="modal-confirm-btn">Finalizar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const TEXTS = [
+  {id:'t1', label:'Werken bij de bakkerij', content:`Bakkerij "Het Volkoren" zoekt een nieuwe medewerker voor de verkoop.<br> * Dagen: Maandag, woensdag en zaterdag.<br> * Tijden: Van 07:00 tot 13:00 uur.<br> * Taken: Brood snijden, klanten helpen en de winkel schoonmaken.<br> * Salaris: € 13,50 per uur.`},
+  {id:'t2', label:'Een afspraak bij de huisarts', content:`<table style="width:100%;border-collapse:collapse">
+    <tr><th style="text-align:left;padding:6px;border-bottom:1px solid rgba(255,255,255,0.12)">Naam patiënt</th><th style="text-align:left;padding:6px;border-bottom:1px solid rgba(255,255,255,0.12)">Datum</th><th style="text-align:left;padding:6px;border-bottom:1px solid rgba(255,255,255,0.12)">Tijd</th><th style="text-align:left;padding:6px;border-bottom:1px solid rgba(255,255,255,0.12)">Dokter</th></tr>
+    <tr><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">Dhr. Bakker</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">12 april</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">09:15</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">Dr. Smit</td></tr>
+    <tr><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">Mevr. Visser</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">12 april</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">10:30</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">Dr. Jones</td></tr>
+    <tr><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">Mevr. Dijk</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">13 april</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">14:00</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">Dr. Smit</td></tr>
+  </table>`},
+  {id:'t3', label:'De supermarkt folder', content:`Aanbiedingen van de week:<br> * Appels: 2 kilo voor € 2,50.<br> * Koffie: Nu 25% korting op alle merken.<br> * Verse vis: Alleen op vrijdag en zaterdag.<br> * Openingstijden: Dagelijks van 08:00 tot 20:00 uur. Op zondag gesloten.`},
+  {id:'t4', label:'Email van de school', content:`Beste ouders,<br>Volgende week vrijdag gaan de kinderen naar het bos. We vertrekken met de bus om 09:00 uur vanaf de hoofdingang. De kinderen moeten stevige schoenen dragen en een regenjas meenemen. De lunch krijgen ze op school, maar ze moeten wel een eigen drinkfles meenemen.<br>Groetjes, Meester Jan.`},
+  {id:'t5', label:'De bibliotheekpas', content:`Je kunt een pas aanvragen bij de balie.<br> * Kinderen (0-18 jaar): Gratis.<br> * Volwassenen: € 45 per jaar.<br> * Boeken lenen: Maximaal 3 weken.<br> * Te laat: € 0,20 per dag per boek.`},
+  {id:'t6', label:'Huisregels in het appartementencomplex', content:`* Geen harde muziek na 22:00 uur.<br>* Fietsen mogen niet in de gang staan, maar in de berging.<br>* Vuilniszakken alleen op dinsdag buiten zetten.<br>* De hoofdingang moet altijd op slot zijn.<br>* Huisdieren zijn toegestaan, maar mogen geen overlast geven.`},
+  {id:'t7', label:'Treintijden naar Utrecht Centraal', content:`<table style="width:100%;border-collapse:collapse">
+    <tr><th style="text-align:left;padding:6px;border-bottom:1px solid rgba(255,255,255,0.12)">Trein</th><th style="text-align:left;padding:6px;border-bottom:1px solid rgba(255,255,255,0.12)">Vertrektijd</th><th style="text-align:left;padding:6px;border-bottom:1px solid rgba(255,255,255,0.12)">Spoor</th><th style="text-align:left;padding:6px;border-bottom:1px solid rgba(255,255,255,0.12)">Status</th></tr>
+    <tr><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">Sprinter</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">08:12</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">4b</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">Op tijd</td></tr>
+    <tr><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">Intercity</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">08:25</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">2</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">5 min. vertraging</td></tr>
+    <tr><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">Sprinter</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">08:42</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">4b</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">Rijdt niet</td></tr>
+  </table>`},
+  {id:'t8', label:'Recept voor Tomatensoep', content:`Ingrediënten: 1 kilo tomaten, 2 uien, 1 liter water, 2 bouillonblokjes.<br>* Snijd de tomaten en de uien in stukjes.<br>* Bak de uien 5 minuten in een grote pan.<br>* Voeg de tomaten en het water toe.<br>* Laat de soep 20 minuten koken.<br>* Gebruik een blender om de soep glad te maken.`},
+  {id:'t9', label:'Te koop: Wasmachine', content:`Ik verkoop mijn wasmachine omdat ik ga verhuizen.<br>* Merk: Bosch.<br>* Leeftijd: 3 jaar oud.<br>* Conditie: Werkt nog heel goed, ziet er netjes uit.<br>* Prijs: € 150.<br>* Ophalen: Zelf ophalen van de 2e verdieping (er is geen lift).`},
+  {id:'t10', label:'Het weerbericht voor morgen', content:`Morgenochtend begint koud met mist. In de middag gaat de zon schijnen en wordt het ongeveer 18 graden. Er staat weinig wind. In de avond gaat het regenen en koelt het af naar 10 graden. Een goede dag voor een wandeling in de middag!`},
+  {id:'t11', label:'Een brief van de bank', content:`Belangrijk bericht: Uw nieuwe bankpas is klaar. U kunt deze ophalen bij ons kantoor in het centrum. Neem een geldig identiteitsbewijs mee. Uw oude pas werkt nog tot volgende week vrijdag. Heeft u vragen? Bel dan naar 0800-1234.`},
+  {id:'t12', label:'In de kledingwinkel', content:`<table style="width:100%;border-collapse:collapse">
+    <tr><th style="text-align:left;padding:6px;border-bottom:1px solid rgba(255,255,255,0.12)">Artikel</th><th style="text-align:left;padding:6px;border-bottom:1px solid rgba(255,255,255,0.12)">Kleur</th><th style="text-align:left;padding:6px;border-bottom:1px solid rgba(255,255,255,0.12)">Maat</th><th style="text-align:left;padding:6px;border-bottom:1px solid rgba(255,255,255,0.12)">Prijs</th></tr>
+    <tr><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">T-shirt</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">Wit / Blauw</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">S, M, L</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">€ 15,00</td></tr>
+    <tr><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">Spijkerbroek</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">Donkerblauw</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">32, 34, 36</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">€ 45,00</td></tr>
+    <tr><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">Jas</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">Zwart</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">M, L, XL</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">€ 80,00</td></tr>
+  </table>`},
+  {id:'t13', label:'Informatie over het Museum', content:`Het museum is geopend van dinsdag tot en met zondag van 10:00 tot 17:00 uur. Op maandag is het museum gesloten. Voor groepen groter dan 10 personen is reserveren verplicht. Parkeren kan gratis achter het gebouw. Honden mogen niet naar binnen.`},
+  {id:'t14', label:'Een brief van de tandarts', content:`Geachte heer/mevrouw,<br>Dit is een herinnering voor uw afspraak op dinsdag 5 november om 11:45 uur. U heeft een afspraak bij mondhygiëniste Sanne. Kunt u niet komen? Bel ons dan minimaal 24 uur van tevoren af. Anders moet u de afspraak betalen.`},
+  {id:'t15', label:'De sportschool "Fit & Fun"', content:`<table style="width:100%;border-collapse:collapse">
+    <tr><th style="text-align:left;padding:6px;border-bottom:1px solid rgba(255,255,255,0.12)">Abonnement</th><th style="text-align:left;padding:6px;border-bottom:1px solid rgba(255,255,255,0.12)">Kosten</th><th style="text-align:left;padding:6px;border-bottom:1px solid rgba(255,255,255,0.12)">Toegang tot</th></tr>
+    <tr><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">Ochtend</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">€ 20 / maand</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">07:00 - 12:00</td></tr>
+    <tr><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">Dag</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">€ 30 / maand</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">07:00 - 17:00</td></tr>
+    <tr><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">Altijd</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">€ 45 / maand</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">07:00 - 23:00</td></tr>
+  </table>`},
+  {id:'t16', label:'Brandveiligheid in huis', content:`* Hang een rookmelder op elke verdieping.<br>* Test de rookmelder elke eerste maandag van de maand.<br>* Houd de trap vrij van spullen.<br>* Sluit 's nachts alle tussendeuren.<br>* Bel 112 bij een grote brand.`},
+  {id:'t17', label:'Werkbriefje invullen', content:`Vul elke week je uren in. Schrijf op hoeveel uur je hebt gewerkt en op welke afdeling. Lever het briefje in voor maandagochtend 09:00 uur bij je teamleider. Als het briefje te laat is, krijg je je salaris een week later.`},
+  {id:'t18', label:'In de dierentuin', content:`<table style="width:100%;border-collapse:collapse">
+    <tr><th style="text-align:left;padding:6px;border-bottom:1px solid rgba(255,255,255,0.12)">Dier</th><th style="text-align:left;padding:6px;border-bottom:1px solid rgba(255,255,255,0.12)">Voertijd</th><th style="text-align:left;padding:6px;border-bottom:1px solid rgba(255,255,255,0.12)">Locatie</th></tr>
+    <tr><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">Apen</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">11:00 uur</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">Apenheul</td></tr>
+    <tr><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">Pinguïns</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">13:30 uur</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">Ijspaleis</td></tr>
+    <tr><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">Leeuwen</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">15:00 uur</td><td style="padding:6px;border-bottom:1px solid rgba(255,255,255,0.08)">Safari-park</td></tr>
+  </table>`},
+  {id:'t19', label:'Uitnodiging voor een buurtfeest', content:`Hallo buren!<br>Op zaterdag 24 augustus organiseren wij een buurtfeest in de parkeergarage. Het begint om 16:00 uur en duurt tot 22:00 uur. Wij zorgen voor muziek en drinken. Neem jij iets lekkers te eten mee om te delen? Laat voor 15 augustus weten of je komt!<br>Groetjes, de organisatie.`},
+  {id:'t20', label:'Vakantiehuisje boeken', content:`Vakantiepark "De Groene Velden":<br>* Huisje voor 4 personen: € 400 per week.<br>* Huisje voor 6 personen: € 550 per week.<br>* Extra: Bedlinnen kost € 10 per persoon.<br>* Schoonmaak: Verplichte kosten € 50 per boeking.`},
+];
+
+const QUESTION_BANK = [
+  {textId:'t1',q:'Hoeveel dagen per week moet je werken?',opts:['Twee dagen.','Drie dagen.','Elke dag.'],correct:1},
+  {textId:'t1',q:'Hoe laat begint de werkdag?',opts:['Om 13:00 uur.','Om 08:00 uur.','Om 07:00 uur.'],correct:2},
+  {textId:'t1',q:'Wat is een taak van de medewerker?',opts:['Brood bakken.','Klanten helpen.','De administratie doen.'],correct:1},
+  {textId:'t1',q:'Hoeveel verdien je per uur?',opts:['€ 13,50.','€ 10,00.','€ 7,00.'],correct:0},
+  {textId:'t1',q:'Moet je ook op zaterdag werken?',opts:['Nee.','Ja.','Alleen in de avond.'],correct:1},
+
+  {textId:'t2',q:'Hoe laat heeft Meneer Bakker zijn afspraak?',opts:['Om 10:30 uur.','Om 09:15 uur.','Om 14:00 uur.'],correct:1},
+  {textId:'t2',q:'Wie heeft een afspraak op 13 april?',opts:['Mevr. Dijk.','Dhr. Bakker.','Dr. Smit.'],correct:0},
+  {textId:'t2',q:'Bij welke dokter moet Mevrouw Visser zijn?',opts:['Dr. Smit.','Dr. Jones.','Bij de balie.'],correct:1},
+  {textId:'t2',q:'Hoeveel afspraken zijn er op 12 april?',opts:['Eén.','Twee.','Drie.'],correct:1},
+  {textId:'t2',q:'Heeft Mevr. Dijk een afspraak in de ochtend?',opts:['Ja.','Nee, in de middag.','Dat staat niet in de tekst.'],correct:1},
+
+  {textId:'t3',q:'Hoeveel kosten de appels?',opts:['€ 2,00 per kilo.','€ 2,50 voor 2 kilo.','€ 5,00.'],correct:1},
+  {textId:'t3',q:'Wat is de korting op koffie?',opts:['10%.','50%.','25%.'],correct:2},
+  {textId:'t3',q:'Wanneer kun je verse vis kopen?',opts:['Elke dag.','Op woensdag.','Op vrijdag en zaterdag.'],correct:2},
+  {textId:'t3',q:'Hoe laat gaat de winkel dicht?',opts:['Om 08:00 uur.','Om 20:00 uur.','Om 22:00 uur.'],correct:1},
+  {textId:'t3',q:'Kun je op zondag boodschappen doen?',opts:['Ja.','Nee.','Alleen in de ochtend.'],correct:1},
+
+  {textId:'t4',q:'Waar gaan de kinderen naartoe?',opts:['Naar de dierentuin.','Naar het bos.','Naar het zwembad.'],correct:1},
+  {textId:'t4',q:'Hoe laat vertrekt de bus?',opts:['Om 08:00 uur.','Om 09:30 uur.','Om 09:00 uur.'],correct:2},
+  {textId:'t4',q:'Wat moeten de kinderen meenemen voor het weer?',opts:['Een zonnebril.','Een regenjas.','Een handdoek.'],correct:1},
+  {textId:'t4',q:'Krijgen de kinderen eten van school?',opts:['Ja, de lunch.','Nee, ze moeten zelf eten meenemen.','Alleen fruit.'],correct:0},
+  {textId:'t4',q:'Wat moeten ze zelf meenemen om te drinken?',opts:['Sap.','Een eigen drinkfles.','Geld voor drinken.'],correct:1},
+
+  {textId:'t5',q:'Wat kost een pas voor een kind van 10 jaar?',opts:['€ 45.','Gratis.','€ 10.'],correct:1},
+  {textId:'t5',q:'Hoeveel betaalt een volwassene per jaar?',opts:['Niets.','€ 20.','€ 45.'],correct:2},
+  {textId:'t5',q:'Hoe lang mag je een boek houden?',opts:['1 week.','3 weken.','1 maand.'],correct:1},
+  {textId:'t5',q:'Wat gebeurt er als je het boek te laat inlevert?',opts:['Je krijgt een boete.','Je moet een nieuw boek kopen.','Niets.'],correct:0},
+  {textId:'t5',q:'Waar kun je de pas aanvragen?',opts:['Online.','Bij de balie.','Bij de supermarkt.'],correct:1},
+
+  {textId:'t6',q:'Tot hoe laat mag je harde muziek draaien?',opts:['Tot 20:00 uur.','Tot 22:00 uur.','De hele nacht.'],correct:1},
+  {textId:'t6',q:'Waar moeten de fietsen staan?',opts:['In de gang.','Op het balkon.','In de berging.'],correct:2},
+  {textId:'t6',q:'Op welke dag wordt het vuilnis opgehaald?',opts:['Op maandag.','Op dinsdag.','Op woensdag.'],correct:1},
+  {textId:'t6',q:'Moet de hoofdingang open blijven?',opts:['Ja, overdag.','Nee, deze moet altijd op slot.','Alleen \'s nachts.'],correct:1},
+  {textId:'t6',q:'Mag je een hond hebben in dit appartement?',opts:['Nee, verboden.','Ja, als er geen overlast is.','Alleen kleine honden.'],correct:1},
+
+  {textId:'t7',q:'Welke trein vertrekt van spoor 2?',opts:['De Sprinter van 08:12.','De Intercity.','Geen enkele trein.'],correct:1},
+  {textId:'t7',q:'Heeft de Intercity vertraging?',opts:['Nee.','Ja, 5 minuten.','Ja, 10 minuten.'],correct:1},
+  {textId:'t7',q:'Wat is er met de trein van 08:42?',opts:['Die is op tijd.','Die vertrekt van spoor 2.','Die rijdt niet.'],correct:2},
+  {textId:'t7',q:'Vanaf welk spoor vertrekken de Sprinters meestal?',opts:['Spoor 2.','Spoor 4b.','Spoor 8.'],correct:1},
+  {textId:'t7',q:'Hoe laat vertrekt de eerste trein in de tabel?',opts:['08:42.','08:25.','08:12.'],correct:2},
+
+  {textId:'t8',q:'Hoeveel tomaten heb je nodig?',opts:['1 kilo.','2 kilo.','500 gram.'],correct:0},
+  {textId:'t8',q:'Wat moet je eerst doen met de uien?',opts:['Koken in water.','Snijden.','In de blender doen.'],correct:1},
+  {textId:'t8',q:'Hoe lang moet de ui bakken?',opts:['20 minuten.','5 minuten.','10 minuten.'],correct:1},
+  {textId:'t8',q:'Hoeveel water moet er in de pan?',opts:['2 liter.','1 liter.','5 liter.'],correct:1},
+  {textId:'t8',q:'Hoe lang moet de soep in totaal koken?',opts:['5 minuten.','10 minuten.','20 minuten.'],correct:2},
+
+  {textId:'t9',q:'Waarom verkoopt deze persoon de wasmachine?',opts:['Hij is kapot.','Vanwege een verhuizing.','Hij wil een nieuwe.'],correct:1},
+  {textId:'t9',q:'Hoe oud is de wasmachine?',opts:['1 jaar.','3 jaar.','5 jaar.'],correct:1},
+  {textId:'t9',q:'Wat is de prijs?',opts:['€ 150.','€ 100.','Gratis.'],correct:0},
+  {textId:'t9',q:'Op welke verdieping staat de machine?',opts:['Begane grond.','Eerste verdieping.','Tweede verdieping.'],correct:2},
+  {textId:'t9',q:'Is er een lift in het gebouw?',opts:['Ja.','Nee.','Alleen voor zware spullen.'],correct:1},
+
+  {textId:'t10',q:'Hoe begint de ochtend?',opts:['Met regen.','Met zon.','Met mist.'],correct:2},
+  {textId:'t10',q:'Wat is de temperatuur in de middag?',opts:['10 graden.','18 graden.','25 graden.'],correct:1},
+  {textId:'t10',q:'Wanneer gaat het regenen?',opts:['In de ochtend.','In de middag.','In de avond.'],correct:2},
+  {textId:'t10',q:'Staat er veel wind morgen?',opts:['Ja.','Nee, weinig.','Alleen in de middag.'],correct:1},
+  {textId:'t10',q:'Wat is een goede activiteit voor de middag volgens de tekst?',opts:['Slapen.','Wandelen.','Tv kijken.'],correct:1},
+
+  {textId:'t11',q:'Wat ligt er klaar bij de bank?',opts:['Een nieuwe pas.','Geld.','Een brief.'],correct:0},
+  {textId:'t11',q:'Waar moet je de pas ophalen?',opts:['Bij de supermarkt.','Bij het kantoor in het centrum.','Thuis.'],correct:1},
+  {textId:'t11',q:'Wat moet je meenemen naar de bank?',opts:['De oude pas.','Een identiteitsbewijs.','Niets.'],correct:1},
+  {textId:'t11',q:'Tot wanneer werkt de oude pas?',opts:['Tot morgen.','Tot volgende week vrijdag.','Hij werkt niet meer.'],correct:1},
+  {textId:'t11',q:'Wat is het telefoonnummer van de bank?',opts:['0900-1234.','0800-1111.','0800-1234.'],correct:2},
+
+  {textId:'t12',q:'Welke kleuren T-shirts zijn er?',opts:['Alleen wit.','Wit en blauw.','Zwart.'],correct:1},
+  {textId:'t12',q:'Wat kost de spijkerbroek?',opts:['€ 15,00.','€ 80,00.','€ 45,00.'],correct:2},
+  {textId:'t12',q:'In welke maat is de jas beschikbaar?',opts:['S, M, L.','M, L, XL.','Alleen XL.'],correct:1},
+  {textId:'t12',q:'Wat is het duurste artikel in de tabel?',opts:['Het T-shirt.','De jas.','De broek.'],correct:1},
+  {textId:'t12',q:'Is de spijkerbroek er in maat 32?',opts:['Ja.','Nee.','Alleen in het zwart.'],correct:0},
+
+  {textId:'t13',q:'Op welke dag is het museum dicht?',opts:['Zondag.','Maandag.','Dinsdag.'],correct:1},
+  {textId:'t13',q:'Hoe laat gaat het museum open?',opts:['Om 09:00 uur.','Om 17:00 uur.','Om 10:00 uur.'],correct:2},
+  {textId:'t13',q:'Wanneer moet je verplicht reserveren?',opts:['Altijd.','Bij groepen groter dan 10 mensen.','Nooit.'],correct:1},
+  {textId:'t13',q:'Moet je betalen voor parkeren?',opts:['Ja, € 5.','Nee, het is gratis.','Alleen in het weekend.'],correct:1},
+  {textId:'t13',q:'Mag de hond mee naar het museum?',opts:['Ja.','Alleen kleine honden.','Nee.'],correct:2},
+
+  {textId:'t14',q:'Op welke datum is de afspraak?',opts:['11 november.','5 november.','24 november.'],correct:1},
+  {textId:'t14',q:'Hoe laat is de afspraak?',opts:['Om 11:45 uur.','Om 12:00 uur.','Om 09:00 uur.'],correct:0},
+  {textId:'t14',q:'Bij wie is de afspraak?',opts:['Bij de tandarts.','Bij Sanne.','Bij de dokter.'],correct:1},
+  {textId:'t14',q:'Wanneer moet je uiterlijk afbellen?',opts:['1 uur van tevoren.','24 uur van tevoren.','De dag zelf.'],correct:1},
+  {textId:'t14',q:'Wat gebeurt er als je te laat afbelt?',opts:['Niets.','Je krijgt een nieuwe afspraak.','Je moet betalen.'],correct:2},
+
+  {textId:'t15',q:'Welk abonnement is het goedkoopst?',opts:['Altijd.','Ochtend.','Dag.'],correct:1},
+  {textId:'t15',q:'Tot hoe laat mag je sporten met het "Dag" abonnement?',opts:['Tot 12:00 uur.','Tot 17:00 uur.','Tot 23:00 uur.'],correct:1},
+  {textId:'t15',q:'Hoeveel kost onbeperkte toegang (Altijd)?',opts:['€ 45.','€ 30.','€ 20.'],correct:0},
+  {textId:'t15',q:'Vanaf hoe laat is de sportschool open?',opts:['Vanaf 08:00 uur.','Vanaf 07:00 uur.','Vanaf 09:00 uur.'],correct:1},
+  {textId:'t15',q:'Je wilt om 20:00 uur sporten. Welk abonnement heb je nodig?',opts:['Ochtend.','Dag.','Altijd.'],correct:2},
+
+  {textId:'t16',q:'Waar moet je een rookmelder ophangen?',opts:['Alleen in de keuken.','Op elke verdieping.','In de tuin.'],correct:1},
+  {textId:'t16',q:'Wanneer moet je de rookmelder testen?',opts:['Elke dag.','Elke eerste maandag van de maand.','Nooit.'],correct:1},
+  {textId:'t16',q:'Wat mag er niet op de trap liggen?',opts:['Spullen.','Tapijt.','Verlichting.'],correct:0},
+  {textId:'t16',q:'Wat moet je \'s nachts doen met de deuren in huis?',opts:['Open laten.','Sluiten.','Op slot draaien.'],correct:1},
+  {textId:'t16',q:'Welk nummer bel je bij brand?',opts:['0800-1234.','911.','112.'],correct:2},
+
+  {textId:'t17',q:'Hoe vaak moet je het briefje invullen?',opts:['Elke dag.','Elke week.','Elke maand.'],correct:1},
+  {textId:'t17',q:'Wat moet je opschrijven?',opts:['Je naam en adres.','Je uren en afdeling.','Wat je hebt gegeten.'],correct:1},
+  {textId:'t17',q:'Bij wie lever je het briefje in?',opts:['Bij de directeur.','Bij de teamleider.','Bij de receptie.'],correct:1},
+  {textId:'t17',q:'Wanneer moet het briefje uiterlijk ingeleverd zijn?',opts:['Maandag om 09:00 uur.','Vrijdagavond.','Zondagmiddag.'],correct:0},
+  {textId:'t17',q:'Wat gebeurt er als je het briefje te laat inlevert?',opts:['Je wordt ontslagen.','Je krijgt je geld later.','Niets.'],correct:1},
+
+  {textId:'t18',q:'Hoe laat worden de apen gevoerd?',opts:['Om 11:00 uur.','Om 15:00 uur.','Om 13:30 uur.'],correct:0},
+  {textId:'t18',q:'Waar wonen de pinguïns?',opts:['In het Safari-park.','In het Ijspaleis.','In de Apenheul.'],correct:1},
+  {textId:'t18',q:'Welk dier wordt als laatste gevoerd?',opts:['De apen.','De pinguïns.','De leeuwen.'],correct:2},
+  {textId:'t18',q:'Waar moet je naartoe voor de leeuwen?',opts:['Ijspaleis.','Safari-park.','De ingang.'],correct:1},
+  {textId:'t18',q:'Is er een voertijd om half twee (13:30)?',opts:['Ja, voor de pinguïns.','Nee.','Ja, voor de leeuwen.'],correct:0},
+
+  {textId:'t19',q:'Wanneer is het buurtfeest?',opts:['15 augustus.','24 augustus.','In september.'],correct:1},
+  {textId:'t19',q:'Waar is het feest?',opts:['In het park.','Bij iemand thuis.','In de parkeergarage.'],correct:2},
+  {textId:'t19',q:'Hoe laat begint het feest?',opts:['Om 16:00 uur.','Om 22:00 uur.','Om 12:00 uur.'],correct:0},
+  {textId:'t19',q:'Wat moet je zelf meenemen?',opts:['Drinken.','Muziek.','Iets te eten om te delen.'],correct:2},
+  {textId:'t19',q:'Wanneer moet je uiterlijk reageren?',opts:['Op de dag zelf.','Voor 15 augustus.','Voor 24 augustus.'],correct:1},
+
+  {textId:'t20',q:'Wat kost een huisje voor 4 personen per week?',opts:['€ 550.','€ 400.','€ 50.'],correct:1},
+  {textId:'t20',q:'Hoeveel kost het bedlinnen voor één persoon?',opts:['€ 10.','€ 50.','Gratis.'],correct:0},
+  {textId:'t20',q:'Zijn de schoonmaakkosten verplicht?',opts:['Nee.','Ja.','Alleen als het huisje vies is.'],correct:1},
+  {textId:'t20',q:'Hoeveel betaal je voor de schoonmaak?',opts:['€ 400.','€ 10.','€ 50.'],correct:2},
+  {textId:'t20',q:'Welk huisje is het duurst?',opts:['Voor 4 personen.','Voor 6 personen.','Ze zijn even duur.'],correct:1},
+];
+
+const TEST_SIZE = 19;
+const TEXTS_PER_TEST = 9;
+const TOTAL_MINUTES = 30;
+
+let testQuestions = [];
+let answers = [];
+let currentQ = 0;
+let timerInterval = null;
+let testFinished = false;
+
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function initTest(){
+  const selectedTextIds = shuffle(TEXTS).slice(0, TEXTS_PER_TEST).map(t => t.id);
+  const textWith3 = selectedTextIds[Math.floor(Math.random() * selectedTextIds.length)];
+
+  let selectedQuestions = [];
+  for (const textId of selectedTextIds){
+    const qs = QUESTION_BANK.filter(q => q.textId === textId);
+    const take = (textId === textWith3) ? 3 : 2;
+    selectedQuestions = selectedQuestions.concat(shuffle(qs).slice(0, take));
+  }
+
+  if (selectedQuestions.length < TEST_SIZE){
+    const pool = shuffle(QUESTION_BANK.filter(q => selectedTextIds.includes(q.textId)));
+    for (const q of pool){
+      if (selectedQuestions.length >= TEST_SIZE) break;
+      if (!selectedQuestions.includes(q)) selectedQuestions.push(q);
+    }
+  }
+
+  testQuestions = selectedQuestions.slice(0, TEST_SIZE);
+  answers = new Array(TEST_SIZE).fill(null);
+  currentQ = 0;
+  testFinished = false;
+
+  buildQNav();
+  renderQ(0);
+  startTimer();
+}
+
+function startTimer(){
+  let s = TOTAL_MINUTES * 60;
+  timerInterval = setInterval(()=>{
+    s--;
+    if(s===5*60) showTimerToast('⏰ Te quedan 5 minutos');
+    if(s===60)   showTimerToast('⚠️ Te queda 1 minuto');
+    if(s<=0){clearInterval(timerInterval);finishTest();}
+  },1000);
+}
+
+function showTimerToast(msg){const el=document.getElementById('timer-toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),5000);}
+
+function buildQNav(){
+  const nav=document.getElementById('qnav');nav.innerHTML='';
+  testQuestions.forEach((_,i)=>{
+    const btn=document.createElement('button');
+    btn.className='qnum'+(i===0?' current':'');
+    btn.id=`qnum-${i}`;
+    btn.textContent=i+1;
+    btn.onclick=()=>goToQ(i);
+    nav.appendChild(btn);
+  });
+}
+
+function updateQNav(){
+  testQuestions.forEach((_,i)=>{
+    const btn=document.getElementById(`qnum-${i}`);if(!btn)return;
+    btn.className='qnum';
+    if(answers[i]!==null)btn.classList.add('answered');
+    if(i===currentQ)btn.classList.add('current');
+  });
+  const btn=document.getElementById(`qnum-${currentQ}`);
+  if(btn)btn.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+}
+
+function getTextById(id){return TEXTS.find(t=>t.id===id);}
+
+function renderQ(idx){
+  currentQ=idx;
+  const q=testQuestions[idx];
+  const text=getTextById(q.textId);
+  document.getElementById('hdr-count').textContent=`${idx+1} / ${TEST_SIZE}`;
+
+  document.getElementById('text-card-wrap').innerHTML=`
+    <div class="text-card">
+      <div class="text-label">${text.label}</div>
+      <div class="text-content">${text.content}</div>
+    </div>`;
+
+  const labels=['A','B','C','D'];
+  const optsHtml=q.opts.map((opt,oi)=>{
+    const sel=answers[idx]===oi?'selected':'';
+    return `<div class="opt ${sel}" onclick="selectOpt(${oi})">
+      <div class="opt-label">${labels[oi]||''}</div>
+      <div class="opt-text">${opt}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('q-card').innerHTML=`
+    <div class="q-header">
+      <span class="q-num-badge">P${idx+1}</span>
+      <div class="q-text">${q.q}</div>
+    </div>
+    <div class="q-opts">${optsHtml}</div>`;
+
+  document.getElementById('btn-prev').style.display=idx===0?'none':'flex';
+  document.getElementById('btn-next-q').textContent=idx===TEST_SIZE-1?'Última':'Siguiente ›';
+  updateQNav();
+}
+
+function selectOpt(oi){
+  if(testFinished)return;
+  answers[currentQ]=oi;
+  renderQ(currentQ);
+}
+
+function goQ(dir){const next=currentQ+dir;if(next<0||next>=TEST_SIZE)return;renderQ(next);}
+function goToQ(idx){renderQ(idx);}
+
+function confirmFinish(){
+  const u=answers.filter(a=>a===null).length;
+  document.getElementById('modal-title').textContent='¿Finalizar el test?';
+  document.getElementById('modal-sub').textContent=u>0?`Tienes ${u} pregunta${u>1?'s':''} sin responder.`:'¿Estás seguro?';
+  document.getElementById('modal-confirm-btn').textContent='Finalizar';
+  document.getElementById('modal-confirm-btn').onclick=finishTest;
+  document.getElementById('confirm-modal').classList.add('open');
+}
+
+function confirmExit(){
+  document.getElementById('modal-title').textContent='¿Salir del test?';
+  document.getElementById('modal-sub').textContent='Tu progreso se perderá.';
+  document.getElementById('modal-confirm-btn').textContent='Salir';
+  document.getElementById('modal-confirm-btn').onclick=()=>window.location.href='../index.html';
+  document.getElementById('confirm-modal').classList.add('open');
+}
+
+function closeModal(){document.getElementById('confirm-modal').classList.remove('open');}
+
+function finishTest(){
+  clearInterval(timerInterval);testFinished=true;closeModal();
+  let correct=0;
+  testQuestions.forEach((q,i)=>{if(answers[i]===q.correct)correct++;});
+  const pct=Math.round(correct/TEST_SIZE*100);
+  const pass=pct>=70;
+  document.getElementById('main-content').style.display='none';
+  document.getElementById('bottom-nav').style.display='none';
+  document.getElementById('qnav-wrap').style.display='none';
+  const rs=document.getElementById('results-screen');
+  rs.innerHTML=`
+    <div class="results-emoji">${pass?'🎉':'📚'}</div>
+    <div class="results-title">${pass?'¡Aprobado!':'Sigue practicando'}</div>
+    <div class="results-score">${pct}%</div>
+    <div class="results-bar-wrap"><div class="results-bar ${pass?'pass':'fail'}" style="width:${pct}%"></div></div>
+    <div class="results-verdict ${pass?'pass':'fail'}">${pass?'✓ Superado — mínimo 70%':'✗ No superado — mínimo 70%'}</div>
+    <div class="results-breakdown">
+      <div class="breakdown-row"><span class="breakdown-label">Correctas</span><span class="breakdown-val ok">${correct} / ${TEST_SIZE}</span></div>
+      <div class="breakdown-row"><span class="breakdown-label">Incorrectas / Sin responder</span><span class="breakdown-val err">${TEST_SIZE-correct}</span></div>
+      <div class="breakdown-row"><span class="breakdown-label">Puntuación</span><span class="breakdown-val">${pct}%</span></div>
+    </div>
+    <button class="btn-retry" onclick="retryTest()">🔄 Nuevo test</button>
+    <button class="btn-back-home" onclick="window.location.href='../index.html'">‹ Volver al dashboard</button>`;
+  rs.classList.add('show');
+}
+
+function retryTest(){
+  document.getElementById('main-content').style.display='block';
+  document.getElementById('bottom-nav').style.display='flex';
+  document.getElementById('qnav-wrap').style.display='block';
+  document.getElementById('results-screen').classList.remove('show');
+  document.getElementById('results-screen').innerHTML='';
+  initTest();
+}
+
+initTest();
+</script>
+</body>
+</html>
