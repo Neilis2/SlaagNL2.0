@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SlaagNL — KNS</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0d1f3c;--navy2:#162d54;--navy3:#1e3a6e;--orange:#f47c3a;--cream:#fdf6ec;--green:#2ecc8a;--red:#e8455a;--blue:#60a5fa;--yellow:#f4c842;--border:rgba(255,255,255,0.07);--ease:0.22s cubic-bezier(0.4,0,0.2,1);}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
+body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);min-height:100vh;-webkit-font-smoothing:antialiased;}
+.header{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--navy2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;}
+.btn-back{background:none;border:none;color:var(--orange);font-size:24px;cursor:pointer;padding:0 6px 0 0;line-height:1;flex-shrink:0;}
+.header-info{flex:1;}
+.header-sup{font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:1.2px;font-weight:700;}
+.header-title{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--cream);}
+.header-count{font-size:12px;color:rgba(253,246,236,0.45);font-weight:600;flex-shrink:0;}
+.qnav-wrap{background:var(--navy2);border-bottom:1px solid var(--border);padding:10px 14px;overflow-x:auto;scrollbar-width:none;}
+.qnav-wrap::-webkit-scrollbar{display:none;}
+.qnav{display:flex;gap:6px;width:max-content;}
+.qnum{width:30px;height:30px;border-radius:8px;border:1.5px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:rgba(253,246,236,0.4);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all var(--ease);flex-shrink:0;}
+.qnum.answered{background:rgba(244,124,58,0.15);border-color:rgba(244,124,58,0.4);color:var(--orange);}
+.qnum.current{background:var(--orange);border-color:var(--orange);color:white;}
+.main{padding:16px 16px 110px;max-width:600px;margin:0 auto;}
+.media-card{background:var(--navy2);border-radius:18px;border:1px solid var(--border);padding:14px;margin-bottom:14px;}
+.media-img{width:100%;display:block;border-radius:14px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);aspect-ratio:16/9;object-fit:cover;}
+.media-fallback{display:none;margin-top:10px;font-size:12px;color:rgba(253,246,236,0.55);line-height:1.5;}
+.q-card{background:var(--navy2);border-radius:18px;border:1px solid var(--border);overflow:hidden;margin-bottom:14px;}
+.q-header{padding:16px 18px 12px;display:flex;align-items:flex-start;gap:12px;}
+.q-num-badge{background:rgba(96,165,250,0.12);border:1px solid rgba(96,165,250,0.25);color:var(--blue);font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;flex-shrink:0;margin-top:2px;}
+.q-text{font-size:15px;font-weight:600;color:var(--cream);line-height:1.5;flex:1;}
+.q-opts{padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px;}
+.opt{display:flex;align-items:center;gap:12px;padding:13px 16px;border-radius:14px;border:1.5px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);cursor:pointer;transition:all var(--ease);user-select:none;}
+.opt:active{transform:scale(0.98);}
+.opt.selected{border-color:var(--orange);background:rgba(244,124,58,0.1);}
+.opt-label{width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:rgba(253,246,236,0.5);flex-shrink:0;}
+.opt.selected .opt-label{background:var(--orange);border-color:var(--orange);color:white;}
+.opt-text{font-size:14px;font-weight:500;color:var(--cream);line-height:1.4;flex:1;}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--navy2);border-top:1px solid var(--border);padding:12px 16px;display:flex;gap:10px;max-width:600px;margin:0 auto;}
+.btn-nav{flex:1;padding:13px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;border:none;}
+.btn-prev{background:rgba(255,255,255,0.06);color:rgba(253,246,236,0.6);border:1.5px solid rgba(255,255,255,0.1);}
+.btn-next-q{background:var(--navy3);color:var(--cream);border:1.5px solid rgba(255,255,255,0.12);}
+.btn-finish{background:var(--orange);color:white;}
+.btn-audio{background:rgba(244,196,58,0.10);color:var(--yellow);border:1.5px solid rgba(244,196,58,0.25);}
+.results-screen{display:none;flex-direction:column;align-items:center;padding:24px 20px 80px;max-width:600px;margin:0 auto;}
+.results-screen.show{display:flex;}
+.results-emoji{font-size:64px;margin-bottom:8px;}
+.results-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:var(--cream);margin-bottom:6px;text-align:center;}
+.results-score{font-family:'Playfair Display',serif;font-size:48px;font-weight:900;color:var(--orange);margin:8px 0;}
+.results-bar-wrap{width:100%;height:10px;background:rgba(255,255,255,0.08);border-radius:99px;overflow:hidden;margin-bottom:6px;}
+.results-bar{height:100%;border-radius:99px;}
+.results-bar.pass{background:linear-gradient(90deg,var(--green),#1da86a);}
+.results-bar.fail{background:linear-gradient(90deg,var(--red),#c23348);}
+.results-verdict{font-size:13px;font-weight:700;margin-bottom:24px;}
+.results-verdict.pass{color:var(--green);}
+.results-verdict.fail{color:var(--red);}
+.results-breakdown{width:100%;background:var(--navy2);border-radius:16px;border:1px solid var(--border);overflow:hidden;margin-bottom:20px;}
+.breakdown-row{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border);font-size:13px;}
+.breakdown-row:last-child{border-bottom:none;}
+.breakdown-label{color:rgba(253,246,236,0.6);}
+.breakdown-val{font-weight:700;color:var(--cream);}
+.breakdown-val.ok{color:var(--green);}
+.breakdown-val.err{color:var(--red);}
+.btn-back-home{padding:14px;background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.1);border-radius:14px;color:var(--cream);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;width:100%;}
+.timer-toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-80px);background:var(--navy3);border:1px solid rgba(244,196,58,0.4);color:var(--yellow);font-size:13px;font-weight:700;padding:12px 20px;border-radius:99px;z-index:999;transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1),opacity 0.4s;opacity:0;white-space:nowrap;}
+.timer-toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity 0.25s;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal-box{background:var(--navy2);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:28px 24px;width:100%;max-width:320px;text-align:center;transform:scale(0.92);transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1);}
+.modal-overlay.open .modal-box{transform:scale(1);}
+.modal-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:900;color:var(--cream);margin-bottom:8px;}
+.modal-sub{font-size:13px;color:rgba(253,246,236,0.5);margin-bottom:20px;line-height:1.5;}
+.modal-btns{display:flex;gap:10px;}
+.modal-btn{flex:1;padding:12px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;border:none;}
+.modal-btn.primary{background:var(--orange);color:white;}
+.modal-btn.secondary{background:rgba(255,255,255,0.06);color:var(--cream);border:1px solid var(--border);}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <button class="btn-back" onclick="confirmExit()">‹</button>
+  <div class="header-info">
+    <div class="header-sup">Examen</div>
+    <div class="header-title">KNS — Kennis van de Nederlandse Samenleving</div>
+  </div>
+  <div class="header-count" id="hdr-count">1 / 30</div>
+</div>
+
+<div class="qnav-wrap" id="qnav-wrap">
+  <div class="qnav" id="qnav"></div>
+</div>
+
+<div class="main" id="main-content">
+  <div class="media-card" id="media-card">
+    <img class="media-img" id="kns-img" alt="KNS afbeelding" />
+    <div class="media-fallback" id="img-fallback"></div>
+  </div>
+  <div class="q-card" id="q-card"></div>
+</div>
+
+<div class="bottom-nav" id="bottom-nav">
+  <button class="btn-nav btn-prev" id="btn-prev" onclick="goQ(-1)">‹ Vorige</button>
+  <button class="btn-nav btn-audio" id="btn-audio" onclick="reSpeak()">🔊 Opnieuw lezen</button>
+  <button class="btn-nav btn-next-q" id="btn-next-q" onclick="goQ(1)">Volgende ›</button>
+  <button class="btn-nav btn-finish" onclick="confirmFinish()">Afronden</button>
+</div>
+
+<div class="results-screen" id="results-screen"></div>
+<div class="timer-toast" id="timer-toast"></div>
+
+<div class="modal-overlay" id="confirm-modal">
+  <div class="modal-box">
+    <div class="modal-title" id="modal-title"></div>
+    <div class="modal-sub" id="modal-sub"></div>
+    <div class="modal-btns">
+      <button class="modal-btn secondary" onclick="closeModal()">Annuleren</button>
+      <button class="modal-btn primary" id="modal-confirm-btn"></button>
+    </div>
+  </div>
+</div>
+
+<script>
+const ASSET_DIR = 'assets/kns/';
+const TEST_SIZE = 30;
+const TOTAL_MINUTES = 30;
+
+const QUESTION_BANK = [
+  { id: 1, imgBase: 'kns1', q: 'In welk deel van de wereld ligt Nederland?', opts: ['Europa', 'Zuid-Amerika'], correct: 0 },
+  { id: 2, imgBase: 'kns2', q: 'Welk land ligt ten zuiden van Nederland?', opts: ['België', 'Duitsland'], correct: 0 },
+  { id: 3, imgBase: 'kns3', q: 'Welk land ligt ten oosten van Nederland?', opts: ['België', 'Duitsland'], correct: 1 },
+  { id: 4, imgBase: 'kns4', q: 'Welk land is groter?', opts: ['Marokko', 'Nederland'], correct: 0 },
+  { id: 5, imgBase: 'kns5', q: 'Welk land is kleiner?', opts: ['Nederland', 'Turkije'], correct: 0 },
+  { id: 6, imgBase: 'kns6', q: 'Wat betekent Nederland?', opts: ['Laag land', 'Waterland'], correct: 0 },
+  { id: 7, imgBase: 'kns7', q: 'Kijk naar de foto. Wat is dit?', opts: ['Een dijk', 'Een haven'], correct: 0 },
+  { id: 8, imgBase: 'kns8', q: 'Wat gebeurt er met Nederland als er geen dijken zijn?', opts: ['Nederland krijgt meer regen', 'Nederland staat onder water'], correct: 1 },
+  { id: 9, imgBase: 'kns9', q: 'Welke stad ligt in de Randstad?', opts: ['Eindhoven', 'Utrecht'], correct: 1 },
+  { id: 10, imgBase: 'kns10', q: 'In Nederland, wonen daar veel mensen of weinig mensen?', opts: ['Veel mensen', 'Weinig mensen'], correct: 0 },
+  { id: 11, imgBase: 'kns11', q: 'Wat is de hoofdstad van Nederland?', opts: ['Amsterdam', 'Den Haag'], correct: 0 },
+  { id: 12, imgBase: 'kns12', q: 'In welke stad zit de regering van Nederland?', opts: ['Den Haag', 'Rotterdam'], correct: 0 },
+  { id: 13, imgBase: 'kns13', q: 'Waar woont de koning van Nederland?', opts: ['Groningen', 'Zuid-Holland'], correct: 1 },
+  { id: 14, imgBase: 'kns14', q: 'Waar ligt de grootste zeehaven van Nederland?', opts: ['Amsterdam', 'Rotterdam'], correct: 1 },
+  { id: 15, imgBase: 'kns15', q: 'Hoe heet de nationale luchthaven van Nederland?', opts: ['Europoort', 'Schiphol'], correct: 1 },
+  { id: 16, imgBase: 'kns16', q: 'Waar ligt Schiphol?', opts: ['Amsterdam', 'Rotterdam'], correct: 0 },
+  { id: 17, imgBase: 'kns17', q: 'Wie helpt u als u in Nederland aankomt?', opts: ['De regering', 'Mijn partner'], correct: 1 },
+  { id: 18, imgBase: 'kns18', q: 'Is Nederland vaak droog of nat?', opts: ['Droog', 'Nat'], correct: 1 },
+  { id: 19, imgBase: 'kns19', q: 'Als u naar Nederland komt, moet u dan opnieuw uw rijbewijs halen?', opts: ['Ja', 'Nee'], correct: 0 },
+  { id: 20, imgBase: 'kns20', q: 'In Nederland, zijn de wegen daar druk of rustig?', opts: ['Druk', 'Rustig'], correct: 0 },
+  { id: 21, imgBase: 'kns21', q: 'In Nederland, zijn daar veel fietsen of weinig fietsen?', opts: ['Veel', 'Weinig'], correct: 0 },
+  { id: 22, imgBase: 'kns22', q: 'Wat is typisch Nederlands in het verkeer?', opts: ['Boten', 'Fietsen'], correct: 1 },
+  { id: 23, imgBase: 'kns23', q: 'Leven Nederlanders veel binnen of buiten?', opts: ['Binnen', 'Buiten'], correct: 0 },
+  { id: 24, imgBase: 'kns24', q: 'Wie ziet u op het plaatje?', opts: ['De Koning van Spanje', 'Willem van Oranje'], correct: 1 },
+  { id: 25, imgBase: 'kns25', q: 'Was de koning van Spanje katholiek of protestants?', opts: ['Katholiek', 'Protestants'], correct: 0 },
+  { id: 26, imgBase: 'kns26', q: 'Hoe lang duurde de oorlog met Spanje?', opts: ['8 jaar', '80 jaar'], correct: 1 },
+  { id: 27, imgBase: 'kns27', q: 'Hoe lang bestaat de Nederlandse staat ongeveer?', opts: ['Vijftig jaar', 'Vierhonderd jaar'], correct: 1 },
+  { id: 28, imgBase: 'kns28', q: 'Waren de VOC-schepen voor de handel of voor de visvangst?', opts: ['Voor de handel', 'Voor de visvangst'], correct: 0 },
+  { id: 29, imgBase: 'kns29', q: 'Wie schilderde dit schilderij?', opts: ['Rembrandt van Rijn', 'Willem van Oranje'], correct: 0 },
+  { id: 30, imgBase: 'kns30', q: 'Is er in Nederland scheiding van kerk en staat?', opts: ['Ja', 'Nee'], correct: 0 },
+  { id: 31, imgBase: 'kns31', q: 'Door welk land is Nederland bezet tijdens de Tweede Wereldoorlog?', opts: ['Duitsland', 'Engeland'], correct: 0 },
+  { id: 32, imgBase: 'kns32', q: 'Welke grote Nederlandse stad is in 1940 gebombardeerd?', opts: ['Amsterdam', 'Rotterdam'], correct: 1 },
+  { id: 33, imgBase: 'kns33', q: 'Waarom is Anne Frank beroemd?', opts: ['Ze schreef een dagboek', 'Ze was baas van een museum'], correct: 0 },
+  { id: 34, imgBase: 'kns34', q: 'Welke kolonie van Nederland werd onafhankelijk vlak na de Tweede Wereldoorlog?', opts: ['Indonesië', 'Suriname'], correct: 0 },
+  { id: 35, imgBase: 'kns35', q: 'Uit welk land kwamen veel gastarbeiders?', opts: ['Uit Engeland', 'Uit Turkije'], correct: 1 },
+  { id: 36, imgBase: 'kns36', q: 'Welke kolonie van Nederland werd in 1975 onafhankelijk?', opts: ['Nederlandse Antillen', 'Suriname'], correct: 1 },
+  { id: 37, imgBase: 'kns37', q: 'Wie zijn dit?', opts: ['Koning Willem-Alexander en Maxima', 'Prinses Beatrix en Claus'], correct: 0 },
+  { id: 38, imgBase: 'kns38', q: 'Uit welk land komt koningin Maxima?', opts: ['Argentinië', 'Duitsland'], correct: 0 },
+  { id: 39, imgBase: 'kns39', q: 'Hoe heet de kroonprinses?', opts: ['Amalia', 'Beatrix'], correct: 0 },
+  { id: 40, imgBase: 'kns40', q: 'Is Nederland een democratie?', opts: ['Ja', 'Nee'], correct: 0 },
+  { id: 41, imgBase: 'kns41', q: 'In welke stad zit het parlement van Nederland?', opts: ['Amsterdam', 'Den Haag'], correct: 1 },
+  { id: 42, imgBase: 'kns42', q: 'Wat is de belangrijkste wet in Nederland?', opts: ['De grondwet', 'Het parlement'], correct: 0 },
+  { id: 43, imgBase: 'kns43', q: 'Wie is de voorzitter van de raad van ministers?', opts: ['De koning', 'De minister-president'], correct: 1 },
+  { id: 44, imgBase: 'kns44', q: 'Wie vergaderen in deze zaal?', opts: ['De Eerste Kamer', 'De Tweede Kamer'], correct: 1 },
+  { id: 45, imgBase: 'kns45', q: 'Hoe vaak zijn er verkiezingen in Nederland?', opts: ['Elke vier jaar', 'Elke zes jaar'], correct: 0 },
+  { id: 46, imgBase: 'kns46', q: 'Hoe oud moet u zijn om te mogen stemmen in Nederland?', opts: ['18 jaar', '21 jaar'], correct: 0 },
+  { id: 47, imgBase: 'kns47', q: 'Heeft Nederland één politieke partij of meer politieke partijen?', opts: ['Één politieke partij', 'Meer politieke partijen'], correct: 1 },
+  { id: 48, imgBase: 'kns48', q: 'Wat is de functie van deze man?', opts: ['Burgemeester', 'Minister-president'], correct: 0 },
+  { id: 49, imgBase: 'kns49', q: 'Is discriminatie toegestaan in Nederland?', opts: ['Ja', 'Nee'], correct: 1 },
+  { id: 50, imgBase: 'kns50', q: 'Hebben vrouwen in Nederland meer rechten dan mannen of dezelfde rechten?', opts: ['Dezelfde rechten', 'Meer rechten dan mannen'], correct: 0 },
+  { id: 51, imgBase: 'kns51', q: 'Mogen vrouwen in Nederland zelf kiezen met wie ze willen trouwen?', opts: ['Ja', 'Nee'], correct: 0 },
+  { id: 52, imgBase: 'kns52', q: 'Is het discrimineren van homoseksuelen strafbaar of toegestaan in Nederland?', opts: ['Strafbaar', 'Toegestaan'], correct: 0 },
+  { id: 53, imgBase: 'kns53', q: 'Heeft Nederland één staatsgodsdienst of zijn er veel godsdiensten?', opts: ['Er is één staatsgodsdienst', 'Er zijn veel godsdiensten'], correct: 1 },
+  { id: 54, imgBase: 'kns54', q: 'Zijn de kranten, radio en televisie vrij in hun mening in Nederland?', opts: ['Ja', 'Nee'], correct: 0 },
+  { id: 55, imgBase: 'kns55', q: 'Heeft Nederland veel televisiekanalen of is er één staatstelevisie?', opts: ['Er is één staatstelevisie', 'Er zijn veel televisiekanalen'], correct: 1 },
+  { id: 56, imgBase: 'kns56', q: 'Is homoseksualiteit toegestaan of strafbaar in Nederland?', opts: ['Strafbaar', 'Toegestaan'], correct: 1 },
+  { id: 57, imgBase: 'kns57', q: 'Is wapenbezit zonder vergunning toegestaan of strafbaar in Nederland?', opts: ['Strafbaar', 'Toegestaan'], correct: 0 },
+  { id: 58, imgBase: 'kns58', q: 'Is vrouwenbesnijdenis toegestaan of strafbaar in Nederland?', opts: ['Strafbaar', 'Toegestaan'], correct: 0 },
+  { id: 59, imgBase: 'kns59', q: 'Is het slaan van vrouwen toegestaan of strafbaar in Nederland?', opts: ['Strafbaar', 'Toegestaan'], correct: 0 },
+  { id: 60, imgBase: 'kns60', q: 'Hebben alle mensen in Nederland hetzelfde geloof?', opts: ['Ja', 'Nee'], correct: 1 },
+  { id: 61, imgBase: 'kns61', q: 'Welke taal spreken de mensen in Nederland?', opts: ['Duits', 'Nederlands'], correct: 1 },
+  { id: 62, imgBase: 'kns62', q: 'Is het belangrijk om snel Nederlands te leren?', opts: ['Ja', 'Nee'], correct: 0 },
+  { id: 63, imgBase: 'kns63', q: 'Wat leert u in de Nederlandse taalles?', opts: ['Alle Europese talen', 'De Nederlandse taal'], correct: 1 },
+  { id: 64, imgBase: 'kns64', q: 'Moet u voor een taalcursus betalen?', opts: ['Ja', 'Nee'], correct: 0 },
+  { id: 65, imgBase: 'kns65', q: 'Wie betaalt de taalcursus?', opts: ['De school', 'Ik betaal zelf'], correct: 1 },
+  { id: 66, imgBase: 'kns66', q: 'Gaan in Nederland alleen kinderen naar school of ook volwassenen?', opts: ['Alleen kinderen', 'Kinderen en volwassenen'], correct: 1 },
+  { id: 67, imgBase: 'kns67', q: 'Worden verjaardagen in Nederland gevierd?', opts: ['Ja', 'Nee'], correct: 0 },
+  { id: 68, imgBase: 'kns68', q: 'Wat doen Nederlanders meestal als ze bij iemand op bezoek gaan?', opts: ['Ze gaan zomaar naar binnen', 'Ze maken eerst een afspraak'], correct: 1 },
+  { id: 69, imgBase: 'kns69', q: 'Opa\'s en oma\'s in Nederland, wonen die bij hun kinderen of wonen ze apart?', opts: ['Ze wonen apart', 'Ze wonen bij hun kinderen'], correct: 0 },
+  { id: 70, imgBase: 'kns70', q: 'Is het voor het leren van de taal goed om met kinderen naar de Nederlandse televisie te kijken?', opts: ['Ja', 'Nee'], correct: 0 },
+  { id: 71, imgBase: 'kns71', q: 'Wie is in Nederland verantwoordelijk voor wat kinderen doen?', opts: ['De ouders', 'De school'], correct: 0 },
+  { id: 72, imgBase: 'kns72', q: 'Hoe oud zijn de meeste kinderen in Nederland als ze naar school gaan?', opts: ['Vier jaar', 'Vijf jaar'], correct: 0 },
+  { id: 73, imgBase: 'kns73', q: 'Vanaf welke leeftijd is onderwijs verplicht in Nederland?', opts: ['Vier jaar', 'Vijf jaar'], correct: 1 },
+  { id: 74, imgBase: 'kns74', q: 'Tot welke leeftijd is onderwijs verplicht in Nederland?', opts: ['Twaalf jaar', 'Achttien jaar'], correct: 1 },
+  { id: 75, imgBase: 'kns75', q: 'Leren kinderen als ze spelen?', opts: ['Ja', 'Nee'], correct: 0 },
+  { id: 76, imgBase: 'kns76', q: 'Wie kiest in Nederland de school voor het kind?', opts: ['De gemeente', 'De ouders'], correct: 1 },
+  { id: 77, imgBase: 'kns77', q: 'Zijn er in Nederland op school aparte klassen voor jongens en voor meisjes?', opts: ['Ja', 'Nee'], correct: 1 },
+  { id: 78, imgBase: 'kns78', q: 'Dragen kinderen in Nederland op school een uniform?', opts: ['Ja', 'Nee'], correct: 1 },
+  { id: 79, imgBase: 'kns79', q: 'Wat kan deze jongen doen met een computer?', opts: ['Alleen spelen', 'Spelen en leren'], correct: 1 },
+  { id: 80, imgBase: 'kns80', q: 'Voortgezet onderwijs, is dat voor kinderen vanaf vier jaar of vanaf twaalf jaar?', opts: ['Vanaf vier jaar', 'Vanaf twaalf jaar'], correct: 1 },
+  { id: 81, imgBase: 'kns81', q: 'Gaan alle kinderen vanaf twaalf jaar naar hetzelfde soort onderwijs, of zijn er twee richtingen?', opts: ['Er is één soort', 'Er zijn twee richtingen'], correct: 1 },
+  { id: 82, imgBase: 'kns82', q: 'Tot welke leeftijd moeten kinderen in Nederland naar school?', opts: ['Zestien jaar', 'Achttien jaar'], correct: 1 },
+  { id: 83, imgBase: 'kns83', q: 'Vanaf welke leeftijd mogen jongeren hun eigen keuzes maken?', opts: ['Vanaf zestien jaar', 'Vanaf achttien jaar'], correct: 1 },
+  { id: 84, imgBase: 'kns84', q: 'Is het verplicht om uzelf te verzekeren tegen ziektekosten?', opts: ['Ja', 'Nee'], correct: 0 },
+  { id: 85, imgBase: 'kns85', q: 'Wie betaalt in Nederland uw verzekering tegen ziektekosten?', opts: ['De gemeente', 'Mijn partner'], correct: 1 },
+  { id: 86, imgBase: 'kns86', q: 'Als u ziek wordt, waar kan u in Nederland dan het beste eerst naartoe gaan?', opts: ['Naar de huisarts', 'Naar het ziekenhuis'], correct: 0 },
+  { id: 87, imgBase: 'kns87', q: 'Waar haalt men in Nederland medicijnen op recept?', opts: ['Bij de apotheek', 'Bij de drogist'], correct: 0 },
+  { id: 88, imgBase: 'kns88', q: 'Waar gaat u in Nederland in een noodgeval naartoe?', opts: ['Naar de drogist', 'Naar het ziekenhuis'], correct: 1 },
+  { id: 89, imgBase: 'kns89', q: 'Waar werken de meeste specialisten?', opts: ['Bij de huisartssenpost', 'In het ziekenhuis'], correct: 1 },
+  { id: 90, imgBase: 'kns90', q: 'Voor wie is het consultatiebureau?', opts: ['Voor grote kinderen', 'Voor kleine kinderen'], correct: 1 },
+  { id: 91, imgBase: 'kns91', q: 'Wie werken er in Nederland?', opts: ['Alleen mannen', 'Mannen en vrouwen'], correct: 1 },
+  { id: 92, imgBase: 'kns92', q: 'Wanneer moet u werk gaan zoeken, zo snel mogelijk of later?', opts: ['Zo snel mogelijk', 'Later'], correct: 0 },
+  { id: 93, imgBase: 'kns93', q: 'Waar is in Nederland steeds minder werk te vinden?', opts: ['In de industrie', 'In de zorg'], correct: 0 },
+  { id: 94, imgBase: 'kns94', q: 'Waar is in Nederland veel werk te vinden?', opts: ['In de landbouw', 'In de zorg'], correct: 1 },
+  { id: 95, imgBase: 'kns95', q: 'Waar is het in Nederland gemakkelijker om werk te vinden?', opts: ['In de beveiliging', 'In de landbouw'], correct: 0 },
+  { id: 96, imgBase: 'kns96', q: 'Hoe vindt u in Nederland gemakkelijker werk, via de krant of via familie?', opts: ['Via de krant', 'Via familie'], correct: 1 },
+  { id: 97, imgBase: 'kns97', q: 'Waar kunt u zich in Nederland inschrijven als u werk zoekt?', opts: ['Bij een school', 'Bij een uitzendbureau'], correct: 1 },
+  { id: 98, imgBase: 'kns98', q: 'Geeft men elkaar in Nederland bij een sollicitatiegesprek eerst een hand of gaat men direct zitten?', opts: ['Men gaat direct zitten', 'Men geeft elkaar eerst een hand'], correct: 1 },
+  { id: 99, imgBase: 'kns99', q: 'Krijgt u in Nederland een uitkering of moet uw partner voor u zorgen?', opts: ['Ik krijg een uitkering', 'Mijn partner moet voor mij zorgen'], correct: 1 },
+  { id: 100, imgBase: 'kns100', q: 'Is het leven in Nederland duur of goedkoop?', opts: ['Duur', 'Goedkoop'], correct: 0 },
+];
+
+let testQuestions = [];
+let answers = [];
+let currentQ = 0;
+let timerInterval = null;
+let testFinished = false;
+
+let speechReady = false;
+let selectedVoice = null;
+
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function pickTestQuestions(){
+  return shuffle(QUESTION_BANK).slice(0, TEST_SIZE);
+}
+
+function initTest(){
+  testQuestions = pickTestQuestions();
+  answers = new Array(TEST_SIZE).fill(null);
+  currentQ = 0;
+  testFinished = false;
+
+  buildQNav();
+  renderQ(0);
+  startTimer();
+  initSpeech();
+}
+
+function startTimer(){
+  let s = TOTAL_MINUTES * 60;
+  timerInterval = setInterval(()=>{
+    s--;
+    if(s===5*60) showTimerToast('⏰ Nog 5 minuten');
+    if(s===60)   showTimerToast('⚠️ Nog 1 minuut');
+    if(s<=0){clearInterval(timerInterval);finishTest();}
+  },1000);
+}
+
+function showTimerToast(msg){
+  const el=document.getElementById('timer-toast');
+  el.textContent=msg;
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),5000);
+}
+
+function buildQNav(){
+  const nav=document.getElementById('qnav');nav.innerHTML='';
+  testQuestions.forEach((_,i)=>{
+    const btn=document.createElement('button');
+    btn.className='qnum'+(i===0?' current':'');
+    btn.id=`qnum-${i}`;
+    btn.textContent=i+1;
+    btn.onclick=()=>goToQ(i);
+    nav.appendChild(btn);
+  });
+}
+
+function updateQNav(){
+  testQuestions.forEach((_,i)=>{
+    const btn=document.getElementById(`qnum-${i}`);if(!btn)return;
+    btn.className='qnum';
+    if(answers[i]!==null)btn.classList.add('answered');
+    if(i===currentQ)btn.classList.add('current');
+  });
+  const btn=document.getElementById(`qnum-${currentQ}`);
+  if(btn)btn.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+}
+
+function loadImageFlexible(imgBase){
+  const img = document.getElementById('kns-img');
+  const fb = document.getElementById('img-fallback');
+  fb.style.display='none';
+  img.style.display='block';
+
+  const jpg = ASSET_DIR + imgBase + '.jpg';
+  const png = ASSET_DIR + imgBase + '.png';
+
+  img.onerror = () => {
+    if (img.dataset.tried !== 'png') {
+      img.dataset.tried = 'png';
+      img.src = png;
+      return;
+    }
+    img.style.display='none';
+    fb.style.display='block';
+    fb.textContent = jpg + ' / ' + png;
+  };
+
+  img.dataset.tried = 'jpg';
+  img.src = jpg;
+}
+
+function renderQ(idx){
+  currentQ=idx;
+  const q=testQuestions[idx];
+  document.getElementById('hdr-count').textContent=`${idx+1} / ${TEST_SIZE}`;
+
+  loadImageFlexible(q.imgBase);
+
+  const labels=['A','B'];
+  const optsHtml=q.opts.map((opt,oi)=>{
+    const sel=answers[idx]===oi?'selected':'';
+    return `<div class="opt ${sel}" onclick="selectOpt(${oi})">
+      <div class="opt-label">${labels[oi]||''}</div>
+      <div class="opt-text">${opt}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('q-card').innerHTML=`
+    <div class="q-header">
+      <span class="q-num-badge">P${idx+1}</span>
+      <div class="q-text">${q.q}</div>
+    </div>
+    <div class="q-opts">${optsHtml}</div>`;
+
+  document.getElementById('btn-prev').style.display=idx===0?'none':'flex';
+  document.getElementById('btn-next-q').textContent=idx===TEST_SIZE-1?'Laatste':'Volgende ›';
+  updateQNav();
+
+  speakCurrent();
+}
+
+function selectOpt(oi){
+  if(testFinished)return;
+  answers[currentQ]=oi;
+  renderQ(currentQ);
+}
+
+function goQ(dir){
+  const next=currentQ+dir;
+  if(next<0||next>=TEST_SIZE)return;
+  renderQ(next);
+}
+function goToQ(idx){renderQ(idx);}
+
+function confirmFinish(){
+  const u=answers.filter(a=>a===null).length;
+  document.getElementById('modal-title').textContent='Examen afronden?';
+  document.getElementById('modal-sub').textContent=u>0?`Je hebt ${u} vraag${u>1?'en':''} niet beantwoord.`:'Weet je het zeker?';
+  document.getElementById('modal-confirm-btn').textContent='Afronden';
+  document.getElementById('modal-confirm-btn').onclick=finishTest;
+  document.getElementById('confirm-modal').classList.add('open');
+}
+
+function confirmExit(){
+  document.getElementById('modal-title').textContent='Examen verlaten?';
+  document.getElementById('modal-sub').textContent='Je voortgang gaat verloren.';
+  document.getElementById('modal-confirm-btn').textContent='Verlaten';
+  document.getElementById('modal-confirm-btn').onclick=()=>window.location.href='../index.html';
+  document.getElementById('confirm-modal').classList.add('open');
+}
+
+function closeModal(){document.getElementById('confirm-modal').classList.remove('open');}
+
+function finishTest(){
+  clearInterval(timerInterval);
+  testFinished=true;
+  closeModal();
+  stopSpeech();
+
+  let correct=0;
+  testQuestions.forEach((q,i)=>{if(answers[i]===q.correct)correct++;});
+  const pct=Math.round(correct/TEST_SIZE*100);
+  const pass=pct>=70;
+
+  document.getElementById('main-content').style.display='none';
+  document.getElementById('bottom-nav').style.display='none';
+  document.getElementById('qnav-wrap').style.display='none';
+
+  const rs=document.getElementById('results-screen');
+  rs.innerHTML=`
+    <div class="results-emoji">${pass?'🎉':'📚'}</div>
+    <div class="results-title">${pass?'Geslaagd!':'Blijf oefenen'}</div>
+    <div class="results-score">${pct}%</div>
+    <div class="results-bar-wrap"><div class="results-bar ${pass?'pass':'fail'}" style="width:${pct}%"></div></div>
+    <div class="results-verdict ${pass?'pass':'fail'}">${pass?'✓ Behaald — minimaal 70%':'✗ Niet behaald — minimaal 70%'}</div>
+    <div class="results-breakdown">
+      <div class="breakdown-row"><span class="breakdown-label">Goed</span><span class="breakdown-val ok">${correct} / ${TEST_SIZE}</span></div>
+      <div class="breakdown-row"><span class="breakdown-label">Fout / leeg</span><span class="breakdown-val err">${TEST_SIZE-correct}</span></div>
+      <div class="breakdown-row"><span class="breakdown-label">Score</span><span class="breakdown-val">${pct}%</span></div>
+    </div>
+    <button class="btn-back-home" onclick="window.location.href='../index.html'">‹ Terug naar dashboard</button>`;
+  rs.classList.add('show');
+}
+
+function initSpeech(){
+  if(!('speechSynthesis' in window)) return;
+  const trySelect = () => {
+    const voices = window.speechSynthesis.getVoices();
+    if(!voices || voices.length===0) return false;
+    selectedVoice =
+      voices.find(v => (v.lang||'').toLowerCase().startsWith('nl')) ||
+      voices.find(v => (v.lang||'').toLowerCase().startsWith('nl-nl')) ||
+      voices[0] ||
+      null;
+    speechReady = true;
+    return true;
+  };
+  if(!trySelect()){
+    window.speechSynthesis.onvoiceschanged = () => { trySelect(); };
+  }
+}
+
+function stopSpeech(){
+  if(!('speechSynthesis' in window)) return;
+  try { window.speechSynthesis.cancel(); } catch(e){}
+}
+
+function buildSpeakText(){
+  const q = testQuestions[currentQ];
+  const A = q.opts[0] ?? '';
+  const B = q.opts[1] ?? '';
+  return `${q.q}. A: ${A}. B: ${B}.`;
+}
+
+function speakCurrent(){
+  if(!('speechSynthesis' in window)) return;
+  stopSpeech();
+
+  const text = buildSpeakText();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'nl-NL';
+  u.rate = 0.85;
+  u.pitch = 1.0;
+  u.volume = 1.0;
+  if(selectedVoice) u.voice = selectedVoice;
+
+  try { window.speechSynthesis.speak(u); } catch(e){}
+}
+
+function reSpeak(){
+  speakCurrent();
+}
+
+initTest();
+</script>
+
+</body>
+  </html>
