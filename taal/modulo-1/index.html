@@ -69,6 +69,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
 .premium-sub{font-size:11px;color:rgba(253,246,236,0.45);line-height:1.4;}
 .premium-arrow{font-size:16px;color:var(--purple);flex-shrink:0;}
 </style>
+<script src="../../js/free-access.js"></script>
 </head>
 <body>
 <div class="header">
@@ -110,7 +111,8 @@ const LESSONS=[
 const KEY_PREFIX='slaagnl_m1_';
 const KEY_PREMIUM='slaagnl_premium';
 function isDone(num){return localStorage.getItem(KEY_PREFIX+num)==='done';}
-function isPremium(){return localStorage.getItem(KEY_PREMIUM)==='true';}
+function isPremium(){if(window.SLAAGNL_DISABLE_PLANS === true) return true; // TEMP: disable plans (free access)
+  return localStorage.getItem(KEY_PREMIUM)==='true';}
 
 (()=>{const p=new URLSearchParams(window.location.search);if(p.has('done')){localStorage.setItem(KEY_PREFIX+p.get('done'),'done');window.history.replaceState({},'',window.location.pathname);}})();
 

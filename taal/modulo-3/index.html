@@ -62,6 +62,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
 .premium-sub{font-size:11px;color:rgba(253,246,236,0.45);line-height:1.4;}
 .premium-arrow{font-size:16px;color:var(--purple);flex-shrink:0;}
 </style>
+<script src="../../js/free-access.js"></script>
 </head>
 <body>
 <div class="header">
@@ -99,7 +100,8 @@ const LESSONS=[
 ];
 const KEY_PREFIX='slaagnl_m3_';
 function isDone(num){return localStorage.getItem(KEY_PREFIX+num)==='done';}
-function isPremium(){return localStorage.getItem('slaagnl_premium')==='true'||localStorage.getItem('slaagnl_plan')==='completo'||localStorage.getItem('slaagnl_plan')==='enfocado';}
+function isPremium(){if(window.SLAAGNL_DISABLE_PLANS === true) return true; // TEMP: disable plans (free access)
+  return localStorage.getItem('slaagnl_premium')==='true'||localStorage.getItem('slaagnl_plan')==='completo'||localStorage.getItem('slaagnl_plan')==='enfocado';}
 function getStatus(num){
   if(isDone(num))return'completed';
   if(isPremium())return'available';

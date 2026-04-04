@@ -134,6 +134,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
 /* CONNECTOR LINE */
 .connector{width:2px;height:10px;background:rgba(255,255,255,0.06);margin:0 auto;border-radius:2px;}
 </style>
+<script src="../../js/free-access.js"></script>
 </head>
 <body>
 
@@ -192,7 +193,8 @@ const KEY_PREFIX = 'slaagnl_m0_';
 const KEY_PREMIUM = 'slaagnl_premium';
 
 function isDone(num){ return localStorage.getItem(KEY_PREFIX + num) === 'done'; }
-function isPremium(){ return localStorage.getItem(KEY_PREMIUM) === 'true'; }
+function isPremium(){ if(window.SLAAGNL_DISABLE_PLANS === true) return true; // TEMP: disable plans (free access)
+  return localStorage.getItem(KEY_PREMIUM) === 'true'; }
 
 // For demo: mark a lesson done via URL param ?done=N
 (()=>{
