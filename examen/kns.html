@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
+<script>
+  // Guard: redirect to disclaimer if not yet accepted
+  (function(){
+    if (localStorage.getItem('slaagnl_exam_disclaimer_accepted') !== 'true') {
+      localStorage.setItem('slaagnl_exam_target', 'kns');
+      location.replace('index.html');
+    }
+  })();
+</script>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>SlaagNL — KNS</title>
