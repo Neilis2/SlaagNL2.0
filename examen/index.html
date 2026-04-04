@@ -1,1 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SlaagNL — Examen</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --navy:#0d1f3c;--navy2:#162d54;--navy3:#1e3a6e;
+      --orange:#f47c3a;--cream:#fdf6ec;--border:rgba(255,255,255,0.08);
+      --ease:0.22s cubic-bezier(0.4,0,0.2,1);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:'DM Sans',sans-serif;
+      background:var(--navy);
+      color:var(--cream);
+      min-height:100vh;
+      -webkit-font-smoothing:antialiased;
+    }
+    .header{
+      display:flex;align-items:center;gap:10px;
+      padding:14px 16px;background:var(--navy2);
+      border-bottom:1px solid var(--border);
+      position:sticky;top:0;z-index:50;
+    }
+    .btn-back{
+      background:none;border:none;color:var(--orange);
+      font-size:24px;cursor:pointer;line-height:1;
+      padding:0 6px 0 0;
+    }
+    .title{
+      font-family:'Playfair Display',serif;
+      font-weight:900;font-size:16px;
+    }
 
+    .wrap{max-width:640px;margin:0 auto;padding:18px 16px 44px;}
+    .card{
+      background:var(--navy2);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:18px;
+    }
+    .h1{
+      font-family:'Playfair Display',serif;
+      font-weight:900;
+      font-size:24px;
+      margin-bottom:10px;
+      line-height:1.15;
+    }
+    .p{
+      font-size:13.5px;
+      line-height:1.65;
+      color:rgba(253,246,236,0.78);
+      margin-bottom:10px;
+    }
+    .list{margin:12px 0 16px;padding-left:18px;}
+    .list li{
+      margin:8px 0;
+      color:rgba(253,246,236,0.82);
+      line-height:1.55;
+      font-size:13.5px;
+    }
+
+    .btn{
+      width:100%;
+      padding:14px 16px;
+      border-radius:14px;
+      border:none;
+      font-weight:900;
+      cursor:pointer;
+      font-family:inherit;
+      transition:transform 0.12s var(--ease);
+    }
+    .btn:active{transform:scale(0.98);}
+
+    .btn-primary{background:var(--orange);color:white;}
+    .btn-secondary{
+      margin-top:10px;
+      background:rgba(255,255,255,0.06);
+      border:1px solid var(--border);
+      color:var(--cream);
+    }
+
+    .muted{
+      margin-top:12px;
+      font-size:12px;
+      color:rgba(253,246,236,0.45);
+      text-align:center;
+      line-height:1.4;
+    }
+
+    .choices{
+      display:none;
+      gap:10px;
+      margin-top:14px;
+    }
+    .choice{
+      flex:1;
+      background:rgba(255,255,255,0.06);
+      border:1px solid var(--border);
+      color:var(--cream);
+      padding:12px;
+      border-radius:14px;
+      cursor:pointer;
+      font-weight:900;
+      font-family:inherit;
+      transition:transform 0.12s var(--ease);
+    }
+    .choice:active{transform:scale(0.98);}
+  </style>
+</head>
+<body>
+  <div class="header">
+    <button class="btn-back" onclick="window.location.href='../index.html'">‹</button>
+    <div class="title">Examen</div>
+  </div>
+
+  <div class="wrap">
+    <div class="card">
+      <div class="h1">⚠️ Antes de empezar</div>
+
+      <div class="p">
+        Este simulador es una herramienta de práctica independiente para ayudarte a preparar tu integración en los Países Bajos. Ten en cuenta lo siguiente:
+      </div>
+
+      <ul class="list">
+        <li><strong>No es el examen oficial:</strong> Este contenido es para practicar y no es una copia exacta de las pruebas realizadas por el IND o DUO.</li>
+        <li><strong>Sin vinculación institucional:</strong> No estamos afiliados a ninguna entidad del gobierno neerlandés.</li>
+        <li><strong>Propósito educativo:</strong> Los resultados obtenidos aquí son una guía de estudio y no garantizan la aprobación del examen real.</li>
+        <li>Al hacer clic en <strong>\"Empezar\"</strong>, aceptas que utilizas esta herramienta como apoyo complementario para tu preparación.</li>
+      </ul>
+
+      <button class="btn btn-primary" id="btn-start">Empezar</button>
+      <button class="btn btn-secondary" id="btn-cancel">Cancelar</button>
+
+      <div class="muted" id="muted"></div>
+
+      <div class="choices" id="choices">
+        <button class="choice" onclick="setTargetAndStart('kns')">KNS</button>
+        <button class="choice" onclick="setTargetAndStart('spreken')">Spreken</button>
+        <button class="choice" onclick="setTargetAndStart('lezen')">Lezen</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+  const KEY_ACCEPTED = 'slaagnl_exam_disclaimer_accepted';
+  const KEY_TARGET   = 'slaagnl_exam_target';
+
+  const TARGET_URLS = {
+    kns: 'kns.html',
+    spreken: 'spreken.html',
+    lezen: 'lezen.html'
+  };
+
+  function resolveTarget(){
+    const t = (localStorage.getItem(KEY_TARGET) || '').toLowerCase();
+    return TARGET_URLS[t] ? t : null;
+  }
+
+  function startWithTarget(t){
+    localStorage.setItem(KEY_ACCEPTED, 'true');
+    window.location.href = TARGET_URLS[t];
+  }
+
+  function setTargetAndStart(t){
+    localStorage.setItem(KEY_TARGET, t);
+    startWithTarget(t);
+  }
+
+  document.getElementById('btn-cancel').addEventListener('click', () => {
+    // No guardar aceptación
+    window.location.href = '../index.html';
+  });
+
+  document.getElementById('btn-start').addEventListener('click', () => {
+    const t = resolveTarget();
+    if (!t) {
+      document.getElementById('muted').textContent = 'Elige un examen para continuar:';
+      document.getElementById('choices').style.display = 'flex';
+      return;
+    }
+    startWithTarget(t);
+  });
+
+  // UX: si ya aceptó y hay examen objetivo, saltar directo
+  (function(){
+    const accepted = localStorage.getItem(KEY_ACCEPTED) === 'true';
+    const t = resolveTarget();
+    if (accepted && t) window.location.replace(TARGET_URLS[t]);
+  })();
+</script>
+</body>
+</html>
