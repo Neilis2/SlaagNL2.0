@@ -285,6 +285,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
 [dir="rtl"] .subpanel{right:auto;left:-100%;border-left:none;border-right:1px solid var(--border);}
 [dir="rtl"] .subpanel.open{left:0;}
 </style>
+<script src="js/free-access.js"></script>
 </head>
 <body>
 
@@ -575,6 +576,7 @@ function calcDays() {
   return d > 0 ? d : 0;
 }
 function isPremium() {
+  if (window.SLAAGNL_DISABLE_PLANS === true) return true; // TEMP: disable plans (free access)
   const u = state.user;
   if (u.plan === 'completo' || u.plan === 'enfocado') return true;
   if (u.premiumExpiry) return new Date() < new Date(u.premiumExpiry);
