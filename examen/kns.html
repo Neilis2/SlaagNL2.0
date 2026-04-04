@@ -459,7 +459,7 @@ function speakCurrent(){
   const text = buildSpeakText();
   const u = new SpeechSynthesisUtterance(text);
   u.lang = 'nl-NL';
-  u.rate = 0.85;
+  u.rate = 0.70;
   u.pitch = 1.0;
   u.volume = 1.0;
   if(selectedVoice) u.voice = selectedVoice;
