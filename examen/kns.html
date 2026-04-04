@@ -428,10 +428,10 @@ function initSpeech(){
     const voices = window.speechSynthesis.getVoices();
     if(!voices || voices.length===0) return false;
     selectedVoice =
-      voices.find(v => (v.lang||'').toLowerCase().startsWith('nl')) ||
-      voices.find(v => (v.lang||'').toLowerCase().startsWith('nl-nl')) ||
-      voices[0] ||
-      null;
+  voices.find(v => /^nl/i.test(v.lang) && /(google|microsoft|natural|neural)/i.test(v.name)) ||
+  voices.find(v => /^nl/i.test(v.lang) && v.localService) ||
+  voices.find(v => /^nl/i.test(v.lang)) ||
+  null;
     speechReady = true;
     return true;
   };
@@ -468,7 +468,7 @@ function speakCurrent(){
 }
 
 function reSpeak(){
-  speakCurrent();
+  // intencionalmente vacío: no releer al seleccionar respuesta
 }
 
 initTest();
