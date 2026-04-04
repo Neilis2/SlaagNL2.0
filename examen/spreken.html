@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SlaagNL — Spreken</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0d1f3c;--navy2:#162d54;--navy3:#1e3a6e;--orange:#f47c3a;--cream:#fdf6ec;--green:#2ecc8a;--red:#e8455a;--purple:#a78bfa;--blue:#60a5fa;--border:rgba(255,255,255,0.07);--ease:0.22s cubic-bezier(0.4,0,0.2,1);}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
+body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);min-height:100vh;-webkit-font-smoothing:antialiased;}
+.header{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--navy2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;}
+.btn-back{background:none;border:none;color:var(--orange);font-size:24px;cursor:pointer;padding:0 6px 0 0;line-height:1;flex-shrink:0;}
+.header-info{flex:1;}
+.header-sup{font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:1.2px;font-weight:700;}
+.header-title{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--cream);}
+.header-count{font-size:12px;color:rgba(253,246,236,0.45);font-weight:600;flex-shrink:0;}
+.qnav-wrap{background:var(--navy2);border-bottom:1px solid var(--border);padding:10px 14px;overflow-x:auto;scrollbar-width:none;}
+.qnav-wrap::-webkit-scrollbar{display:none;}
+.qnav{display:flex;gap:6px;width:max-content;}
+.qnum{width:30px;height:30px;border-radius:8px;border:1.5px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:rgba(253,246,236,0.4);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all var(--ease);flex-shrink:0;}
+.qnum.done{background:rgba(46,204,138,0.15);border-color:rgba(46,204,138,0.3);color:var(--green);}
+.qnum.current{background:var(--orange);border-color:var(--orange);color:white;}
+.main{padding:16px 16px 110px;max-width:600px;margin:0 auto;}
+
+.section-title{
+  font-family:'Playfair Display',serif;
+  font-size:18px;
+  font-weight:900;
+  margin:6px 0 12px;
+  color:rgba(253,246,236,0.95);
+}
+
+.card{background:var(--navy2);border-radius:18px;border:1px solid var(--border);overflow:hidden;margin-bottom:14px;}
+.pad{padding:16px 18px;}
+.video{width:100%;border-radius:14px;border:1px solid rgba(255,255,255,0.08);background:rgba(0,0,0,0.25);aspect-ratio:16/9;}
+.audio-player{display:flex;align-items:center;gap:14px;}
+.play-btn{width:52px;height:52px;border-radius:50%;background:var(--orange);border:none;display:flex;align-items:center;justify-content:center;font-size:18px;color:white;cursor:pointer;flex-shrink:0;transition:all var(--ease);}
+.play-btn:active{transform:scale(0.93);}
+.play-btn.playing{background:var(--red);}
+.small{font-size:12px;color:rgba(253,246,236,0.45);line-height:1.5;}
+.bigline{font-size:15px;font-weight:700;line-height:1.6;}
+
+.media-img{width:100%;display:block;border-radius:14px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);aspect-ratio:16/9;object-fit:cover;}
+.media-fallback{display:none;margin-top:10px;font-size:12px;color:rgba(253,246,236,0.55);line-height:1.5;}
+
+.blank{display:inline-block;min-width:80px;border-bottom:2px solid var(--orange);margin:0 4px;color:var(--orange);font-style:italic;text-align:center;}
+
+.record-btn{width:100%;padding:16px;border-radius:14px;border:none;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:10px;transition:all var(--ease);}
+.record-btn.idle{background:rgba(167,139,250,0.12);border:1.5px solid rgba(167,139,250,0.3);color:var(--purple);}
+.record-btn.recording{background:rgba(232,69,90,0.15);border:1.5px solid var(--red);color:var(--red);animation:recordPulse 1.5s ease infinite;}
+@keyframes recordPulse{0%,100%{box-shadow:0 0 0 0 rgba(232,69,90,0.3);}50%{box-shadow:0 0 0 12px rgba(232,69,90,0);}}
+.record-btn.done{background:rgba(46,204,138,0.12);border:1.5px solid rgba(46,204,138,0.3);color:var(--green);}
+.rec-ic{font-size:20px;}
+
+.transcript-wrap{margin-top:12px;background:rgba(0,0,0,0.2);border-radius:12px;padding:14px 16px;border:1px solid rgba(255,255,255,0.06);min-height:70px;}
+.transcript-note{font-size:11px;color:rgba(253,246,236,0.35);margin-bottom:6px;}
+.transcript-text{font-size:14px;color:var(--cream);line-height:1.65;min-height:28px;}
+.transcript-placeholder{color:rgba(253,246,236,0.2);font-style:italic;font-size:13px;}
+
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--navy2);border-top:1px solid var(--border);padding:12px 16px;display:flex;gap:10px;max-width:600px;margin:0 auto;}
+.btn-nav{flex:1;padding:13px;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;border:none;}
+.btn-prev{background:rgba(255,255,255,0.06);color:rgba(253,246,236,0.6);border:1.5px solid rgba(255,255,255,0.1);}
+.btn-next{background:var(--navy3);color:var(--cream);border:1.5px solid rgba(255,255,255,0.12);}
+.btn-finish{background:var(--orange);color:white;}
+
+.finish-screen{display:none;flex-direction:column;align-items:center;padding:32px 20px 80px;max-width:600px;margin:0 auto;text-align:center;}
+.finish-screen.show{display:flex;}
+.finish-emoji{font-size:72px;margin-bottom:12px;}
+.finish-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:var(--cream);margin-bottom:10px;}
+.finish-sub{font-size:14px;color:rgba(253,246,236,0.55);line-height:1.65;max-width:420px;margin-bottom:28px;}
+.finish-premium-card{background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.25);border-radius:18px;padding:20px;margin-bottom:24px;width:100%;text-align:left;}
+.finish-premium-title{font-size:15px;font-weight:900;color:var(--purple);margin-bottom:10px;}
+.finish-premium-sub{font-size:13px;color:rgba(253,246,236,0.55);line-height:1.55;margin-bottom:12px;}
+.finish-premium-note{font-size:12px;color:rgba(253,246,236,0.45);line-height:1.55;margin-top:10px;border-top:1px solid rgba(255,255,255,0.08);padding-top:10px;}
+.btn-premium{padding:14px 16px;background:var(--purple);border:none;border-radius:12px;color:white;font-size:14px;font-weight:900;cursor:pointer;font-family:inherit;width:100%;margin-top:10px;}
+.btn-back-home{padding:14px;background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.1);border-radius:12px;color:var(--cream);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;width:100%;}
+
+.timer-toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-80px);background:var(--navy3);border:1px solid rgba(244,196,58,0.4);color:#f4c842;font-size:13px;font-weight:900;padding:12px 20px;border-radius:99px;z-index:999;transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1),opacity 0.4s;opacity:0;white-space:nowrap;}
+.timer-toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity 0.25s;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal-box{background:var(--navy2);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:28px 24px;width:100%;max-width:320px;text-align:center;transform:scale(0.92);transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1);}
+.modal-overlay.open .modal-box{transform:scale(1);}
+.modal-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:900;color:var(--cream);margin-bottom:8px;}
+.modal-sub{font-size:13px;color:rgba(253,246,236,0.5);margin-bottom:20px;line-height:1.5;}
+.modal-btns{display:flex;gap:10px;}
+.modal-btn{flex:1;padding:12px;border-radius:12px;font-size:14px;font-weight:900;cursor:pointer;font-family:inherit;border:none;}
+.modal-btn.primary{background:var(--orange);color:white;}
+.modal-btn.secondary{background:rgba(255,255,255,0.06);color:var(--cream);border:1px solid var(--border);}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <button class="btn-back" onclick="confirmExit()">‹</button>
+  <div class="header-info">
+    <div class="header-sup">Examen</div>
+    <div class="header-title">Spreken</div>
+  </div>
+  <div class="header-count" id="hdr-count">1 / 22</div>
+</div>
+
+<div class="qnav-wrap" id="qnav-wrap">
+  <div class="qnav" id="qnav"></div>
+</div>
+
+<div class="main" id="main-content">
+  <div id="q-wrap"></div>
+</div>
+
+<div class="bottom-nav" id="bottom-nav">
+  <button class="btn-nav btn-prev" id="btn-prev" onclick="goQ(-1)">‹ Anterior</button>
+  <button class="btn-nav btn-next" id="btn-next" onclick="goQ(1)">Siguiente ›</button>
+  <button class="btn-nav btn-finish" onclick="confirmFinish()">Finalizar</button>
+</div>
+
+<div class="finish-screen" id="finish-screen"></div>
+<div class="timer-toast" id="timer-toast"></div>
+
+<div class="modal-overlay" id="confirm-modal">
+  <div class="modal-box">
+    <div class="modal-title" id="modal-title"></div>
+    <div class="modal-sub" id="modal-sub"></div>
+    <div class="modal-btns">
+      <button class="modal-btn secondary" onclick="closeModal()">Cancelar</button>
+      <button class="modal-btn primary" id="modal-confirm-btn">Finalizar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const VIDEO_DIR = 'assets/video/';
+const AUDIO_DIR = 'assets/audio/';
+const IMG_DIR   = 'assets/spreken/';
+
+const SECTION_1_BANK_SIZE = 64;
+const SECTION_2_BANK_SIZE = 100;
+
+const SECTION_1_TEST_COUNT = 10;
+const SECTION_2_TEST_COUNT = 12;
+const TEST_SIZE = SECTION_1_TEST_COUNT + SECTION_2_TEST_COUNT;
+
+const TOTAL_MINUTES = 30;
+
+const BANK_S1 = Array.from({length: SECTION_1_BANK_SIZE}, (_,i)=>({
+  section: 1,
+  video: `s1_${i+1}.mp4`
+}));
+
+const BANK_S2 = Array.from({length: SECTION_2_BANK_SIZE}, (_,i)=>({
+  section: 2,
+  audio: `s2_${i+1}.mp3`,
+  imgBase: `s2_${i+1}`,
+  audioText: '',
+  sentence: '... _____'
+}));
+
+let testQuestions = [];
+let transcripts = [];
+let currentQ = 0;
+let timerInterval = null;
+let recognition = null;
+let isRecording = false;
+let currentAudio = null;
+let currentVideo = null;
+
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function initTest(){
+  const s1Pick = shuffle(BANK_S1).slice(0, SECTION_1_TEST_COUNT);
+  const s2Pick = shuffle(BANK_S2).slice(0, SECTION_2_TEST_COUNT);
+  testQuestions = [...s1Pick, ...s2Pick];
+  transcripts = new Array(TEST_SIZE).fill('');
+  currentQ = 0;
+
+  buildQNav();
+  renderQ(0);
+  startTimer();
+  initSpeechRecognition();
+}
+
+function startTimer(){
+  let s = TOTAL_MINUTES * 60;
+  timerInterval = setInterval(()=>{
+    s--;
+    if(s===5*60) showTimerToast('⏰ Te quedan 5 minutos');
+    if(s===60)   showTimerToast('⚠️ Te queda 1 minuto');
+    if(s<=0){clearInterval(timerInterval);finishTest();}
+  },1000);
+}
+
+function showTimerToast(msg){
+  const el=document.getElementById('timer-toast');
+  el.textContent=msg;
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),5000);
+}
+
+function initSpeechRecognition(){
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SR) return;
+  recognition = new SR();
+  recognition.lang = 'nl-NL';
+  recognition.continuous = false;
+  recognition.interimResults = true;
+
+  recognition.onresult = (e) => {
+    let transcript = '';
+    for(let i=e.resultIndex; i<e.results.length; i++){
+      transcript += e.results[i][0].transcript;
+    }
+    const el = document.getElementById(`transcript-${currentQ}`);
+    if(el) el.textContent = transcript;
+
+    if(e.results[e.results.length-1].isFinal){
+      transcripts[currentQ] = transcript;
+      stopRecording();
+    }
+  };
+
+  recognition.onerror = () => stopRecording();
+  recognition.onend = () => stopRecording();
+}
+
+function toggleRecording(){
+  if(isRecording) stopRecording();
+  else startRecording();
+}
+function startRecording(){
+  if(!recognition){showTimerToast('⚠️ Micrófono no disponible');return;}
+  isRecording = true;
+  recognition.start();
+
+  const btn = document.getElementById(`rec-btn-${currentQ}`);
+  if(btn){
+    btn.className='record-btn recording';
+    btn.innerHTML='<span class="rec-ic">⏹</span> Grabando...';
+  }
+}
+function stopRecording(){
+  isRecording = false;
+  try{recognition.stop();}catch(e){}
+  const btn = document.getElementById(`rec-btn-${currentQ}`);
+  if(btn){
+    const hasTr = transcripts[currentQ]?.trim().length > 0;
+    btn.className='record-btn '+(hasTr?'done':'idle');
+    btn.innerHTML=hasTr
+      ? '<span class="rec-ic">✓</span> Respuesta guardada'
+      : '<span class="rec-ic">🎤</span> Toca para hablar';
+    updateQNav();
+  }
+}
+
+function stopPlayers(){
+  if(currentAudio){try{currentAudio.pause();}catch(e){} currentAudio=null;}
+  if(currentVideo){try{currentVideo.pause();}catch(e){} currentVideo=null;}
+  const playingBtns = document.querySelectorAll('.play-btn.playing');
+  playingBtns.forEach(b=>b.classList.remove('playing'));
+}
+
+function playAudio(filename, idx){
+  stopPlayers();
+  const audio = new Audio(`${AUDIO_DIR}${filename}`);
+  currentAudio = audio;
+  const btn = document.getElementById(`audio-btn-${idx}`);
+  if(btn) btn.classList.add('playing');
+  audio.play().catch(()=>{});
+  audio.onended = () => { if(btn)btn.classList.remove('playing'); currentAudio=null; };
+  audio.onerror = () => { if(btn)btn.classList.remove('playing'); currentAudio=null; };
+}
+
+function loadImageFlexible(imgBase, idx){
+  const img = document.getElementById(`img-${idx}`);
+  const fb  = document.getElementById(`img-fallback-${idx}`);
+  if(!img || !fb) return;
+
+  fb.style.display='none';
+  img.style.display='block';
+
+  const jpg = IMG_DIR + imgBase + '.jpg';
+  const png = IMG_DIR + imgBase + '.png';
+
+  img.onerror = () => {
+    if (img.dataset.tried !== 'png') { img.dataset.tried='png'; img.src=png; return; }
+    img.style.display='none';
+    fb.style.display='block';
+    fb.textContent = 'Afbeelding ontbreekt';
+  };
+
+  img.dataset.tried='jpg';
+  img.src=jpg;
+}
+
+function buildQNav(){
+  const nav=document.getElementById('qnav');
+  nav.innerHTML='';
+  testQuestions.forEach((_,i)=>{
+    const btn=document.createElement('button');
+    btn.className='qnum'+(i===0?' current':'');
+    btn.id=`qnum-${i}`;
+    btn.textContent=i+1;
+    btn.onclick=()=>goToQ(i);
+    nav.appendChild(btn);
+  });
+}
+
+function updateQNav(){
+  testQuestions.forEach((_,i)=>{
+    const btn=document.getElementById(`qnum-${i}`);
+    if(!btn) return;
+    btn.className='qnum';
+    if(transcripts[i]?.trim().length>0) btn.classList.add('done');
+    if(i===currentQ) btn.classList.add('current');
+  });
+  const btn=document.getElementById(`qnum-${currentQ}`);
+  if(btn) btn.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+}
+
+function renderQ(idx){
+  if(isRecording) stopRecording();
+  stopPlayers();
+
+  currentQ = idx;
+  const q = testQuestions[idx];
+  document.getElementById('hdr-count').textContent = `${idx+1} / ${TEST_SIZE}`;
+
+  const isS1 = q.section === 1;
+
+  let html = `<div class="section-title">${isS1 ? 'Vraag - Antwoord' : 'Aanvulzinnen'}</div>`;
+
+  if(isS1){
+    html += `
+      <div class="card">
+        <div class="pad">
+          <video class="video" id="video-${idx}" controls playsinline preload="metadata">
+            <source src="${VIDEO_DIR}${q.video}" type="video/mp4">
+          </video>
+
+          <div style="margin-top:14px;">
+            <button class="record-btn ${transcripts[idx]?.trim().length>0?'done':'idle'}" id="rec-btn-${idx}" onclick="toggleRecording()">
+              <span class="rec-ic">${transcripts[idx]?.trim().length>0?'✓':'🎤'}</span>
+              ${transcripts[idx]?.trim().length>0?'Respuesta guardada':'Toca para hablar'}
+            </button>
+
+            <div class="transcript-wrap">
+              <div class="transcript-note">Belangrijk: in het echte examen zie je niet wat je zegt.</div>
+              <div class="transcript-text" id="transcript-${idx}">
+                ${transcripts[idx] || '<span class="transcript-placeholder">Tu respuesta aparecerá aquí mientras hablas...</span>'}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  } else {
+    const sentenceHtml = (q.sentence || '... _____').replace(/_+/g, '<span class="blank">___</span>');
+    html += `
+      <div class="card">
+        <div class="pad">
+          <div class="audio-player">
+            <button class="play-btn" id="audio-btn-${idx}" onclick="playAudio('${q.audio}',${idx})">▶</button>
+            <div>
+              <div class="small">${q.audio}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pad" style="padding-top:0;">
+          <img class="media-img" id="img-${idx}" alt="Afbeelding" />
+          <div class="media-fallback" id="img-fallback-${idx}"></div>
+        </div>
+
+        <div class="pad" style="padding-top:0;">
+          <div class="small" style="margin-bottom:8px;">${q.audioText || ''}</div>
+          <div class="bigline">${sentenceHtml}</div>
+
+          <div style="margin-top:14px;">
+            <button class="record-btn ${transcripts[idx]?.trim().length>0?'done':'idle'}" id="rec-btn-${idx}" onclick="toggleRecording()">
+              <span class="rec-ic">${transcripts[idx]?.trim().length>0?'✓':'🎤'}</span>
+              ${transcripts[idx]?.trim().length>0?'Respuesta guardada':'Toca para hablar'}
+            </button>
+
+            <div class="transcript-wrap">
+              <div class="transcript-note">Belangrijk: in het echte examen zie je niet wat je zegt.</div>
+              <div class="transcript-text" id="transcript-${idx}">
+                ${transcripts[idx] || '<span class="transcript-placeholder">Tu respuesta aparecerá aquí mientras hablas...</span>'}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  document.getElementById('q-wrap').innerHTML = html;
+
+  if(isS1){
+    currentVideo = document.getElementById(`video-${idx}`) || null;
+  } else {
+    loadImageFlexible(q.imgBase, idx);
+  }
+
+  document.getElementById('btn-prev').style.display = idx===0 ? 'none' : 'flex';
+  document.getElementById('btn-next').textContent = idx===TEST_SIZE-1 ? 'Última' : 'Siguiente ›';
+  updateQNav();
+}
+
+function goQ(dir){
+  const next = currentQ + dir;
+  if(next<0 || next>=TEST_SIZE) return;
+  renderQ(next);
+}
+function goToQ(idx){ renderQ(idx); }
+
+function confirmFinish(){
+  const done = transcripts.filter(t=>t?.trim().length>0).length;
+  document.getElementById('modal-title').textContent='¿Finalizar?';
+  document.getElementById('modal-sub').textContent=`Has respondido ${done} de ${TEST_SIZE}.`;
+  document.getElementById('modal-confirm-btn').onclick=finishTest;
+  document.getElementById('confirm-modal').classList.add('open');
+}
+
+function confirmExit(){
+  document.getElementById('modal-title').textContent='¿Salir?';
+  document.getElementById('modal-sub').textContent='Tu progreso se perderá.';
+  document.getElementById('modal-confirm-btn').onclick=()=>window.location.href='../index.html';
+  document.getElementById('confirm-modal').classList.add('open');
+}
+
+function closeModal(){ document.getElementById('confirm-modal').classList.remove('open'); }
+
+function finishTest(){
+  clearInterval(timerInterval);
+  closeModal();
+  if(isRecording) stopRecording();
+  stopPlayers();
+
+  const done = transcripts.filter(t=>t?.trim().length>0).length;
+
+  document.getElementById('main-content').style.display='none';
+  document.getElementById('bottom-nav').style.display='none';
+  document.getElementById('qnav-wrap').style.display='none';
+
+  const fs = document.getElementById('finish-screen');
+  fs.innerHTML = `
+    <div class="finish-emoji">🗣️</div>
+    <div class="finish-title">¡Spreken completado!</div>
+    <div class="finish-sub">Has respondido ${done} de ${TEST_SIZE} ítems.</div>
+
+    <div class="finish-premium-card">
+      <div class="finish-premium-title">¿Quieres una experiencia más real?</div>
+      <div class="finish-premium-sub">Sabemos que la clave para aprobar el examen Spreken es que un nativo te entienda. Por eso, una persona neerlandohablante de nuestro equipo escuchará personalmente tus audios.</div>
+      <div class="finish-premium-sub">Recibirás en tu Gmail una valoración detallada de tu pronunciación, gramática y fluidez, junto con un resumen de los puntos que ya dominas y aquellos en los que debes trabajar más para ir al examen con total seguridad.</div>
+      <div class="finish-premium-note"><strong>Importante:</strong> Este servicio es una herramienta de apoyo y práctica personalizada. La revisión y calificación de nuestro equipo no garantiza el aprobado del examen oficial Spreken, ya que no tenemos vinculación con DUO. Nuestro objetivo es ofrecerte una experiencia de preparación humana y completa para que te sientas lista el día de tu prueba.</div>
+      <button class="btn-premium" onclick="showTimerToast('⭐ Revisar test — próximamente')">⭐ Revisar test</button>
+    </div>
+
+    <button class="btn-back-home" onclick="window.location.href='../index.html'">‹ Volver al dashboard</button>
+  `;
+  fs.classList.add('show');
+}
+
+initTest();
+</script>
+</body>
+  </html>
