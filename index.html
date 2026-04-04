@@ -630,8 +630,11 @@ function renderDashboard() {
 
   // Check if examen lock UI should be shown — TEMP: disabled via DISABLE_EXAMEN_LOCK_UI
   if (DISABLE_EXAMEN_LOCK_UI) {
-    document.querySelector('.examen-blur-content').style.filter = 'none';
+    const blurEl = document.querySelector('.examen-blur-content');
+    blurEl.style.filter = 'none';
+    blurEl.style.pointerEvents = 'auto';
     document.querySelector('.examen-overlay').style.display = 'none';
+    document.getElementById('examen-wrap').style.cursor = 'default';
     document.getElementById('unlock-info').style.display = 'none';
   } else {
     const examenUnlocked = isPremium() || avg >= threshold;
