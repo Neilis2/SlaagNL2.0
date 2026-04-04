@@ -341,12 +341,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
   <!-- EXAMEN -->
   <div class="section-block">
     <div class="section-tag tag-examen">📋 Examen</div>
-    <div class="examen-blur-wrap" id="examen-wrap" onclick="toggleUnlock()">
+    <div class="examen-blur-wrap" id="examen-wrap">
       <div class="examen-blur-content">
         <div class="topics-grid">
-          <div class="topic-oval"><div class="topic-emoji">📋</div><div class="topic-name">KNS</div><div class="topic-sub">35 preguntas</div></div>
-          <div class="topic-oval"><div class="topic-emoji">🗣️</div><div class="topic-name">Spreken</div><div class="topic-sub">35 preguntas</div></div>
-          <div class="topic-oval"><div class="topic-emoji">📗</div><div class="topic-name">Lezen</div><div class="topic-sub">10 textos</div></div>
+          <div class="topic-oval" onclick="goExam('kns')"><div class="topic-emoji">📋</div><div class="topic-name">KNS</div><div class="topic-sub">35 preguntas</div></div>
+          <div class="topic-oval" onclick="goExam('spreken')"><div class="topic-emoji">🗣️</div><div class="topic-name">Spreken</div><div class="topic-sub">35 preguntas</div></div>
+          <div class="topic-oval" onclick="goExam('lezen')"><div class="topic-emoji">📗</div><div class="topic-name">Lezen</div><div class="topic-sub">10 textos</div></div>
         </div>
       </div>
       <div class="examen-overlay"><div class="examen-lock-icon">🔒</div></div>
@@ -575,6 +575,16 @@ function calcDays() {
   const d = Math.ceil((e - n) / 86400000);
   return d > 0 ? d : 0;
 }
+const DISABLE_EXAMEN_LOCK_UI = true; // TEMP: lock UI disabled while plans are off — set to false to restore
+
+function goExam(target) {
+  const allowed = ['kns', 'spreken', 'lezen'];
+  if (!allowed.includes(target)) return;
+  localStorage.setItem('slaagnl_exam_target', target);
+  const accepted = localStorage.getItem('slaagnl_exam_disclaimer_accepted') === 'true';
+  window.location.href = accepted ? `examen/${target}.html` : 'examen/index.html';
+}
+
 function isPremium() {
   if (window.SLAAGNL_DISABLE_PLANS === true) return true; // TEMP: disable plans (free access)
   const u = state.user;
@@ -618,11 +628,17 @@ function renderDashboard() {
   document.getElementById('unlock-pct-val').textContent = avg + '%';
   document.getElementById('unlock-pct-of').textContent  = 'de ' + threshold + '% necesario';
 
-  // Check if examen should be unlocked
-  const examenUnlocked = isPremium() || avg >= threshold;
-  document.getElementById('examen-wrap').style.cursor = examenUnlocked ? 'default' : 'pointer';
-  document.querySelector('.examen-blur-content').style.filter = examenUnlocked ? 'none' : 'blur(4px)';
-  document.querySelector('.examen-overlay').style.display = examenUnlocked ? 'none' : 'flex';
+  // Check if examen lock UI should be shown — TEMP: disabled via DISABLE_EXAMEN_LOCK_UI
+  if (DISABLE_EXAMEN_LOCK_UI) {
+    document.querySelector('.examen-blur-content').style.filter = 'none';
+    document.querySelector('.examen-overlay').style.display = 'none';
+    document.getElementById('unlock-info').style.display = 'none';
+  } else {
+    const examenUnlocked = isPremium() || avg >= threshold;
+    document.getElementById('examen-wrap').style.cursor = examenUnlocked ? 'default' : 'pointer';
+    document.querySelector('.examen-blur-content').style.filter = examenUnlocked ? 'none' : 'blur(4px)';
+    document.querySelector('.examen-overlay').style.display = examenUnlocked ? 'none' : 'flex';
+  }
 
   document.documentElement.dir = state.lang === 'ar' ? 'rtl' : 'ltr';
 
@@ -666,6 +682,7 @@ function renderGrid(containerId, mods) {
 
 // ══ EXAMEN UNLOCK INFO ══
 function toggleUnlock() {
+  if (DISABLE_EXAMEN_LOCK_UI) return; // TEMP: lock UI disabled
   const avg = avgMastery();
   const threshold = state.user.plan === 'enfocado' ? 50 : 80;
   if (isPremium() || avg >= threshold) return;
