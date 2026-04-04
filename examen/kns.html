@@ -329,7 +329,7 @@ function loadImageFlexible(imgBase){
   img.src = jpg;
 }
 
-function renderQ(idx){
+function renderQ(idx, speak=true){
   currentQ=idx;
   const q=testQuestions[idx];
   document.getElementById('hdr-count').textContent=`${idx+1} / ${TEST_SIZE}`;
@@ -356,13 +356,13 @@ function renderQ(idx){
   document.getElementById('btn-next-q').textContent=idx===TEST_SIZE-1?'Laatste':'Volgende ›';
   updateQNav();
 
-  speakCurrent();
+  if(speak) speakCurrent();
 }
 
 function selectOpt(oi){
   if(testFinished)return;
   answers[currentQ]=oi;
-  renderQ(currentQ);
+  renderQ(currentQ, false);
 }
 
 function goQ(dir){
@@ -459,7 +459,7 @@ function speakCurrent(){
   const text = buildSpeakText();
   const u = new SpeechSynthesisUtterance(text);
   u.lang = 'nl-NL';
-  u.rate = 0.70;
+  u.rate = 0.65;
   u.pitch = 1.0;
   u.volume = 1.0;
   if(selectedVoice) u.voice = selectedVoice;
@@ -467,9 +467,7 @@ function speakCurrent(){
   try { window.speechSynthesis.speak(u); } catch(e){}
 }
 
-function reSpeak(){
-  // intencionalmente vacío: no releer al seleccionar respuesta
-}
+function reSpeak(){ speakCurrent(); }
 
 initTest();
 </script>
