@@ -141,11 +141,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
 </div>
 
 <script>
-const VIDEO_DIR = 'assets/video/';
 const AUDIO_DIR = 'assets/audio/';
 const IMG_DIR   = 'assets/spreken/';
 
-const SECTION_1_BANK_SIZE = 64;
 const SECTION_2_BANK_SIZE = 100;
 
 const SECTION_1_TEST_COUNT = 10;
@@ -154,10 +152,12 @@ const TEST_SIZE = SECTION_1_TEST_COUNT + SECTION_2_TEST_COUNT;
 
 const TOTAL_MINUTES = 30;
 
-const BANK_S1 = Array.from({length: SECTION_1_BANK_SIZE}, (_,i)=>({
-  section: 1,
-  video: `s1_${i+1}.mp4`
-}));
+async function loadDeel1Videos(){
+  const resp = await fetch('../assets/video/deel1/index.json');
+  if(!resp.ok) throw new Error(`index.json niet geladen (${resp.status})`);
+  const data = await resp.json();
+  return data.map(entry => ({ section: 1, videoSrc: `../assets/video/deel1/${entry.file}` }));
+}
 
 const BANK_S2 = Array.from({length: SECTION_2_BANK_SIZE}, (_,i)=>({
   section: 2,
@@ -178,8 +178,15 @@ let currentVideo = null;
 
 function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 
-function initTest(){
-  const s1Pick = shuffle(BANK_S1).slice(0, SECTION_1_TEST_COUNT);
+async function initTest(){
+  let s1;
+  try {
+    s1 = await loadDeel1Videos();
+  } catch(e) {
+    document.getElementById('q-wrap').innerHTML = '<p style="color:var(--red);padding:20px;">Video\'s konden niet worden geladen. Probeer de pagina te herladen.</p>';
+    return;
+  }
+  const s1Pick = shuffle(s1).slice(0, SECTION_1_TEST_COUNT);
   const s2Pick = shuffle(BANK_S2).slice(0, SECTION_2_TEST_COUNT);
   testQuestions = [...s1Pick, ...s2Pick];
   transcripts = new Array(TEST_SIZE).fill('');
@@ -345,7 +352,7 @@ function renderQ(idx){
       <div class="card">
         <div class="pad">
           <video class="video" id="video-${idx}" controls playsinline preload="metadata">
-            <source src="${VIDEO_DIR}${q.video}" type="video/mp4">
+            <source src="${q.videoSrc}" type="video/mp4">
           </video>
 
           <div style="margin-top:14px;">
