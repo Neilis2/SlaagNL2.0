@@ -452,7 +452,14 @@ function renderQ(idx){
   if(isS1){
     currentVideo = document.getElementById(`video-${idx}`) || null;
   } else {
-    loadImageByFilename(q.image, idx);
+    if(q.image){
+      loadImageByFilename(q.image, idx);
+    } else {
+      const img = document.getElementById(`img-${idx}`);
+      const fb  = document.getElementById(`img-fallback-${idx}`);
+      if(img) img.style.display='none';
+      if(fb){ fb.style.display='block'; fb.textContent='Afbeelding ontbreekt'; }
+    }
   }
 
   document.getElementById('btn-prev').style.display = idx===0 ? 'none' : 'flex';
