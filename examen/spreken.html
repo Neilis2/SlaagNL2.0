@@ -159,13 +159,20 @@ async function loadDeel1Videos(){
   return data.map(entry => ({ section: 1, videoSrc: `../assets/video/deel1/${entry.file}` }));
 }
 
-const BANK_S2 = Array.from({length: SECTION_2_BANK_SIZE}, (_,i)=>({
-  section: 2,
-  audio: `s2_${i+1}.mp3`,
-  imgBase: `s2_${i+1}`,
-  audioText: '',
-  sentence: '... _____'
-}));
+let BANK_S2 = [];
+
+async function loadSection2Bank(){
+  const resp = await fetch('../assets/spreken/section2/index.json');
+  if(!resp.ok) throw new Error(`section2/index.json niet geladen (${resp.status})`);
+  const data = await resp.json();
+  return data.map(entry => ({
+    section: 2,
+    audio: entry.audio,
+    image: entry.image,
+    audioText: '',
+    sentence: entry.sentence
+  }));
+}
 
 let testQuestions = [];
 let transcripts = [];
@@ -185,6 +192,18 @@ async function initTest(){
   } catch(e) {
     document.getElementById('q-wrap').innerHTML = '<p style="color:var(--red);padding:20px;">Video\'s konden niet worden geladen. Probeer de pagina te herladen.</p>';
     return;
+  }
+  try {
+    BANK_S2 = await loadSection2Bank();
+  } catch(e) {
+    showTimerToast('⚠️ Aanvulzinnen konden niet worden geladen, dummy data wordt gebruikt');
+    BANK_S2 = Array.from({length: SECTION_2_BANK_SIZE}, (_,i)=>({
+      section: 2,
+      audio: `s2_${i+1}.mp3`,
+      image: 's2_1.png',
+      audioText: '',
+      sentence: '... _____'
+    }));
   }
   const s1Pick = shuffle(s1).slice(0, SECTION_1_TEST_COUNT);
   const s2Pick = shuffle(BANK_S2).slice(0, SECTION_2_TEST_COUNT);
@@ -310,6 +329,23 @@ function loadImageFlexible(imgBase, idx){
   img.src=jpg;
 }
 
+function loadImageByFilename(filename, idx){
+  const img = document.getElementById(`img-${idx}`);
+  const fb  = document.getElementById(`img-fallback-${idx}`);
+  if(!img || !fb) return;
+
+  fb.style.display='none';
+  img.style.display='block';
+
+  img.onerror = () => {
+    img.style.display='none';
+    fb.style.display='block';
+    fb.textContent = 'Afbeelding ontbreekt';
+  };
+
+  img.src = IMG_DIR + filename;
+}
+
 function buildQNav(){
   const nav=document.getElementById('qnav');
   nav.innerHTML='';
@@ -416,7 +452,7 @@ function renderQ(idx){
   if(isS1){
     currentVideo = document.getElementById(`video-${idx}`) || null;
   } else {
-    loadImageFlexible(q.imgBase, idx);
+    loadImageByFilename(q.image, idx);
   }
 
   document.getElementById('btn-prev').style.display = idx===0 ? 'none' : 'flex';
