@@ -3,932 +3,639 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SlaagNL – Aprueba tu Inburgeringsexamen</title>
+<title>SlaagNL – Inburgeringsexamen</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --navy: #0d1f3c;
-  --navy2: #162d54;
-  --navy3: #1e3a6e;
-  --orange: #f47c3a;
-  --orange2: #f4a36a;
-  --cream: #fdf6ec;
-  --cream2: #f5ead8;
-  --green: #2ecc8a;
-  --yellow: #f4c842;
-  --border: rgba(255,255,255,0.08);
-  --ease: 0.2s ease;
+  --navy: #0d1f3c; --navy2: #162d54; --navy3: #1e3a6e;
+  --orange: #f47c3a; --orange2: #f4a36a;
+  --cream: #fdf6ec; --green: #2ecc8a;
+  --border: rgba(255,255,255,0.08); --ease: 0.2s ease;
 }
-
 * { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--navy); color: var(--cream); min-height: 100vh; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
 
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--navy);
-  color: var(--cream);
-  min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
-}
-
-/* ══ TOP BAR ══ */
-.topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 24px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: rgba(13, 31, 60, 0.92);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
-}
-.topbar-logo {
-  font-family: 'Playfair Display', serif;
-  font-size: 22px;
-  font-weight: 900;
-  color: var(--cream);
-  letter-spacing: 0.3px;
-  text-decoration: none;
-}
+/* ══ TOPBAR ══ */
+.topbar { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; position: sticky; top: 0; z-index: 100; background: rgba(13,31,60,0.94); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); gap: 12px; }
+.topbar-logo { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; color: var(--cream); text-decoration: none; flex-shrink: 0; }
 .topbar-logo span { color: var(--orange); }
-
-.topbar-login {
-  background: none;
-  border: 1.5px solid rgba(244, 124, 58, 0.45);
-  color: var(--orange);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
-  font-weight: 700;
-  padding: 8px 18px;
-  border-radius: 99px;
-  cursor: pointer;
-  transition: all var(--ease);
-  text-decoration: none;
-  display: inline-block;
-}
-.topbar-login:hover {
-  background: rgba(244, 124, 58, 0.1);
-  border-color: var(--orange);
-}
+.lang-selector { display: flex; align-items: center; gap: 4px; flex: 1; justify-content: center; }
+.lang-btn { background: none; border: 1.5px solid transparent; border-radius: 8px; font-size: 18px; cursor: pointer; padding: 4px 6px; line-height: 1; transition: all var(--ease); opacity: 0.45; }
+.lang-btn.active { border-color: var(--orange); opacity: 1; background: rgba(244,124,58,0.1); }
+.lang-btn:hover { opacity: 0.85; }
+.topbar-login { background: none; border: 1.5px solid rgba(244,124,58,0.45); color: var(--orange); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 700; padding: 8px 16px; border-radius: 99px; cursor: pointer; transition: all var(--ease); text-decoration: none; white-space: nowrap; flex-shrink: 0; }
+.topbar-login:hover { background: rgba(244,124,58,0.1); border-color: var(--orange); }
 
 /* ══ HERO ══ */
-.hero {
-  min-height: calc(100vh - 57px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 48px 24px 40px;
-  text-align: center;
-  background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(244,124,58,0.14) 0%, transparent 70%),
-              linear-gradient(180deg, var(--navy2) 0%, var(--navy) 100%);
-  position: relative;
-  overflow: hidden;
-}
-
-.hero::before {
-  content: '';
-  position: absolute;
-  bottom: -40px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 120%;
-  height: 80px;
-  background: var(--cream);
-  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
-}
-
-.hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  background: rgba(46, 204, 138, 0.1);
-  border: 1px solid rgba(46, 204, 138, 0.3);
-  border-radius: 99px;
-  padding: 6px 14px;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--green);
-  margin-bottom: 24px;
-  letter-spacing: 0.3px;
-}
-
-.lowie-hero {
-  width: 110px;
-  height: 110px;
-  object-fit: contain;
-  filter: drop-shadow(0 12px 32px rgba(244, 124, 58, 0.35));
-  margin-bottom: 16px;
-  animation: floatLowie 4s ease-in-out infinite;
-}
-@keyframes floatLowie {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-
-.hero-title {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(32px, 8vw, 52px);
-  font-weight: 900;
-  line-height: 1.1;
-  color: var(--cream);
-  margin-bottom: 16px;
-  max-width: 480px;
-}
+.hero { min-height: calc(100vh - 57px); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 48px 24px 60px; text-align: center; background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(244,124,58,0.14) 0%, transparent 70%), linear-gradient(180deg, var(--navy2) 0%, var(--navy) 100%); position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; bottom: -40px; left: 50%; transform: translateX(-50%); width: 120%; height: 80px; background: var(--cream); border-radius: 50% 50% 0 0 / 100% 100% 0 0; }
+.hero-badge { display: inline-flex; align-items: center; gap: 7px; background: rgba(46,204,138,0.1); border: 1px solid rgba(46,204,138,0.3); border-radius: 99px; padding: 6px 14px; font-size: 12px; font-weight: 700; color: var(--green); margin-bottom: 24px; letter-spacing: 0.3px; }
+.lowie-hero { width: 110px; height: 110px; object-fit: contain; filter: drop-shadow(0 12px 32px rgba(244,124,58,0.35)); margin-bottom: 16px; animation: floatLowie 4s ease-in-out infinite; }
+@keyframes floatLowie { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+.hero-title { font-family: 'Playfair Display', serif; font-size: clamp(30px, 8vw, 50px); font-weight: 900; line-height: 1.1; color: var(--cream); margin-bottom: 16px; max-width: 480px; }
 .hero-title .accent { color: var(--orange); }
-
-.hero-sub {
-  font-size: clamp(14px, 3.5vw, 17px);
-  color: rgba(253, 246, 236, 0.6);
-  line-height: 1.6;
-  max-width: 360px;
-  margin-bottom: 36px;
-}
-
-.hero-cta-group {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  align-items: center;
-  width: 100%;
-  max-width: 300px;
-}
-
-.btn-primary {
-  width: 100%;
-  padding: 16px 28px;
-  background: linear-gradient(135deg, var(--orange), #f4a020);
-  border: none;
-  border-radius: 16px;
-  color: white;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.22s;
-  box-shadow: 0 8px 24px rgba(244, 124, 58, 0.35);
-  text-decoration: none;
-  display: block;
-  text-align: center;
-}
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(244, 124, 58, 0.45);
-}
+.hero-sub { font-size: clamp(14px, 3.5vw, 17px); color: rgba(253,246,236,0.6); line-height: 1.6; max-width: 360px; margin-bottom: 36px; }
+.hero-cta-group { display: flex; flex-direction: column; gap: 12px; align-items: center; width: 100%; max-width: 300px; }
+.btn-primary { width: 100%; padding: 16px 28px; background: linear-gradient(135deg, var(--orange), #f4a020); border: none; border-radius: 16px; color: white; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.22s; box-shadow: 0 8px 24px rgba(244,124,58,0.35); text-decoration: none; display: block; text-align: center; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(244,124,58,0.45); }
 .btn-primary:active { transform: scale(0.97); }
-
-.btn-secondary {
-  width: 100%;
-  padding: 14px 28px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1.5px solid rgba(255, 255, 255, 0.14);
-  border-radius: 16px;
-  color: rgba(253, 246, 236, 0.7);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.22s;
-  text-decoration: none;
-  display: block;
-  text-align: center;
-}
-.btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--cream);
-  border-color: rgba(255, 255, 255, 0.25);
-}
-
-.hero-note {
-  margin-top: 14px;
-  font-size: 11px;
-  color: rgba(253, 246, 236, 0.3);
-  letter-spacing: 0.2px;
-}
+.btn-secondary { width: 100%; padding: 14px 28px; background: rgba(255,255,255,0.06); border: 1.5px solid rgba(255,255,255,0.14); border-radius: 16px; color: rgba(253,246,236,0.7); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.22s; text-decoration: none; display: block; text-align: center; }
+.btn-secondary:hover { background: rgba(255,255,255,0.1); color: var(--cream); border-color: rgba(255,255,255,0.25); }
+.hero-note { margin-top: 14px; font-size: 11px; color: rgba(253,246,236,0.3); letter-spacing: 0.2px; }
 
 /* ══ FEATURES ══ */
-.features {
-  background: var(--cream);
-  padding: 56px 24px 48px;
-}
-
-.section-label {
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1.8px;
-  color: var(--orange);
-  text-align: center;
-  margin-bottom: 10px;
-}
-.section-title {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(22px, 5vw, 30px);
-  font-weight: 900;
-  color: var(--navy);
-  text-align: center;
-  line-height: 1.2;
-  margin-bottom: 32px;
-}
-
-.features-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  max-width: 480px;
-  margin: 0 auto;
-}
-
-.feature-card {
-  background: white;
-  border: 1.5px solid rgba(13, 31, 60, 0.07);
-  border-radius: 20px;
-  padding: 20px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  box-shadow: 0 2px 12px rgba(13, 31, 60, 0.06);
-  transition: transform var(--ease), box-shadow var(--ease);
-}
-.feature-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(13, 31, 60, 0.1);
-}
-.feature-card.featured {
-  background: linear-gradient(135deg, var(--navy2), var(--navy3));
-  border-color: rgba(244, 124, 58, 0.3);
-  grid-column: span 2;
-  flex-direction: row;
-  align-items: center;
-  padding: 20px 20px;
-}
-
-.feature-emoji {
-  font-size: 28px;
-  line-height: 1;
-}
-.feature-card.featured .feature-emoji {
-  font-size: 36px;
-  flex-shrink: 0;
-}
-.feature-name {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--navy);
-  line-height: 1.3;
-}
-.feature-card.featured .feature-name {
-  color: var(--cream);
-  font-size: 15px;
-}
-.feature-desc {
-  font-size: 11.5px;
-  color: rgba(13, 31, 60, 0.45);
-  line-height: 1.4;
-}
-.feature-card.featured .feature-desc {
-  color: rgba(253, 246, 236, 0.55);
-  font-size: 12px;
-}
+.features { background: var(--cream); padding: 56px 24px 48px; }
+.section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.8px; color: var(--orange); text-align: center; margin-bottom: 10px; }
+.section-title { font-family: 'Playfair Display', serif; font-size: clamp(22px, 5vw, 30px); font-weight: 900; color: var(--navy); text-align: center; line-height: 1.2; margin-bottom: 32px; }
+.features-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; max-width: 480px; margin: 0 auto; }
+.feature-card { background: white; border: 1.5px solid rgba(13,31,60,0.07); border-radius: 20px; padding: 20px 16px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 2px 12px rgba(13,31,60,0.06); transition: transform var(--ease), box-shadow var(--ease); }
+.feature-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(13,31,60,0.1); }
+.feature-card.featured { background: linear-gradient(135deg, var(--navy2), var(--navy3)); border-color: rgba(244,124,58,0.3); grid-column: span 2; flex-direction: row; align-items: center; padding: 20px; }
+.feature-emoji { font-size: 28px; line-height: 1; }
+.feature-lowie { width: 44px; height: 44px; object-fit: contain; flex-shrink: 0; }
+.feature-card.featured .feature-lowie { width: 50px; height: 50px; }
+.feature-name { font-size: 13px; font-weight: 700; color: var(--navy); line-height: 1.3; }
+.feature-card.featured .feature-name { color: var(--cream); font-size: 15px; }
+.feature-desc { font-size: 11.5px; color: rgba(13,31,60,0.45); line-height: 1.4; }
+.feature-card.featured .feature-desc { color: rgba(253,246,236,0.55); font-size: 12px; }
 .feature-card.featured .feature-text { flex: 1; padding-left: 14px; }
+[dir="rtl"] .feature-card.featured .feature-text { padding-left: 0; padding-right: 14px; }
 
-/* ══ EXAM SECTIONS ══ */
-.sections-band {
-  background: var(--navy2);
-  padding: 48px 24px;
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-}
+/* ══ EXAM BAND ══ */
+.sections-band { background: var(--navy2); padding: 48px 24px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
 .sections-band .section-label { color: var(--orange2); }
 .sections-band .section-title { color: var(--cream); }
-
-.exam-pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
-  margin-bottom: 32px;
-}
-.exam-pill {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 12px;
-  padding: 12px 16px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--cream);
-}
+.exam-pills { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 32px; }
+.exam-pill { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 12px 16px; font-size: 13px; font-weight: 600; color: var(--cream); }
 .exam-pill-emoji { font-size: 18px; }
 .exam-pill-label { color: rgba(253,246,236,0.7); font-size: 11px; font-weight: 400; display: block; }
-
-/* ══ STATS ══ */
-.stats-row {
-  display: flex;
-  justify-content: center;
-  gap: 0;
-  max-width: 400px;
-  margin: 0 auto;
-  background: rgba(244, 124, 58, 0.07);
-  border: 1px solid rgba(244, 124, 58, 0.18);
-  border-radius: 20px;
-  overflow: hidden;
-}
-.stat-item {
-  flex: 1;
-  padding: 18px 12px;
-  text-align: center;
-  border-right: 1px solid rgba(244, 124, 58, 0.15);
-}
+.stats-row { display: flex; justify-content: center; max-width: 360px; margin: 0 auto; background: rgba(244,124,58,0.07); border: 1px solid rgba(244,124,58,0.18); border-radius: 20px; overflow: hidden; }
+.stat-item { flex: 1; padding: 18px 12px; text-align: center; border-right: 1px solid rgba(244,124,58,0.15); }
 .stat-item:last-child { border-right: none; }
-.stat-num {
-  font-family: 'Playfair Display', serif;
-  font-size: 24px;
-  font-weight: 900;
-  color: var(--orange);
-  display: block;
-  line-height: 1;
-  margin-bottom: 4px;
-}
-.stat-lbl {
-  font-size: 10px;
-  color: rgba(253,246,236,0.4);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-}
+.stat-num { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 900; color: var(--orange); display: block; line-height: 1; margin-bottom: 4px; }
+.stat-lbl { font-size: 10px; color: rgba(253,246,236,0.4); font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; }
 
 /* ══ TESTIMONIALS ══ */
-.testimonials {
-  background: var(--cream);
-  padding: 48px 24px 40px;
-}
+.testimonials { background: var(--cream); padding: 48px 24px 40px; }
 .testimonials .section-title { color: var(--navy); }
-
-.testimonial-list {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  max-width: 480px;
-  margin: 0 auto;
-}
-.testimonial-card {
-  background: white;
-  border: 1.5px solid rgba(13, 31, 60, 0.07);
-  border-radius: 18px;
-  padding: 18px 18px 16px;
-  box-shadow: 0 2px 10px rgba(13, 31, 60, 0.05);
-}
+.testimonial-list { display: flex; flex-direction: column; gap: 14px; max-width: 480px; margin: 0 auto; }
+.testimonial-card { background: white; border: 1.5px solid rgba(13,31,60,0.07); border-radius: 18px; padding: 18px 18px 16px; box-shadow: 0 2px 10px rgba(13,31,60,0.05); }
 .testimonial-stars { font-size: 13px; margin-bottom: 8px; letter-spacing: 1px; }
-.testimonial-text {
-  font-size: 13px;
-  color: rgba(13, 31, 60, 0.65);
-  line-height: 1.6;
-  margin-bottom: 12px;
-  font-style: italic;
-}
-.testimonial-author {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.testimonial-avatar {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  font-weight: 700;
-  color: white;
-  flex-shrink: 0;
-}
-.testimonial-name {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--navy);
-}
-.testimonial-origin {
-  font-size: 11px;
-  color: rgba(13, 31, 60, 0.4);
-}
+.testimonial-text { font-size: 13px; color: rgba(13,31,60,0.65); line-height: 1.6; margin-bottom: 12px; font-style: italic; }
+.testimonial-author { display: flex; align-items: center; gap: 10px; }
+.testimonial-avatar { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: white; flex-shrink: 0; }
+.testimonial-name { font-size: 12px; font-weight: 700; color: var(--navy); }
+.testimonial-origin { font-size: 11px; color: rgba(13,31,60,0.4); }
 
-/* ══ PLANS PREVIEW ══ */
-.plans-section {
-  background: var(--navy);
-  padding: 48px 24px 40px;
-}
+/* ══ PLANS ══ */
+.plans-section { background: var(--navy); padding: 48px 24px 40px; }
 .plans-section .section-title { color: var(--cream); }
-
-.plans-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  max-width: 420px;
-  margin: 0 auto 28px;
-}
-.plan-row {
-  background: var(--navy2);
-  border: 1.5px solid var(--border);
-  border-radius: 16px;
-  padding: 16px 18px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  transition: border-color var(--ease);
-}
-.plan-row:hover { border-color: rgba(244, 124, 58, 0.3); }
-.plan-row.highlighted {
-  border-color: rgba(244, 124, 58, 0.45);
-  background: linear-gradient(135deg, rgba(30,58,110,0.9), rgba(22,45,84,0.9));
-  position: relative;
-}
-.plan-row-badge {
-  position: absolute;
-  top: -10px;
-  right: 14px;
-  background: var(--orange);
-  color: white;
-  font-size: 10px;
-  font-weight: 700;
-  padding: 3px 10px;
-  border-radius: 99px;
-}
+.plans-grid { display: flex; flex-direction: column; gap: 12px; max-width: 420px; margin: 0 auto 28px; }
+.plan-row { background: var(--navy2); border: 1.5px solid var(--border); border-radius: 16px; padding: 16px 18px; display: flex; align-items: center; gap: 14px; transition: border-color var(--ease); position: relative; }
+.plan-row:hover { border-color: rgba(244,124,58,0.3); }
+.plan-row.highlighted { border-color: rgba(244,124,58,0.45); background: linear-gradient(135deg, rgba(30,58,110,0.9), rgba(22,45,84,0.9)); }
+.plan-row-badge { position: absolute; top: -10px; right: 14px; background: var(--orange); color: white; font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 99px; }
+[dir="rtl"] .plan-row-badge { right: auto; left: 14px; }
 .plan-row-icon { font-size: 24px; flex-shrink: 0; }
 .plan-row-info { flex: 1; }
-.plan-row-name {
-  font-family: 'Playfair Display', serif;
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--cream);
-  margin-bottom: 2px;
-}
+.plan-row-name { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 700; color: var(--cream); margin-bottom: 2px; }
 .plan-row-desc { font-size: 11.5px; color: rgba(253,246,236,0.4); line-height: 1.4; }
-.plan-row-price {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--orange);
-  text-align: right;
-  flex-shrink: 0;
-}
-.plan-row-price small {
-  font-size: 10px;
-  color: rgba(253,246,236,0.3);
-  font-weight: 400;
-  display: block;
-  text-align: right;
-}
+.plan-row-price { font-size: 16px; font-weight: 700; color: var(--orange); text-align: right; flex-shrink: 0; }
+.plan-row-price small { font-size: 10px; color: rgba(253,246,236,0.3); font-weight: 400; display: block; text-align: right; }
 
 /* ══ FINAL CTA ══ */
-.final-cta {
-  background: linear-gradient(135deg, var(--navy3), var(--navy2));
-  padding: 48px 24px 56px;
-  text-align: center;
-  border-top: 1px solid var(--border);
-}
-.final-cta-lowie {
-  width: 80px;
-  height: 80px;
-  object-fit: contain;
-  margin-bottom: 16px;
-  filter: drop-shadow(0 6px 16px rgba(244,124,58,0.3));
-}
-.final-cta-title {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(24px, 6vw, 34px);
-  font-weight: 900;
-  color: var(--cream);
-  margin-bottom: 10px;
-  line-height: 1.2;
-}
+.final-cta { background: linear-gradient(135deg, var(--navy3), var(--navy2)); padding: 48px 24px 56px; text-align: center; border-top: 1px solid var(--border); }
+.final-cta-lowie { width: 80px; height: 80px; object-fit: contain; margin-bottom: 16px; filter: drop-shadow(0 6px 16px rgba(244,124,58,0.3)); }
+.final-cta-title { font-family: 'Playfair Display', serif; font-size: clamp(24px, 6vw, 34px); font-weight: 900; color: var(--cream); margin-bottom: 10px; line-height: 1.2; }
 .final-cta-title .accent { color: var(--orange); }
-.final-cta-sub {
-  font-size: 14px;
-  color: rgba(253,246,236,0.5);
-  margin-bottom: 28px;
-  line-height: 1.5;
-}
-.final-cta-btn {
-  display: inline-block;
-  padding: 16px 36px;
-  background: linear-gradient(135deg, var(--orange), #f4a020);
-  border: none;
-  border-radius: 16px;
-  color: white;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-  text-decoration: none;
-  box-shadow: 0 8px 28px rgba(244,124,58,0.4);
-  transition: all 0.22s;
-}
-.final-cta-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 36px rgba(244,124,58,0.5);
-}
+.final-cta-sub { font-size: 14px; color: rgba(253,246,236,0.5); margin-bottom: 28px; line-height: 1.5; }
+.final-cta-btn { display: inline-block; padding: 16px 36px; background: linear-gradient(135deg, var(--orange), #f4a020); border: none; border-radius: 16px; color: white; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; text-decoration: none; box-shadow: 0 8px 28px rgba(244,124,58,0.4); transition: all 0.22s; }
+.final-cta-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(244,124,58,0.5); }
 
 /* ══ FOOTER ══ */
-footer {
-  background: var(--navy);
-  border-top: 1px solid var(--border);
-  padding: 20px 24px;
-  text-align: center;
-}
-.footer-logo {
-  font-family: 'Playfair Display', serif;
-  font-size: 18px;
-  font-weight: 900;
-  color: rgba(253,246,236,0.5);
-  margin-bottom: 6px;
-}
+footer { background: var(--navy); border-top: 1px solid var(--border); padding: 20px 24px; text-align: center; }
+.footer-logo { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 900; color: rgba(253,246,236,0.5); margin-bottom: 6px; }
 .footer-logo span { color: var(--orange); }
-.footer-note {
-  font-size: 11px;
-  color: rgba(253,246,236,0.22);
-  line-height: 1.5;
-}
+.footer-note { font-size: 11px; color: rgba(253,246,236,0.22); line-height: 1.5; }
 
 /* ══ MODAL ══ */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.65);
-  z-index: 500;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s;
-}
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 500; display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
 .modal-overlay.open { opacity: 1; pointer-events: all; }
-.modal-box {
-  background: var(--navy2);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 24px;
-  padding: 32px 24px 28px;
-  width: 100%;
-  max-width: 340px;
-  transform: scale(0.92);
-  transition: transform 0.28s cubic-bezier(0.34,1.56,0.64,1);
-  position: relative;
-}
+.modal-box { background: var(--navy2); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 32px 24px 28px; width: 100%; max-width: 340px; transform: scale(0.92); transition: transform 0.28s cubic-bezier(0.34,1.56,0.64,1); position: relative; }
 .modal-overlay.open .modal-box { transform: scale(1); }
-.modal-close {
-  position: absolute;
-  top: 16px;
-  right: 18px;
-  background: none;
-  border: none;
-  color: rgba(253,246,236,0.3);
-  font-size: 20px;
-  cursor: pointer;
-  line-height: 1;
-}
-.modal-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 22px;
-  font-weight: 900;
-  color: var(--cream);
-  margin-bottom: 6px;
-}
-.modal-sub {
-  font-size: 13px;
-  color: rgba(253,246,236,0.45);
-  margin-bottom: 22px;
-  line-height: 1.5;
-}
+.modal-close { position: absolute; top: 16px; right: 18px; background: none; border: none; color: rgba(253,246,236,0.3); font-size: 20px; cursor: pointer; line-height: 1; }
+[dir="rtl"] .modal-close { right: auto; left: 18px; }
+.modal-title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; color: var(--cream); margin-bottom: 6px; }
+.modal-sub { font-size: 13px; color: rgba(253,246,236,0.45); margin-bottom: 22px; line-height: 1.5; }
 .form-field { margin-bottom: 14px; }
-.form-label {
-  display: block;
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: rgba(253,246,236,0.35);
-  margin-bottom: 6px;
-}
-.form-input {
-  width: 100%;
-  padding: 13px 15px;
-  background: rgba(255,255,255,0.05);
-  border: 1.5px solid rgba(255,255,255,0.1);
-  border-radius: 12px;
-  color: var(--cream);
-  font-size: 14px;
-  font-family: 'DM Sans', sans-serif;
-  outline: none;
-  transition: border-color var(--ease);
-}
+.form-label { display: block; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: rgba(253,246,236,0.35); margin-bottom: 6px; }
+.form-input { width: 100%; padding: 13px 15px; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 12px; color: var(--cream); font-size: 14px; font-family: 'DM Sans', sans-serif; outline: none; transition: border-color var(--ease); }
 .form-input:focus { border-color: var(--orange); }
 .form-input::placeholder { color: rgba(253,246,236,0.2); }
-.btn-modal {
-  width: 100%;
-  padding: 14px;
-  background: linear-gradient(135deg, var(--orange), #f4a020);
-  border: none;
-  border-radius: 12px;
-  color: white;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
-  margin-top: 4px;
-  transition: all var(--ease);
-  box-shadow: 0 4px 16px rgba(244,124,58,0.3);
-}
+.btn-modal { width: 100%; padding: 14px; background: linear-gradient(135deg, var(--orange), #f4a020); border: none; border-radius: 12px; color: white; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'DM Sans', sans-serif; margin-top: 4px; transition: all var(--ease); box-shadow: 0 4px 16px rgba(244,124,58,0.3); }
 .btn-modal:hover { box-shadow: 0 6px 22px rgba(244,124,58,0.45); }
-.modal-switch {
-  text-align: center;
-  margin-top: 16px;
-  font-size: 12px;
-  color: rgba(253,246,236,0.35);
-}
-.modal-switch a {
-  color: var(--orange);
-  font-weight: 700;
-  cursor: pointer;
-  text-decoration: none;
-}
-.modal-lowie {
-  width: 56px;
-  height: 56px;
-  object-fit: contain;
-  display: block;
-  margin: 0 auto 14px;
-}
+.modal-switch { text-align: center; margin-top: 16px; font-size: 12px; color: rgba(253,246,236,0.35); }
+.modal-switch a { color: var(--orange); font-weight: 700; cursor: pointer; text-decoration: none; }
+.modal-lowie { width: 56px; height: 56px; object-fit: contain; display: block; margin: 0 auto 14px; }
 </style>
 </head>
 <body>
 
-<!-- TOP BAR -->
+<!-- TOPBAR -->
 <nav class="topbar">
   <a class="topbar-logo" href="#">Slaag<span>NL</span></a>
-  <a class="topbar-login" href="#" onclick="openLogin(); return false;">Iniciar sesión</a>
+  <div class="lang-selector">
+    <button class="lang-btn active" id="lb-es" onclick="setLang('es')" title="Español">🇪🇸</button>
+    <button class="lang-btn" id="lb-en" onclick="setLang('en')" title="English">🇬🇧</button>
+    <button class="lang-btn" id="lb-tr" onclick="setLang('tr')" title="Türkçe">🇹🇷</button>
+    <button class="lang-btn" id="lb-ar" onclick="setLang('ar')" title="العربية">🇸🇦</button>
+  </div>
+  <a class="topbar-login" href="#" id="top-login" onclick="openLogin(); return false;"></a>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-badge">🇳🇱 Preparación para el Inburgeringsexamen</div>
-  <img class="lowie-hero" src="assets/lowie.png" alt="Lowie, tu guía">
-  <h1 class="hero-title">Aprueba tu examen de <span class="accent">holandés</span> con confianza</h1>
-  <p class="hero-sub">SlaagNL te guía paso a paso con lecciones en español, ejercicios interactivos y simulacros del examen real.</p>
+  <div class="hero-badge" id="hero-badge"></div>
+  <img class="lowie-hero" src="assets/lowie.png" alt="Lowie">
+  <h1 class="hero-title" id="hero-title"></h1>
+  <p class="hero-sub" id="hero-sub"></p>
   <div class="hero-cta-group">
-    <a class="btn-primary" href="#" onclick="openRegister(); return false;">Empezar gratis 🦁</a>
-    <a class="btn-secondary" href="#" onclick="openLogin(); return false;">Ya tengo una cuenta</a>
+    <a class="btn-primary" href="#" id="btn-start" onclick="openRegister(); return false;"></a>
+    <a class="btn-secondary" href="#" id="btn-login2" onclick="openLogin(); return false;"></a>
   </div>
-  <p class="hero-note">Sin tarjeta de crédito · Acceso inmediato</p>
+  <p class="hero-note" id="hero-note"></p>
 </section>
 
 <!-- FEATURES -->
 <section class="features">
-  <p class="section-label">¿Por qué SlaagNL?</p>
-  <h2 class="section-title">Todo lo que necesitas para <em>geslaagd</em></h2>
+  <p class="section-label" id="feat-label"></p>
+  <h2 class="section-title" id="feat-title"></h2>
   <div class="features-grid">
     <div class="feature-card featured">
-      <div class="feature-emoji">🦁</div>
+      <img class="feature-lowie" src="assets/lowie.png" alt="Lowie">
       <div class="feature-text">
-        <div class="feature-name">Lowie te guía en cada paso</div>
-        <div class="feature-desc">Tu mascota personal que te motiva, explica y celebra cada logro contigo.</div>
+        <div class="feature-name" id="f1name"></div>
+        <div class="feature-desc" id="f1desc"></div>
       </div>
     </div>
     <div class="feature-card">
       <div class="feature-emoji">📚</div>
-      <div class="feature-name">Taal (Idioma)</div>
-      <div class="feature-desc">Gramática, vocabulario y pronunciación en módulos progresivos.</div>
+      <div class="feature-name" id="f2name"></div>
+      <div class="feature-desc" id="f2desc"></div>
     </div>
     <div class="feature-card">
       <div class="feature-emoji">🏛️</div>
-      <div class="feature-name">Samenleving</div>
-      <div class="feature-desc">Historia y sociedad holandesa para el examen KNS.</div>
+      <div class="feature-name" id="f3name"></div>
+      <div class="feature-desc" id="f3desc"></div>
     </div>
     <div class="feature-card">
       <div class="feature-emoji">🗣️</div>
-      <div class="feature-name">Spreken</div>
-      <div class="feature-desc">Practica el habla con ejercicios de pronunciación reales.</div>
+      <div class="feature-name" id="f4name"></div>
+      <div class="feature-desc" id="f4desc"></div>
     </div>
     <div class="feature-card">
       <div class="feature-emoji">📋</div>
-      <div class="feature-name">Simulacros</div>
-      <div class="feature-desc">Exámenes de práctica con el formato oficial del inburgering.</div>
+      <div class="feature-name" id="f5name"></div>
+      <div class="feature-desc" id="f5desc"></div>
     </div>
     <div class="feature-card">
       <div class="feature-emoji">🔥</div>
-      <div class="feature-name">Racha diaria</div>
-      <div class="feature-desc">Mantén el ritmo con tu racha y ve tu dominio crecer cada día.</div>
+      <div class="feature-name" id="f6name"></div>
+      <div class="feature-desc" id="f6desc"></div>
     </div>
     <div class="feature-card">
       <div class="feature-emoji">📊</div>
-      <div class="feature-name">Tu progreso</div>
-      <div class="feature-desc">Ve exactamente qué dominas y qué necesita más práctica.</div>
+      <div class="feature-name" id="f7name"></div>
+      <div class="feature-desc" id="f7desc"></div>
     </div>
   </div>
 </section>
 
-<!-- EXAM SECTIONS -->
+<!-- EXAM BAND -->
 <section class="sections-band">
-  <p class="section-label">Examen cubierto al 100%</p>
-  <h2 class="section-title">Las 4 partes del Inburgeringsexamen</h2>
+  <p class="section-label" id="exam-label"></p>
+  <h2 class="section-title" id="exam-title"></h2>
   <div class="exam-pills">
-    <div class="exam-pill"><span class="exam-pill-emoji">📚</span><div><strong>Taal</strong><span class="exam-pill-label">Lengua holandesa</span></div></div>
-    <div class="exam-pill"><span class="exam-pill-emoji">🏛️</span><div><strong>KNS</strong><span class="exam-pill-label">Conocimiento sociedad</span></div></div>
-    <div class="exam-pill"><span class="exam-pill-emoji">🗣️</span><div><strong>Spreken</strong><span class="exam-pill-label">Expresión oral</span></div></div>
-    <div class="exam-pill"><span class="exam-pill-emoji">📗</span><div><strong>Lezen</strong><span class="exam-pill-label">Comprensión lectora</span></div></div>
+    <div class="exam-pill"><span class="exam-pill-emoji">📋</span><div><strong>KNS</strong><span class="exam-pill-label" id="pill1sub"></span></div></div>
+    <div class="exam-pill"><span class="exam-pill-emoji">🗣️</span><div><strong>Spreken</strong><span class="exam-pill-label" id="pill2sub"></span></div></div>
+    <div class="exam-pill"><span class="exam-pill-emoji">📗</span><div><strong>Lezen</strong><span class="exam-pill-label" id="pill3sub"></span></div></div>
   </div>
   <div class="stats-row">
-    <div class="stat-item"><span class="stat-num">4</span><span class="stat-lbl">Áreas</span></div>
-    <div class="stat-item"><span class="stat-num">17</span><span class="stat-lbl">Módulos</span></div>
-    <div class="stat-item"><span class="stat-num">∞</span><span class="stat-lbl">Ejercicios</span></div>
+    <div class="stat-item"><span class="stat-num">3</span><span class="stat-lbl" id="stat-a"></span></div>
+    <div class="stat-item"><span class="stat-num">17</span><span class="stat-lbl" id="stat-m"></span></div>
+    <div class="stat-item"><span class="stat-num">∞</span><span class="stat-lbl" id="stat-e"></span></div>
   </div>
 </section>
 
 <!-- TESTIMONIALS -->
 <section class="testimonials">
-  <p class="section-label">Lo que dicen nuestros estudiantes</p>
-  <h2 class="section-title">Personas reales, resultados reales</h2>
+  <p class="section-label" id="test-label"></p>
+  <h2 class="section-title" id="test-title"></h2>
   <div class="testimonial-list">
     <div class="testimonial-card">
       <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
-      <p class="testimonial-text">"Llevaba meses posponiendo el examen. Con SlaagNL lo preparé en 6 semanas y aprobé a la primera. Lowie me daba ánimos cada día 🦁"</p>
+      <p class="testimonial-text" id="test1"></p>
       <div class="testimonial-author">
         <div class="testimonial-avatar" style="background:linear-gradient(135deg,#f47c3a,#f4c842)">V</div>
-        <div><div class="testimonial-name">Valentina R.</div><div class="testimonial-origin">Venezuela · Amsterdam</div></div>
+        <div><div class="testimonial-name">Valentina R.</div><div class="testimonial-origin">Venezuela</div></div>
       </div>
     </div>
     <div class="testimonial-card">
       <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
-      <p class="testimonial-text">"Las explicaciones en español hacen toda la diferencia. Por fin entiendo la gramática holandesa sin confundirme con el inglés."</p>
+      <p class="testimonial-text" id="test2"></p>
       <div class="testimonial-author">
         <div class="testimonial-avatar" style="background:linear-gradient(135deg,#2ecc8a,#60b0f4)">C</div>
-        <div><div class="testimonial-name">Carlos M.</div><div class="testimonial-origin">México · Rotterdam</div></div>
+        <div><div class="testimonial-name">Carlos M.</div><div class="testimonial-origin">México</div></div>
       </div>
     </div>
     <div class="testimonial-card">
       <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
-      <p class="testimonial-text">"El módulo de KNS es increíble. Aprendí la historia de Holanda de forma divertida y lo recordé perfectamente en el examen."</p>
+      <p class="testimonial-text" id="test3"></p>
       <div class="testimonial-author">
         <div class="testimonial-avatar" style="background:linear-gradient(135deg,#a78bfa,#f47c3a)">L</div>
-        <div><div class="testimonial-name">Lucía P.</div><div class="testimonial-origin">Colombia · Utrecht</div></div>
+        <div><div class="testimonial-name">Lucía P.</div><div class="testimonial-origin">Colombia</div></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- PLANS PREVIEW -->
+<!-- PLANS -->
 <section class="plans-section">
-  <p class="section-label" style="color:var(--orange2)">Planes</p>
-  <h2 class="section-title">Empieza gratis, escala cuando quieras</h2>
+  <p class="section-label" id="plan-label" style="color:var(--orange2)"></p>
+  <h2 class="section-title" id="plan-title"></h2>
   <div class="plans-grid">
     <div class="plan-row">
       <div class="plan-row-icon">🆓</div>
       <div class="plan-row-info">
-        <div class="plan-row-name">Libre</div>
-        <div class="plan-row-desc">Módulos 0–1 · 5 ejercicios/día</div>
+        <div class="plan-row-name" id="p1name"></div>
+        <div class="plan-row-desc" id="p1desc"></div>
       </div>
-      <div class="plan-row-price">€0<small>siempre</small></div>
+      <div class="plan-row-price">€0<small id="p1per"></small></div>
     </div>
     <div class="plan-row">
       <div class="plan-row-icon">🎯</div>
       <div class="plan-row-info">
-        <div class="plan-row-name">Enfocado</div>
-        <div class="plan-row-desc">Todo TAAL · 30 ejercicios/día</div>
+        <div class="plan-row-name" id="p2name"></div>
+        <div class="plan-row-desc" id="p2desc"></div>
       </div>
-      <div class="plan-row-price">€4.99<small>/mes</small></div>
+      <div class="plan-row-price">€4.99<small id="p2per"></small></div>
     </div>
     <div class="plan-row highlighted">
-      <div class="plan-row-badge">⭐ Recomendado</div>
+      <div class="plan-row-badge" id="p3badge"></div>
       <div class="plan-row-icon">🏆</div>
       <div class="plan-row-info">
-        <div class="plan-row-name">Completo</div>
-        <div class="plan-row-desc">Todo incluido · Ejercicios ilimitados</div>
+        <div class="plan-row-name" id="p3name"></div>
+        <div class="plan-row-desc" id="p3desc"></div>
       </div>
-      <div class="plan-row-price">€9.99<small>/mes</small></div>
+      <div class="plan-row-price">€9.99<small id="p3per"></small></div>
     </div>
   </div>
   <div style="text-align:center">
-    <a class="btn-primary" href="#" onclick="openRegister(); return false;" style="display:inline-block;width:auto;padding:14px 32px;">Empezar con el plan Libre →</a>
+    <a class="btn-primary" href="#" id="plan-btn" onclick="openRegister(); return false;" style="display:inline-block;width:auto;padding:14px 32px;"></a>
   </div>
 </section>
 
 <!-- FINAL CTA -->
 <section class="final-cta">
   <img class="final-cta-lowie" src="assets/lowie.png" alt="Lowie">
-  <h2 class="final-cta-title">¡Tu <span class="accent">geslaagd</span> te espera!</h2>
-  <p class="final-cta-sub">Únete a cientos de hispanohablantes que ya preparan su inburgeringsexamen con SlaagNL.</p>
-  <a class="final-cta-btn" href="#" onclick="openRegister(); return false;">Crear cuenta gratis 🦁</a>
+  <h2 class="final-cta-title" id="cta-title"></h2>
+  <p class="final-cta-sub" id="cta-sub"></p>
+  <a class="final-cta-btn" href="#" id="cta-btn" onclick="openRegister(); return false;"></a>
 </section>
 
 <!-- FOOTER -->
 <footer>
   <div class="footer-logo">Slaag<span>NL</span></div>
-  <p class="footer-note">Preparación para el Inburgeringsexamen · En español<br>hola@slaagnl.com</p>
+  <p class="footer-note" id="foot-note"></p>
 </footer>
 
-<!-- REGISTER MODAL -->
+<!-- MODAL REGISTER -->
 <div class="modal-overlay" id="modal-register">
   <div class="modal-box">
     <button class="modal-close" onclick="closeModals()">✕</button>
     <img class="modal-lowie" src="assets/lowie.png" alt="Lowie">
-    <div class="modal-title">Crear cuenta</div>
-    <div class="modal-sub">Empieza gratis, sin tarjeta de crédito.</div>
+    <div class="modal-title" id="reg-title"></div>
+    <div class="modal-sub" id="reg-sub"></div>
     <div class="form-field">
-      <label class="form-label">Tu nombre</label>
-      <input class="form-input" id="reg-name" type="text" placeholder="ej. Valentina">
+      <label class="form-label" id="reg-l-name"></label>
+      <input class="form-input" id="reg-name" type="text">
     </div>
     <div class="form-field">
-      <label class="form-label">Correo electrónico</label>
-      <input class="form-input" id="reg-email" type="email" placeholder="tu@correo.com">
+      <label class="form-label" id="reg-l-email"></label>
+      <input class="form-input" id="reg-email" type="email">
     </div>
     <div class="form-field">
-      <label class="form-label">Contraseña</label>
-      <input class="form-input" id="reg-pass" type="password" placeholder="Mínimo 6 caracteres">
+      <label class="form-label" id="reg-l-pass"></label>
+      <input class="form-input" id="reg-pass" type="password">
     </div>
-    <button class="btn-modal" onclick="doRegister()">Crear cuenta gratis →</button>
-    <p class="modal-switch">¿Ya tienes cuenta? <a onclick="switchToLogin()">Iniciar sesión</a></p>
+    <button class="btn-modal" id="reg-btn" onclick="doRegister()"></button>
+    <p class="modal-switch"><span id="reg-switch"></span> <a onclick="switchToLogin()" id="reg-switch-a"></a></p>
   </div>
 </div>
 
-<!-- LOGIN MODAL -->
+<!-- MODAL LOGIN -->
 <div class="modal-overlay" id="modal-login">
   <div class="modal-box">
     <button class="modal-close" onclick="closeModals()">✕</button>
     <img class="modal-lowie" src="assets/lowie.png" alt="Lowie">
-    <div class="modal-title">Bienvenido de vuelta</div>
-    <div class="modal-sub">¡Lowie te ha echado de menos! 🦁</div>
+    <div class="modal-title" id="log-title"></div>
+    <div class="modal-sub" id="log-sub"></div>
     <div class="form-field">
-      <label class="form-label">Correo electrónico</label>
-      <input class="form-input" id="login-email" type="email" placeholder="tu@correo.com">
+      <label class="form-label" id="log-l-email"></label>
+      <input class="form-input" id="log-email" type="email">
     </div>
     <div class="form-field">
-      <label class="form-label">Contraseña</label>
-      <input class="form-input" id="login-pass" type="password" placeholder="Tu contraseña">
+      <label class="form-label" id="log-l-pass"></label>
+      <input class="form-input" id="log-pass" type="password">
     </div>
-    <button class="btn-modal" onclick="doLogin()">Entrar a mi cuenta →</button>
-    <p class="modal-switch">¿No tienes cuenta? <a onclick="switchToRegister()">Crear una gratis</a></p>
+    <button class="btn-modal" id="log-btn" onclick="doLogin()"></button>
+    <p class="modal-switch"><span id="log-switch"></span> <a onclick="switchToRegister()" id="log-switch-a"></a></p>
   </div>
 </div>
 
 <script>
-function openRegister() {
-  closeModals();
-  document.getElementById('modal-register').classList.add('open');
-}
-function openLogin() {
-  closeModals();
-  document.getElementById('modal-login').classList.add('open');
-}
-function closeModals() {
-  document.getElementById('modal-register').classList.remove('open');
-  document.getElementById('modal-login').classList.remove('open');
-}
-function switchToLogin()     { openLogin(); }
-function switchToRegister()  { openRegister(); }
+const LANGS = ['es','en','tr','ar'];
 
-document.getElementById('modal-register').addEventListener('click', function(e) {
-  if (e.target === this) closeModals();
-});
-document.getElementById('modal-login').addEventListener('click', function(e) {
-  if (e.target === this) closeModals();
-});
+const T = {
+  es: {
+    badge:'🇳🇱 Preparación para el Inburgeringsexamen',
+    heroTitle:'Aprueba tu examen de <span class="accent">holandés</span> con confianza',
+    heroSub:'SlaagNL te guía paso a paso con lecciones, ejercicios interactivos y simulacros',
+    btnStart:'Empezar gratis', btnLogin2:'Ya tengo una cuenta',
+    heroNote:'Sin tarjeta de crédito · Acceso inmediato', topLogin:'Iniciar sesión',
+    featLabel:'¿Por qué SlaagNL?', featTitle:'Todo lo que necesitas para <em>geslaagd</em>',
+    f1name:'Lowie te guía en cada paso', f1desc:'Tu mascota personal que te motiva, explica y celebra cada logro contigo.',
+    f2name:'Taal (Idioma)', f2desc:'Gramática, vocabulario y pronunciación en módulos progresivos.',
+    f3name:'Samenleving', f3desc:'Historia y sociedad holandesa para el examen KNS.',
+    f4name:'Spreken', f4desc:'Practica el habla con ejercicios de pronunciación reales.',
+    f5name:'Simulacros', f5desc:'Exámenes de práctica con el formato oficial del inburgering.',
+    f6name:'Racha diaria', f6desc:'Mantén el ritmo con tu racha y ve tu dominio crecer cada día.',
+    f7name:'Tu progreso', f7desc:'Ve exactamente qué dominas y qué necesita más práctica.',
+    examLabel:'Examen cubierto al 100%', examTitle:'Las 3 partes del Inburgeringsexamen',
+    pill1sub:'Conocimiento sociedad', pill2sub:'Expresión oral', pill3sub:'Comprensión lectora',
+    statA:'Partes', statM:'Módulos', statE:'Ejercicios',
+    testLabel:'Lo que dicen nuestros estudiantes', testTitle:'Personas reales, resultados reales',
+    test1:'"Llevaba meses posponiendo el examen. Con SlaagNL lo preparé en 6 semanas y aprobé a la primera. Lowie me daba ánimos cada día 🦁"',
+    test2:'"Las explicaciones hacen toda la diferencia. Por fin entiendo la gramática holandesa sin confundirme."',
+    test3:'"El módulo de KNS es increíble. Aprendí la historia de Holanda de forma divertida y lo recordé perfectamente en el examen."',
+    planLabel:'Planes', planTitle:'Empieza gratis, escala cuando quieras',
+    p1name:'Libre', p1desc:'Módulos 0–1 · 5 ejercicios/día', p1per:'siempre',
+    p2name:'Enfocado', p2desc:'Todo TAAL · 30 ejercicios/día', p2per:'/mes',
+    p3name:'Completo', p3desc:'Todo incluido · Ejercicios ilimitados', p3per:'/mes', p3badge:'⭐ Recomendado',
+    planBtn:'Empezar con el plan Libre →',
+    ctaTitle:'¡Tu <span class="accent">geslaagd</span> te espera!',
+    ctaSub:'Únete a cientos de hispanohablantes que ya preparan su inburgeringsexamen con SlaagNL.',
+    ctaBtn:'Crear cuenta gratis',
+    footNote:'Preparación para el Inburgeringsexamen · hola@slaagnl.com',
+    regTitle:'Crear cuenta', regSub:'Empieza gratis, sin tarjeta de crédito.',
+    regLName:'Tu nombre', regPName:'ej. Valentina',
+    regLEmail:'Correo electrónico', regPEmail:'tu@correo.com',
+    regLPass:'Contraseña', regPPass:'Mínimo 6 caracteres',
+    regBtn:'Crear cuenta gratis →', regSwitch:'¿Ya tienes cuenta?', regSwitchA:'Iniciar sesión',
+    logTitle:'Bienvenido de vuelta', logSub:'¡Lowie te ha echado de menos! 🦁',
+    logLEmail:'Correo electrónico', logPEmail:'tu@correo.com',
+    logLPass:'Contraseña', logPPass:'Tu contraseña',
+    logBtn:'Entrar a mi cuenta →', logSwitch:'¿No tienes cuenta?', logSwitchA:'Crear una gratis',
+    aName:'Por favor escribe tu nombre.', aEmail:'Por favor escribe tu correo.',
+    aPass:'La contraseña debe tener al menos 6 caracteres.', aPassL:'Por favor escribe tu contraseña.',
+    aConfirm:'¿Entrar de todas formas al dashboard?',
+  },
+  en: {
+    badge:'🇳🇱 Preparation for the Inburgeringsexamen',
+    heroTitle:'Pass your <span class="accent">Dutch</span> exam with confidence',
+    heroSub:'SlaagNL guides you step by step with lessons, interactive exercises and practice exams',
+    btnStart:'Start for free', btnLogin2:'I already have an account',
+    heroNote:'No credit card · Instant access', topLogin:'Log in',
+    featLabel:'Why SlaagNL?', featTitle:'Everything you need to be <em>geslaagd</em>',
+    f1name:'Lowie guides you every step', f1desc:'Your personal mascot that motivates, explains and celebrates every achievement with you.',
+    f2name:'Taal (Language)', f2desc:'Grammar, vocabulary and pronunciation in progressive modules.',
+    f3name:'Samenleving', f3desc:'Dutch history and society for the KNS exam.',
+    f4name:'Spreken', f4desc:'Practice speaking with real pronunciation exercises.',
+    f5name:'Practice exams', f5desc:'Mock exams in the official inburgering format.',
+    f6name:'Daily streak', f6desc:'Keep your momentum with your streak and watch your mastery grow every day.',
+    f7name:'Your progress', f7desc:'See exactly what you master and what needs more practice.',
+    examLabel:'100% exam coverage', examTitle:'The 3 parts of the Inburgeringsexamen',
+    pill1sub:'Society knowledge', pill2sub:'Oral expression', pill3sub:'Reading comprehension',
+    statA:'Parts', statM:'Modules', statE:'Exercises',
+    testLabel:'What our students say', testTitle:'Real people, real results',
+    test1:'"I had been postponing the exam for months. With SlaagNL I prepared it in 6 weeks and passed on the first try. Lowie cheered me on every day 🦁"',
+    test2:'"The explanations make all the difference. I finally understand Dutch grammar without getting confused."',
+    test3:'"The KNS module is incredible. I learned Dutch history in a fun way and remembered it perfectly in the exam."',
+    planLabel:'Plans', planTitle:'Start free, scale when you want',
+    p1name:'Free', p1desc:'Modules 0–1 · 5 exercises/day', p1per:'always',
+    p2name:'Focused', p2desc:'All TAAL · 30 exercises/day', p2per:'/month',
+    p3name:'Complete', p3desc:'All included · Unlimited exercises', p3per:'/month', p3badge:'⭐ Recommended',
+    planBtn:'Start with the Free plan →',
+    ctaTitle:'Your <span class="accent">geslaagd</span> awaits!',
+    ctaSub:'Join hundreds of people already preparing their inburgeringsexamen with SlaagNL.',
+    ctaBtn:'Create free account',
+    footNote:'Preparation for the Inburgeringsexamen · hola@slaagnl.com',
+    regTitle:'Create account', regSub:'Start free, no credit card required.',
+    regLName:'Your name', regPName:'e.g. Valentina',
+    regLEmail:'Email address', regPEmail:'your@email.com',
+    regLPass:'Password', regPPass:'At least 6 characters',
+    regBtn:'Create free account →', regSwitch:'Already have an account?', regSwitchA:'Log in',
+    logTitle:'Welcome back', logSub:'Lowie missed you! 🦁',
+    logLEmail:'Email address', logPEmail:'your@email.com',
+    logLPass:'Password', logPPass:'Your password',
+    logBtn:'Enter my account →', logSwitch:"Don't have an account?", logSwitchA:'Create one free',
+    aName:'Please enter your name.', aEmail:'Please enter your email.',
+    aPass:'Password must be at least 6 characters.', aPassL:'Please enter your password.',
+    aConfirm:'Enter the dashboard anyway?',
+  },
+  tr: {
+    badge:'🇳🇱 Inburgeringsexamen için Hazırlık',
+    heroTitle:'<span class="accent">Hollandaca</span> sınavını güvenle geç',
+    heroSub:'SlaagNL sizi adım adım dersler, etkileşimli alıştırmalar ve deneme sınavlarıyla yönlendirir',
+    btnStart:'Ücretsiz başla', btnLogin2:'Zaten bir hesabım var',
+    heroNote:'Kredi kartı gerekmez · Anında erişim', topLogin:'Giriş yap',
+    featLabel:'Neden SlaagNL?', featTitle:'<em>Geslaagd</em> olmak için ihtiyacın olan her şey',
+    f1name:'Lowie her adımda rehberin', f1desc:'Seni motive eden, açıklayan ve her başarını kutlayan kişisel maskotun.',
+    f2name:'Taal (Dil)', f2desc:'İlerleyen modüllerde dil bilgisi, kelime ve telaffuz.',
+    f3name:'Samenleving', f3desc:'KNS sınavı için Hollanda tarihi ve toplumu.',
+    f4name:'Spreken', f4desc:'Gerçek telaffuz alıştırmalarıyla konuşma pratiği yapın.',
+    f5name:'Deneme sınavları', f5desc:'Resmi inburgering formatında alıştırma sınavları.',
+    f6name:'Günlük seri', f6desc:'Serinizi sürdürün ve her gün ustalığınızın büyüdüğünü izleyin.',
+    f7name:'İlerlemeniz', f7desc:'Neye hakim olduğunuzu ve neyin daha fazla pratik gerektirdiğini tam olarak görün.',
+    examLabel:'%100 sınav kapsamı', examTitle:'Inburgeringsexamen\'ın 3 bölümü',
+    pill1sub:'Toplum bilgisi', pill2sub:'Sözlü ifade', pill3sub:'Okuma anlama',
+    statA:'Bölüm', statM:'Modül', statE:'Alıştırma',
+    testLabel:'Öğrencilerimiz ne diyor', testTitle:'Gerçek insanlar, gerçek sonuçlar',
+    test1:'"Sınavı aylarca erteliyordum. SlaagNL ile 6 haftada hazırlandım ve ilk denemede geçtim. Lowie her gün beni cesaretlendirdi 🦁"',
+    test2:'"Açıklamalar tüm farkı yaratıyor. Sonunda Hollandaca dilbilgisini karışmadan anlıyorum."',
+    test3:'"KNS modülü inanılmaz. Hollanda tarihini eğlenceli bir şekilde öğrendim ve sınavda mükemmel hatırladım."',
+    planLabel:'Planlar', planTitle:'Ücretsiz başla, istediğinde yükselt',
+    p1name:'Ücretsiz', p1desc:'Modül 0–1 · Günde 5 alıştırma', p1per:'her zaman',
+    p2name:'Odaklı', p2desc:'Tüm TAAL · Günde 30 alıştırma', p2per:'/ay',
+    p3name:'Tam', p3desc:'Her şey dahil · Sınırsız alıştırma', p3per:'/ay', p3badge:'⭐ Önerilen',
+    planBtn:'Ücretsiz plan ile başla →',
+    ctaTitle:'<span class="accent">Geslaagd</span>\'ın sizi bekliyor!',
+    ctaSub:'SlaagNL ile inburgeringsexamen\'larına hazırlanan yüzlerce kişiye katılın.',
+    ctaBtn:'Ücretsiz hesap oluştur',
+    footNote:'Inburgeringsexamen için Hazırlık · hola@slaagnl.com',
+    regTitle:'Hesap oluştur', regSub:'Ücretsiz başla, kredi kartı gerekmez.',
+    regLName:'Adınız', regPName:'örn. Valentina',
+    regLEmail:'E-posta adresi', regPEmail:'siz@eposta.com',
+    regLPass:'Şifre', regPPass:'En az 6 karakter',
+    regBtn:'Ücretsiz hesap oluştur →', regSwitch:'Zaten hesabınız var mı?', regSwitchA:'Giriş yapın',
+    logTitle:'Tekrar hoş geldiniz', logSub:'Lowie sizi özledi! 🦁',
+    logLEmail:'E-posta adresi', logPEmail:'siz@eposta.com',
+    logLPass:'Şifre', logPPass:'Şifreniz',
+    logBtn:'Hesabıma gir →', logSwitch:'Hesabınız yok mu?', logSwitchA:'Ücretsiz oluşturun',
+    aName:'Lütfen adınızı girin.', aEmail:'Lütfen e-postanızı girin.',
+    aPass:'Şifre en az 6 karakter olmalıdır.', aPassL:'Lütfen şifrenizi girin.',
+    aConfirm:'Yine de dashboard\'a girmek istiyor musunuz?',
+  },
+  ar: {
+    badge:'🇳🇱 التحضير لـ Inburgeringsexamen',
+    heroTitle:'اجتز امتحان <span class="accent">الهولندية</span> بثقة',
+    heroSub:'يرشدك SlaagNL خطوة بخطوة بالدروس والتمارين التفاعلية والاختبارات التجريبية',
+    btnStart:'ابدأ مجاناً', btnLogin2:'لدي حساب بالفعل',
+    heroNote:'بدون بطاقة ائتمان · وصول فوري', topLogin:'تسجيل الدخول',
+    featLabel:'لماذا SlaagNL؟', featTitle:'كل ما تحتاجه لتكون <em>geslaagd</em>',
+    f1name:'Lowie يرشدك في كل خطوة', f1desc:'شخصيتك الشخصية التي تحفزك وتشرح وتحتفل بكل إنجاز معك.',
+    f2name:'Taal (اللغة)', f2desc:'قواعد اللغة والمفردات والنطق في وحدات تدريجية.',
+    f3name:'Samenleving', f3desc:'التاريخ والمجتمع الهولندي لامتحان KNS.',
+    f4name:'Spreken', f4desc:'تدرب على الكلام بتمارين نطق حقيقية.',
+    f5name:'اختبارات تجريبية', f5desc:'اختبارات تدريبية بالتنسيق الرسمي للاندماج.',
+    f6name:'السلسلة اليومية', f6desc:'حافظ على إيقاعك مع سلسلتك واشهد إتقانك ينمو كل يوم.',
+    f7name:'تقدمك', f7desc:'شاهد بالضبط ما تتقنه وما يحتاج المزيد من التدريب.',
+    examLabel:'تغطية شاملة للامتحان', examTitle:'الأجزاء الـ3 من Inburgeringsexamen',
+    pill1sub:'معرفة المجتمع', pill2sub:'التعبير الشفهي', pill3sub:'فهم المقروء',
+    statA:'أجزاء', statM:'وحدات', statE:'تمارين',
+    testLabel:'ما يقوله طلابنا', testTitle:'أشخاص حقيقيون، نتائج حقيقية',
+    test1:'"كنت أؤجل الامتحان لأشهر. مع SlaagNL حضّرته في 6 أسابيع ونجحت من المرة الأولى. Lowie شجعني كل يوم 🦁"',
+    test2:'"الشروحات تحدث كل الفرق. أخيراً أفهم قواعد اللغة الهولندية دون ارتباك."',
+    test3:'"وحدة KNS رائعة. تعلمت تاريخ هولندا بطريقة ممتعة وتذكرته بشكل مثالي في الامتحان."',
+    planLabel:'الخطط', planTitle:'ابدأ مجاناً، ارقَ متى تشاء',
+    p1name:'مجاني', p1desc:'وحدات 0–1 · 5 تمارين/يوم', p1per:'دائماً',
+    p2name:'مركّز', p2desc:'كل TAAL · 30 تمريناً/يوم', p2per:'/شهر',
+    p3name:'كامل', p3desc:'كل شيء مشمول · تمارين غير محدودة', p3per:'/شهر', p3badge:'⭐ موصى به',
+    planBtn:'ابدأ بالخطة المجانية →',
+    ctaTitle:'<span class="accent">Geslaagd</span> ينتظرك!',
+    ctaSub:'انضم إلى مئات الأشخاص الذين يحضّرون لـ inburgeringsexamen مع SlaagNL.',
+    ctaBtn:'إنشاء حساب مجاني',
+    footNote:'التحضير لـ Inburgeringsexamen · hola@slaagnl.com',
+    regTitle:'إنشاء حساب', regSub:'ابدأ مجاناً، بدون بطاقة ائتمان.',
+    regLName:'اسمك', regPName:'مثال: فالنتينا',
+    regLEmail:'البريد الإلكتروني', regPEmail:'بريدك@مثال.com',
+    regLPass:'كلمة المرور', regPPass:'6 أحرف على الأقل',
+    regBtn:'إنشاء حساب مجاني →', regSwitch:'لديك حساب بالفعل؟', regSwitchA:'تسجيل الدخول',
+    logTitle:'مرحباً بعودتك', logSub:'Lowie اشتاق إليك! 🦁',
+    logLEmail:'البريد الإلكتروني', logPEmail:'بريدك@مثال.com',
+    logLPass:'كلمة المرور', logPPass:'كلمة مرورك',
+    logBtn:'الدخول إلى حسابي →', logSwitch:'ليس لديك حساب؟', logSwitchA:'أنشئ واحداً مجاناً',
+    aName:'الرجاء إدخال اسمك.', aEmail:'الرجاء إدخال بريدك الإلكتروني.',
+    aPass:'يجب أن تكون كلمة المرور 6 أحرف على الأقل.', aPassL:'الرجاء إدخال كلمة المرور.',
+    aConfirm:'هل تريد الدخول إلى لوحة التحكم على أي حال؟',
+  }
+};
+
+let currentLang = localStorage.getItem('slaagnl_lang') || 'es';
+
+function setLang(lang) {
+  if (!LANGS.includes(lang)) return;
+  currentLang = lang;
+  localStorage.setItem('slaagnl_lang', lang);
+  applyLang();
+}
+
+function setText(id, html, isHTML) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (isHTML) el.innerHTML = html; else el.textContent = html;
+}
+
+function applyLang() {
+  const t = T[currentLang] || T.es;
+  const isRTL = currentLang === 'ar';
+  document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+  document.documentElement.lang = currentLang;
+
+  LANGS.forEach(l => {
+    const btn = document.getElementById('lb-' + l);
+    if (btn) btn.classList.toggle('active', l === currentLang);
+  });
+
+  setText('top-login', t.topLogin);
+  setText('hero-badge', t.badge);
+  setText('hero-title', t.heroTitle, true);
+  setText('hero-sub', t.heroSub);
+  setText('btn-start', t.btnStart);
+  setText('btn-login2', t.btnLogin2);
+  setText('hero-note', t.heroNote);
+  setText('feat-label', t.featLabel);
+  setText('feat-title', t.featTitle, true);
+  setText('f1name', t.f1name); setText('f1desc', t.f1desc);
+  setText('f2name', t.f2name); setText('f2desc', t.f2desc);
+  setText('f3name', t.f3name); setText('f3desc', t.f3desc);
+  setText('f4name', t.f4name); setText('f4desc', t.f4desc);
+  setText('f5name', t.f5name); setText('f5desc', t.f5desc);
+  setText('f6name', t.f6name); setText('f6desc', t.f6desc);
+  setText('f7name', t.f7name); setText('f7desc', t.f7desc);
+  setText('exam-label', t.examLabel);
+  setText('exam-title', t.examTitle);
+  setText('pill1sub', t.pill1sub); setText('pill2sub', t.pill2sub); setText('pill3sub', t.pill3sub);
+  setText('stat-a', t.statA); setText('stat-m', t.statM); setText('stat-e', t.statE);
+  setText('test-label', t.testLabel); setText('test-title', t.testTitle);
+  setText('test1', t.test1); setText('test2', t.test2); setText('test3', t.test3);
+  setText('plan-label', t.planLabel); setText('plan-title', t.planTitle);
+  setText('p1name', t.p1name); setText('p1desc', t.p1desc); setText('p1per', t.p1per);
+  setText('p2name', t.p2name); setText('p2desc', t.p2desc); setText('p2per', t.p2per);
+  setText('p3name', t.p3name); setText('p3desc', t.p3desc); setText('p3per', t.p3per); setText('p3badge', t.p3badge);
+  setText('plan-btn', t.planBtn);
+  setText('cta-title', t.ctaTitle, true); setText('cta-sub', t.ctaSub); setText('cta-btn', t.ctaBtn);
+  setText('foot-note', t.footNote);
+  setText('reg-title', t.regTitle); setText('reg-sub', t.regSub);
+  setText('reg-l-name', t.regLName); document.getElementById('reg-name').placeholder = t.regPName;
+  setText('reg-l-email', t.regLEmail); document.getElementById('reg-email').placeholder = t.regPEmail;
+  setText('reg-l-pass', t.regLPass); document.getElementById('reg-pass').placeholder = t.regPPass;
+  setText('reg-btn', t.regBtn); setText('reg-switch', t.regSwitch); setText('reg-switch-a', t.regSwitchA);
+  setText('log-title', t.logTitle); setText('log-sub', t.logSub);
+  setText('log-l-email', t.logLEmail); document.getElementById('log-email').placeholder = t.logPEmail;
+  setText('log-l-pass', t.logLPass); document.getElementById('log-pass').placeholder = t.logPPass;
+  setText('log-btn', t.logBtn); setText('log-switch', t.logSwitch); setText('log-switch-a', t.logSwitchA);
+}
+
+function openRegister() { closeModals(); document.getElementById('modal-register').classList.add('open'); }
+function openLogin()    { closeModals(); document.getElementById('modal-login').classList.add('open'); }
+function closeModals()  { document.getElementById('modal-register').classList.remove('open'); document.getElementById('modal-login').classList.remove('open'); }
+function switchToLogin()    { openLogin(); }
+function switchToRegister() { openRegister(); }
+
+document.getElementById('modal-register').addEventListener('click', function(e) { if (e.target === this) closeModals(); });
+document.getElementById('modal-login').addEventListener('click', function(e) { if (e.target === this) closeModals(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModals(); });
 
 function doRegister() {
+  const t = T[currentLang] || T.es;
   const name  = document.getElementById('reg-name').value.trim();
   const email = document.getElementById('reg-email').value.trim();
   const pass  = document.getElementById('reg-pass').value;
-
-  if (!name)  { alert('Por favor escribe tu nombre.'); return; }
-  if (!email) { alert('Por favor escribe tu correo.'); return; }
-  if (pass.length < 6) { alert('La contraseña debe tener al menos 6 caracteres.'); return; }
-
+  if (!name)        { alert(t.aName);  return; }
+  if (!email)       { alert(t.aEmail); return; }
+  if (pass.length < 6) { alert(t.aPass); return; }
   localStorage.setItem('slaagnl_name',  name);
   localStorage.setItem('slaagnl_email', email);
   localStorage.setItem('slaagnl_plan',  'libre');
   localStorage.setItem('slaagnl_streak', '0');
-
   window.location.href = 'dashboard.html';
 }
 
 function doLogin() {
-  const email = document.getElementById('login-email').value.trim();
-  const pass  = document.getElementById('login-pass').value;
-
-  if (!email) { alert('Por favor escribe tu correo.'); return; }
-  if (!pass)  { alert('Por favor escribe tu contraseña.'); return; }
-
+  const t = T[currentLang] || T.es;
+  const email = document.getElementById('log-email').value.trim();
+  const pass  = document.getElementById('log-pass').value;
+  if (!email) { alert(t.aEmail); return; }
+  if (!pass)  { alert(t.aPassL); return; }
   const savedEmail = localStorage.getItem('slaagnl_email');
   if (savedEmail && savedEmail !== email) {
-    if (!confirm('No se encontró esta cuenta. ¿Entrar de todas formas al dashboard?')) return;
+    if (!confirm(t.aConfirm)) return;
   }
-
   window.location.href = 'dashboard.html';
 }
+
+document.addEventListener('DOMContentLoaded', () => applyLang());
 </script>
 </body>
 </html>

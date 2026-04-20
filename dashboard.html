@@ -438,7 +438,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
   <div class="subpanel-body">
     <div class="lang-option" id="lang-es" onclick="changeLang('es')"><span class="lang-flag">🇪🇸</span><span class="lang-name">Español</span><span class="lang-check" id="check-es" style="display:none">✓</span></div>
     <div class="lang-option" id="lang-en" onclick="changeLang('en')"><span class="lang-flag">🇬🇧</span><span class="lang-name">English</span><span class="lang-check" id="check-en" style="display:none">✓</span></div>
-    <div class="lang-option" id="lang-ar" onclick="changeLang('ar')"><span class="lang-flag">🇲🇦</span><span class="lang-name">العربية</span><span class="lang-check" id="check-ar" style="display:none">✓</span></div>
+    <div class="lang-option" id="lang-tr" onclick="changeLang('tr')"><span class="lang-flag">🇹🇷</span><span class="lang-name">Türkçe</span><span class="lang-check" id="check-tr" style="display:none">✓</span></div>
+    <div class="lang-option" id="lang-ar" onclick="changeLang('ar')"><span class="lang-flag">🇸🇦</span><span class="lang-name">العربية</span><span class="lang-check" id="check-ar" style="display:none">✓</span></div>
   </div>
 </div>
 
@@ -514,15 +515,15 @@ const SPREKEN_MODS = [
 
 // ══ PLANS ══
 const PLANS_DATA = {
-  libre:{name:{es:'Libre',en:'Free',ar:'مجاني'},price:'€0',features:{es:[
+  libre:{name:{es:'Libre',en:'Free',tr:'Ücretsiz',ar:'مجاني'},price:'€0',features:{es:[
     {t:'Módulos 0 y 1 desbloqueados',ok:true},{t:'5 ejercicios por día',ok:true},
     {t:'Audio de pronunciación',ok:true},{t:'Módulos 2-7 bloqueados',ok:false},
     {t:'Sin simulacros',ok:false},{t:'Sin Samenleving ni Spreken',ok:false}]}},
-  enfocado:{name:{es:'Enfocado',en:'Focused',ar:'مركّز'},price:'€4.99',features:{es:[
+  enfocado:{name:{es:'Enfocado',en:'Focused',tr:'Odaklı',ar:'مركّز'},price:'€4.99',features:{es:[
     {t:'Todo TAAL desbloqueado',ok:true},{t:'30 ejercicios por día',ok:true},
     {t:'Audio + velocidad ajustable',ok:true},{t:'1 simulacro por semana',ok:true},
     {t:'Progreso completo visible',ok:true},{t:'Samenleving y Spreken bloqueados',ok:false}]}},
-  completo:{name:{es:'Completo',en:'Complete',ar:'كامل'},price:'€9.99',featured:true,features:{es:[
+  completo:{name:{es:'Completo',en:'Complete',tr:'Tam',ar:'كامل'},price:'€9.99',featured:true,features:{es:[
     {t:'TAAL + SAMENLEVING + EXAMEN + SPREKEN',ok:true},{t:'Ejercicios ilimitados',ok:true},
     {t:'Simulacros ilimitados',ok:true},{t:'Estadísticas detalladas',ok:true},
     {t:'Lowie te guía en cada paso 🦁',ok:true},{t:'Soporte prioritario',ok:true}]}}
@@ -799,10 +800,13 @@ function openContactPanel()  { openSubpanel('subpanel-contact'); }
 function changeLang(lang) {
   state.lang = lang;
   localStorage.setItem('slaagnl_lang', lang);
-  ['es','en','ar'].forEach(l => {
-    document.getElementById('check-'+l).style.display = l === lang ? 'inline' : 'none';
-    document.getElementById('lang-'+l).classList.toggle('active', l === lang);
+  ['es','en','tr','ar'].forEach(l => {
+    const check = document.getElementById('check-'+l);
+    const opt   = document.getElementById('lang-'+l);
+    if (check) check.style.display = l === lang ? 'inline' : 'none';
+    if (opt)   opt.classList.toggle('active', l === lang);
   });
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
   closeAllSubpanels(); renderDashboard();
 }
 
