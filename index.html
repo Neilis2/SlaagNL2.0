@@ -36,6 +36,20 @@ body { font-family: 'DM Sans', sans-serif; background: var(--navy); color: var(-
 .hero-title .accent { color: var(--orange); }
 .hero-sub { font-size: clamp(14px, 3.5vw, 17px); color: rgba(253,246,236,0.6); line-height: 1.6; max-width: 360px; margin-bottom: 36px; }
 .hero-cta-group { display: flex; flex-direction: column; gap: 12px; align-items: center; width: 100%; max-width: 300px; }
+.link-login { font-size: 13px; color: rgba(253,246,236,0.4); cursor: pointer; text-decoration: none; padding: 4px; transition: color var(--ease); }
+.link-login:hover { color: rgba(253,246,236,0.75); }
+.et-btn { width: 100%; display: flex; align-items: center; gap: 14px; background: var(--navy2); border: 2px solid rgba(255,255,255,0.1); border-radius: 18px; padding: 16px 18px; cursor: pointer; font-family: 'DM Sans', sans-serif; text-align: left; margin-bottom: 10px; transition: all 0.22s; position: relative; }
+.et-btn:not(.et-disabled):hover { border-color: var(--orange); background: rgba(244,124,58,0.08); transform: translateY(-1px); }
+.et-btn:not(.et-disabled):active { transform: scale(0.98); }
+.et-disabled { opacity: 0.42; cursor: not-allowed; }
+.et-icon { font-size: 30px; flex-shrink: 0; }
+.et-info { flex: 1; text-align: left; }
+.et-name { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 700; color: var(--cream); margin-bottom: 2px; }
+.et-desc { font-size: 11.5px; color: rgba(253,246,236,0.4); line-height: 1.4; }
+.et-arrow { font-size: 20px; color: var(--orange); flex-shrink: 0; }
+.et-badge { position: absolute; top: 10px; right: 14px; background: rgba(244,124,58,0.15); border: 1px solid rgba(244,124,58,0.3); color: var(--orange); font-size: 10px; font-weight: 700; padding: 2px 9px; border-radius: 99px; }
+[dir="rtl"] .et-badge { right: auto; left: 14px; }
+[dir="rtl"] .et-info { text-align: right; }
 .btn-primary { width: 100%; padding: 16px 28px; background: linear-gradient(135deg, var(--orange), #f4a020); border: none; border-radius: 16px; color: white; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.22s; box-shadow: 0 8px 24px rgba(244,124,58,0.35); text-decoration: none; display: block; text-align: center; }
 .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(244,124,58,0.45); }
 .btn-primary:active { transform: scale(0.97); }
@@ -160,8 +174,9 @@ footer { background: var(--navy); border-top: 1px solid var(--border); padding: 
   <h1 class="hero-title" id="hero-title"></h1>
   <p class="hero-sub" id="hero-sub"></p>
   <div class="hero-cta-group">
-    <a class="btn-primary" href="#" id="btn-start" onclick="openRegister(); return false;"></a>
-    <a class="btn-secondary" href="#" id="btn-login2" onclick="openLogin(); return false;"></a>
+    <a class="btn-primary" href="test-nivel.html" id="btn-test"></a>
+    <a class="btn-secondary" href="#" id="btn-register" onclick="openRegister(); return false;"></a>
+    <a class="link-login" href="#" id="link-login" onclick="openLogin(); return false;"></a>
   </div>
   <p class="hero-note" id="hero-note"></p>
 </section>
@@ -309,6 +324,32 @@ footer { background: var(--navy); border-top: 1px solid var(--border); padding: 
   <p class="footer-note" id="foot-note"></p>
 </footer>
 
+<!-- MODAL EXAM TYPE -->
+<div class="modal-overlay" id="modal-exam-type">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModals()">✕</button>
+    <img class="modal-lowie" src="assets/lowie.png" alt="Lowie">
+    <div class="modal-title" id="et-modal-title"></div>
+    <div class="modal-sub" id="et-modal-sub"></div>
+    <button class="et-btn" onclick="selectExamType('mvv')">
+      <div class="et-icon">🛂</div>
+      <div class="et-info">
+        <div class="et-name" id="et-modal-name1"></div>
+        <div class="et-desc" id="et-modal-desc1"></div>
+      </div>
+      <div class="et-arrow">›</div>
+    </button>
+    <button class="et-btn et-disabled" disabled>
+      <div class="et-icon">🏛️</div>
+      <div class="et-info">
+        <div class="et-name" id="et-modal-name2"></div>
+        <div class="et-desc" id="et-modal-desc2"></div>
+      </div>
+      <div class="et-badge" id="et-modal-soon"></div>
+    </button>
+  </div>
+</div>
+
 <!-- MODAL REGISTER -->
 <div class="modal-overlay" id="modal-register">
   <div class="modal-box">
@@ -361,8 +402,11 @@ const T = {
     badge:'🇳🇱 Preparación para el Inburgeringsexamen',
     heroTitle:'Aprueba tu examen de <span class="accent">holandés</span> con confianza',
     heroSub:'SlaagNL te guía paso a paso con lecciones, ejercicios interactivos y simulacros',
-    btnStart:'Empezar gratis', btnLogin2:'Ya tengo una cuenta',
+    btnTest:'Hacer test de nivel', btnRegister:'Crear cuenta', linkLogin:'¿Ya tienes cuenta? Iniciar sesión',
     heroNote:'Sin tarjeta de crédito · Acceso inmediato', topLogin:'Iniciar sesión',
+    etModalTitle:'¿Para qué te preparas?', etModalSub:'Selecciona tu tipo de examen para acceder al material correcto.',
+    etName1:'MVV · Examen de embajada', etDesc1:'Nivel A1 · Para personas que solicitan desde fuera de Holanda',
+    etName2:'Naturalización', etDesc2:'N2 · Para solicitar la ciudadanía holandesa', etSoon:'Próximamente',
     featLabel:'¿Por qué SlaagNL?', featTitle:'Todo lo que necesitas para <em>geslaagd</em>',
     f1name:'Lowie te guía en cada paso', f1desc:'Tu mascota personal que te motiva, explica y celebra cada logro contigo.',
     f2name:'Taal (Idioma)', f2desc:'Gramática, vocabulario y pronunciación en módulos progresivos.',
@@ -404,8 +448,11 @@ const T = {
     badge:'🇳🇱 Preparation for the Inburgeringsexamen',
     heroTitle:'Pass your <span class="accent">Dutch</span> exam with confidence',
     heroSub:'SlaagNL guides you step by step with lessons, interactive exercises and practice exams',
-    btnStart:'Start for free', btnLogin2:'I already have an account',
+    btnTest:'Take level test', btnRegister:'Create account', linkLogin:'Already have an account? Log in',
     heroNote:'No credit card · Instant access', topLogin:'Log in',
+    etModalTitle:'What are you preparing for?', etModalSub:'Select your exam type to access the right material.',
+    etName1:'MVV · Embassy exam', etDesc1:'Level A1 · For people applying from outside the Netherlands',
+    etName2:'Naturalisation', etDesc2:'N2 · To apply for Dutch citizenship', etSoon:'Coming soon',
     featLabel:'Why SlaagNL?', featTitle:'Everything you need to be <em>geslaagd</em>',
     f1name:'Lowie guides you every step', f1desc:'Your personal mascot that motivates, explains and celebrates every achievement with you.',
     f2name:'Taal (Language)', f2desc:'Grammar, vocabulary and pronunciation in progressive modules.',
@@ -447,8 +494,11 @@ const T = {
     badge:'🇳🇱 Inburgeringsexamen için Hazırlık',
     heroTitle:'<span class="accent">Hollandaca</span> sınavını güvenle geç',
     heroSub:'SlaagNL sizi adım adım dersler, etkileşimli alıştırmalar ve deneme sınavlarıyla yönlendirir',
-    btnStart:'Ücretsiz başla', btnLogin2:'Zaten bir hesabım var',
+    btnTest:'Seviye testi yap', btnRegister:'Hesap oluştur', linkLogin:'Zaten hesabınız var mı? Giriş yapın',
     heroNote:'Kredi kartı gerekmez · Anında erişim', topLogin:'Giriş yap',
+    etModalTitle:'Ne için hazırlanıyorsunuz?', etModalSub:'Doğru materyale erişmek için sınav türünüzü seçin.',
+    etName1:'MVV · Büyükelçilik sınavı', etDesc1:'Seviye A1 · Hollanda dışından başvuran kişiler için',
+    etName2:'Vatandaşlık', etDesc2:'N2 · Hollanda vatandaşlığı için başvurmak', etSoon:'Yakında',
     featLabel:'Neden SlaagNL?', featTitle:'<em>Geslaagd</em> olmak için ihtiyacın olan her şey',
     f1name:'Lowie her adımda rehberin', f1desc:'Seni motive eden, açıklayan ve her başarını kutlayan kişisel maskotun.',
     f2name:'Taal (Dil)', f2desc:'İlerleyen modüllerde dil bilgisi, kelime ve telaffuz.',
@@ -490,8 +540,11 @@ const T = {
     badge:'🇳🇱 التحضير لـ Inburgeringsexamen',
     heroTitle:'اجتز امتحان <span class="accent">الهولندية</span> بثقة',
     heroSub:'يرشدك SlaagNL خطوة بخطوة بالدروس والتمارين التفاعلية والاختبارات التجريبية',
-    btnStart:'ابدأ مجاناً', btnLogin2:'لدي حساب بالفعل',
+    btnTest:'أجري اختبار المستوى', btnRegister:'إنشاء حساب', linkLogin:'لديك حساب؟ تسجيل الدخول',
     heroNote:'بدون بطاقة ائتمان · وصول فوري', topLogin:'تسجيل الدخول',
+    etModalTitle:'لماذا تستعد؟', etModalSub:'اختر نوع الامتحان للوصول إلى المواد الصحيحة.',
+    etName1:'MVV · امتحان السفارة', etDesc1:'المستوى A1 · للأشخاص الذين يتقدمون من خارج هولندا',
+    etName2:'التجنيس', etDesc2:'N2 · للحصول على الجنسية الهولندية', etSoon:'قريباً',
     featLabel:'لماذا SlaagNL؟', featTitle:'كل ما تحتاجه لتكون <em>geslaagd</em>',
     f1name:'Lowie يرشدك في كل خطوة', f1desc:'شخصيتك الشخصية التي تحفزك وتشرح وتحتفل بكل إنجاز معك.',
     f2name:'Taal (اللغة)', f2desc:'قواعد اللغة والمفردات والنطق في وحدات تدريجية.',
@@ -561,8 +614,16 @@ function applyLang() {
   setText('hero-badge', t.badge);
   setText('hero-title', t.heroTitle, true);
   setText('hero-sub', t.heroSub);
-  setText('btn-start', t.btnStart);
-  setText('btn-login2', t.btnLogin2);
+  setText('btn-test', t.btnTest);
+  setText('btn-register', t.btnRegister);
+  setText('link-login', t.linkLogin);
+  setText('et-modal-title', t.etModalTitle);
+  setText('et-modal-sub', t.etModalSub);
+  setText('et-modal-name1', t.etName1);
+  setText('et-modal-desc1', t.etDesc1);
+  setText('et-modal-name2', t.etName2);
+  setText('et-modal-desc2', t.etDesc2);
+  setText('et-modal-soon', t.etSoon);
   setText('hero-note', t.heroNote);
   setText('feat-label', t.featLabel);
   setText('feat-title', t.featTitle, true);
@@ -599,11 +660,14 @@ function applyLang() {
 
 function openRegister() { closeModals(); document.getElementById('modal-register').classList.add('open'); }
 function openLogin()    { closeModals(); document.getElementById('modal-login').classList.add('open'); }
-function closeModals()  { document.getElementById('modal-register').classList.remove('open'); document.getElementById('modal-login').classList.remove('open'); }
+function openExamType() { closeModals(); document.getElementById('modal-exam-type').classList.add('open'); }
+function selectExamType(type) { localStorage.setItem('slaagnl_exam_type', type); window.location.href = 'dashboard.html'; }
+function closeModals()  { document.getElementById('modal-register').classList.remove('open'); document.getElementById('modal-login').classList.remove('open'); document.getElementById('modal-exam-type').classList.remove('open'); }
 function switchToLogin()    { openLogin(); }
 function switchToRegister() { openRegister(); }
 
 document.getElementById('modal-register').addEventListener('click', function(e) { if (e.target === this) closeModals(); });
+document.getElementById('modal-exam-type').addEventListener('click', function(e) { if (e.target === this) closeModals(); });
 document.getElementById('modal-login').addEventListener('click', function(e) { if (e.target === this) closeModals(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModals(); });
 
@@ -619,7 +683,7 @@ function doRegister() {
   localStorage.setItem('slaagnl_email', email);
   localStorage.setItem('slaagnl_plan',  'libre');
   localStorage.setItem('slaagnl_streak', '0');
-  window.location.href = 'dashboard.html';
+  openExamType();
 }
 
 function doLogin() {
@@ -632,7 +696,8 @@ function doLogin() {
   if (savedEmail && savedEmail !== email) {
     if (!confirm(t.aConfirm)) return;
   }
-  window.location.href = 'dashboard.html';
+  const examType = localStorage.getItem('slaagnl_exam_type');
+  if (examType) { window.location.href = 'dashboard.html'; } else { openExamType(); }
 }
 
 document.addEventListener('DOMContentLoaded', () => applyLang());
