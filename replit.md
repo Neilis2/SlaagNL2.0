@@ -11,7 +11,8 @@ An educational web platform for Spanish speakers learning Dutch and preparing fo
 
 ## Project Structure
 
-- `/` - Root with main `index.html` dashboard
+- `/index.html` - Landing page (página de entrada pública)
+- `/dashboard.html` - Dashboard principal del usuario (después de iniciar sesión)
 - `/css/` - Global styles (`styles.css`)
 - `/js/` - JavaScript utilities (`firebase.js`, `free-access.js`)
 - `/assets/` - Audio, video, and image assets
