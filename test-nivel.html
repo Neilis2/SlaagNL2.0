@@ -118,6 +118,31 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
 .auth-skip:hover{color:rgba(253,246,236,0.5);}
 .auth-err{font-size:12px;color:#e8455a;display:none;text-align:center;padding:4px 0;}
 .auth-err.show{display:block;}
+
+.field-group{display:flex;flex-direction:column;gap:5px;}
+.field-label{font-size:11px;font-weight:700;color:rgba(253,246,236,0.55);text-transform:uppercase;letter-spacing:0.6px;text-align:left;padding-left:2px;}
+[dir="rtl"] .field-label{text-align:right;padding-left:0;padding-right:2px;}
+.field-hint{font-size:11px;color:rgba(253,246,236,0.3);font-style:italic;padding-left:2px;text-align:left;}
+[dir="rtl"] .field-hint{text-align:right;padding-left:0;padding-right:2px;}
+
+.auth-select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23f47c3a' d='M6 8L0 0h12z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;padding-right:40px;cursor:pointer;}
+[dir="rtl"] .auth-select{background-position:left 16px center;padding-right:16px;padding-left:40px;}
+.auth-select option{background:var(--navy2);color:var(--cream);}
+
+input[type="date"].auth-input{color-scheme:dark;}
+
+/* ══ OTP SCREEN ══ */
+.otp-icon{font-size:48px;margin-bottom:10px;filter:drop-shadow(0 6px 16px rgba(244,124,58,0.25));}
+.otp-email{font-size:14px;color:var(--orange);font-weight:700;margin-bottom:18px;word-break:break-all;text-align:center;max-width:340px;}
+.otp-demo{display:inline-flex;align-items:center;gap:8px;background:rgba(244,196,66,0.08);border:1px dashed rgba(244,196,66,0.35);border-radius:10px;padding:8px 14px;margin-bottom:22px;}
+.otp-demo-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#f4c842;}
+.otp-demo-code{font-family:'Playfair Display',serif;font-size:18px;font-weight:900;color:var(--cream);letter-spacing:4px;}
+.otp-grid{display:flex;gap:8px;justify-content:center;margin-bottom:18px;}
+.otp-digit{width:42px;height:52px;border:2px solid rgba(255,255,255,0.12);background:var(--navy2);border-radius:10px;color:var(--cream);font-family:'Playfair Display',serif;font-size:24px;font-weight:900;text-align:center;outline:none;transition:all var(--ease);}
+.otp-digit:focus{border-color:var(--orange);background:rgba(244,124,58,0.06);box-shadow:0 0 0 3px rgba(244,124,58,0.15);}
+.otp-digit.filled{border-color:rgba(46,204,138,0.4);}
+.otp-resent{font-size:12px;color:var(--green);margin-top:10px;height:18px;opacity:0;transition:opacity 0.3s;}
+.otp-resent.show{opacity:1;}
 </style>
 </head>
 <body>
@@ -210,22 +235,85 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
 
     <!-- REGISTER FORM -->
     <div class="auth-form" id="form-reg">
-      <input class="auth-input" type="text" id="a-reg-name" autocomplete="name">
-      <input class="auth-input" type="email" id="a-reg-email" autocomplete="email">
-      <input class="auth-input" type="password" id="a-reg-pass" autocomplete="new-password">
+      <div class="field-group">
+        <label class="field-label" id="lbl-name"></label>
+        <input class="auth-input" type="text" id="a-reg-name" autocomplete="name">
+      </div>
+      <div class="field-group">
+        <label class="field-label" id="lbl-age"></label>
+        <input class="auth-input" type="number" id="a-reg-age" min="14" max="99" inputmode="numeric">
+      </div>
+      <div class="field-group">
+        <label class="field-label" id="lbl-email"></label>
+        <input class="auth-input" type="email" id="a-reg-email" autocomplete="email">
+      </div>
+      <div class="field-group">
+        <label class="field-label" id="lbl-pass"></label>
+        <input class="auth-input" type="password" id="a-reg-pass" autocomplete="new-password">
+        <span class="field-hint" id="hint-pass"></span>
+      </div>
+      <div class="field-group">
+        <label class="field-label" id="lbl-country"></label>
+        <select class="auth-input auth-select" id="a-reg-country"></select>
+      </div>
+      <div class="field-group">
+        <label class="field-label" id="lbl-examdate"></label>
+        <input class="auth-input" type="date" id="a-reg-examdate">
+        <span class="field-hint" id="hint-examdate"></span>
+      </div>
       <div class="auth-err" id="err-reg"></div>
       <button class="auth-submit" id="reg-submit-btn" onclick="doRegisterTest()"></button>
     </div>
 
     <!-- LOGIN FORM -->
     <div class="auth-form" id="form-log" style="display:none">
-      <input class="auth-input" type="email" id="a-log-email" autocomplete="email">
-      <input class="auth-input" type="password" id="a-log-pass" autocomplete="current-password">
+      <div class="field-group">
+        <label class="field-label" id="lbl-log-email"></label>
+        <input class="auth-input" type="email" id="a-log-email" autocomplete="email">
+      </div>
+      <div class="field-group">
+        <label class="field-label" id="lbl-log-pass"></label>
+        <input class="auth-input" type="password" id="a-log-pass" autocomplete="current-password">
+      </div>
       <div class="auth-err" id="err-log"></div>
       <button class="auth-submit" id="log-submit-btn" onclick="doLoginTest()"></button>
     </div>
 
     <button class="auth-skip" id="auth-skip-btn" onclick="goDashboard()"></button>
+  </div>
+</div>
+
+<!-- SCREEN 5: OTP VERIFICATION -->
+<div id="screen-otp" class="screen">
+  <div class="topbar">
+    <button class="back-link" onclick="showScreen('screen-auth')" style="background:none;border:none;cursor:pointer;">‹ <span id="otp-back-label"></span></button>
+    <div class="logo">Slaag<span>NL</span></div>
+    <div style="width:80px"></div>
+  </div>
+  <div class="screen-body">
+    <div class="otp-icon">📧</div>
+    <h2 class="auth-title" id="otp-title"></h2>
+    <p class="auth-sub" id="otp-sub"></p>
+    <p class="otp-email" id="otp-email-display"></p>
+
+    <div class="otp-demo">
+      <span class="otp-demo-label" id="otp-demo-label"></span>
+      <span class="otp-demo-code" id="otp-demo-code">------</span>
+    </div>
+
+    <div class="otp-grid" id="otp-grid">
+      <input class="otp-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
+      <input class="otp-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
+      <input class="otp-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
+      <input class="otp-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
+      <input class="otp-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
+      <input class="otp-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
+    </div>
+
+    <div class="auth-err" id="err-otp"></div>
+    <button class="auth-submit" id="otp-verify-btn" onclick="doVerifyOTP()" style="max-width:360px"></button>
+    <button class="auth-skip" id="otp-resend-btn" onclick="resendOTP()"></button>
+    <p class="otp-resent" id="otp-resent-msg"></p>
   </div>
 </div>
 
@@ -288,14 +376,30 @@ const T = {
       ['¿Eres holandés/a?','¿Aprendes holandés?','¿Hablas holandés?','¿Trabajas en Holanda?'],
     ],
     authBack:'Resultados',
-    authTitle:'¡Guarda tu progreso!',
+    authTitle:'Guarda tu progreso y obtén tu plan personalizado',
     authSub:'Crea tu cuenta o inicia sesión para acceder a tu material personalizado.',
     tabReg:'Crear cuenta', tabLog:'Iniciar sesión',
-    phName:'Tu nombre', phEmail:'Tu email', phPass:'Contraseña (mín. 6 caracteres)', phPassLog:'Contraseña',
-    regSubmit:'Crear cuenta y continuar →', logSubmit:'Iniciar sesión →',
+    lblName:'Nombre completo', lblAge:'Edad', lblEmail:'Email', lblPass:'Contraseña',
+    lblCountry:'País de origen', lblExamDate:'Fecha del examen (aproximada)',
+    lblLogEmail:'Email', lblLogPass:'Contraseña',
+    phName:'Tu nombre completo', phAge:'p. ej. 28', phEmail:'tu@email.com', phPass:'••••••••', phPassLog:'Contraseña',
+    countryPlaceholder:'-- Selecciona tu país --',
+    hintPass:'Mínimo 8 caracteres', hintExamDate:'¿Aún no lo sabes? Déjalo en blanco',
+    regSubmit:'Continuar →', logSubmit:'Iniciar sesión →',
     skipBtn:'Saltar y continuar sin cuenta',
-    eName:'Por favor escribe tu nombre.', eEmail:'Por favor escribe un email válido.',
-    ePass:'La contraseña debe tener al menos 6 caracteres.', ePassL:'Por favor escribe tu contraseña.',
+    eName:'Por favor escribe tu nombre.', eAge:'Por favor escribe una edad válida (14-99).',
+    eEmail:'Por favor escribe un email válido.',
+    ePass:'La contraseña debe tener al menos 8 caracteres.', ePassL:'Por favor escribe tu contraseña.',
+    eCountry:'Por favor selecciona tu país de origen.',
+    otpBack:'Volver',
+    otpTitle:'Verifica tu email',
+    otpSub:'Hemos enviado un código de 6 dígitos a:',
+    otpDemoLabel:'Código demo',
+    otpVerify:'Verificar y continuar →',
+    otpResend:'Reenviar código',
+    otpResent:'¡Código reenviado!',
+    otpInvalid:'Código incorrecto. Inténtalo de nuevo.',
+    otpEmpty:'Por favor introduce el código completo.',
   },
   en: {
     backLabel:'Back',
@@ -348,14 +452,30 @@ const T = {
       ['Are you Dutch?','Are you learning Dutch?','Do you speak Dutch?','Do you work in the Netherlands?'],
     ],
     authBack:'Results',
-    authTitle:'Save your progress!',
+    authTitle:'Save your progress and get your personalized plan',
     authSub:'Create your account or log in to access your personalised material.',
     tabReg:'Create account', tabLog:'Log in',
-    phName:'Your name', phEmail:'Your email', phPass:'Password (min. 6 characters)', phPassLog:'Password',
-    regSubmit:'Create account and continue →', logSubmit:'Log in →',
+    lblName:'Full name', lblAge:'Age', lblEmail:'Email', lblPass:'Password',
+    lblCountry:'Country of origin', lblExamDate:'Exam date (approximate)',
+    lblLogEmail:'Email', lblLogPass:'Password',
+    phName:'Your full name', phAge:'e.g. 28', phEmail:'you@email.com', phPass:'••••••••', phPassLog:'Password',
+    countryPlaceholder:'-- Select your country --',
+    hintPass:'Minimum 8 characters', hintExamDate:"Don't know yet? Leave blank",
+    regSubmit:'Continue →', logSubmit:'Log in →',
     skipBtn:'Skip and continue without account',
-    eName:'Please enter your name.', eEmail:'Please enter a valid email.',
-    ePass:'Password must be at least 6 characters.', ePassL:'Please enter your password.',
+    eName:'Please enter your name.', eAge:'Please enter a valid age (14-99).',
+    eEmail:'Please enter a valid email.',
+    ePass:'Password must be at least 8 characters.', ePassL:'Please enter your password.',
+    eCountry:'Please select your country of origin.',
+    otpBack:'Back',
+    otpTitle:'Verify your email',
+    otpSub:'We sent a 6-digit code to:',
+    otpDemoLabel:'Demo code',
+    otpVerify:'Verify and continue →',
+    otpResend:'Resend code',
+    otpResent:'Code resent!',
+    otpInvalid:'Incorrect code. Please try again.',
+    otpEmpty:'Please enter the full code.',
   },
   tr: {
     backLabel:'Geri',
@@ -408,14 +528,30 @@ const T = {
       ['Hollandalı mısın?','Hollandaca öğreniyor musun?','Hollandaca konuşuyor musun?','Hollanda\'da çalışıyor musun?'],
     ],
     authBack:'Sonuçlar',
-    authTitle:'İlerlemeni kaydet!',
+    authTitle:'İlerlemeni kaydet ve kişisel planını al',
     authSub:'Kişiselleştirilmiş materyaline erişmek için hesap oluştur veya giriş yap.',
     tabReg:'Hesap oluştur', tabLog:'Giriş yap',
-    phName:'Adınız', phEmail:'E-postanız', phPass:'Şifre (en az 6 karakter)', phPassLog:'Şifre',
-    regSubmit:'Hesap oluştur ve devam et →', logSubmit:'Giriş yap →',
+    lblName:'Tam adınız', lblAge:'Yaş', lblEmail:'E-posta', lblPass:'Şifre',
+    lblCountry:'Doğduğunuz ülke', lblExamDate:'Sınav tarihi (yaklaşık)',
+    lblLogEmail:'E-posta', lblLogPass:'Şifre',
+    phName:'Tam adınız', phAge:'örn. 28', phEmail:'siz@email.com', phPass:'••••••••', phPassLog:'Şifre',
+    countryPlaceholder:'-- Ülkenizi seçin --',
+    hintPass:'En az 8 karakter', hintExamDate:'Henüz bilmiyor musunuz? Boş bırakın',
+    regSubmit:'Devam et →', logSubmit:'Giriş yap →',
     skipBtn:'Atla ve hesapsız devam et',
-    eName:'Lütfen adınızı yazın.', eEmail:'Lütfen geçerli bir e-posta yazın.',
-    ePass:'Şifre en az 6 karakter olmalıdır.', ePassL:'Lütfen şifrenizi yazın.',
+    eName:'Lütfen adınızı yazın.', eAge:'Lütfen geçerli bir yaş yazın (14-99).',
+    eEmail:'Lütfen geçerli bir e-posta yazın.',
+    ePass:'Şifre en az 8 karakter olmalıdır.', ePassL:'Lütfen şifrenizi yazın.',
+    eCountry:'Lütfen doğduğunuz ülkeyi seçin.',
+    otpBack:'Geri',
+    otpTitle:'E-postanızı doğrulayın',
+    otpSub:'6 haneli bir kod gönderdik:',
+    otpDemoLabel:'Demo kodu',
+    otpVerify:'Doğrula ve devam et →',
+    otpResend:'Kodu tekrar gönder',
+    otpResent:'Kod tekrar gönderildi!',
+    otpInvalid:'Yanlış kod. Tekrar deneyin.',
+    otpEmpty:'Lütfen tam kodu girin.',
   },
   ar: {
     backLabel:'رجوع',
@@ -468,14 +604,30 @@ const T = {
       ['هل أنت هولندي؟','هل تتعلم الهولندية؟','هل تتحدث الهولندية؟','هل تعمل في هولندا؟'],
     ],
     authBack:'النتائج',
-    authTitle:'احفظ تقدمك!',
+    authTitle:'احفظ تقدمك واحصل على خطتك المخصصة',
     authSub:'أنشئ حسابك أو سجل الدخول للوصول إلى المواد المخصصة لك.',
     tabReg:'إنشاء حساب', tabLog:'تسجيل الدخول',
-    phName:'اسمك', phEmail:'بريدك الإلكتروني', phPass:'كلمة المرور (6 أحرف على الأقل)', phPassLog:'كلمة المرور',
-    regSubmit:'أنشئ حساباً وتابع →', logSubmit:'تسجيل الدخول →',
+    lblName:'الاسم الكامل', lblAge:'العمر', lblEmail:'البريد الإلكتروني', lblPass:'كلمة المرور',
+    lblCountry:'بلد المنشأ', lblExamDate:'تاريخ الامتحان (تقريبي)',
+    lblLogEmail:'البريد الإلكتروني', lblLogPass:'كلمة المرور',
+    phName:'اسمك الكامل', phAge:'مثلاً 28', phEmail:'you@email.com', phPass:'••••••••', phPassLog:'كلمة المرور',
+    countryPlaceholder:'-- اختر بلدك --',
+    hintPass:'8 أحرف على الأقل', hintExamDate:'لا تعرف بعد؟ اتركه فارغاً',
+    regSubmit:'تابع →', logSubmit:'تسجيل الدخول →',
     skipBtn:'تخطّ وتابع بدون حساب',
-    eName:'يرجى كتابة اسمك.', eEmail:'يرجى كتابة بريد إلكتروني صحيح.',
-    ePass:'يجب أن تكون كلمة المرور 6 أحرف على الأقل.', ePassL:'يرجى كتابة كلمة المرور.',
+    eName:'يرجى كتابة اسمك.', eAge:'يرجى كتابة عمر صحيح (14-99).',
+    eEmail:'يرجى كتابة بريد إلكتروني صحيح.',
+    ePass:'يجب أن تكون كلمة المرور 8 أحرف على الأقل.', ePassL:'يرجى كتابة كلمة المرور.',
+    eCountry:'يرجى اختيار بلد المنشأ.',
+    otpBack:'رجوع',
+    otpTitle:'تحقق من بريدك الإلكتروني',
+    otpSub:'أرسلنا رمزاً مكوناً من 6 أرقام إلى:',
+    otpDemoLabel:'كود تجريبي',
+    otpVerify:'تحقق وتابع →',
+    otpResend:'إعادة إرسال الرمز',
+    otpResent:'تم إعادة إرسال الرمز!',
+    otpInvalid:'الرمز غير صحيح. حاول مرة أخرى.',
+    otpEmpty:'يرجى إدخال الرمز كاملاً.',
   }
 };
 
@@ -514,6 +666,66 @@ function showScreen(id) {
   document.getElementById(id).classList.add('active');
 }
 
+// ══ COUNTRIES LIST (translated) ══
+const COUNTRIES = [
+  {c:'es', f:'🇪🇸', es:'España', en:'Spain', tr:'İspanya', ar:'إسبانيا'},
+  {c:'mx', f:'🇲🇽', es:'México', en:'Mexico', tr:'Meksika', ar:'المكسيك'},
+  {c:'co', f:'🇨🇴', es:'Colombia', en:'Colombia', tr:'Kolombiya', ar:'كولومبيا'},
+  {c:'ar', f:'🇦🇷', es:'Argentina', en:'Argentina', tr:'Arjantin', ar:'الأرجنتين'},
+  {c:'ve', f:'🇻🇪', es:'Venezuela', en:'Venezuela', tr:'Venezuela', ar:'فنزويلا'},
+  {c:'pe', f:'🇵🇪', es:'Perú', en:'Peru', tr:'Peru', ar:'بيرو'},
+  {c:'cl', f:'🇨🇱', es:'Chile', en:'Chile', tr:'Şili', ar:'تشيلي'},
+  {c:'ec', f:'🇪🇨', es:'Ecuador', en:'Ecuador', tr:'Ekvador', ar:'الإكوادور'},
+  {c:'do', f:'🇩🇴', es:'República Dominicana', en:'Dominican Republic', tr:'Dominik Cumhuriyeti', ar:'جمهورية الدومينيكان'},
+  {c:'cu', f:'🇨🇺', es:'Cuba', en:'Cuba', tr:'Küba', ar:'كوبا'},
+  {c:'bo', f:'🇧🇴', es:'Bolivia', en:'Bolivia', tr:'Bolivya', ar:'بوليفيا'},
+  {c:'uy', f:'🇺🇾', es:'Uruguay', en:'Uruguay', tr:'Uruguay', ar:'أوروغواي'},
+  {c:'py', f:'🇵🇾', es:'Paraguay', en:'Paraguay', tr:'Paraguay', ar:'باراغواي'},
+  {c:'gt', f:'🇬🇹', es:'Guatemala', en:'Guatemala', tr:'Guatemala', ar:'غواتيمالا'},
+  {c:'hn', f:'🇭🇳', es:'Honduras', en:'Honduras', tr:'Honduras', ar:'هندوراس'},
+  {c:'sv', f:'🇸🇻', es:'El Salvador', en:'El Salvador', tr:'El Salvador', ar:'السلفادور'},
+  {c:'ni', f:'🇳🇮', es:'Nicaragua', en:'Nicaragua', tr:'Nikaragua', ar:'نيكاراغوا'},
+  {c:'cr', f:'🇨🇷', es:'Costa Rica', en:'Costa Rica', tr:'Kosta Rika', ar:'كوستاريكا'},
+  {c:'pa', f:'🇵🇦', es:'Panamá', en:'Panama', tr:'Panama', ar:'بنما'},
+  {c:'pr', f:'🇵🇷', es:'Puerto Rico', en:'Puerto Rico', tr:'Porto Riko', ar:'بورتوريكو'},
+  {c:'tr', f:'🇹🇷', es:'Turquía', en:'Turkey', tr:'Türkiye', ar:'تركيا'},
+  {c:'ma', f:'🇲🇦', es:'Marruecos', en:'Morocco', tr:'Fas', ar:'المغرب'},
+  {c:'dz', f:'🇩🇿', es:'Argelia', en:'Algeria', tr:'Cezayir', ar:'الجزائر'},
+  {c:'tn', f:'🇹🇳', es:'Túnez', en:'Tunisia', tr:'Tunus', ar:'تونس'},
+  {c:'eg', f:'🇪🇬', es:'Egipto', en:'Egypt', tr:'Mısır', ar:'مصر'},
+  {c:'sy', f:'🇸🇾', es:'Siria', en:'Syria', tr:'Suriye', ar:'سوريا'},
+  {c:'iq', f:'🇮🇶', es:'Iraq', en:'Iraq', tr:'Irak', ar:'العراق'},
+  {c:'lb', f:'🇱🇧', es:'Líbano', en:'Lebanon', tr:'Lübnan', ar:'لبنان'},
+  {c:'jo', f:'🇯🇴', es:'Jordania', en:'Jordan', tr:'Ürdün', ar:'الأردن'},
+  {c:'ps', f:'🇵🇸', es:'Palestina', en:'Palestine', tr:'Filistin', ar:'فلسطين'},
+  {c:'sa', f:'🇸🇦', es:'Arabia Saudita', en:'Saudi Arabia', tr:'Suudi Arabistan', ar:'المملكة العربية السعودية'},
+  {c:'ye', f:'🇾🇪', es:'Yemen', en:'Yemen', tr:'Yemen', ar:'اليمن'},
+  {c:'sd', f:'🇸🇩', es:'Sudán', en:'Sudan', tr:'Sudan', ar:'السودان'},
+  {c:'ly', f:'🇱🇾', es:'Libia', en:'Libya', tr:'Libya', ar:'ليبيا'},
+  {c:'ae', f:'🇦🇪', es:'Emiratos Árabes Unidos', en:'United Arab Emirates', tr:'Birleşik Arap Emirlikleri', ar:'الإمارات العربية المتحدة'},
+  {c:'br', f:'🇧🇷', es:'Brasil', en:'Brazil', tr:'Brezilya', ar:'البرازيل'},
+  {c:'pt', f:'🇵🇹', es:'Portugal', en:'Portugal', tr:'Portekiz', ar:'البرتغال'},
+  {c:'nl', f:'🇳🇱', es:'Países Bajos', en:'Netherlands', tr:'Hollanda', ar:'هولندا'},
+  {c:'other', f:'🌍', es:'Otro', en:'Other', tr:'Diğer', ar:'أخرى'},
+];
+
+function populateCountries() {
+  const sel = document.getElementById('a-reg-country');
+  if (!sel) return;
+  const prevValue = sel.value;
+  sel.innerHTML = '';
+  const ph = document.createElement('option');
+  ph.value = ''; ph.textContent = t.countryPlaceholder; ph.disabled = true; ph.selected = true;
+  sel.appendChild(ph);
+  COUNTRIES.forEach(co => {
+    const o = document.createElement('option');
+    o.value = co.c;
+    o.textContent = `${co.f}  ${co[lang] || co.en}`;
+    sel.appendChild(o);
+  });
+  if (prevValue) sel.value = prevValue;
+}
+
 // ══ APPLY TRANSLATIONS ══
 function applyLang() {
   setText('back-label', t.backLabel);
@@ -533,11 +745,31 @@ function applyLang() {
   setText('reg-submit-btn', t.regSubmit);
   setText('log-submit-btn', t.logSubmit);
   setText('auth-skip-btn', t.skipBtn);
+  // Field labels
+  setText('lbl-name', t.lblName);
+  setText('lbl-age', t.lblAge);
+  setText('lbl-email', t.lblEmail);
+  setText('lbl-pass', t.lblPass);
+  setText('lbl-country', t.lblCountry);
+  setText('lbl-examdate', t.lblExamDate);
+  setText('lbl-log-email', t.lblLogEmail);
+  setText('lbl-log-pass', t.lblLogPass);
+  setText('hint-pass', t.hintPass);
+  setText('hint-examdate', t.hintExamDate);
   document.getElementById('a-reg-name').placeholder = t.phName;
+  document.getElementById('a-reg-age').placeholder = t.phAge;
   document.getElementById('a-reg-email').placeholder = t.phEmail;
   document.getElementById('a-reg-pass').placeholder = t.phPass;
   document.getElementById('a-log-email').placeholder = t.phEmail;
   document.getElementById('a-log-pass').placeholder = t.phPassLog;
+  populateCountries();
+  // OTP
+  setText('otp-back-label', t.otpBack);
+  setText('otp-title', t.otpTitle);
+  setText('otp-sub', t.otpSub);
+  setText('otp-demo-label', t.otpDemoLabel);
+  setText('otp-verify-btn', t.otpVerify);
+  setText('otp-resend-btn', t.otpResend);
 }
 
 // ══ AUTH ══
@@ -570,19 +802,120 @@ function showErr(id, msg) {
 
 function isValidEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
 
+// Pending registration data (filled before OTP, committed after verify)
+let pendingReg = null;
+
 function doRegisterTest() {
   const name = document.getElementById('a-reg-name').value.trim();
+  const ageStr = document.getElementById('a-reg-age').value.trim();
   const email = document.getElementById('a-reg-email').value.trim();
   const pass = document.getElementById('a-reg-pass').value;
+  const country = document.getElementById('a-reg-country').value;
+  const examDate = document.getElementById('a-reg-examdate').value;
   document.getElementById('err-reg').classList.remove('show');
   if (!name) return showErr('err-reg', t.eName);
+  const age = parseInt(ageStr, 10);
+  if (!ageStr || isNaN(age) || age < 14 || age > 99) return showErr('err-reg', t.eAge);
   if (!isValidEmail(email)) return showErr('err-reg', t.eEmail);
-  if (pass.length < 6) return showErr('err-reg', t.ePass);
-  localStorage.setItem('slaagnl_name', name);
-  localStorage.setItem('slaagnl_email', email);
-  localStorage.setItem('slaagnl_plan', 'libre');
-  localStorage.setItem('slaagnl_streak', '0');
+  if (pass.length < 8) return showErr('err-reg', t.ePass);
+  if (!country) return showErr('err-reg', t.eCountry);
+
+  pendingReg = { name, age, email, country, examDate };
+  startOTPFlow(email);
+}
+
+// ══ OTP VERIFICATION ══
+let currentOTP = null;
+
+function generateOTP() {
+  return String(Math.floor(100000 + Math.random() * 900000));
+}
+
+function startOTPFlow(email) {
+  currentOTP = generateOTP();
+  document.getElementById('otp-email-display').textContent = email;
+  document.getElementById('otp-demo-code').textContent = currentOTP;
+  document.getElementById('err-otp').classList.remove('show');
+  document.getElementById('otp-resent-msg').classList.remove('show');
+  // Clear digit inputs
+  document.querySelectorAll('.otp-digit').forEach(d => { d.value=''; d.classList.remove('filled'); });
+  showScreen('screen-otp');
+  setTimeout(() => {
+    const first = document.querySelector('.otp-digit');
+    if (first) first.focus();
+  }, 100);
+}
+
+function getOTPValue() {
+  return Array.from(document.querySelectorAll('.otp-digit')).map(d => d.value).join('');
+}
+
+function doVerifyOTP() {
+  document.getElementById('err-otp').classList.remove('show');
+  const code = getOTPValue();
+  if (code.length < 6) return showErr('err-otp', t.otpEmpty);
+  if (code !== currentOTP) {
+    showErr('err-otp', t.otpInvalid);
+    document.querySelectorAll('.otp-digit').forEach(d => { d.value=''; d.classList.remove('filled'); });
+    const first = document.querySelector('.otp-digit');
+    if (first) first.focus();
+    return;
+  }
+  // Save full registration
+  if (pendingReg) {
+    localStorage.setItem('slaagnl_name', pendingReg.name);
+    localStorage.setItem('slaagnl_age', String(pendingReg.age));
+    localStorage.setItem('slaagnl_email', pendingReg.email);
+    localStorage.setItem('slaagnl_country', pendingReg.country);
+    if (pendingReg.examDate) localStorage.setItem('slaagnl_exam_date', pendingReg.examDate);
+    localStorage.setItem('slaagnl_plan', 'libre');
+    localStorage.setItem('slaagnl_streak', '0');
+    localStorage.setItem('slaagnl_email_verified', '1');
+  }
   goDashboard();
+}
+
+function resendOTP() {
+  currentOTP = generateOTP();
+  document.getElementById('otp-demo-code').textContent = currentOTP;
+  document.getElementById('err-otp').classList.remove('show');
+  const msg = document.getElementById('otp-resent-msg');
+  msg.textContent = t.otpResent;
+  msg.classList.add('show');
+  setTimeout(() => msg.classList.remove('show'), 2500);
+}
+
+function initOTPInputs() {
+  const inputs = document.querySelectorAll('.otp-digit');
+  inputs.forEach((inp, idx) => {
+    inp.addEventListener('input', (e) => {
+      const v = e.target.value.replace(/\D/g, '');
+      e.target.value = v.slice(0,1);
+      if (e.target.value) {
+        e.target.classList.add('filled');
+        if (idx < inputs.length - 1) inputs[idx+1].focus();
+        else if (getOTPValue().length === 6) doVerifyOTP();
+      } else {
+        e.target.classList.remove('filled');
+      }
+    });
+    inp.addEventListener('keydown', (e) => {
+      if (e.key === 'Backspace' && !e.target.value && idx > 0) {
+        inputs[idx-1].focus();
+        inputs[idx-1].value = '';
+        inputs[idx-1].classList.remove('filled');
+      }
+    });
+    inp.addEventListener('paste', (e) => {
+      e.preventDefault();
+      const txt = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g,'').slice(0,6);
+      txt.split('').forEach((ch, i) => {
+        if (inputs[i]) { inputs[i].value = ch; inputs[i].classList.add('filled'); }
+      });
+      if (txt.length === 6) doVerifyOTP();
+      else if (inputs[txt.length]) inputs[txt.length].focus();
+    });
+  });
 }
 
 function doLoginTest() {
@@ -725,6 +1058,7 @@ function goDashboard() {
 
 // ══ INIT ══
 applyLang();
+initOTPInputs();
 </script>
 </body>
 </html>
