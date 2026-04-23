@@ -385,7 +385,7 @@ function confirmExit(){
   document.getElementById('modal-title').textContent='Examen verlaten?';
   document.getElementById('modal-sub').textContent='Je voortgang gaat verloren.';
   document.getElementById('modal-confirm-btn').textContent='Verlaten';
-  document.getElementById('modal-confirm-btn').onclick=()=>window.location.href='../index.html';
+  document.getElementById('modal-confirm-btn').onclick=()=>window.location.href='../dashboard.html';
   document.getElementById('confirm-modal').classList.add('open');
 }
 
@@ -418,7 +418,7 @@ function finishTest(){
       <div class="breakdown-row"><span class="breakdown-label">Fout / leeg</span><span class="breakdown-val err">${TEST_SIZE-correct}</span></div>
       <div class="breakdown-row"><span class="breakdown-label">Score</span><span class="breakdown-val">${pct}%</span></div>
     </div>
-    <button class="btn-back-home" onclick="window.location.href='../index.html'">‹ Terug naar dashboard</button>`;
+    <button class="btn-back-home" onclick="window.location.href='../dashboard.html'" style="background:linear-gradient(135deg,var(--orange),#e8702f);color:white;border:none;padding:16px 24px;border-radius:14px;font-weight:900;font-size:15px;box-shadow:0 6px 20px rgba(244,124,58,0.35);">🏠 Terug naar je dashboard</button>`;
   rs.classList.add('show');
 }
 

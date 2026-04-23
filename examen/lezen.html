@@ -430,7 +430,7 @@ function confirmExit(){
   document.getElementById('modal-title').textContent='¿Salir del test?';
   document.getElementById('modal-sub').textContent='Tu progreso se perderá.';
   document.getElementById('modal-confirm-btn').textContent='Salir';
-  document.getElementById('modal-confirm-btn').onclick=()=>window.location.href='../index.html';
+  document.getElementById('modal-confirm-btn').onclick=()=>window.location.href='../dashboard.html';
   document.getElementById('confirm-modal').classList.add('open');
 }
 
@@ -458,7 +458,7 @@ function finishTest(){
       <div class="breakdown-row"><span class="breakdown-label">Puntuación</span><span class="breakdown-val">${pct}%</span></div>
     </div>
     <button class="btn-retry" onclick="retryTest()">🔄 Nuevo test</button>
-    <button class="btn-back-home" onclick="window.location.href='../index.html'">‹ Volver al dashboard</button>`;
+    <button class="btn-back-home" onclick="window.location.href='../dashboard.html'" style="background:linear-gradient(135deg,var(--orange),#e8702f);color:white;border:none;padding:16px 24px;border-radius:14px;font-weight:900;font-size:15px;box-shadow:0 6px 20px rgba(244,124,58,0.35);">🏠 Volver a mi dashboard</button>`;
   rs.classList.add('show');
 }
 

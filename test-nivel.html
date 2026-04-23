@@ -241,7 +241,8 @@ input[type="date"].auth-input{color-scheme:dark;}
       </div>
       <div class="field-group">
         <label class="field-label" id="lbl-age"></label>
-        <input class="auth-input" type="number" id="a-reg-age" min="14" max="99" inputmode="numeric">
+        <input class="auth-input" type="number" id="a-reg-age" min="16" max="67" inputmode="numeric">
+        <span class="field-hint" id="hint-age"></span>
       </div>
       <div class="field-group">
         <label class="field-label" id="lbl-email"></label>
@@ -387,7 +388,10 @@ const T = {
     hintPass:'Mínimo 8 caracteres', hintExamDate:'¿Aún no lo sabes? Déjalo en blanco',
     regSubmit:'Continuar →', logSubmit:'Iniciar sesión →',
     skipBtn:'Saltar y continuar sin cuenta',
-    eName:'Por favor escribe tu nombre.', eAge:'Por favor escribe una edad válida (14-99).',
+    ageNote:'Edad permitida: 16–67 años',
+    eName:'Por favor escribe tu nombre.', eAge:'Por favor escribe una edad válida.',
+    eAgeYoung:'Los menores de 16 años no realizan este examen — se integran directamente en la escuela holandesa. 🏫',
+    eAgeOld:'Los mayores de 67 años están exentos del Inburgeringsexamen. No necesitas hacerlo. 🌷',
     eEmail:'Por favor escribe un email válido.',
     ePass:'La contraseña debe tener al menos 8 caracteres.', ePassL:'Por favor escribe tu contraseña.',
     eCountry:'Por favor selecciona tu país de origen.',
@@ -463,7 +467,10 @@ const T = {
     hintPass:'Minimum 8 characters', hintExamDate:"Don't know yet? Leave blank",
     regSubmit:'Continue →', logSubmit:'Log in →',
     skipBtn:'Skip and continue without account',
-    eName:'Please enter your name.', eAge:'Please enter a valid age (14-99).',
+    ageNote:'Allowed age: 16–67',
+    eName:'Please enter your name.', eAge:'Please enter a valid age.',
+    eAgeYoung:'Under-16s do not take this exam — they integrate directly into Dutch school. 🏫',
+    eAgeOld:'People over 67 are exempt from the Inburgeringsexamen. You do not need to take it. 🌷',
     eEmail:'Please enter a valid email.',
     ePass:'Password must be at least 8 characters.', ePassL:'Please enter your password.',
     eCountry:'Please select your country of origin.',
@@ -539,7 +546,10 @@ const T = {
     hintPass:'En az 8 karakter', hintExamDate:'Henüz bilmiyor musunuz? Boş bırakın',
     regSubmit:'Devam et →', logSubmit:'Giriş yap →',
     skipBtn:'Atla ve hesapsız devam et',
-    eName:'Lütfen adınızı yazın.', eAge:'Lütfen geçerli bir yaş yazın (14-99).',
+    ageNote:'İzin verilen yaş: 16–67',
+    eName:'Lütfen adınızı yazın.', eAge:'Lütfen geçerli bir yaş yazın.',
+    eAgeYoung:'16 yaş altı bu sınava girmez — doğrudan Hollanda okuluna entegre olurlar. 🏫',
+    eAgeOld:'67 yaş üstü Inburgeringsexamen\'den muaftır. Bu sınava girmen gerekmiyor. 🌷',
     eEmail:'Lütfen geçerli bir e-posta yazın.',
     ePass:'Şifre en az 8 karakter olmalıdır.', ePassL:'Lütfen şifrenizi yazın.',
     eCountry:'Lütfen doğduğunuz ülkeyi seçin.',
@@ -615,7 +625,10 @@ const T = {
     hintPass:'8 أحرف على الأقل', hintExamDate:'لا تعرف بعد؟ اتركه فارغاً',
     regSubmit:'تابع →', logSubmit:'تسجيل الدخول →',
     skipBtn:'تخطّ وتابع بدون حساب',
-    eName:'يرجى كتابة اسمك.', eAge:'يرجى كتابة عمر صحيح (14-99).',
+    ageNote:'العمر المسموح: 16–67',
+    eName:'يرجى كتابة اسمك.', eAge:'يرجى كتابة عمر صحيح.',
+    eAgeYoung:'الأشخاص أقل من 16 سنة لا يخضعون لهذا الامتحان — يندمجون مباشرة في المدرسة الهولندية. 🏫',
+    eAgeOld:'الأشخاص فوق 67 سنة معفون من امتحان Inburgering. لست بحاجة لتقديمه. 🌷',
     eEmail:'يرجى كتابة بريد إلكتروني صحيح.',
     ePass:'يجب أن تكون كلمة المرور 8 أحرف على الأقل.', ePassL:'يرجى كتابة كلمة المرور.',
     eCountry:'يرجى اختيار بلد المنشأ.',
@@ -756,6 +769,7 @@ function applyLang() {
   setText('lbl-log-pass', t.lblLogPass);
   setText('hint-pass', t.hintPass);
   setText('hint-examdate', t.hintExamDate);
+  setText('hint-age', t.ageNote);
   document.getElementById('a-reg-name').placeholder = t.phName;
   document.getElementById('a-reg-age').placeholder = t.phAge;
   document.getElementById('a-reg-email').placeholder = t.phEmail;
@@ -815,7 +829,9 @@ function doRegisterTest() {
   document.getElementById('err-reg').classList.remove('show');
   if (!name) return showErr('err-reg', t.eName);
   const age = parseInt(ageStr, 10);
-  if (!ageStr || isNaN(age) || age < 14 || age > 99) return showErr('err-reg', t.eAge);
+  if (!ageStr || isNaN(age)) return showErr('err-reg', t.eAge);
+  if (age < 16) return showErr('err-reg', t.eAgeYoung);
+  if (age > 67) return showErr('err-reg', t.eAgeOld);
   if (!isValidEmail(email)) return showErr('err-reg', t.eEmail);
   if (pass.length < 8) return showErr('err-reg', t.ePass);
   if (!country) return showErr('err-reg', t.eCountry);
@@ -871,6 +887,7 @@ function doVerifyOTP() {
     localStorage.setItem('slaagnl_plan', 'libre');
     localStorage.setItem('slaagnl_streak', '0');
     localStorage.setItem('slaagnl_email_verified', '1');
+    localStorage.setItem('slaagnl_show_plan_modal', '1');
   }
   goDashboard();
 }
