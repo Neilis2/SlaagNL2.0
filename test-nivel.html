@@ -287,6 +287,15 @@ const T = {
       null,
       ['¿Eres holandés/a?','¿Aprendes holandés?','¿Hablas holandés?','¿Trabajas en Holanda?'],
     ],
+    authBack:'Resultados',
+    authTitle:'¡Guarda tu progreso!',
+    authSub:'Crea tu cuenta o inicia sesión para acceder a tu material personalizado.',
+    tabReg:'Crear cuenta', tabLog:'Iniciar sesión',
+    phName:'Tu nombre', phEmail:'Tu email', phPass:'Contraseña (mín. 6 caracteres)', phPassLog:'Contraseña',
+    regSubmit:'Crear cuenta y continuar →', logSubmit:'Iniciar sesión →',
+    skipBtn:'Saltar y continuar sin cuenta',
+    eName:'Por favor escribe tu nombre.', eEmail:'Por favor escribe un email válido.',
+    ePass:'La contraseña debe tener al menos 6 caracteres.', ePassL:'Por favor escribe tu contraseña.',
   },
   en: {
     backLabel:'Back',
@@ -338,6 +347,15 @@ const T = {
       null,
       ['Are you Dutch?','Are you learning Dutch?','Do you speak Dutch?','Do you work in the Netherlands?'],
     ],
+    authBack:'Results',
+    authTitle:'Save your progress!',
+    authSub:'Create your account or log in to access your personalised material.',
+    tabReg:'Create account', tabLog:'Log in',
+    phName:'Your name', phEmail:'Your email', phPass:'Password (min. 6 characters)', phPassLog:'Password',
+    regSubmit:'Create account and continue →', logSubmit:'Log in →',
+    skipBtn:'Skip and continue without account',
+    eName:'Please enter your name.', eEmail:'Please enter a valid email.',
+    ePass:'Password must be at least 6 characters.', ePassL:'Please enter your password.',
   },
   tr: {
     backLabel:'Geri',
@@ -389,6 +407,15 @@ const T = {
       null,
       ['Hollandalı mısın?','Hollandaca öğreniyor musun?','Hollandaca konuşuyor musun?','Hollanda\'da çalışıyor musun?'],
     ],
+    authBack:'Sonuçlar',
+    authTitle:'İlerlemeni kaydet!',
+    authSub:'Kişiselleştirilmiş materyaline erişmek için hesap oluştur veya giriş yap.',
+    tabReg:'Hesap oluştur', tabLog:'Giriş yap',
+    phName:'Adınız', phEmail:'E-postanız', phPass:'Şifre (en az 6 karakter)', phPassLog:'Şifre',
+    regSubmit:'Hesap oluştur ve devam et →', logSubmit:'Giriş yap →',
+    skipBtn:'Atla ve hesapsız devam et',
+    eName:'Lütfen adınızı yazın.', eEmail:'Lütfen geçerli bir e-posta yazın.',
+    ePass:'Şifre en az 6 karakter olmalıdır.', ePassL:'Lütfen şifrenizi yazın.',
   },
   ar: {
     backLabel:'رجوع',
@@ -440,6 +467,15 @@ const T = {
       null,
       ['هل أنت هولندي؟','هل تتعلم الهولندية؟','هل تتحدث الهولندية؟','هل تعمل في هولندا؟'],
     ],
+    authBack:'النتائج',
+    authTitle:'احفظ تقدمك!',
+    authSub:'أنشئ حسابك أو سجل الدخول للوصول إلى المواد المخصصة لك.',
+    tabReg:'إنشاء حساب', tabLog:'تسجيل الدخول',
+    phName:'اسمك', phEmail:'بريدك الإلكتروني', phPass:'كلمة المرور (6 أحرف على الأقل)', phPassLog:'كلمة المرور',
+    regSubmit:'أنشئ حساباً وتابع →', logSubmit:'تسجيل الدخول →',
+    skipBtn:'تخطّ وتابع بدون حساب',
+    eName:'يرجى كتابة اسمك.', eEmail:'يرجى كتابة بريد إلكتروني صحيح.',
+    ePass:'يجب أن تكون كلمة المرور 6 أحرف على الأقل.', ePassL:'يرجى كتابة كلمة المرور.',
   }
 };
 
@@ -489,6 +525,78 @@ function applyLang() {
   setText('et-desc2', t.etDesc2);
   setText('et-soon', t.etSoon);
   setText('q-back-label', t.qBackLabel);
+  setText('auth-back-label', t.authBack);
+  setText('auth-title', t.authTitle);
+  setText('auth-sub', t.authSub);
+  setText('tab-reg', t.tabReg);
+  setText('tab-log', t.tabLog);
+  setText('reg-submit-btn', t.regSubmit);
+  setText('log-submit-btn', t.logSubmit);
+  setText('auth-skip-btn', t.skipBtn);
+  document.getElementById('a-reg-name').placeholder = t.phName;
+  document.getElementById('a-reg-email').placeholder = t.phEmail;
+  document.getElementById('a-reg-pass').placeholder = t.phPass;
+  document.getElementById('a-log-email').placeholder = t.phEmail;
+  document.getElementById('a-log-pass').placeholder = t.phPassLog;
+}
+
+// ══ AUTH ══
+function showAuth() {
+  // Pre-fill if user already logged in before
+  const savedName = localStorage.getItem('slaagnl_name');
+  const savedEmail = localStorage.getItem('slaagnl_email');
+  if (savedName) document.getElementById('a-reg-name').value = savedName;
+  if (savedEmail) {
+    document.getElementById('a-reg-email').value = savedEmail;
+    document.getElementById('a-log-email').value = savedEmail;
+  }
+  showScreen('screen-auth');
+}
+
+function switchAuthTab(which) {
+  document.getElementById('tab-reg').classList.toggle('active', which === 'reg');
+  document.getElementById('tab-log').classList.toggle('active', which === 'log');
+  document.getElementById('form-reg').style.display = which === 'reg' ? 'flex' : 'none';
+  document.getElementById('form-log').style.display = which === 'log' ? 'flex' : 'none';
+  document.getElementById('err-reg').classList.remove('show');
+  document.getElementById('err-log').classList.remove('show');
+}
+
+function showErr(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.classList.add('show');
+}
+
+function isValidEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
+
+function doRegisterTest() {
+  const name = document.getElementById('a-reg-name').value.trim();
+  const email = document.getElementById('a-reg-email').value.trim();
+  const pass = document.getElementById('a-reg-pass').value;
+  document.getElementById('err-reg').classList.remove('show');
+  if (!name) return showErr('err-reg', t.eName);
+  if (!isValidEmail(email)) return showErr('err-reg', t.eEmail);
+  if (pass.length < 6) return showErr('err-reg', t.ePass);
+  localStorage.setItem('slaagnl_name', name);
+  localStorage.setItem('slaagnl_email', email);
+  localStorage.setItem('slaagnl_plan', 'libre');
+  localStorage.setItem('slaagnl_streak', '0');
+  goDashboard();
+}
+
+function doLoginTest() {
+  const email = document.getElementById('a-log-email').value.trim();
+  const pass = document.getElementById('a-log-pass').value;
+  document.getElementById('err-log').classList.remove('show');
+  if (!isValidEmail(email)) return showErr('err-log', t.eEmail);
+  if (!pass) return showErr('err-log', t.ePassL);
+  localStorage.setItem('slaagnl_email', email);
+  if (!localStorage.getItem('slaagnl_name')) {
+    localStorage.setItem('slaagnl_name', email.split('@')[0]);
+  }
+  if (!localStorage.getItem('slaagnl_plan')) localStorage.setItem('slaagnl_plan', 'libre');
+  goDashboard();
 }
 
 // ══ EXAM TYPE SELECTION ══
