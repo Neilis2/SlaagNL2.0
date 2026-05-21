@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SlaagNL</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0d1f3c;--navy2:#162d54;--navy3:#1e3a6e;
+  --orange:#f47c3a;--cream:#fdf6ec;--yellow:#f4c842;
+  --green:#2ecc8a;--red:#e8455a;--purple:#a78bfa;
+  --blue:#60a5fa;--border:rgba(255,255,255,0.07);
+  --border-cream:rgba(13,31,60,0.08);--ease:0.22s cubic-bezier(0.4,0,0.2,1);}
+body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+
+/* ══ HEADER ══ */
+.header{
+  background:var(--navy2);
+  border-bottom:1px solid var(--border);
+  padding:12px 20px 18px;
+  display:flex;flex-direction:column;align-items:center;
+  position:sticky;top:0;z-index:100;
+}
+.header-top{
+  width:100%;display:flex;align-items:center;
+  justify-content:space-between;margin-bottom:8px;
+}
+.streak-badge{
+  display:flex;align-items:center;gap:4px;
+  font-size:13px;font-weight:700;color:var(--orange);
+  background:rgba(244,124,58,0.12);
+  border:1px solid rgba(244,124,58,0.25);
+  padding:5px 11px;border-radius:99px;cursor:pointer;
+}
+.avatar-btn{
+  width:36px;height:36px;border-radius:50%;
+  background:linear-gradient(135deg,var(--orange),#f4c842);
+  border:2px solid rgba(244,124,58,0.35);
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;font-weight:700;color:white;
+  cursor:pointer;transition:transform var(--ease);
+}
+.avatar-btn:active{transform:scale(0.92);}
+
+/* Lowie + logo center */
+.header-center{display:flex;flex-direction:column;align-items:center;gap:0;}
+
+.lowie-bubble{
+  background:white;color:#1a2a4a;
+  font-size:12px;font-weight:600;
+  padding:7px 14px;
+  border-radius:16px 16px 16px 4px;
+  box-shadow:0 4px 20px rgba(0,0,0,0.18);
+  margin-bottom:6px;position:relative;
+  max-width:260px;text-align:center;line-height:1.35;
+  transition:opacity 0.3s;
+}
+.lowie-bubble::after{
+  content:'';position:absolute;
+  bottom:-7px;left:16px;
+  border:7px solid transparent;
+  border-top-color:white;border-bottom:0;
+  border-left:5px solid transparent;
+}
+
+.lowie-img{
+  width:80px;height:80px;
+  object-fit:contain;
+  filter:drop-shadow(0 6px 16px rgba(244,124,58,0.25));
+  margin-bottom:2px;
+}
+
+.logo-text{
+  font-family:'Playfair Display',serif;
+  font-size:26px;font-weight:900;
+  color:var(--cream);letter-spacing:0.5px;line-height:1;
+}
+.logo-nl{color:var(--orange);}
+
+/* ══ HERO ══ */
+.hero{
+  background:linear-gradient(160deg,var(--navy2),var(--navy3));
+  padding:16px 20px;border-bottom:1px solid var(--border);
+}
+.gift-banner{
+  display:flex;align-items:center;gap:10px;
+  background:rgba(244,196,58,0.07);
+  border:1px solid rgba(244,196,58,0.25);
+  border-radius:12px;padding:10px 14px;margin-bottom:14px;
+  animation:giftPulse 3s ease infinite;
+}
+@keyframes giftPulse{0%,100%{border-color:rgba(244,196,58,0.25);}50%{border-color:rgba(244,196,58,0.5);}}
+.gift-title{font-size:13px;font-weight:700;color:var(--yellow);}
+.gift-sub{font-size:11px;color:rgba(253,246,236,0.45);}
+.gift-btn{
+  margin-left:auto;padding:7px 14px;background:var(--yellow);
+  border:none;border-radius:99px;color:#1a1000;
+  font-size:12px;font-weight:700;white-space:nowrap;
+  flex-shrink:0;cursor:pointer;font-family:inherit;
+}
+.dominio-row{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px;}
+.dominio-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:rgba(253,246,236,0.4);}
+.dominio-pct{font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--orange);}
+.dominio-bar{height:7px;background:rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;margin-bottom:8px;}
+.dominio-bar-fill{height:100%;background:linear-gradient(90deg,var(--orange),var(--yellow));border-radius:10px;transition:width 0.8s ease;}
+.exam-row{font-size:12px;color:rgba(253,246,236,0.4);text-align:right;}
+.exam-row strong{color:var(--blue);}
+
+/* ══ SECTIONS ══ */
+.sections-wrap{background:var(--cream);padding-bottom:60px;}
+.section-block{padding:22px 16px 20px;border-bottom:1px solid var(--border-cream);}
+
+.section-tag{
+  display:inline-flex;align-items:center;gap:7px;
+  font-size:13px;font-weight:700;
+  text-transform:uppercase;letter-spacing:1px;
+  padding:7px 16px;border-radius:99px;margin-bottom:16px;
+}
+.tag-taal   {color:#1a5fa8;background:rgba(26,95,168,0.09);border:1px solid rgba(26,95,168,0.18);}
+.tag-sam    {color:#1a7a50;background:rgba(26,122,80,0.09);border:1px solid rgba(26,122,80,0.18);}
+.tag-spreken{color:#6b35a8;background:rgba(107,53,168,0.09);border:1px solid rgba(107,53,168,0.18);}
+.tag-examen {color:#a83535;background:rgba(168,53,53,0.07);border:1px solid rgba(168,53,53,0.16);}
+
+/* ══ TOPIC OVALS ══ */
+.topics-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.topic-oval{
+  background:rgba(13,31,60,0.06);
+  border:1.5px solid rgba(13,31,60,0.1);
+  border-radius:18px;
+  padding:14px 8px 12px;
+  display:flex;flex-direction:column;align-items:center;gap:5px;
+  cursor:pointer;text-align:center;user-select:none;
+  transition:all 0.18s;
+}
+.topic-oval:active{transform:scale(0.96);}
+.topic-oval.done  {background:rgba(46,204,138,0.08);border-color:rgba(46,204,138,0.28);}
+.topic-oval.curr  {background:rgba(244,124,58,0.07);border-color:rgba(244,124,58,0.28);}
+.topic-oval.locked{opacity:0.45;cursor:not-allowed;}
+.topic-oval.soon  {opacity:0.52;cursor:default;}
+.topic-oval.locked:active,.topic-oval.soon:active{transform:none;}
+
+.topic-emoji{font-size:22px;line-height:1;}
+.topic-name{font-size:11.5px;font-weight:700;color:var(--navy);line-height:1.25;}
+.topic-oval.done .topic-name  {color:#1a7a50;}
+.topic-oval.curr .topic-name  {color:#b85a1a;}
+.topic-oval.locked .topic-name,
+.topic-oval.soon .topic-name  {color:rgba(13,31,60,0.4);}
+.topic-sub{font-size:10px;color:rgba(13,31,60,0.38);line-height:1.2;}
+.topic-oval.soon .topic-sub{color:var(--purple);font-weight:600;}
+
+/* ══ EXAMEN BLUR ══ */
+.examen-blur-wrap{position:relative;border-radius:18px;overflow:hidden;cursor:pointer;}
+.examen-blur-content{filter:blur(4px);pointer-events:none;user-select:none;}
+.examen-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
+.examen-lock-icon{font-size:42px;}
+.unlock-info{
+  display:none;margin-top:12px;
+  background:white;border:1px solid rgba(168,53,53,0.15);
+  border-radius:14px;padding:14px 16px;text-align:center;
+}
+.unlock-info.show{display:block;}
+.unlock-title{font-family:'Playfair Display',serif;font-size:14px;font-weight:900;color:var(--navy);margin-bottom:5px;}
+.unlock-sub{font-size:12px;color:rgba(13,31,60,0.5);line-height:1.5;margin-bottom:10px;}
+.unlock-bar-wrap{height:5px;background:rgba(13,31,60,0.08);border-radius:99px;overflow:hidden;margin-bottom:5px;}
+.unlock-bar-fill{height:100%;background:linear-gradient(90deg,var(--orange),var(--yellow));border-radius:99px;transition:width 0.6s ease;}
+.unlock-pct{font-size:11px;font-weight:700;color:rgba(13,31,60,0.4);}
+.unlock-pct span{color:var(--orange);}
+
+/* ══ TOAST ══ */
+.toast{
+  position:fixed;bottom:24px;left:50%;
+  transform:translateX(-50%) translateY(80px);
+  background:var(--navy3);border:1px solid rgba(255,255,255,0.12);
+  color:var(--cream);font-size:13px;font-weight:600;
+  padding:12px 20px;border-radius:99px;z-index:9999;
+  transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1),opacity 0.35s;
+  opacity:0;white-space:nowrap;max-width:90vw;text-align:center;
+}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+
+/* ══ DRAWER ══ */
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:200;opacity:0;pointer-events:none;transition:opacity 0.3s;}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.profile-drawer{
+  position:fixed;top:0;right:-100%;
+  width:min(340px,92vw);height:100%;
+  background:var(--navy2);border-left:1px solid var(--border);
+  z-index:300;display:flex;flex-direction:column;
+  transition:right 0.32s cubic-bezier(0.4,0,0.2,1);overflow-y:auto;
+}
+.profile-drawer.open{right:0;}
+.drawer-header{
+  padding:50px 20px 20px;
+  background:linear-gradient(160deg,var(--navy3),var(--navy2));
+  border-bottom:1px solid var(--border);position:relative;
+}
+.drawer-close{position:absolute;top:16px;left:16px;background:none;border:none;color:rgba(253,246,236,0.4);font-size:22px;cursor:pointer;line-height:1;}
+.drawer-avatar{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#f4c842);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:white;margin-bottom:12px;border:3px solid rgba(244,124,58,0.4);}
+.drawer-name{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--cream);margin-bottom:2px;}
+.drawer-email{font-size:12px;color:rgba(253,246,236,0.4);margin-bottom:8px;}
+.drawer-plan-chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:var(--orange);background:rgba(244,124,58,0.1);border:1px solid rgba(244,124,58,0.25);padding:3px 10px;border-radius:99px;}
+.drawer-menu{padding:12px 0;}
+.drawer-item{display:flex;align-items:center;gap:14px;padding:14px 20px;cursor:pointer;transition:background var(--ease);border:none;background:none;width:100%;text-align:left;font-family:inherit;color:var(--cream);}
+.drawer-item:hover{background:rgba(255,255,255,0.04);}
+.drawer-item-icon{font-size:18px;width:24px;text-align:center;}
+.drawer-item-label{font-size:14px;font-weight:500;flex:1;}
+.drawer-item-arrow{font-size:16px;color:rgba(253,246,236,0.25);}
+.drawer-divider{height:1px;background:var(--border);margin:4px 0;}
+.drawer-item.danger{color:var(--red);}
+
+/* ══ SUBPANELS ══ */
+.subpanel{position:fixed;top:0;right:-100%;width:min(340px,92vw);height:100%;background:var(--navy);border-left:1px solid var(--border);z-index:400;display:flex;flex-direction:column;transition:right 0.28s cubic-bezier(0.4,0,0.2,1);overflow-y:auto;}
+.subpanel.open{right:0;}
+.subpanel-header{display:flex;align-items:center;gap:12px;padding:52px 20px 16px;background:var(--navy2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:1;}
+.subpanel-back{background:none;border:none;color:var(--orange);font-size:22px;cursor:pointer;padding:0;line-height:1;}
+.subpanel-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--cream);}
+.subpanel-body{padding:16px 20px;flex:1;}
+
+/* Progress */
+.progress-topic-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--border);}
+.pt-icon{font-size:20px;width:28px;text-align:center;}
+.pt-name{font-size:13px;font-weight:600;color:var(--cream);flex:1;}
+.pt-pct{font-size:13px;font-weight:700;min-width:36px;text-align:right;}
+.progress-blur-wrap{position:relative;margin-top:4px;}
+.progress-blur-items{filter:blur(5px);pointer-events:none;user-select:none;}
+.progress-lock-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:rgba(13,31,60,0.55);border-radius:14px;padding:20px;}
+.progress-lock-overlay p{font-size:12px;font-weight:600;color:rgba(253,246,236,0.7);text-align:center;line-height:1.5;}
+.btn-upgrade{padding:9px 18px;background:var(--orange);border:none;border-radius:99px;color:white;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
+
+/* Plans */
+.plan-card{background:var(--navy2);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:12px;position:relative;}
+.plan-card.plan-current{border-color:rgba(46,204,138,0.35);}
+.plan-card.plan-featured{border-color:rgba(244,124,58,0.4);}
+.plan-badge{position:absolute;top:-10px;right:14px;background:var(--orange);color:white;font-size:10px;font-weight:700;padding:3px 10px;border-radius:99px;}
+.plan-name{font-family:'Playfair Display',serif;font-size:17px;font-weight:900;color:var(--cream);margin-bottom:4px;}
+.plan-price{font-size:22px;font-weight:700;color:var(--orange);margin-bottom:10px;}
+.plan-price span{font-size:12px;color:rgba(253,246,236,0.4);font-weight:400;}
+.plan-features{list-style:none;margin-bottom:14px;}
+.plan-features li{font-size:12px;color:rgba(253,246,236,0.65);padding:3px 0;}
+.plan-features li.ok::before{content:'✓ ';color:var(--green);font-weight:700;}
+.plan-features li.no{color:rgba(253,246,236,0.3);}
+.plan-features li.no::before{content:'✗ ';color:var(--red);}
+.plan-btn{width:100%;padding:11px;background:var(--navy3);border:1.5px solid rgba(255,255,255,0.1);border-radius:10px;color:var(--cream);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all var(--ease);}
+.plan-btn:hover{border-color:var(--orange);background:rgba(244,124,58,0.1);}
+.plan-btn-current{border-color:var(--green);color:var(--green);cursor:default;}
+
+/* Settings/Form */
+.settings-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border);cursor:pointer;}
+.settings-row-label{font-size:14px;font-weight:500;color:var(--cream);}
+.settings-row.danger .settings-row-label{color:var(--red);}
+.settings-arrow{color:rgba(253,246,236,0.25);font-size:16px;}
+.lang-option{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--border);cursor:pointer;}
+.lang-option.active .lang-name{color:var(--orange);font-weight:700;}
+.lang-flag{font-size:22px;}.lang-name{font-size:14px;color:var(--cream);flex:1;}.lang-check{color:var(--green);font-size:16px;}
+.form-field{margin-bottom:16px;}
+.form-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(253,246,236,0.4);margin-bottom:6px;display:block;}
+.form-input{width:100%;padding:12px 14px;background:var(--navy2);border:1.5px solid rgba(255,255,255,0.1);border-radius:12px;color:var(--cream);font-size:14px;font-family:inherit;outline:none;transition:border-color var(--ease);}
+.form-input:focus{border-color:var(--orange);}
+.btn-save{width:100%;padding:13px;background:var(--orange);border:none;border-radius:12px;color:white;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;}
+
+/* Confirm modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity 0.25s;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal-box{background:var(--navy2);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:28px 24px;width:100%;max-width:320px;text-align:center;transform:scale(0.92);transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1);}
+.modal-overlay.open .modal-box{transform:scale(1);}
+.modal-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:900;color:var(--cream);margin-bottom:8px;}
+.modal-sub{font-size:13px;color:rgba(253,246,236,0.5);margin-bottom:20px;line-height:1.5;}
+.modal-btns{display:flex;gap:10px;}
+.modal-btn{flex:1;padding:12px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;border:none;}
+.modal-btn.primary{background:var(--red);color:white;}
+.modal-btn.secondary{background:rgba(255,255,255,0.06);color:var(--cream);border:1px solid var(--border);}
+
+/* Lowie modal */
+.lowie-modal{position:fixed;inset:0;z-index:600;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.65);opacity:0;pointer-events:none;transition:opacity 0.25s;padding:20px;}
+.lowie-modal.open{opacity:1;pointer-events:all;}
+.lowie-modal-box{background:var(--navy2);border:1px solid rgba(255,255,255,0.1);border-radius:24px;padding:32px 24px;text-align:center;max-width:300px;width:100%;transform:scale(0.85);transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);}
+.lowie-modal.open .lowie-modal-box{transform:scale(1);}
+.lowie-modal-img{width:100px;height:100px;object-fit:contain;margin-bottom:4px;filter:drop-shadow(0 4px 12px rgba(244,124,58,0.3));}
+.lowie-modal-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:var(--cream);margin-bottom:6px;}
+.lowie-modal-sub{font-size:13px;color:rgba(253,246,236,0.5);line-height:1.5;margin-bottom:20px;}
+.lowie-modal-btn{padding:12px 28px;background:var(--orange);border:none;border-radius:12px;color:white;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
+
+[dir="rtl"] .profile-drawer{right:auto;left:-100%;border-left:none;border-right:1px solid var(--border);}
+[dir="rtl"] .profile-drawer.open{left:0;}
+[dir="rtl"] .subpanel{right:auto;left:-100%;border-left:none;border-right:1px solid var(--border);}
+[dir="rtl"] .subpanel.open{left:0;}
+
+/* ══ APPROVAL BANNER ══ */
+.approval-banner{background:linear-gradient(135deg,rgba(46,204,138,0.12),rgba(46,204,138,0.06));border:1px solid rgba(46,204,138,0.3);border-radius:14px;padding:14px 16px;margin:14px 16px 0;display:flex;align-items:flex-start;gap:12px;animation:approvalPulse 3s ease infinite;}
+@keyframes approvalPulse{0%,100%{border-color:rgba(46,204,138,0.3);}50%{border-color:rgba(46,204,138,0.6);}}
+.approval-icon{font-size:28px;flex-shrink:0;}
+.approval-text{flex:1;}
+.approval-title{font-size:14px;font-weight:700;color:var(--green);margin-bottom:3px;}
+.approval-sub{font-size:12px;color:rgba(253,246,236,0.55);line-height:1.4;margin-bottom:10px;}
+.approval-btns{display:flex;gap:8px;flex-wrap:wrap;}
+.approval-btn{padding:7px 14px;border-radius:99px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;border:none;}
+.approval-btn.yes{background:var(--green);color:white;}
+.approval-btn.no{background:rgba(255,255,255,0.08);color:rgba(253,246,236,0.6);border:1px solid rgba(255,255,255,0.12);}
+
+/* ══ STREAK MODAL ══ */
+.streak-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:600;display:flex;align-items:flex-end;justify-content:center;padding:0;opacity:0;pointer-events:none;transition:opacity 0.25s;}
+.streak-modal-overlay.open{opacity:1;pointer-events:all;}
+.streak-modal-box{background:var(--navy2);border:1px solid var(--border);border-radius:24px 24px 0 0;padding:28px 24px 40px;width:100%;max-width:480px;transform:translateY(100%);transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1);}
+.streak-modal-overlay.open .streak-modal-box{transform:translateY(0);}
+.streak-pill{width:40px;height:4px;background:rgba(255,255,255,0.15);border-radius:99px;margin:0 auto 20px;}
+.streak-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.streak-flame{font-size:48px;line-height:1;}
+.streak-days{font-family:'Playfair Display',serif;font-size:42px;font-weight:900;color:var(--orange);line-height:1;}
+.streak-label{font-size:12px;color:rgba(253,246,236,0.45);font-weight:600;}
+.streak-milestones{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
+.streak-milestone{display:flex;align-items:center;gap:12px;padding:13px 16px;background:rgba(255,255,255,0.04);border-radius:14px;border:1px solid var(--border);}
+.streak-milestone.reached{background:rgba(46,204,138,0.08);border-color:rgba(46,204,138,0.25);}
+.streak-milestone.next{background:rgba(244,124,58,0.06);border-color:rgba(244,124,58,0.2);}
+.sm-icon{font-size:22px;width:32px;text-align:center;flex-shrink:0;}
+.sm-info{flex:1;}
+.sm-days{font-size:11px;font-weight:700;color:rgba(253,246,236,0.4);margin-bottom:2px;}
+.streak-milestone.reached .sm-days{color:var(--green);}
+.streak-milestone.next .sm-days{color:var(--orange);}
+.sm-reward{font-size:13px;font-weight:600;color:var(--cream);}
+.sm-badge{font-size:11px;padding:3px 10px;border-radius:99px;font-weight:700;}
+.sm-badge.done{background:rgba(46,204,138,0.15);color:var(--green);}
+.sm-badge.pending{background:rgba(244,124,58,0.1);color:var(--orange);}
+.streak-close{width:100%;padding:13px;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:12px;color:var(--cream);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
+
+/* ══ RANKING PANEL ══ */
+.ranking-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);}
+.ranking-pos{font-size:15px;font-weight:900;width:28px;text-align:center;flex-shrink:0;}
+.ranking-pos.top1{color:#f4c842;}
+.ranking-pos.top2{color:#a0b0c8;}
+.ranking-pos.top3{color:#cd7f32;}
+.ranking-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--navy3),var(--navy2));border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--cream);flex-shrink:0;}
+.ranking-avatar.me{background:linear-gradient(135deg,var(--orange),#f4c842);border-color:rgba(244,124,58,0.4);}
+.ranking-info{flex:1;min-width:0;}
+.ranking-name{font-size:13px;font-weight:700;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ranking-name.me{color:var(--orange);}
+.ranking-meta{font-size:11px;color:rgba(253,246,236,0.4);}
+.ranking-score{font-size:13px;font-weight:900;color:var(--orange);}
+.ranking-sep{text-align:center;padding:10px;font-size:12px;color:rgba(253,246,236,0.3);}
+
+/* ══ ERROR SECTION ══ */
+.error-section{margin-top:16px;background:rgba(232,69,90,0.06);border:1px solid rgba(232,69,90,0.2);border-radius:14px;padding:16px;}
+.error-section-title{font-size:13px;font-weight:700;color:var(--red);margin-bottom:10px;}
+.error-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);}
+.error-row:last-child{border-bottom:none;}
+.error-mod{font-size:12px;color:rgba(253,246,236,0.7);flex:1;}
+.error-count{font-size:12px;font-weight:700;color:var(--red);}
+.upgrade-nudge{background:rgba(244,124,58,0.08);border:1px solid rgba(244,124,58,0.2);border-radius:14px;padding:16px;text-align:center;margin-top:12px;}
+.upgrade-nudge-title{font-size:14px;font-weight:700;color:var(--orange);margin-bottom:6px;}
+.upgrade-nudge-sub{font-size:12px;color:rgba(253,246,236,0.5);margin-bottom:12px;line-height:1.5;}
+.btn-upgrade-full{width:100%;padding:12px;background:var(--orange);border:none;border-radius:12px;color:white;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
+
+/* ══ EXAM LIMIT BADGE ══ */
+.exam-limit-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;margin-top:3px;}
+.exam-limit-badge.ok{background:rgba(46,204,138,0.12);color:var(--green);}
+.exam-limit-badge.warn{background:rgba(244,196,58,0.12);color:var(--yellow);}
+.exam-limit-badge.full{background:rgba(232,69,90,0.12);color:var(--red);}
+
+/* ══ CONFETTI CANVAS ══ */
+#confetti-canvas{position:fixed;inset:0;z-index:9998;pointer-events:none;}
+
+/* ══ COUNTER BANNER ══ */
+.counter-banner{background:linear-gradient(135deg,rgba(167,139,250,0.1),rgba(167,139,250,0.05));border:1px solid rgba(167,139,250,0.2);border-radius:14px;padding:12px 16px;margin:0 16px 14px;text-align:center;}
+.counter-num{font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:var(--purple);}
+.counter-label{font-size:11px;color:rgba(253,246,236,0.45);margin-top:2px;}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+<script src="js/free-access.js"></script>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-top">
+    <div class="streak-badge" id="dash-streak" onclick="openStreakModal()">🔥 0</div>
+    <div class="avatar-btn" id="avatar-btn" onclick="openDrawer()">N</div>
+  </div>
+  <div class="header-center">
+    <div class="lowie-bubble" id="lowie-bubble">¡Hola! ¿Lista para estudiar hoy? 🦁</div>
+    <img class="lowie-img" src="assets/lowie.png" alt="Lowie" id="lowie-img">
+    <div class="logo-text">Slaag<span class="logo-nl">NL</span></div>
+  </div>
+</div>
+
+<!-- APPROVAL BANNER (shown when exam date passed) -->
+<div id="approval-banner" style="display:none"></div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="gift-banner" id="dash-gift" style="display:none">
+    <span style="font-size:20px;flex-shrink:0;">🎁</span>
+    <div><div class="gift-title">¡1 día Premium gratis!</div><div class="gift-sub">Sin límite de ejercicios hoy</div></div>
+    <button class="gift-btn" onclick="activatePremiumDay()">Activar</button>
+  </div>
+  <div class="dominio-row">
+    <span class="dominio-label" id="dash-dominio-label">DOMINIO GENERAL</span>
+    <span class="dominio-pct" id="dash-pct">0%</span>
+  </div>
+  <div class="dominio-bar"><div class="dominio-bar-fill" id="dash-bar" style="width:0%"></div></div>
+  <div class="exam-row" id="dash-bar-msg">Examen en <strong>— días</strong></div>
+</div>
+
+<!-- SECTIONS -->
+<div class="sections-wrap">
+
+  <!-- TAAL -->
+  <div class="section-block">
+    <div class="section-tag tag-taal">📚 Taal</div>
+    <div class="topics-grid" id="grid-taal"></div>
+  </div>
+
+  <!-- SAMENLEVING -->
+  <div class="section-block">
+    <div class="section-tag tag-sam">🏛️ Samenleving</div>
+    <div class="topics-grid" id="grid-sam"></div>
+  </div>
+
+  <!-- SPREKEN -->
+  <div class="section-block">
+    <div class="section-tag tag-spreken">🗣️ Spreken</div>
+    <div class="topics-grid" id="grid-spreken"></div>
+  </div>
+
+  <!-- EXAMEN -->
+  <div class="section-block">
+    <div class="section-tag tag-examen">📋 Examen</div>
+    <div class="examen-blur-wrap" id="examen-wrap">
+      <div class="examen-blur-content">
+        <div class="topics-grid">
+          <div class="topic-oval" onclick="goExam('kns')"><div class="topic-emoji">📋</div><div class="topic-name">KNS</div><div class="topic-sub">35 preguntas</div></div>
+          <div class="topic-oval" onclick="goExam('spreken')"><div class="topic-emoji">🗣️</div><div class="topic-name">Spreken</div><div class="topic-sub">35 preguntas</div></div>
+          <div class="topic-oval" onclick="goExam('lezen')"><div class="topic-emoji">📗</div><div class="topic-name">Lezen</div><div class="topic-sub">10 textos</div></div>
+        </div>
+      </div>
+      <div class="examen-overlay"><div class="examen-lock-icon">🔒</div></div>
+    </div>
+    <div class="unlock-info" id="unlock-info">
+      <div class="unlock-title">Sección bloqueada</div>
+      <div class="unlock-sub" id="unlock-sub">Alcanza el 80% de dominio general (plan Libre), 50% con Enfocado, o activa el plan Completo para acceso inmediato.</div>
+      <div class="unlock-bar-wrap"><div class="unlock-bar-fill" id="unlock-bar" style="width:0%"></div></div>
+      <div class="unlock-pct"><span id="unlock-pct-val">0%</span> <span id="unlock-pct-of">de 80% necesario</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- LOWIE MODAL -->
+<div class="lowie-modal" id="lowie-modal">
+  <div class="lowie-modal-box">
+    <img class="lowie-modal-img" src="assets/lowie.png" alt="Lowie">
+    <div class="lowie-modal-title" id="lowie-modal-title">¡Bien hecho!</div>
+    <div class="lowie-modal-sub" id="lowie-modal-sub">Has completado el módulo.</div>
+    <button class="lowie-modal-btn" onclick="closeLowieModal()">¡Genial! 🦁</button>
+  </div>
+</div>
+
+<!-- DRAWER OVERLAY -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+
+<!-- PROFILE DRAWER -->
+<div class="profile-drawer" id="profile-drawer">
+  <div class="drawer-header">
+    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+    <div class="drawer-avatar" id="drawer-avatar">N</div>
+    <div class="drawer-name" id="drawer-name">Usuario</div>
+    <div class="drawer-email" id="drawer-email">correo@ejemplo.com</div>
+    <div class="drawer-plan-chip">⭐ <span id="drawer-plan-label">Plan Libre</span></div>
+  </div>
+  <div class="drawer-menu">
+    <button class="drawer-item" onclick="openProgressPanel()"><span class="drawer-item-icon">📊</span><span class="drawer-item-label">Mi progreso</span><span class="drawer-item-arrow">›</span></button>
+    <button class="drawer-item" onclick="openRankingPanel()"><span class="drawer-item-icon">🏆</span><span class="drawer-item-label">Ranking global</span><span class="drawer-item-arrow">›</span></button>
+    <button class="drawer-item" onclick="openEditPanel()"><span class="drawer-item-icon">✏️</span><span class="drawer-item-label">Editar perfil</span><span class="drawer-item-arrow">›</span></button>
+    <button class="drawer-item" onclick="openPlansPanel()"><span class="drawer-item-icon">⭐</span><span class="drawer-item-label">Planes</span><span class="drawer-item-arrow">›</span></button>
+    <div class="drawer-divider"></div>
+    <button class="drawer-item" onclick="openSettingsPanel()"><span class="drawer-item-icon">⚙️</span><span class="drawer-item-label">Configuración</span><span class="drawer-item-arrow">›</span></button>
+    <button class="drawer-item" onclick="openContactPanel()"><span class="drawer-item-icon">💬</span><span class="drawer-item-label">Contacto</span><span class="drawer-item-arrow">›</span></button>
+    <div class="drawer-divider"></div>
+    <button class="drawer-item danger" onclick="confirmLogout()"><span class="drawer-item-icon">🚪</span><span class="drawer-item-label">Cerrar sesión</span></button>
+  </div>
+</div>
+
+<!-- SUBPANEL — Progreso -->
+<div class="subpanel" id="subpanel-progress">
+  <div class="subpanel-header"><button class="subpanel-back" onclick="closeAllSubpanels()">‹</button><div class="subpanel-title">Mi progreso</div></div>
+  <div class="subpanel-body" id="progress-body"></div>
+</div>
+
+<!-- SUBPANEL — Ranking -->
+<div class="subpanel" id="subpanel-ranking">
+  <div class="subpanel-header"><button class="subpanel-back" onclick="closeAllSubpanels()">‹</button><div class="subpanel-title">🏆 Ranking global</div></div>
+  <div class="subpanel-body" id="ranking-body"></div>
+</div>
+
+<!-- SUBPANEL — Editar -->
+<div class="subpanel" id="subpanel-edit">
+  <div class="subpanel-header"><button class="subpanel-back" onclick="closeAllSubpanels()">‹</button><div class="subpanel-title">Editar perfil</div></div>
+  <div class="subpanel-body">
+    <div class="form-field"><label class="form-label">Nombre</label><input class="form-input" id="edit-name-input" type="text"></div>
+    <div class="form-field"><label class="form-label">País de origen</label><input class="form-input" id="edit-country-input" type="text"></div>
+    <div class="form-field"><label class="form-label">Fecha del examen</label><input class="form-input" id="edit-date-input" type="date"></div>
+    <button class="btn-save" onclick="saveEditProfile()">Guardar cambios</button>
+  </div>
+</div>
+
+<!-- SUBPANEL — Planes -->
+<div class="subpanel" id="subpanel-plans">
+  <div class="subpanel-header"><button class="subpanel-back" onclick="closeAllSubpanels()">‹</button><div class="subpanel-title">Elige tu plan</div></div>
+  <div class="subpanel-body"><div id="plans-list"></div></div>
+</div>
+
+<!-- SUBPANEL — Configuración -->
+<div class="subpanel" id="subpanel-settings">
+  <div class="subpanel-header"><button class="subpanel-back" onclick="closeAllSubpanels()">‹</button><div class="subpanel-title">Configuración</div></div>
+  <div class="subpanel-body">
+    <div class="settings-row" onclick="openLangPanel()"><span class="settings-row-label">Idioma de la app</span><span class="settings-arrow">›</span></div>
+    <div class="settings-row" onclick="confirmResetProgress()"><span class="settings-row-label">Reiniciar progreso</span><span class="settings-arrow">›</span></div>
+    <div class="drawer-divider" style="margin:8px 0"></div>
+    <div class="settings-row danger" onclick="confirmDeleteAccount()"><span class="settings-row-label">Eliminar cuenta</span><span class="settings-arrow">›</span></div>
+  </div>
+</div>
+
+<!-- SUBPANEL — Idioma -->
+<div class="subpanel" id="subpanel-lang">
+  <div class="subpanel-header"><button class="subpanel-back" onclick="closeAllSubpanels()">‹</button><div class="subpanel-title">Idioma de la app</div></div>
+  <div class="subpanel-body">
+    <div class="lang-option" id="lang-es" onclick="changeLang('es')"><span class="lang-flag">🇪🇸</span><span class="lang-name">Español</span><span class="lang-check" id="check-es" style="display:none">✓</span></div>
+    <div class="lang-option" id="lang-en" onclick="changeLang('en')"><span class="lang-flag">🇬🇧</span><span class="lang-name">English</span><span class="lang-check" id="check-en" style="display:none">✓</span></div>
+    <div class="lang-option" id="lang-tr" onclick="changeLang('tr')"><span class="lang-flag">🇹🇷</span><span class="lang-name">Türkçe</span><span class="lang-check" id="check-tr" style="display:none">✓</span></div>
+    <div class="lang-option" id="lang-ar" onclick="changeLang('ar')"><span class="lang-flag">🇸🇦</span><span class="lang-name">العربية</span><span class="lang-check" id="check-ar" style="display:none">✓</span></div>
+  </div>
+</div>
+
+<!-- SUBPANEL — Contacto -->
+<div class="subpanel" id="subpanel-contact">
+  <div class="subpanel-header"><button class="subpanel-back" onclick="closeAllSubpanels()">‹</button><div class="subpanel-title">Contacto</div></div>
+  <div class="subpanel-body">
+    <p style="font-size:13px;color:rgba(253,246,236,0.55);margin-bottom:16px;">Estamos aquí para ayudarte</p>
+    <div style="background:var(--navy2);border-radius:14px;padding:16px;border:1px solid var(--border);">
+      <div style="font-size:12px;color:rgba(253,246,236,0.4);margin-bottom:6px;">Escríbenos a</div>
+      <div style="font-size:14px;font-weight:700;color:var(--orange);">hola@slaagnl.com</div>
+    </div>
+  </div>
+</div>
+
+<!-- STREAK MODAL -->
+<div class="streak-modal-overlay" id="streak-modal" onclick="closeStreakModal()">
+  <div class="streak-modal-box" onclick="event.stopPropagation()">
+    <div class="streak-pill"></div>
+    <div class="streak-header">
+      <div class="streak-flame">🔥</div>
+      <div>
+        <div class="streak-days" id="streak-modal-days">0</div>
+        <div class="streak-label">días seguidos</div>
+      </div>
+    </div>
+    <div class="streak-milestones" id="streak-milestones"></div>
+    <button class="streak-close" onclick="closeStreakModal()">Cerrar</button>
+  </div>
+</div>
+
+<!-- POST-REGISTRATION PLAN MODAL -->
+<div class="modal-overlay" id="postreg-plan-modal">
+  <div class="modal-box" style="max-width:420px;text-align:left;padding:24px 22px;">
+    <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--cream);text-align:center;margin-bottom:6px;">¡Bienvenido a SlaagNL! 🦁</div>
+    <div style="font-size:13px;color:rgba(253,246,236,0.6);text-align:center;margin-bottom:18px;line-height:1.5;">Elige el plan que mejor se adapta a ti. Puedes cambiarlo cuando quieras.</div>
+    <div id="postreg-plans-list" style="display:flex;flex-direction:column;gap:10px;"></div>
+    <button class="modal-btn secondary" style="margin-top:14px;width:100%;padding:11px;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;background:transparent;color:rgba(253,246,236,0.5);border:none;" onclick="closePostRegPlan()">Decidir más tarde</button>
+  </div>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div class="modal-overlay" id="confirm-modal">
+  <div class="modal-box">
+    <div class="modal-title" id="confirm-title">¿Confirmar?</div>
+    <div class="modal-sub" id="confirm-sub"></div>
+    <div class="modal-btns">
+      <button class="modal-btn secondary" onclick="closeConfirm()">Cancelar</button>
+      <button class="modal-btn primary" id="confirm-yes">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══ STATE ══
+const state = {
+  lang: localStorage.getItem('slaagnl_lang') || 'es',
+  user: {
+    name: localStorage.getItem('slaagnl_name') || 'Usuario',
+    email: localStorage.getItem('slaagnl_email') || '',
+    plan: localStorage.getItem('slaagnl_plan') || 'libre',
+    streak: parseInt(localStorage.getItem('slaagnl_streak') || '0'),
+    examDate: localStorage.getItem('slaagnl_exam_date') || localStorage.getItem('slaagnl_examdate') || '',
+    age: localStorage.getItem('slaagnl_age') || '',
+    country: localStorage.getItem('slaagnl_country') || '',
+    premiumDaysLeft: parseInt(localStorage.getItem('slaagnl_premdays') || '1'),
+    premiumExpiry: localStorage.getItem('slaagnl_premexpiry') || null,
+    mastery: JSON.parse(localStorage.getItem('slaagnl_mastery') || 'null') || {
+      m0:0,m1:0,m2:0,m3:0,m4:0,m5:0,m6:0,m7:0,
+      s1:0,s2:0,s3:0,s4:0,s5:0,
+      sp1:0,sp2:0,sp3:0,sp4:0,
+    },
+    errors: JSON.parse(localStorage.getItem('slaagnl_errors') || 'null') || {
+      m0:0,m1:0,m2:0,m3:0,m4:0,m5:0,m6:0,m7:0,
+      s1:0,s2:0,s3:0,s4:0,s5:0,
+      sp1:0,sp2:0,sp3:0,sp4:0,
+    }
+  }
+};
+window.state = state;
+
+// ══ MODULE DATA ══
+const TAAL_MODS = [
+  {id:'m0',name:'Fundamentos',emoji:'🔤',ready:true, url:'taal/modulo-0/index.html'},
+  {id:'m1',name:'Artículos',  emoji:'📌',ready:true, url:'taal/modulo-1/index.html'},
+  {id:'m2',name:'Gramática',  emoji:'📐',ready:true, url:'taal/modulo-2/index.html'},
+  {id:'m3',name:'Números',    emoji:'🔢',ready:true, url:'taal/modulo-3/index.html'},
+  {id:'m4',name:'Descripción',emoji:'🎨',ready:false,url:null},
+  {id:'m5',name:'Verbos',     emoji:'🔄',ready:false,url:null},
+  {id:'m6',name:'Gram. avanzada',emoji:'🧠',ready:false,url:null},
+  {id:'m7',name:'Vocabulario',emoji:'📖',ready:false,url:null},
+];
+const SAM_MODS = [
+  {id:'s1',name:'Historia',     emoji:'🗺️',ready:true,url:'samenleving/modulo-1/index.html'},
+  {id:'s2',name:'Sociedad',     emoji:'🤝',ready:true,url:'samenleving/modulo-2/index.html'},
+  {id:'s3',name:'Trabajo',      emoji:'💼',ready:true,url:'samenleving/modulo-3/index.html'},
+  {id:'s4',name:'Vida práctica',emoji:'🏠',ready:false,url:null},
+  {id:'s5',name:'Inburgering',  emoji:'📋',ready:false,url:null},
+];
+const SPREKEN_MODS = [
+  {id:'sp1',name:'Presentarte',  emoji:'👤',ready:false,url:null},
+  {id:'sp2',name:'Cotidiano',    emoji:'📅',ready:false,url:null},
+  {id:'sp3',name:'Planes',       emoji:'🌟',ready:false,url:null},
+  {id:'sp4',name:'Opinión',      emoji:'💬',ready:false,url:null},
+];
+
+// ══ PLANS ══
+const PLANS_DATA = {
+  libre:{name:{es:'Libre',en:'Free',tr:'Ücretsiz',ar:'مجاني'},price:'€0',features:{es:[
+    {t:'Primeros 2 módulos de cada sección',ok:true},
+    {t:'1 simulacro por semana (sin temporizador)',ok:true},
+    {t:'Racha diaria con recompensas',ok:true},
+    {t:'Módulos avanzados bloqueados',ok:false},
+    {t:'Sin análisis de errores',ok:false},
+    {t:'Sin acceso a Samenleving ni Spreken avanzado',ok:false}]}},
+  enfocado:{name:{es:'Enfocado',en:'Focused',tr:'Odaklı',ar:'مركّز'},price:'€4.99',features:{es:[
+    {t:'Todo TAAL desbloqueado',ok:true},
+    {t:'3 simulacros por semana (con temporizador)',ok:true},
+    {t:'Análisis de errores por módulo',ok:true},
+    {t:'Progreso completo visible',ok:true},
+    {t:'Racha con recompensas avanzadas',ok:true},
+    {t:'Samenleving y Spreken bloqueados',ok:false}]}},
+  completo:{name:{es:'Completo',en:'Complete',tr:'Tam',ar:'كامل'},price:'€9.99',featured:true,features:{es:[
+    {t:'TAAL + SAMENLEVING + EXAMEN + SPREKEN',ok:true},
+    {t:'Simulacros ilimitados en modo real',ok:true},
+    {t:'Estadísticas y errores avanzados',ok:true},
+    {t:'Rachas con recompensas exclusivas',ok:true},
+    {t:'Asistente Lowie 🦁 (próximamente)',ok:true},
+    {t:'Soporte prioritario',ok:true}]}}
+};
+
+// ══ LOWIE MESSAGES ══
+const LOWIE_MSGS = [
+  '¡Hola, {name}! ¿Lista para estudiar hoy? 🦁',
+  '¡Tú puedes, {name}! Un paso más hacia el examen. 💪',
+  '¿Sabías que en NL hay más bicicletas que personas? 🚲',
+  'Tip: practica 15 min al día, no 2 horas el domingo. 📅',
+  '¡El neerlandés tiene 3 géneros gramaticales! 🇳🇱',
+  '¡Cada lección completada te acerca al ✅ Geslaagd!',
+  'Tip: escucha radio holandesa mientras desayunas. 📻',
+  '¿Sabías que "gezellig" no tiene traducción exacta al español? 😊',
+  '¡Mantén tu racha diaria, {name}! 🔥',
+  'Tip: repite las frases en voz alta — el Spreken lo agradece. 🗣️',
+];
+let lowieIdx = 0;
+let lowieTimer = null;
+
+function updateLowieBubble() {
+  const el = document.getElementById('lowie-bubble');
+  if (!el) return;
+  el.style.opacity = '0';
+  setTimeout(() => {
+    const name = state.user.name || 'tú';
+    const msg = LOWIE_MSGS[lowieIdx % LOWIE_MSGS.length].replace(/{name}/g, name);
+    el.textContent = msg;
+    el.style.opacity = '1';
+    lowieIdx++;
+  }, 300);
+}
+function startLowieRotation() {
+  updateLowieBubble();
+  if (lowieTimer) clearInterval(lowieTimer);
+  lowieTimer = setInterval(updateLowieBubble, 30000);
+}
+
+// ══ HELPERS ══
+function avgMastery() {
+  const vals = Object.values(state.user.mastery || {});
+  return vals.length ? Math.round(vals.reduce((a,b) => a+b,0) / vals.length) : 0;
+}
+function calcDays() {
+  if (!state.user.examDate) return null;
+  const e = new Date(state.user.examDate), n = new Date();
+  n.setHours(0,0,0,0); e.setHours(0,0,0,0);
+  const d = Math.ceil((e - n) / 86400000);
+  return d;
+}
+function modPct(id) { return state.user.mastery[id] ?? 0; }
+function modErrors(id) { return state.user.errors[id] ?? 0; }
+function isPremium() {
+  const u = state.user;
+  if (u.plan === 'completo' || u.plan === 'enfocado') return true;
+  if (u.premiumExpiry) return new Date() < new Date(u.premiumExpiry);
+  return false;
+}
+
+// ══ PLAN ACCESS ══
+function isModuleAccessible(modIndex, section) {
+  const plan = state.user.plan;
+  if (plan === 'completo' || isPremium()) return true;
+  if (plan === 'enfocado') {
+    if (section === 'taal') return true;
+    return modIndex < 2;
+  }
+  return modIndex < 2;
+}
+
+// ══ WEEKLY EXAM LIMIT ══
+function getISOWeek() {
+  const d = new Date();
+  const jan4 = new Date(d.getFullYear(), 0, 4);
+  const startOfWeek = new Date(jan4);
+  startOfWeek.setDate(jan4.getDate() - ((jan4.getDay() + 6) % 7));
+  const diff = d - startOfWeek;
+  return `${d.getFullYear()}-W${Math.ceil(diff / 604800000)}`;
+}
+function getWeeklyExamCount(type) {
+  const data = JSON.parse(localStorage.getItem('slaagnl_weekly_exams') || '{}');
+  const week = getISOWeek();
+  if (!data[type] || data[type].week !== week) return 0;
+  return data[type].count || 0;
+}
+function getExamWeeklyLimit() {
+  const plan = state.user.plan;
+  if (plan === 'completo') return Infinity;
+  if (plan === 'enfocado') return 3;
+  return 1;
+}
+function canDoExam(type) {
+  return getWeeklyExamCount(type) < getExamWeeklyLimit();
+}
+
+// ══ SAVE ══
+function saveState() {
+  localStorage.setItem('slaagnl_mastery', JSON.stringify(state.user.mastery));
+  localStorage.setItem('slaagnl_errors',  JSON.stringify(state.user.errors));
+  localStorage.setItem('slaagnl_name', state.user.name);
+  localStorage.setItem('slaagnl_plan', state.user.plan);
+  localStorage.setItem('slaagnl_streak', state.user.streak);
+  localStorage.setItem('slaagnl_examdate', state.user.examDate || '');
+  localStorage.setItem('slaagnl_exam_date', state.user.examDate || '');
+  if (state.user.age)     localStorage.setItem('slaagnl_age', String(state.user.age));
+  if (state.user.country) localStorage.setItem('slaagnl_country', state.user.country);
+}
+
+// ══ RENDER DASHBOARD ══
+function renderDashboard() {
+  const avg  = avgMastery();
+  const days = calcDays();
+  const init = (state.user.name || 'U').charAt(0).toUpperCase();
+
+  document.querySelectorAll('.avatar-btn,#drawer-avatar').forEach(el => el.textContent = init);
+  document.getElementById('dash-streak').innerHTML = '🔥 ' + (state.user.streak || 0);
+  document.getElementById('dash-pct').textContent  = avg + '%';
+  document.getElementById('dash-bar').style.width  = avg + '%';
+
+  if (days !== null) {
+    if (days > 0) {
+      document.getElementById('dash-bar-msg').innerHTML = `Examen en <strong>${days} días</strong>`;
+    } else if (days === 0) {
+      document.getElementById('dash-bar-msg').innerHTML = `<strong>🎯 ¡Hoy es tu examen!</strong>`;
+    } else {
+      document.getElementById('dash-bar-msg').innerHTML = `Examen hace <strong>${Math.abs(days)} días</strong>`;
+    }
+  }
+
+  document.getElementById('dash-gift').style.display =
+    (state.user.premiumDaysLeft > 0 && !state.user.premiumExpiry && state.user.plan !== 'completo') ? 'flex' : 'none';
+
+  document.getElementById('drawer-name').textContent  = state.user.name || '';
+  document.getElementById('drawer-email').textContent = state.user.email || '';
+  const pn = PLANS_DATA[state.user.plan || 'libre'].name[state.lang] || 'Libre';
+  document.getElementById('drawer-plan-label').textContent = 'Plan: ' + pn;
+
+  // Examen section — always unlocked (access controlled per test)
+  document.querySelector('.examen-blur-content').style.filter = 'none';
+  document.querySelector('.examen-blur-content').style.pointerEvents = 'auto';
+  document.querySelector('.examen-overlay').style.display = 'none';
+  document.getElementById('examen-wrap').style.cursor = 'default';
+  document.getElementById('unlock-info').style.display = 'none';
+
+  document.documentElement.dir = state.lang === 'ar' ? 'rtl' : 'ltr';
+
+  renderGrid('grid-taal',    TAAL_MODS,    'taal');
+  renderGrid('grid-sam',     SAM_MODS,     'sam');
+  renderGrid('grid-spreken', SPREKEN_MODS, 'spreken');
+  checkApprovalBanner();
+}
+
+function renderGrid(containerId, mods, section) {
+  const c = document.getElementById(containerId);
+  if (!c) return;
+  c.innerHTML = mods.map((mod, i) => {
+    const pct        = modPct(mod.id);
+    const isDone     = pct >= 80;
+    const prevDone   = i === 0 || modPct(mods[i-1].id) >= 80;
+    const accessible = isModuleAccessible(i, section);
+    const isCurr     = !isDone && prevDone && mod.ready && accessible;
+    const isPlanLock = !accessible && mod.ready;
+    const isSeqLock  = accessible && !isDone && !isCurr && mod.ready;
+    const soon       = !mod.ready;
+
+    let cls = 'topic-oval';
+    if (isDone)       cls += ' done';
+    else if (isCurr)  cls += ' curr';
+    else if (isPlanLock || isSeqLock) cls += ' locked';
+    else if (soon)    cls += ' soon';
+
+    const sub = soon ? 'Próx.' : `${pct}%`;
+
+    let fn;
+    if (soon)          fn = `showToast('¡Próximamente!')`;
+    else if (isPlanLock) fn = `showUpgradeNudge()`;
+    else if (isSeqLock)  fn = `showToast('Completa el módulo anterior al 80% primero')`;
+    else if (mod.url)    fn = `window.location.href='${mod.url}'`;
+    else                 fn = `showToast('¡Próximamente!')`;
+
+    return `<div class="${cls}" onclick="${fn}">
+      <div class="topic-emoji">${mod.emoji}</div>
+      <div class="topic-name">${mod.name}</div>
+      <div class="topic-sub">${sub}</div>
+    </div>`;
+  }).join('');
+}
+
+// ══ UPGRADE NUDGE ══
+function showUpgradeNudge() {
+  showConfirm(
+    '🔒 Módulo bloqueado',
+    'Este módulo está disponible desde el plan Enfocado o Completo.',
+    'Ver planes',
+    () => { openDrawer(); setTimeout(() => openPlansPanel(), 200); }
+  );
+}
+
+// ══ APPROVAL BANNER ══
+function checkApprovalBanner() {
+  const examDate = state.user.examDate;
+  if (!examDate) return;
+  const exam = new Date(examDate);
+  exam.setHours(0,0,0,0);
+  const now = new Date(); now.setHours(0,0,0,0);
+  const daysSince = Math.floor((now - exam) / 86400000);
+
+  const banner = document.getElementById('approval-banner');
+  const phase1Done = localStorage.getItem('slaagnl_approval_phase1');
+  const phase2Done = localStorage.getItem('slaagnl_approval_phase2');
+
+  if (daysSince >= 1 && daysSince <= 3 && !phase1Done) {
+    banner.style.display = 'block';
+    banner.innerHTML = `<div class="approval-banner">
+      <div class="approval-icon">📋</div>
+      <div class="approval-text">
+        <div class="approval-title">¿Hiciste el examen?</div>
+        <div class="approval-sub">Queremos saber cómo te fue. Tu respuesta ayuda a mejorar SlaagNL para todos.</div>
+        <div class="approval-btns">
+          <button class="approval-btn yes" onclick="approvalPhase1(true)">✅ Sí, lo hice</button>
+          <button class="approval-btn no" onclick="approvalPhase1(false)">No pude ir</button>
+        </div>
+      </div>
+    </div>`;
+  } else if (daysSince >= 21 && !phase2Done && phase1Done === 'yes') {
+    banner.style.display = 'block';
+    banner.innerHTML = `<div class="approval-banner">
+      <div class="approval-icon">🎓</div>
+      <div class="approval-text">
+        <div class="approval-title">¿Aprobaste el Inburgeringsexamen?</div>
+        <div class="approval-sub">Han pasado 3 semanas. ¡Cuéntanos el resultado!</div>
+        <div class="approval-btns">
+          <button class="approval-btn yes" onclick="approvalPhase2(true)">🎉 ¡Sí, aprobé!</button>
+          <button class="approval-btn no" onclick="approvalPhase2(false)">Aún no / No</button>
+        </div>
+      </div>
+    </div>`;
+  } else {
+    banner.style.display = 'none';
+  }
+}
+
+function approvalPhase1(didIt) {
+  localStorage.setItem('slaagnl_approval_phase1', didIt ? 'yes' : 'no');
+  document.getElementById('approval-banner').style.display = 'none';
+  if (didIt) showToast('¡Gracias! Te preguntaremos el resultado en 3 semanas 🙌');
+  else showToast('No pasa nada, ¡suerte la próxima! 💪');
+}
+function approvalPhase2(passed) {
+  localStorage.setItem('slaagnl_approval_phase2', passed ? 'passed' : 'failed');
+  const total = parseInt(localStorage.getItem('slaagnl_global_passed') || '247') + (passed ? 1 : 0);
+  localStorage.setItem('slaagnl_global_passed', String(total));
+  document.getElementById('approval-banner').style.display = 'none';
+  if (passed) {
+    showToast('🎉 ¡Felicidades! Te has unido a los aprobados con SlaagNL');
+    setTimeout(() => launchConfetti(), 400);
+    setTimeout(() => showLowieModal('¡Geslaagd! 🎉', '¡Lo lograste! Has aprobado el Inburgeringsexamen. ¡SlaagNL está orgulloso de ti!'), 800);
+  } else {
+    showToast('No te rindas — ¡la próxima es la tuya! 💪');
+  }
+}
+
+// ══ CONFETTI ══
+function launchConfetti() {
+  if (typeof confetti === 'undefined') return;
+  const duration = 4000;
+  const end = Date.now() + duration;
+  const colors = ['#f47c3a', '#f4c842', '#2ecc8a', '#a78bfa', '#fdf6ec'];
+  (function frame() {
+    confetti({ particleCount: 6, angle: 60,  spread: 55, origin: {x:0}, colors });
+    confetti({ particleCount: 6, angle: 120, spread: 55, origin: {x:1}, colors });
+    if (Date.now() < end) requestAnimationFrame(frame);
+  })();
+}
+
+// ══ STREAK MODAL ══
+const STREAK_REWARDS = [
+  { days: 7,  icon: '🌟', label: 'Insignia de constancia', plans: ['libre','enfocado','completo'] },
+  { days: 15, icon: '🔓', label: 'Módulo extra desbloqueado 24h', plans: ['libre','enfocado'] },
+  { days: 30, icon: '💎', label: '2 días Premium gratis', plans: ['libre','enfocado'] },
+  { days: 60, icon: '🏆', label: 'Recompensa exclusiva', plans: ['completo'] },
+  { days: 100,icon: '👑', label: 'Leyenda de SlaagNL', plans: ['libre','enfocado','completo'] },
+];
+function openStreakModal() {
+  const streak = state.user.streak || 0;
+  const plan   = state.user.plan || 'libre';
+  document.getElementById('streak-modal-days').textContent = streak;
+  document.getElementById('streak-milestones').innerHTML = STREAK_REWARDS
+    .filter(r => r.plans.includes(plan) || plan === 'completo')
+    .map(r => {
+      const reached = streak >= r.days;
+      const isNext  = !reached && STREAK_REWARDS.filter(x => x.plans.includes(plan)).find(x => x.days > streak)?.days === r.days;
+      return `<div class="streak-milestone${reached?' reached':isNext?' next':''}">
+        <div class="sm-icon">${r.icon}</div>
+        <div class="sm-info">
+          <div class="sm-days">${r.days} días</div>
+          <div class="sm-reward">${r.label}</div>
+        </div>
+        <span class="sm-badge ${reached?'done':'pending'}">${reached?'✓ Logrado':'Pendiente'}</span>
+      </div>`;
+    }).join('');
+  document.getElementById('streak-modal').classList.add('open');
+}
+function closeStreakModal() {
+  document.getElementById('streak-modal').classList.remove('open');
+}
+
+// ══ RANKING ══
+const FAKE_USERS = [
+  { name:'Fatima A.',  flag:'🇲🇦', mastery:94, streak:45 },
+  { name:'Yildiz K.',  flag:'🇹🇷', mastery:88, streak:32 },
+  { name:'Ahmad R.',   flag:'🇸🇾', mastery:82, streak:28 },
+  { name:'Nadia V.',   flag:'🇧🇷', mastery:76, streak:21 },
+  { name:'Selin T.',   flag:'🇹🇷', mastery:71, streak:19 },
+  { name:'Mariam O.',  flag:'🇸🇴', mastery:65, streak:14 },
+  { name:'Chen L.',    flag:'🇨🇳', mastery:60, streak:11 },
+  { name:'Rania S.',   flag:'🇪🇬', mastery:54, streak:8  },
+  { name:'Priya M.',   flag:'🇮🇳', mastery:48, streak:6  },
+  { name:'Amara D.',   flag:'🇬🇭', mastery:42, streak:4  },
+];
+function rankScore(u) { return Math.round(u.mastery * 0.7 + u.streak * 1.2); }
+function openRankingPanel() {
+  const me = {
+    name: state.user.name || 'Tú',
+    flag: '⭐',
+    mastery: avgMastery(),
+    streak: state.user.streak || 0,
+    isMe: true
+  };
+  const all = [...FAKE_USERS, me].sort((a,b) => rankScore(b) - rankScore(a));
+  const myPos = all.findIndex(u => u.isMe);
+
+  const posLabel = (i) => {
+    if (i === 0) return `<span class="ranking-pos top1">🥇</span>`;
+    if (i === 1) return `<span class="ranking-pos top2">🥈</span>`;
+    if (i === 2) return `<span class="ranking-pos top3">🥉</span>`;
+    return `<span class="ranking-pos">${i+1}</span>`;
+  };
+
+  const row = (u, i) => `
+    <div class="ranking-row">
+      ${posLabel(i)}
+      <div class="ranking-avatar${u.isMe?' me':''}">${u.flag}</div>
+      <div class="ranking-info">
+        <div class="ranking-name${u.isMe?' me':''}">${u.name}${u.isMe?' (Tú)':''}</div>
+        <div class="ranking-meta">🔥 ${u.streak} días · ${u.mastery}% dominio</div>
+      </div>
+      <div class="ranking-score">${rankScore(u)} pts</div>
+    </div>`;
+
+  const topRows = all.slice(0, 5).map(row).join('');
+  let mySection = '';
+  if (myPos >= 5) {
+    mySection = `<div class="ranking-sep">···</div>` + row(me, myPos);
+  }
+
+  document.getElementById('ranking-body').innerHTML = `
+    <div style="font-size:11px;color:rgba(253,246,236,0.35);margin-bottom:12px;line-height:1.5;">
+      Basado en dominio, racha y simulacros. Se actualiza al abrir la app.
+    </div>
+    ${topRows}${mySection}
+    <div style="margin-top:16px;padding:12px 14px;background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.2);border-radius:12px;font-size:12px;color:rgba(253,246,236,0.5);text-align:center;line-height:1.5;">
+      🌍 Ranking global en tiempo real — <strong style="color:var(--purple)">próximamente con Firebase</strong>
+    </div>`;
+  openSubpanel('subpanel-ranking');
+}
+
+// ══ GIFT ══
+function activatePremiumDay() {
+  const e = new Date(); e.setHours(e.getHours() + 24);
+  state.user.premiumExpiry  = e.toISOString();
+  state.user.premiumDaysLeft = 0;
+  localStorage.setItem('slaagnl_premexpiry', e.toISOString());
+  localStorage.setItem('slaagnl_premdays', '0');
+  document.getElementById('dash-gift').style.display = 'none';
+  showToast('✅ Premium activo por 24h');
+  renderDashboard();
+}
+
+// ══ TOAST ══
+let toastTimer = null;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 3200);
+}
+
+// ══ LOWIE MODAL ══
+function showLowieModal(title, sub) {
+  document.getElementById('lowie-modal-title').textContent = title;
+  document.getElementById('lowie-modal-sub').textContent   = sub;
+  document.getElementById('lowie-modal').classList.add('open');
+}
+function closeLowieModal() {
+  document.getElementById('lowie-modal').classList.remove('open');
+}
+
+// ══ DRAWER ══
+function openDrawer()  {
+  document.getElementById('profile-drawer').classList.add('open');
+  document.getElementById('drawer-overlay').classList.add('open');
+}
+function closeDrawer() {
+  document.getElementById('profile-drawer').classList.remove('open');
+  document.getElementById('drawer-overlay').classList.remove('open');
+  closeAllSubpanels();
+}
+function openSubpanel(id)  { closeAllSubpanels(); document.getElementById(id)?.classList.add('open'); }
+function closeAllSubpanels() { document.querySelectorAll('.subpanel').forEach(p => p.classList.remove('open')); }
+
+// ══ PROGRESS PANEL ══
+function openProgressPanel() {
+  const allMods = [...TAAL_MODS,...SAM_MODS,...SPREKEN_MODS];
+  const FREE_LIMIT = 3;
+  const plan = state.user.plan || 'libre';
+  const canSeeAll = plan === 'enfocado' || plan === 'completo';
+
+  const row = m => {
+    const p = modPct(m.id);
+    const e = modErrors(m.id);
+    const col = p >= 80 ? 'var(--green)' : p >= 40 ? 'var(--orange)' : 'var(--blue)';
+    const total = 20;
+    const completadas = Math.round(p * total / 100);
+    const faltan = total - completadas;
+    const errBtn = canSeeAll
+      ? `<button onclick="openErrorDetail('${m.id}')" style="font-size:10px;padding:3px 9px;border-radius:99px;background:rgba(232,69,90,0.12);border:none;color:var(--red);font-weight:700;cursor:pointer;font-family:inherit;margin-top:6px;">❌ ${e} errores →</button>`
+      : `<button onclick="showUpgradeNudge()" style="font-size:10px;padding:3px 9px;border-radius:99px;background:rgba(232,69,90,0.08);border:none;color:rgba(232,69,90,0.5);font-weight:700;cursor:pointer;font-family:inherit;margin-top:6px;">🔒 ${e} errores</button>`;
+    return `<div class="progress-topic-row" style="flex-direction:column;align-items:flex-start;">
+      <div style="display:flex;align-items:center;gap:12px;width:100%;padding-bottom:4px;">
+        <div class="pt-icon">${m.emoji}</div>
+        <div class="pt-name">${m.name}</div>
+        <div class="pt-pct" style="color:${col}">${p}%</div>
+      </div>
+      <div style="display:flex;gap:14px;margin-left:40px;font-size:11px;color:rgba(253,246,236,0.4);">
+        <span>✅ Completadas: <strong style="color:var(--green)">${completadas}</strong></span>
+        <span>📌 Faltan: <strong style="color:var(--orange)">${faltan}</strong></span>
+      </div>
+      ${errBtn}
+    </div>`;
+  };
+
+  let html = allMods.slice(0, FREE_LIMIT).map(row).join('');
+  if (!canSeeAll) {
+    html += `<div class="progress-blur-wrap"><div class="progress-blur-items">${allMods.slice(FREE_LIMIT).map(row).join('')}</div>
+      <div class="progress-lock-overlay">
+        <p>Desbloquea el progreso completo con el plan Enfocado o Completo</p>
+        <button class="btn-upgrade" onclick="closeAllSubpanels();setTimeout(()=>openDrawer(),200);setTimeout(()=>openPlansPanel(),400)">Ver planes →</button>
+      </div></div>`;
+  } else {
+    html += allMods.slice(FREE_LIMIT).map(row).join('');
+  }
+  document.getElementById('progress-body').innerHTML = html;
+  openSubpanel('subpanel-progress');
+}
+
+function openErrorDetail(modId) {
+  const errors = state.user.errors[modId] || 0;
+  if (errors === 0) { showToast('¡Sin errores en este módulo! 🎉'); return; }
+  showToast(`Módulo ${modId}: ${errors} errores — análisis próximamente 🔍`);
+}
+
+// ══ EDIT PANEL ══
+function openEditPanel() {
+  document.getElementById('edit-name-input').value    = state.user.name    || '';
+  document.getElementById('edit-country-input').value = state.user.country || '';
+  document.getElementById('edit-date-input').value    = state.user.examDate || '';
+  openSubpanel('subpanel-edit');
+}
+function saveEditProfile() {
+  const n = document.getElementById('edit-name-input').value.trim();
+  const c = document.getElementById('edit-country-input').value.trim();
+  const d = document.getElementById('edit-date-input').value;
+  if (n) state.user.name    = n;
+  if (c) state.user.country = c;
+  if (d) state.user.examDate = d;
+  saveState();
+  closeAllSubpanels();
+  renderDashboard();
+  startLowieRotation();
+  showToast('✅ Guardado');
+}
+
+// ══ PLANS PANEL ══
+function openPlansPanel() {
+  const lang = state.lang, curr = state.user.plan || 'libre';
+  document.getElementById('plans-list').innerHTML = Object.entries(PLANS_DATA).map(([id, plan]) => {
+    const isCurr = id === curr;
+    const feats  = plan.features[lang] || plan.features.es;
+    return `<div class="plan-card${isCurr?' plan-current':''}${plan.featured?' plan-featured':''}">
+      ${plan.featured?'<div class="plan-badge">⭐ Recomendado</div>':''}
+      <div class="plan-name">${plan.name[lang]||plan.name.es}</div>
+      <div class="plan-price">${plan.price}${plan.price!=='€0'?'<span>/mes</span>':''}</div>
+      <ul class="plan-features">${feats.map(f=>`<li class="${f.ok?'ok':'no'}">${f.t}</li>`).join('')}</ul>
+      <button class="plan-btn${isCurr?' plan-btn-current':''}" onclick="selectPlan('${id}')" ${isCurr?'disabled':''}>
+        ${isCurr?'Plan actual':'Seleccionar'}</button></div>`;
+  }).join('');
+  openSubpanel('subpanel-plans');
+}
+function selectPlan(id) {
+  if (id === 'libre') {
+    state.user.plan = 'libre';
+    saveState(); closeAllSubpanels(); renderDashboard(); showToast('Plan Libre activado');
+  } else {
+    showToast('Pagos próximamente — Stripe 🚀');
+  }
+}
+
+function openSettingsPanel() { openSubpanel('subpanel-settings'); }
+function openLangPanel()     { openSubpanel('subpanel-lang'); }
+function openContactPanel()  { openSubpanel('subpanel-contact'); }
+
+function changeLang(lang) {
+  state.lang = lang;
+  localStorage.setItem('slaagnl_lang', lang);
+  ['es','en','tr','ar'].forEach(l => {
+    const check = document.getElementById('check-'+l);
+    const opt   = document.getElementById('lang-'+l);
+    if (check) check.style.display = l === lang ? 'inline' : 'none';
+    if (opt)   opt.classList.toggle('active', l === lang);
+  });
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  closeAllSubpanels(); renderDashboard();
+}
+
+// ══ EXAM ACCESS ══
+function goExam(target) {
+  const allowed = ['kns', 'spreken', 'lezen'];
+  if (!allowed.includes(target)) return;
+  if (!canDoExam(target)) {
+    const limit = getExamWeeklyLimit();
+    showToast(`Límite semanal alcanzado (${limit}/sem). ${state.user.plan === 'libre' ? 'Actualiza a Enfocado para 3 sim/sem.' : 'Actualiza a Completo para simulacros ilimitados.'}`);
+    return;
+  }
+  localStorage.setItem('slaagnl_exam_target', target);
+  const accepted = localStorage.getItem('slaagnl_exam_disclaimer_accepted') === 'true';
+  window.location.href = accepted ? `examen/${target}.html` : 'examen/index.html';
+}
+
+// ══ CONFIRM MODAL ══
+function showConfirm(title, sub, btnLabel, fn) {
+  document.getElementById('confirm-title').textContent = title;
+  document.getElementById('confirm-sub').textContent   = sub;
+  document.getElementById('confirm-yes').textContent   = btnLabel;
+  document.getElementById('confirm-yes').onclick = () => { closeConfirm(); fn(); };
+  document.getElementById('confirm-modal').classList.add('open');
+}
+function closeConfirm() { document.getElementById('confirm-modal').classList.remove('open'); }
+function confirmLogout() {
+  showConfirm('¿Cerrar sesión?','Podrás volver cuando quieras.','Cerrar sesión',()=>{
+    showToast('Sesión cerrada');
+    setTimeout(() => window.location.href='index.html', 800);
+  });
+}
+function confirmResetProgress() {
+  showConfirm('¿Reiniciar todo?','Tu progreso vuelve a 0. Tu cuenta se mantiene.','Reiniciar',()=>{
+    Object.keys(state.user.mastery).forEach(k => state.user.mastery[k] = 0);
+    Object.keys(state.user.errors).forEach(k => state.user.errors[k] = 0);
+    state.user.streak = 0;
+    saveState(); renderDashboard(); showToast('Progreso reiniciado ✅');
+  });
+}
+function confirmDeleteAccount() {
+  showConfirm('¿Eliminar cuenta?','Esta acción es permanente.','Eliminar',()=>showToast('Cuenta eliminada'));
+}
+
+// ══ POST-REGISTRATION PLAN MODAL ══
+function openPostRegPlan() {
+  const lang = state.lang;
+  const html = Object.entries(PLANS_DATA).map(([id, plan]) => {
+    const feats = plan.features[lang] || plan.features.es;
+    const top3 = feats.slice(0, 3).map(f =>
+      `<li style="font-size:11.5px;color:${f.ok?'rgba(253,246,236,0.75)':'rgba(253,246,236,0.35)'};margin:2px 0;list-style:none;padding-left:14px;position:relative;">
+        <span style="position:absolute;left:0;color:${f.ok?'var(--green)':'var(--red)'};">${f.ok?'✓':'✗'}</span>${f.t}
+      </li>`).join('');
+    const gift = (id !== 'completo')
+      ? `<div style="font-size:10.5px;color:#f4c842;margin-top:6px;font-weight:700;">🎁 + 1 día Premium gratis</div>` : '';
+    return `<div style="background:var(--navy3);border:1.5px solid ${plan.featured?'var(--orange)':'var(--border)'};border-radius:14px;padding:14px;cursor:pointer;transition:all var(--ease);margin-bottom:10px;" onclick="pickPostRegPlan('${id}')">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:900;color:var(--cream);">${plan.name[lang]||plan.name.es}${plan.featured?' ⭐':''}</div>
+        <div style="font-size:15px;font-weight:900;color:var(--orange);">${plan.price}${plan.price!=='€0'?'<span style="font-size:10px;color:rgba(253,246,236,0.4);">/mes</span>':''}</div>
+      </div>
+      <ul style="margin:6px 0 0;padding:0;">${top3}</ul>
+      ${gift}
+    </div>`;
+  }).join('');
+  document.getElementById('postreg-plans-list').innerHTML = html;
+  document.getElementById('postreg-plan-modal').classList.add('open');
+}
+function pickPostRegPlan(id) {
+  state.user.plan = id;
+  saveState();
+  if (id !== 'completo') {
+    state.user.premiumDaysLeft = 1;
+    localStorage.setItem('slaagnl_premdays', '1');
+  } else {
+    state.user.premiumDaysLeft = 0;
+    localStorage.setItem('slaagnl_premdays', '0');
+  }
+  closePostRegPlan();
+  renderDashboard();
+  showToast('✅ Plan seleccionado');
+}
+function closePostRegPlan() {
+  document.getElementById('postreg-plan-modal').classList.remove('open');
+  localStorage.removeItem('slaagnl_show_plan_modal');
+}
+
+// ══ INIT ══
+window.addEventListener('DOMContentLoaded', () => {
+  changeLang(state.lang);
+  renderDashboard();
+  startLowieRotation();
+  if (localStorage.getItem('slaagnl_show_plan_modal') === '1') {
+    setTimeout(openPostRegPlan, 500);
+  }
+});
+</script>
+</body>
+</html>

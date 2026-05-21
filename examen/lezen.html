@@ -1,13 +1,29 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
 <script>
-  // Guard: redirect to disclaimer if not yet accepted
   (function(){
     if (localStorage.getItem('slaagnl_exam_disclaimer_accepted') !== 'true') {
       localStorage.setItem('slaagnl_exam_target', 'lezen');
       location.replace('index.html');
     }
+    function getISOWeek() {
+      const d = new Date(), jan4 = new Date(d.getFullYear(),0,4);
+      const s = new Date(jan4); s.setDate(jan4.getDate()-((jan4.getDay()+6)%7));
+      return d.getFullYear()+'-W'+Math.ceil((d-s)/604800000);
+    }
+    const plan = localStorage.getItem('slaagnl_plan') || 'libre';
+    const limit = plan === 'completo' ? Infinity : plan === 'enfocado' ? 3 : 1;
+    const data = JSON.parse(localStorage.getItem('slaagnl_weekly_exams') || '{}');
+    const week = getISOWeek();
+    const count = (data.lezen && data.lezen.week === week) ? data.lezen.count : 0;
+    if (count >= limit) {
+      alert('Has alcanzado tu límite semanal de simulacros Lezen.');
+      location.replace('../dashboard.html');
+    }
+    window._SLAAG_PLAN = plan;
+    window._SLAAG_TIMER_ENABLED = plan !== 'libre';
   })();
 </script>
 <meta charset="UTF-8">
@@ -107,9 +123,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
 </div>
 
 <div class="bottom-nav" id="bottom-nav">
-  <button class="btn-nav btn-prev" id="btn-prev" onclick="goQ(-1)">‹ Anterior</button>
-  <button class="btn-nav btn-next-q" id="btn-next-q" onclick="goQ(1)">Siguiente ›</button>
-  <button class="btn-nav btn-finish" onclick="confirmFinish()">Finalizar</button>
+  <button class="btn-nav btn-prev" id="btn-prev" onclick="goQ(-1)">‹ Vorige</button>
+  <button class="btn-nav btn-next-q" id="btn-next-q" onclick="goQ(1)">Volgende ›</button>
+  <button class="btn-nav btn-finish" onclick="confirmFinish()">Afronden</button>
 </div>
 
 <div class="results-screen" id="results-screen"></div>
@@ -117,11 +133,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
 
 <div class="modal-overlay" id="confirm-modal">
   <div class="modal-box">
-    <div class="modal-title" id="modal-title">¿Finalizar?</div>
+    <div class="modal-title" id="modal-title">Afronden?</div>
     <div class="modal-sub" id="modal-sub"></div>
     <div class="modal-btns">
-      <button class="modal-btn secondary" onclick="closeModal()">Cancelar</button>
-      <button class="modal-btn primary" id="modal-confirm-btn">Finalizar</button>
+      <button class="modal-btn secondary" onclick="closeModal()">Annuleren</button>
+      <button class="modal-btn primary" id="modal-confirm-btn">Afronden</button>
     </div>
   </div>
 </div>
@@ -339,6 +355,10 @@ function initTest(){
 }
 
 function startTimer(){
+  if(window._SLAAG_TIMER_ENABLED === false){
+    showTimerToast('⏱ Sin temporizador — Plan Libre');
+    return;
+  }
   let s = TOTAL_MINUTES * 60;
   timerInterval = setInterval(()=>{
     s--;
@@ -346,6 +366,24 @@ function startTimer(){
     if(s===60)   showTimerToast('⚠️ Te queda 1 minuto');
     if(s<=0){clearInterval(timerInterval);finishTest();}
   },1000);
+}
+function _incrementWeeklyCount(type){
+  function getISOWeek(){const d=new Date(),jan4=new Date(d.getFullYear(),0,4);const s=new Date(jan4);s.setDate(jan4.getDate()-((jan4.getDay()+6)%7));return d.getFullYear()+'-W'+Math.ceil((d-s)/604800000);}
+  const week=getISOWeek();
+  const data=JSON.parse(localStorage.getItem('slaagnl_weekly_exams')||'{}');
+  if(!data[type]||data[type].week!==week) data[type]={week,count:0};
+  data[type].count++;
+  localStorage.setItem('slaagnl_weekly_exams',JSON.stringify(data));
+}
+function _launchConfetti(){
+  if(typeof confetti==='undefined')return;
+  const end=Date.now()+3500;
+  const colors=['#f47c3a','#f4c842','#2ecc8a','#a78bfa','#fdf6ec'];
+  (function frame(){
+    confetti({particleCount:6,angle:60,spread:55,origin:{x:0},colors});
+    confetti({particleCount:6,angle:120,spread:55,origin:{x:1},colors});
+    if(Date.now()<end)requestAnimationFrame(frame);
+  })();
 }
 
 function showTimerToast(msg){const el=document.getElementById('timer-toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),5000);}
@@ -404,7 +442,7 @@ function renderQ(idx){
     <div class="q-opts">${optsHtml}</div>`;
 
   document.getElementById('btn-prev').style.display=idx===0?'none':'flex';
-  document.getElementById('btn-next-q').textContent=idx===TEST_SIZE-1?'Última':'Siguiente ›';
+  document.getElementById('btn-next-q').textContent=idx===TEST_SIZE-1?'Laatste':'Volgende ›';
   updateQNav();
 }
 
@@ -419,18 +457,18 @@ function goToQ(idx){renderQ(idx);}
 
 function confirmFinish(){
   const u=answers.filter(a=>a===null).length;
-  document.getElementById('modal-title').textContent='¿Finalizar el test?';
-  document.getElementById('modal-sub').textContent=u>0?`Tienes ${u} pregunta${u>1?'s':''} sin responder.`:'¿Estás seguro?';
-  document.getElementById('modal-confirm-btn').textContent='Finalizar';
+  document.getElementById('modal-title').textContent='Afsluiten?';
+  document.getElementById('modal-sub').textContent=u>0?`Je hebt ${u} vraag${u>1?'en':''} nog niet beantwoord.`:'Weet je het zeker?';
+  document.getElementById('modal-confirm-btn').textContent='Afronden';
   document.getElementById('modal-confirm-btn').onclick=finishTest;
   document.getElementById('confirm-modal').classList.add('open');
 }
 
 function confirmExit(){
-  document.getElementById('modal-title').textContent='¿Salir del test?';
-  document.getElementById('modal-sub').textContent='Tu progreso se perderá.';
-  document.getElementById('modal-confirm-btn').textContent='Salir';
-  document.getElementById('modal-confirm-btn').onclick=()=>window.location.href='../index.html';
+  document.getElementById('modal-title').textContent='Test verlaten?';
+  document.getElementById('modal-sub').textContent='Je voortgang gaat verloren.';
+  document.getElementById('modal-confirm-btn').textContent='Verlaten';
+  document.getElementById('modal-confirm-btn').onclick=()=>window.location.href='../dashboard.html';
   document.getElementById('confirm-modal').classList.add('open');
 }
 
@@ -438,10 +476,12 @@ function closeModal(){document.getElementById('confirm-modal').classList.remove(
 
 function finishTest(){
   clearInterval(timerInterval);testFinished=true;closeModal();
+  _incrementWeeklyCount('lezen');
   let correct=0;
   testQuestions.forEach((q,i)=>{if(answers[i]===q.correct)correct++;});
   const pct=Math.round(correct/TEST_SIZE*100);
   const pass=pct>=70;
+  if(pass) setTimeout(_launchConfetti, 600);
   document.getElementById('main-content').style.display='none';
   document.getElementById('bottom-nav').style.display='none';
   document.getElementById('qnav-wrap').style.display='none';
@@ -458,7 +498,7 @@ function finishTest(){
       <div class="breakdown-row"><span class="breakdown-label">Puntuación</span><span class="breakdown-val">${pct}%</span></div>
     </div>
     <button class="btn-retry" onclick="retryTest()">🔄 Nuevo test</button>
-    <button class="btn-back-home" onclick="window.location.href='../index.html'">‹ Volver al dashboard</button>`;
+    <button class="btn-back-home" onclick="window.location.href='../dashboard.html'" style="background:linear-gradient(135deg,var(--orange),#e8702f);color:white;border:none;padding:16px 24px;border-radius:14px;font-weight:900;font-size:15px;box-shadow:0 6px 20px rgba(244,124,58,0.35);">🏠 Volver a mi dashboard</button>`;
   rs.classList.add('show');
 }
 

@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SlaagNL – Test de nivel</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#0d1f3c; --navy2:#162d54; --navy3:#1e3a6e;
+  --orange:#f47c3a; --cream:#fdf6ec; --green:#2ecc8a;
+  --red:#e8455a; --border:rgba(255,255,255,0.08); --ease:0.2s ease;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+
+/* ══ TOPBAR ══ */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:var(--navy2);border-bottom:1px solid var(--border);}
+.logo{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--cream);}
+.logo span{color:var(--orange);}
+.back-link{color:rgba(253,246,236,0.45);font-size:13px;font-weight:600;text-decoration:none;display:flex;align-items:center;gap:5px;transition:color var(--ease);}
+.back-link:hover{color:var(--cream);}
+.q-counter{font-size:13px;font-weight:700;color:rgba(253,246,236,0.5);}
+
+/* ══ PROGRESS BAR ══ */
+.progress-wrap{height:4px;background:rgba(255,255,255,0.07);}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--orange),#f4c842);border-radius:0 4px 4px 0;transition:width 0.4s ease;}
+
+/* ══ SCREEN ══ */
+.screen{display:none;min-height:calc(100vh - 57px);flex-direction:column;}
+.screen.active{display:flex;}
+.screen-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px 48px;text-align:center;}
+
+/* ══ EXAM TYPE SCREEN ══ */
+.et-lowie{width:90px;height:90px;object-fit:contain;margin-bottom:16px;filter:drop-shadow(0 8px 20px rgba(244,124,58,0.3));animation:float 4s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+.et-title{font-family:'Playfair Display',serif;font-size:clamp(22px,6vw,30px);font-weight:900;color:var(--cream);margin-bottom:8px;line-height:1.2;}
+.et-sub{font-size:14px;color:rgba(253,246,236,0.5);margin-bottom:28px;line-height:1.5;max-width:340px;}
+
+.et-btn{width:100%;max-width:420px;display:flex;align-items:center;gap:16px;background:var(--navy2);border:2px solid rgba(255,255,255,0.1);border-radius:20px;padding:18px 20px;cursor:pointer;font-family:'DM Sans',sans-serif;text-align:left;margin-bottom:12px;transition:all 0.22s;position:relative;overflow:hidden;}
+.et-btn:not(.et-disabled):hover{border-color:var(--orange);background:rgba(244,124,58,0.08);transform:translateY(-1px);}
+.et-btn:not(.et-disabled):active{transform:scale(0.98);}
+.et-disabled{opacity:0.45;cursor:not-allowed;}
+.et-disabled:hover{transform:none!important;}
+.et-icon{font-size:32px;flex-shrink:0;width:44px;text-align:center;}
+.et-content{flex:1;}
+.et-name{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--cream);margin-bottom:3px;}
+.et-desc{font-size:12px;color:rgba(253,246,236,0.45);line-height:1.4;}
+.et-arrow{font-size:22px;color:var(--orange);flex-shrink:0;}
+.et-badge{position:absolute;top:12px;right:14px;background:rgba(244,124,58,0.2);border:1px solid rgba(244,124,58,0.35);color:var(--orange);font-size:10px;font-weight:700;padding:3px 10px;border-radius:99px;}
+[dir="rtl"] .et-badge{right:auto;left:14px;}
+[dir="rtl"] .et-btn{text-align:right;}
+[dir="rtl"] .et-arrow{transform:scaleX(-1);}
+
+.back-to-index{margin-top:8px;font-size:13px;color:rgba(253,246,236,0.3);cursor:pointer;text-decoration:none;display:inline-block;transition:color var(--ease);}
+.back-to-index:hover{color:rgba(253,246,236,0.6);}
+
+/* ══ TEST QUESTION SCREEN ══ */
+.dutch-display{background:linear-gradient(135deg,var(--navy2),var(--navy3));border:1px solid rgba(244,124,58,0.25);border-radius:20px;padding:20px 28px;margin-bottom:20px;max-width:420px;width:100%;}
+.dutch-tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:rgba(253,246,236,0.35);margin-bottom:6px;}
+.dutch-word{font-family:'Playfair Display',serif;font-size:clamp(22px,6vw,32px);font-weight:900;color:var(--orange);line-height:1.2;}
+.dutch-phrase{font-family:'Playfair Display',serif;font-size:clamp(16px,4vw,22px);font-weight:700;color:var(--orange);line-height:1.3;}
+
+.q-text{font-size:clamp(14px,3.5vw,17px);color:rgba(253,246,236,0.75);margin-bottom:20px;max-width:380px;line-height:1.5;}
+
+.options-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:420px;}
+.opt-btn{background:var(--navy2);border:2px solid rgba(255,255,255,0.1);border-radius:14px;padding:14px 12px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--cream);cursor:pointer;text-align:center;transition:all 0.18s;line-height:1.3;}
+.opt-btn:hover:not(.answered){border-color:rgba(244,124,58,0.5);background:rgba(244,124,58,0.06);}
+.opt-btn:active:not(.answered){transform:scale(0.97);}
+.opt-btn.correct{background:rgba(46,204,138,0.12);border-color:var(--green);color:var(--green);}
+.opt-btn.wrong{background:rgba(232,69,90,0.1);border-color:var(--red);color:var(--red);}
+.opt-btn.answered{cursor:default;}
+
+.next-btn{margin-top:20px;padding:13px 32px;background:linear-gradient(135deg,var(--orange),#f4a020);border:none;border-radius:12px;color:white;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;display:none;transition:all var(--ease);box-shadow:0 4px 16px rgba(244,124,58,0.3);}
+.next-btn.show{display:inline-block;}
+.next-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(244,124,58,0.4);}
+
+/* ══ RESULTS SCREEN ══ */
+.result-lowie{width:100px;height:100px;object-fit:contain;margin-bottom:12px;filter:drop-shadow(0 8px 24px rgba(244,124,58,0.35));}
+.score-ring{width:110px;height:110px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column;margin:0 auto 16px;background:linear-gradient(135deg,rgba(244,124,58,0.12),rgba(244,196,66,0.08));border:3px solid rgba(244,124,58,0.3);}
+.score-num{font-family:'Playfair Display',serif;font-size:32px;font-weight:900;color:var(--orange);line-height:1;}
+.score-denom{font-size:12px;color:rgba(253,246,236,0.4);font-weight:600;}
+.level-badge{display:inline-block;padding:6px 18px;border-radius:99px;font-size:13px;font-weight:700;margin-bottom:12px;margin-top:4px;}
+.level-beginner{background:rgba(244,124,58,0.12);border:1px solid rgba(244,124,58,0.3);color:var(--orange);}
+.level-basic{background:rgba(244,196,66,0.1);border:1px solid rgba(244,196,66,0.3);color:#f4c842;}
+.level-intermediate{background:rgba(46,204,138,0.1);border:1px solid rgba(46,204,138,0.3);color:var(--green);}
+.level-advanced{background:rgba(96,176,244,0.1);border:1px solid rgba(96,176,244,0.3);color:#60b0f4;}
+
+.result-title{font-family:'Playfair Display',serif;font-size:clamp(20px,5vw,26px);font-weight:900;color:var(--cream);margin-bottom:8px;max-width:340px;}
+.result-msg{font-size:14px;color:rgba(253,246,236,0.5);line-height:1.6;max-width:320px;margin-bottom:28px;}
+.result-msg strong{color:var(--cream);}
+
+.go-btn{display:inline-block;padding:15px 32px;background:linear-gradient(135deg,var(--orange),#f4a020);border:none;border-radius:14px;color:white;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none;box-shadow:0 6px 20px rgba(244,124,58,0.35);transition:all 0.22s;}
+.go-btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(244,124,58,0.45);}
+
+.result-answers{width:100%;max-width:420px;margin:0 auto 24px;text-align:left;}
+.result-answers-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(253,246,236,0.3);margin-bottom:10px;text-align:center;}
+.result-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);}
+.result-row:last-child{border-bottom:none;}
+.result-icon{font-size:14px;width:20px;text-align:center;flex-shrink:0;}
+.result-q{font-size:12px;color:rgba(253,246,236,0.5);flex:1;line-height:1.3;}
+.result-q strong{color:var(--cream);}
+
+/* ══ AUTH SCREEN ══ */
+.auth-lowie{width:70px;height:70px;object-fit:contain;margin-bottom:12px;filter:drop-shadow(0 6px 16px rgba(244,124,58,0.3));}
+.auth-title{font-family:'Playfair Display',serif;font-size:clamp(20px,5vw,26px);font-weight:900;color:var(--cream);margin-bottom:6px;line-height:1.2;}
+.auth-sub{font-size:13px;color:rgba(253,246,236,0.45);margin-bottom:24px;line-height:1.5;max-width:320px;}
+.auth-tabs{display:flex;gap:0;border:1.5px solid rgba(255,255,255,0.1);border-radius:12px;overflow:hidden;margin-bottom:22px;width:100%;max-width:360px;}
+.auth-tab{flex:1;padding:10px;background:none;border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:rgba(253,246,236,0.4);cursor:pointer;transition:all var(--ease);}
+.auth-tab.active{background:rgba(244,124,58,0.15);color:var(--orange);}
+.auth-form{width:100%;max-width:360px;display:flex;flex-direction:column;gap:10px;}
+.auth-input{width:100%;padding:13px 16px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--cream);outline:none;transition:border-color var(--ease);}
+.auth-input:focus{border-color:rgba(244,124,58,0.5);background:rgba(244,124,58,0.04);}
+.auth-input::placeholder{color:rgba(253,246,236,0.25);}
+.auth-submit{width:100%;padding:14px;background:linear-gradient(135deg,var(--orange),#f4a020);border:none;border-radius:12px;color:white;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-top:4px;box-shadow:0 4px 16px rgba(244,124,58,0.3);transition:all var(--ease);}
+.auth-submit:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(244,124,58,0.4);}
+.auth-skip{margin-top:12px;font-size:12px;color:rgba(253,246,236,0.25);cursor:pointer;background:none;border:none;font-family:'DM Sans',sans-serif;transition:color var(--ease);}
+.auth-skip:hover{color:rgba(253,246,236,0.5);}
+.auth-err{font-size:12px;color:#e8455a;display:none;text-align:center;padding:4px 0;}
+.auth-err.show{display:block;}
+
+.field-group{display:flex;flex-direction:column;gap:5px;}
+.field-label{font-size:11px;font-weight:700;color:rgba(253,246,236,0.55);text-transform:uppercase;letter-spacing:0.6px;text-align:left;padding-left:2px;}
+[dir="rtl"] .field-label{text-align:right;padding-left:0;padding-right:2px;}
+.field-hint{font-size:11px;color:rgba(253,246,236,0.3);font-style:italic;padding-left:2px;text-align:left;}
+[dir="rtl"] .field-hint{text-align:right;padding-left:0;padding-right:2px;}
+
+.auth-select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23f47c3a' d='M6 8L0 0h12z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;padding-right:40px;cursor:pointer;}
+[dir="rtl"] .auth-select{background-position:left 16px center;padding-right:16px;padding-left:40px;}
+.auth-select option{background:var(--navy2);color:var(--cream);}
+
+input[type="date"].auth-input{color-scheme:dark;}
+
+/* ══ OTP SCREEN ══ */
+.otp-icon{font-size:48px;margin-bottom:10px;filter:drop-shadow(0 6px 16px rgba(244,124,58,0.25));}
+.otp-email{font-size:14px;color:var(--orange);font-weight:700;margin-bottom:18px;word-break:break-all;text-align:center;max-width:340px;}
+.otp-demo{display:inline-flex;align-items:center;gap:8px;background:rgba(244,196,66,0.08);border:1px dashed rgba(244,196,66,0.35);border-radius:10px;padding:8px 14px;margin-bottom:22px;}
+.otp-demo-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#f4c842;}
+.otp-demo-code{font-family:'Playfair Display',serif;font-size:18px;font-weight:900;color:var(--cream);letter-spacing:4px;}
+.otp-grid{display:flex;gap:8px;justify-content:center;margin-bottom:18px;}
+.otp-digit{width:42px;height:52px;border:2px solid rgba(255,255,255,0.12);background:var(--navy2);border-radius:10px;color:var(--cream);font-family:'Playfair Display',serif;font-size:24px;font-weight:900;text-align:center;outline:none;transition:all var(--ease);}
+.otp-digit:focus{border-color:var(--orange);background:rgba(244,124,58,0.06);box-shadow:0 0 0 3px rgba(244,124,58,0.15);}
+.otp-digit.filled{border-color:rgba(46,204,138,0.4);}
+.otp-resent{font-size:12px;color:var(--green);margin-top:10px;height:18px;opacity:0;transition:opacity 0.3s;}
+.otp-resent.show{opacity:1;}
+</style>
+</head>
+<body>
+
+<!-- SCREEN 1: EXAM TYPE -->
+<div id="screen-type" class="screen active">
+  <div class="topbar">
+    <a class="back-link" href="index.html" id="back-text">‹ <span id="back-label"></span></a>
+    <div class="logo">Slaag<span>NL</span></div>
+    <div style="width:60px"></div>
+  </div>
+  <div class="screen-body">
+    <img class="et-lowie" src="assets/lowie.png" alt="Lowie">
+    <h1 class="et-title" id="et-title"></h1>
+    <p class="et-sub" id="et-sub"></p>
+    <button class="et-btn" onclick="selectExamType('mvv')">
+      <div class="et-icon">🛂</div>
+      <div class="et-content">
+        <div class="et-name" id="et-name1"></div>
+        <div class="et-desc" id="et-desc1"></div>
+      </div>
+      <div class="et-arrow">›</div>
+    </button>
+    <button class="et-btn et-disabled" disabled>
+      <div class="et-icon">🏛️</div>
+      <div class="et-content">
+        <div class="et-name" id="et-name2"></div>
+        <div class="et-desc" id="et-desc2"></div>
+      </div>
+      <div class="et-badge" id="et-soon"></div>
+    </button>
+  </div>
+</div>
+
+<!-- SCREEN 2: TEST QUESTIONS -->
+<div id="screen-test" class="screen">
+  <div class="topbar">
+    <button class="back-link" onclick="showScreen('screen-type')" style="background:none;border:none;cursor:pointer;">‹ <span id="q-back-label"></span></button>
+    <div class="logo">Slaag<span>NL</span></div>
+    <div class="q-counter" id="q-counter">1/10</div>
+  </div>
+  <div class="progress-wrap"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  <div class="screen-body">
+    <div class="dutch-display" id="dutch-display">
+      <div class="dutch-tag" id="dutch-tag"></div>
+      <div id="dutch-content"></div>
+    </div>
+    <p class="q-text" id="q-text"></p>
+    <div class="options-grid" id="options-grid"></div>
+    <button class="next-btn" id="next-btn" onclick="nextQuestion()"></button>
+  </div>
+</div>
+
+<!-- SCREEN 3: RESULTS -->
+<div id="screen-results" class="screen">
+  <div class="topbar">
+    <div style="width:60px"></div>
+    <div class="logo">Slaag<span>NL</span></div>
+    <div style="width:60px"></div>
+  </div>
+  <div class="screen-body">
+    <img class="result-lowie" src="assets/lowie.png" alt="Lowie" id="result-lowie">
+    <div class="score-ring">
+      <div class="score-num" id="score-num">0</div>
+      <div class="score-denom" id="score-denom">/10</div>
+    </div>
+    <div class="level-badge" id="level-badge"></div>
+    <h2 class="result-title" id="result-title"></h2>
+    <p class="result-msg" id="result-msg"></p>
+    <div class="result-answers" id="result-answers"></div>
+    <button class="go-btn" onclick="showAuth()" id="go-btn"></button>
+  </div>
+</div>
+
+<!-- SCREEN 4: AUTH -->
+<div id="screen-auth" class="screen">
+  <div class="topbar">
+    <button class="back-link" onclick="showScreen('screen-results')" style="background:none;border:none;cursor:pointer;">‹ <span id="auth-back-label"></span></button>
+    <div class="logo">Slaag<span>NL</span></div>
+    <div style="width:80px"></div>
+  </div>
+  <div class="screen-body">
+    <img class="auth-lowie" src="assets/lowie.png" alt="Lowie">
+    <h2 class="auth-title" id="auth-title"></h2>
+    <p class="auth-sub" id="auth-sub"></p>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-reg" onclick="switchAuthTab('reg')"></button>
+      <button class="auth-tab" id="tab-log" onclick="switchAuthTab('log')"></button>
+    </div>
+
+    <!-- REGISTER FORM -->
+    <div class="auth-form" id="form-reg">
+      <div class="field-group">
+        <label class="field-label" id="lbl-name"></label>
+        <input class="auth-input" type="text" id="a-reg-name" autocomplete="name">
+      </div>
+      <div class="field-group">
+        <label class="field-label" id="lbl-age"></label>
+        <input class="auth-input" type="number" id="a-reg-age" min="16" max="67" inputmode="numeric">
+        <span class="field-hint" id="hint-age"></span>
+      </div>
+      <div class="field-group">
+        <label class="field-label" id="lbl-email"></label>
+        <input class="auth-input" type="email" id="a-reg-email" autocomplete="email">
+      </div>
+      <div class="field-group">
+        <label class="field-label" id="lbl-pass"></label>
+        <input class="auth-input" type="password" id="a-reg-pass" autocomplete="new-password">
+        <span class="field-hint" id="hint-pass"></span>
+      </div>
+      <div class="field-group">
+        <label class="field-label" id="lbl-country"></label>
+        <select class="auth-input auth-select" id="a-reg-country"></select>
+      </div>
+      <div class="field-group">
+        <label class="field-label" id="lbl-examdate"></label>
+        <input class="auth-input" type="date" id="a-reg-examdate">
+        <span class="field-hint" id="hint-examdate"></span>
+      </div>
+      <div class="auth-err" id="err-reg"></div>
+      <button class="auth-submit" id="reg-submit-btn" onclick="doRegisterTest()"></button>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <div class="auth-form" id="form-log" style="display:none">
+      <div class="field-group">
+        <label class="field-label" id="lbl-log-email"></label>
+        <input class="auth-input" type="email" id="a-log-email" autocomplete="email">
+      </div>
+      <div class="field-group">
+        <label class="field-label" id="lbl-log-pass"></label>
+        <input class="auth-input" type="password" id="a-log-pass" autocomplete="current-password">
+      </div>
+      <div class="auth-err" id="err-log"></div>
+      <button class="auth-submit" id="log-submit-btn" onclick="doLoginTest()"></button>
+    </div>
+
+    <button class="auth-skip" id="auth-skip-btn" onclick="goDashboard()"></button>
+  </div>
+</div>
+
+<!-- SCREEN 5: OTP VERIFICATION -->
+<div id="screen-otp" class="screen">
+  <div class="topbar">
+    <button class="back-link" onclick="showScreen('screen-auth')" style="background:none;border:none;cursor:pointer;">‹ <span id="otp-back-label"></span></button>
+    <div class="logo">Slaag<span>NL</span></div>
+    <div style="width:80px"></div>
+  </div>
+  <div class="screen-body">
+    <div class="otp-icon">📧</div>
+    <h2 class="auth-title" id="otp-title"></h2>
+    <p class="auth-sub" id="otp-sub"></p>
+    <p class="otp-email" id="otp-email-display"></p>
+
+    <div class="otp-demo">
+      <span class="otp-demo-label" id="otp-demo-label"></span>
+      <span class="otp-demo-code" id="otp-demo-code">------</span>
+    </div>
+
+    <div class="otp-grid" id="otp-grid">
+      <input class="otp-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
+      <input class="otp-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
+      <input class="otp-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
+      <input class="otp-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
+      <input class="otp-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
+      <input class="otp-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
+    </div>
+
+    <div class="auth-err" id="err-otp"></div>
+    <button class="auth-submit" id="otp-verify-btn" onclick="doVerifyOTP()" style="max-width:360px"></button>
+    <button class="auth-skip" id="otp-resend-btn" onclick="resendOTP()"></button>
+    <p class="otp-resent" id="otp-resent-msg"></p>
+  </div>
+</div>
+
+<script>
+const lang = localStorage.getItem('slaagnl_lang') || 'es';
+const isRTL = lang === 'ar';
+if (isRTL) document.documentElement.dir = 'rtl';
+document.documentElement.lang = lang;
+
+// ══ TRANSLATIONS ══
+const T = {
+  es: {
+    backLabel:'Volver',
+    etTitle:'¿Para qué te estás preparando?',
+    etSub:'Selecciona tu tipo de examen. El test se adaptará a tu objetivo.',
+    etName1:'MVV · Examen de embajada',
+    etDesc1:'Nivel A1 · Para personas que solicitan desde fuera de Holanda',
+    etName2:'Naturalización',
+    etDesc2:'N2 · Para solicitar la ciudadanía holandesa',
+    etSoon:'Próximamente',
+    qBackLabel:'Cambiar',
+    dutchTag:'Palabra / Frase en neerlandés',
+    grammarTag:'Gramática neerlandesa',
+    knsTag:'Kennis van de Samenleving',
+    nextBtn:'Siguiente →',
+    finishBtn:'Ver resultados →',
+    scoreLabel:'Respuestas correctas',
+    levels:['Principiante','Básico','Intermedio','Avanzado'],
+    levelTitles:['¡Todo el mundo empieza así!','¡Tienes una base!','¡Buena base!','¡Impresionante!'],
+    levelMsgs:[
+      'Empezarás desde cero y aprenderás el neerlandés paso a paso. <strong>¡Lowie te acompaña en cada lección!</strong>',
+      'Conoces algunas palabras básicas. Empezarás desde el Módulo 1 con ejercicios adaptados a ti.',
+      'Tienes conocimientos intermedios. Comenzarás desde el Módulo 2 para fortalecer tu gramática.',
+      'Ya tienes una base sólida. Empezarás desde el Módulo 3 con material más avanzado.',
+    ],
+    goBtn:'Ir a mi material →',
+    reviewTitle:'Repaso de respuestas',
+    qTexts:[
+      '¿Qué significa esta palabra?',
+      '¿Cuál es el artículo correcto para "boek" (libro)?',
+      '¿Qué significa la expresión "Ik heet…"?',
+      '¿Cuántos habitantes tiene Países Bajos aproximadamente?',
+      '¿Qué significa esta palabra?',
+      '¿Cuál es la capital administrativa de Países Bajos?',
+      'Completa la frase: "Ik ___ student"',
+      '¿Qué significa este verbo?',
+      '¿En qué año se fundó el Reino de los Países Bajos?',
+      '¿Qué significa esta frase?',
+    ],
+    opts:[
+      ['Buenas noches','Hasta luego','Buenos días','Buenas tardes'],
+      null,
+      ['Yo tengo','Yo soy','Me llamo','Yo vivo'],
+      null,
+      ['Tren','Coche','Autobús','Bicicleta'],
+      null,
+      null,
+      ['Dormir','Comer','Estudiar','Trabajar'],
+      null,
+      ['¿Eres holandés/a?','¿Aprendes holandés?','¿Hablas holandés?','¿Trabajas en Holanda?'],
+    ],
+    authBack:'Resultados',
+    authTitle:'Guarda tu progreso y obtén tu plan personalizado',
+    authSub:'Crea tu cuenta o inicia sesión para acceder a tu material personalizado.',
+    tabReg:'Crear cuenta', tabLog:'Iniciar sesión',
+    lblName:'Nombre completo', lblAge:'Edad', lblEmail:'Email', lblPass:'Contraseña',
+    lblCountry:'País de origen', lblExamDate:'Fecha del examen (aproximada)',
+    lblLogEmail:'Email', lblLogPass:'Contraseña',
+    phName:'Tu nombre completo', phAge:'p. ej. 28', phEmail:'tu@email.com', phPass:'••••••••', phPassLog:'Contraseña',
+    countryPlaceholder:'-- Selecciona tu país --',
+    hintPass:'Mínimo 8 caracteres', hintExamDate:'¿Aún no lo sabes? Déjalo en blanco',
+    regSubmit:'Continuar →', logSubmit:'Iniciar sesión →',
+    skipBtn:'Saltar y continuar sin cuenta',
+    ageNote:'Edad permitida: 16–67 años',
+    eName:'Por favor escribe tu nombre.', eAge:'Por favor escribe una edad válida.',
+    eAgeYoung:'Los menores de 16 años no realizan este examen — se integran directamente en la escuela holandesa. 🏫',
+    eAgeOld:'Los mayores de 67 años están exentos del Inburgeringsexamen. No necesitas hacerlo. 🌷',
+    eEmail:'Por favor escribe un email válido.',
+    ePass:'La contraseña debe tener al menos 8 caracteres.', ePassL:'Por favor escribe tu contraseña.',
+    eCountry:'Por favor selecciona tu país de origen.',
+    otpBack:'Volver',
+    otpTitle:'Verifica tu email',
+    otpSub:'Hemos enviado un código de 6 dígitos a:',
+    otpDemoLabel:'Código demo',
+    otpVerify:'Verificar y continuar →',
+    otpResend:'Reenviar código',
+    otpResent:'¡Código reenviado!',
+    otpInvalid:'Código incorrecto. Inténtalo de nuevo.',
+    otpEmpty:'Por favor introduce el código completo.',
+  },
+  en: {
+    backLabel:'Back',
+    etTitle:'What are you preparing for?',
+    etSub:'Select your exam type. The test will adapt to your goal.',
+    etName1:'MVV · Embassy exam',
+    etDesc1:'Level A1 · For people applying from outside the Netherlands',
+    etName2:'Naturalisation',
+    etDesc2:'N2 · To apply for Dutch citizenship',
+    etSoon:'Coming soon',
+    qBackLabel:'Change',
+    dutchTag:'Dutch word / phrase',
+    grammarTag:'Dutch grammar',
+    knsTag:'Kennis van de Samenleving',
+    nextBtn:'Next →',
+    finishBtn:'See results →',
+    scoreLabel:'Correct answers',
+    levels:['Beginner','Basic','Intermediate','Advanced'],
+    levelTitles:["Everyone starts here!","You have a foundation!","Good foundation!","Impressive!"],
+    levelMsgs:[
+      'You\'ll start from scratch and learn Dutch step by step. <strong>Lowie will be with you every lesson!</strong>',
+      'You know some basic words. You\'ll start from Module 1 with exercises adapted to you.',
+      'You have intermediate knowledge. You\'ll start from Module 2 to strengthen your grammar.',
+      'You already have a solid foundation. You\'ll start from Module 3 with more advanced material.',
+    ],
+    goBtn:'Go to my material →',
+    reviewTitle:'Answer review',
+    qTexts:[
+      'What does this word mean?',
+      'Which article is correct for "boek" (book)?',
+      'What does the expression "Ik heet…" mean?',
+      'Approximately how many people live in the Netherlands?',
+      'What does this word mean?',
+      'What is the administrative capital of the Netherlands?',
+      'Complete the sentence: "Ik ___ student"',
+      'What does this verb mean?',
+      'In what year was the Kingdom of the Netherlands founded?',
+      'What does this sentence mean?',
+    ],
+    opts:[
+      ['Good evening','Goodbye','Good morning','Good afternoon'],
+      null,
+      ['I have','I am','My name is','I live'],
+      null,
+      ['Train','Car','Bus','Bicycle'],
+      null,
+      null,
+      ['Sleep','Eat','Study','Work'],
+      null,
+      ['Are you Dutch?','Are you learning Dutch?','Do you speak Dutch?','Do you work in the Netherlands?'],
+    ],
+    authBack:'Results',
+    authTitle:'Save your progress and get your personalized plan',
+    authSub:'Create your account or log in to access your personalised material.',
+    tabReg:'Create account', tabLog:'Log in',
+    lblName:'Full name', lblAge:'Age', lblEmail:'Email', lblPass:'Password',
+    lblCountry:'Country of origin', lblExamDate:'Exam date (approximate)',
+    lblLogEmail:'Email', lblLogPass:'Password',
+    phName:'Your full name', phAge:'e.g. 28', phEmail:'you@email.com', phPass:'••••••••', phPassLog:'Password',
+    countryPlaceholder:'-- Select your country --',
+    hintPass:'Minimum 8 characters', hintExamDate:"Don't know yet? Leave blank",
+    regSubmit:'Continue →', logSubmit:'Log in →',
+    skipBtn:'Skip and continue without account',
+    ageNote:'Allowed age: 16–67',
+    eName:'Please enter your name.', eAge:'Please enter a valid age.',
+    eAgeYoung:'Under-16s do not take this exam — they integrate directly into Dutch school. 🏫',
+    eAgeOld:'People over 67 are exempt from the Inburgeringsexamen. You do not need to take it. 🌷',
+    eEmail:'Please enter a valid email.',
+    ePass:'Password must be at least 8 characters.', ePassL:'Please enter your password.',
+    eCountry:'Please select your country of origin.',
+    otpBack:'Back',
+    otpTitle:'Verify your email',
+    otpSub:'We sent a 6-digit code to:',
+    otpDemoLabel:'Demo code',
+    otpVerify:'Verify and continue →',
+    otpResend:'Resend code',
+    otpResent:'Code resent!',
+    otpInvalid:'Incorrect code. Please try again.',
+    otpEmpty:'Please enter the full code.',
+  },
+  tr: {
+    backLabel:'Geri',
+    etTitle:'Ne için hazırlanıyorsunuz?',
+    etSub:'Sınav türünüzü seçin. Test hedefinize göre uyarlanacak.',
+    etName1:'MVV · Büyükelçilik sınavı',
+    etDesc1:'Seviye A1 · Hollanda dışından başvuran kişiler için',
+    etName2:'Vatandaşlık',
+    etDesc2:'N2 · Hollanda vatandaşlığı için başvurmak',
+    etSoon:'Yakında',
+    qBackLabel:'Değiştir',
+    dutchTag:'Hollandaca kelime / cümle',
+    grammarTag:'Hollandaca dilbilgisi',
+    knsTag:'Kennis van de Samenleving',
+    nextBtn:'Sonraki →',
+    finishBtn:'Sonuçları gör →',
+    scoreLabel:'Doğru cevaplar',
+    levels:['Başlangıç','Temel','Orta','İleri'],
+    levelTitles:['Herkes böyle başlar!','Bir temelin var!','İyi bir temel!','Harika!'],
+    levelMsgs:[
+      'Sıfırdan başlayacak ve Hollandaca\'yı adım adım öğreneceksiniz. <strong>Lowie her derste yanınızda!</strong>',
+      'Bazı temel kelimeleri biliyorsunuz. Modül 1\'den size uygun alıştırmalarla başlayacaksınız.',
+      'Orta düzey bilginiz var. Gramerinizi güçlendirmek için Modül 2\'den başlayacaksınız.',
+      'Zaten sağlam bir temelin var. Daha ileri materyalle Modül 3\'ten başlayacaksınız.',
+    ],
+    goBtn:'Materyalime git →',
+    reviewTitle:'Cevap özeti',
+    qTexts:[
+      'Bu kelime ne anlama gelir?',
+      '"boek" (kitap) için hangi artikel doğrudur?',
+      '"Ik heet…" ifadesi ne anlama gelir?',
+      'Hollanda\'nın nüfusu yaklaşık kaçtır?',
+      'Bu kelime ne anlama gelir?',
+      'Hollanda\'nın idari başkenti neresidir?',
+      'Cümleyi tamamlayın: "Ik ___ student"',
+      'Bu fiil ne anlama gelir?',
+      'Hollanda Krallığı hangi yılda kuruldu?',
+      'Bu cümle ne anlama gelir?',
+    ],
+    opts:[
+      ['İyi akşamlar','Hoşçakal','Günaydın','İyi öğleden sonralar'],
+      null,
+      ['Benim var','Benim','Adım','Yaşıyorum'],
+      null,
+      ['Tren','Araba','Otobüs','Bisiklet'],
+      null,
+      null,
+      ['Uyumak','Yemek','Çalışmak (okul)','Çalışmak (iş)'],
+      null,
+      ['Hollandalı mısın?','Hollandaca öğreniyor musun?','Hollandaca konuşuyor musun?','Hollanda\'da çalışıyor musun?'],
+    ],
+    authBack:'Sonuçlar',
+    authTitle:'İlerlemeni kaydet ve kişisel planını al',
+    authSub:'Kişiselleştirilmiş materyaline erişmek için hesap oluştur veya giriş yap.',
+    tabReg:'Hesap oluştur', tabLog:'Giriş yap',
+    lblName:'Tam adınız', lblAge:'Yaş', lblEmail:'E-posta', lblPass:'Şifre',
+    lblCountry:'Doğduğunuz ülke', lblExamDate:'Sınav tarihi (yaklaşık)',
+    lblLogEmail:'E-posta', lblLogPass:'Şifre',
+    phName:'Tam adınız', phAge:'örn. 28', phEmail:'siz@email.com', phPass:'••••••••', phPassLog:'Şifre',
+    countryPlaceholder:'-- Ülkenizi seçin --',
+    hintPass:'En az 8 karakter', hintExamDate:'Henüz bilmiyor musunuz? Boş bırakın',
+    regSubmit:'Devam et →', logSubmit:'Giriş yap →',
+    skipBtn:'Atla ve hesapsız devam et',
+    ageNote:'İzin verilen yaş: 16–67',
+    eName:'Lütfen adınızı yazın.', eAge:'Lütfen geçerli bir yaş yazın.',
+    eAgeYoung:'16 yaş altı bu sınava girmez — doğrudan Hollanda okuluna entegre olurlar. 🏫',
+    eAgeOld:'67 yaş üstü Inburgeringsexamen\'den muaftır. Bu sınava girmen gerekmiyor. 🌷',
+    eEmail:'Lütfen geçerli bir e-posta yazın.',
+    ePass:'Şifre en az 8 karakter olmalıdır.', ePassL:'Lütfen şifrenizi yazın.',
+    eCountry:'Lütfen doğduğunuz ülkeyi seçin.',
+    otpBack:'Geri',
+    otpTitle:'E-postanızı doğrulayın',
+    otpSub:'6 haneli bir kod gönderdik:',
+    otpDemoLabel:'Demo kodu',
+    otpVerify:'Doğrula ve devam et →',
+    otpResend:'Kodu tekrar gönder',
+    otpResent:'Kod tekrar gönderildi!',
+    otpInvalid:'Yanlış kod. Tekrar deneyin.',
+    otpEmpty:'Lütfen tam kodu girin.',
+  },
+  ar: {
+    backLabel:'رجوع',
+    etTitle:'لماذا تستعد؟',
+    etSub:'اختر نوع الامتحان. سيتكيف الاختبار مع هدفك.',
+    etName1:'MVV · امتحان السفارة',
+    etDesc1:'المستوى A1 · للأشخاص الذين يتقدمون من خارج هولندا',
+    etName2:'التجنيس',
+    etDesc2:'N2 · للحصول على الجنسية الهولندية',
+    etSoon:'قريباً',
+    qBackLabel:'تغيير',
+    dutchTag:'كلمة / جملة هولندية',
+    grammarTag:'قواعد اللغة الهولندية',
+    knsTag:'Kennis van de Samenleving',
+    nextBtn:'التالي →',
+    finishBtn:'عرض النتائج →',
+    scoreLabel:'إجابات صحيحة',
+    levels:['مبتدئ','أساسي','متوسط','متقدم'],
+    levelTitles:['الجميع يبدأ هكذا!','لديك أساس!','أساس جيد!','رائع!'],
+    levelMsgs:[
+      'ستبدأ من الصفر وستتعلم الهولندية خطوة بخطوة. <strong>Lowie معك في كل درس!</strong>',
+      'تعرف بعض الكلمات الأساسية. ستبدأ من الوحدة 1 بتمارين مكيفة لك.',
+      'لديك معرفة متوسطة. ستبدأ من الوحدة 2 لتعزيز قواعدك اللغوية.',
+      'لديك أساس متين بالفعل. ستبدأ من الوحدة 3 بمواد أكثر تقدماً.',
+    ],
+    goBtn:'اذهب إلى المواد →',
+    reviewTitle:'مراجعة الإجابات',
+    qTexts:[
+      'ماذا تعني هذه الكلمة؟',
+      'أي أداة تعريف صحيحة لـ "boek" (كتاب)؟',
+      'ماذا تعني عبارة "Ik heet…"؟',
+      'كم يبلغ تعداد سكان هولندا تقريباً؟',
+      'ماذا تعني هذه الكلمة؟',
+      'ما هي العاصمة الإدارية لهولندا؟',
+      'أكمل الجملة: "Ik ___ student"',
+      'ماذا يعني هذا الفعل؟',
+      'في أي عام تأسست مملكة هولندا؟',
+      'ماذا تعني هذه الجملة؟',
+    ],
+    opts:[
+      ['مساء الخير','وداعاً','صباح الخير','ظهر الخير'],
+      null,
+      ['لدي','أنا','اسمي','أسكن'],
+      null,
+      ['قطار','سيارة','حافلة','دراجة'],
+      null,
+      null,
+      ['نوم','أكل','دراسة','عمل'],
+      null,
+      ['هل أنت هولندي؟','هل تتعلم الهولندية؟','هل تتحدث الهولندية؟','هل تعمل في هولندا؟'],
+    ],
+    authBack:'النتائج',
+    authTitle:'احفظ تقدمك واحصل على خطتك المخصصة',
+    authSub:'أنشئ حسابك أو سجل الدخول للوصول إلى المواد المخصصة لك.',
+    tabReg:'إنشاء حساب', tabLog:'تسجيل الدخول',
+    lblName:'الاسم الكامل', lblAge:'العمر', lblEmail:'البريد الإلكتروني', lblPass:'كلمة المرور',
+    lblCountry:'بلد المنشأ', lblExamDate:'تاريخ الامتحان (تقريبي)',
+    lblLogEmail:'البريد الإلكتروني', lblLogPass:'كلمة المرور',
+    phName:'اسمك الكامل', phAge:'مثلاً 28', phEmail:'you@email.com', phPass:'••••••••', phPassLog:'كلمة المرور',
+    countryPlaceholder:'-- اختر بلدك --',
+    hintPass:'8 أحرف على الأقل', hintExamDate:'لا تعرف بعد؟ اتركه فارغاً',
+    regSubmit:'تابع →', logSubmit:'تسجيل الدخول →',
+    skipBtn:'تخطّ وتابع بدون حساب',
+    ageNote:'العمر المسموح: 16–67',
+    eName:'يرجى كتابة اسمك.', eAge:'يرجى كتابة عمر صحيح.',
+    eAgeYoung:'الأشخاص أقل من 16 سنة لا يخضعون لهذا الامتحان — يندمجون مباشرة في المدرسة الهولندية. 🏫',
+    eAgeOld:'الأشخاص فوق 67 سنة معفون من امتحان Inburgering. لست بحاجة لتقديمه. 🌷',
+    eEmail:'يرجى كتابة بريد إلكتروني صحيح.',
+    ePass:'يجب أن تكون كلمة المرور 8 أحرف على الأقل.', ePassL:'يرجى كتابة كلمة المرور.',
+    eCountry:'يرجى اختيار بلد المنشأ.',
+    otpBack:'رجوع',
+    otpTitle:'تحقق من بريدك الإلكتروني',
+    otpSub:'أرسلنا رمزاً مكوناً من 6 أرقام إلى:',
+    otpDemoLabel:'كود تجريبي',
+    otpVerify:'تحقق وتابع →',
+    otpResend:'إعادة إرسال الرمز',
+    otpResent:'تم إعادة إرسال الرمز!',
+    otpInvalid:'الرمز غير صحيح. حاول مرة أخرى.',
+    otpEmpty:'يرجى إدخال الرمز كاملاً.',
+  }
+};
+
+// ══ QUESTIONS DATA ══
+// dutch: shown as-is (always in Dutch)
+// type: 'vocab' | 'grammar' | 'kns'
+// opts_fixed: options same in all languages (null = use T[lang].opts[i])
+// correct: 0-based index
+const QUESTIONS = [
+  { dutch:'goedemorgen', type:'vocab', correct:2 },
+  { dutch:'Welk lidwoord hoort bij "boek"?', type:'grammar', opts_fixed:['de','het','een','den'], correct:1 },
+  { dutch:'Ik heet…', type:'vocab', correct:2 },
+  { dutch:null, type:'kns', opts_fixed:['~7 miljoen','~12 miljoen','~17 miljoen','~25 miljoen'], correct:2 },
+  { dutch:'fiets', type:'vocab', correct:3 },
+  { dutch:null, type:'kns', opts_fixed:['Amsterdam','Rotterdam','Den Haag','Utrecht'], correct:2 },
+  { dutch:'Ik ___ student', type:'grammar', opts_fixed:['zijn','ben','heeft','is'], correct:1 },
+  { dutch:'werken', type:'vocab', correct:3 },
+  { dutch:null, type:'kns', opts_fixed:['1648','1789','1815','1900'], correct:2 },
+  { dutch:'Spreek je Nederlands?', type:'vocab', correct:2 },
+];
+
+const t = T[lang] || T.es;
+let examType = '';
+let currentQ = 0;
+let score = 0;
+let userAnswers = [];
+
+// ══ HELPERS ══
+function setText(id, html, isHTML) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (isHTML) el.innerHTML = html; else el.textContent = html;
+}
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ══ COUNTRIES LIST (translated) ══
+const COUNTRIES = [
+  {c:'es', f:'🇪🇸', es:'España', en:'Spain', tr:'İspanya', ar:'إسبانيا'},
+  {c:'mx', f:'🇲🇽', es:'México', en:'Mexico', tr:'Meksika', ar:'المكسيك'},
+  {c:'co', f:'🇨🇴', es:'Colombia', en:'Colombia', tr:'Kolombiya', ar:'كولومبيا'},
+  {c:'ar', f:'🇦🇷', es:'Argentina', en:'Argentina', tr:'Arjantin', ar:'الأرجنتين'},
+  {c:'ve', f:'🇻🇪', es:'Venezuela', en:'Venezuela', tr:'Venezuela', ar:'فنزويلا'},
+  {c:'pe', f:'🇵🇪', es:'Perú', en:'Peru', tr:'Peru', ar:'بيرو'},
+  {c:'cl', f:'🇨🇱', es:'Chile', en:'Chile', tr:'Şili', ar:'تشيلي'},
+  {c:'ec', f:'🇪🇨', es:'Ecuador', en:'Ecuador', tr:'Ekvador', ar:'الإكوادور'},
+  {c:'do', f:'🇩🇴', es:'República Dominicana', en:'Dominican Republic', tr:'Dominik Cumhuriyeti', ar:'جمهورية الدومينيكان'},
+  {c:'cu', f:'🇨🇺', es:'Cuba', en:'Cuba', tr:'Küba', ar:'كوبا'},
+  {c:'bo', f:'🇧🇴', es:'Bolivia', en:'Bolivia', tr:'Bolivya', ar:'بوليفيا'},
+  {c:'uy', f:'🇺🇾', es:'Uruguay', en:'Uruguay', tr:'Uruguay', ar:'أوروغواي'},
+  {c:'py', f:'🇵🇾', es:'Paraguay', en:'Paraguay', tr:'Paraguay', ar:'باراغواي'},
+  {c:'gt', f:'🇬🇹', es:'Guatemala', en:'Guatemala', tr:'Guatemala', ar:'غواتيمالا'},
+  {c:'hn', f:'🇭🇳', es:'Honduras', en:'Honduras', tr:'Honduras', ar:'هندوراس'},
+  {c:'sv', f:'🇸🇻', es:'El Salvador', en:'El Salvador', tr:'El Salvador', ar:'السلفادور'},
+  {c:'ni', f:'🇳🇮', es:'Nicaragua', en:'Nicaragua', tr:'Nikaragua', ar:'نيكاراغوا'},
+  {c:'cr', f:'🇨🇷', es:'Costa Rica', en:'Costa Rica', tr:'Kosta Rika', ar:'كوستاريكا'},
+  {c:'pa', f:'🇵🇦', es:'Panamá', en:'Panama', tr:'Panama', ar:'بنما'},
+  {c:'pr', f:'🇵🇷', es:'Puerto Rico', en:'Puerto Rico', tr:'Porto Riko', ar:'بورتوريكو'},
+  {c:'tr', f:'🇹🇷', es:'Turquía', en:'Turkey', tr:'Türkiye', ar:'تركيا'},
+  {c:'ma', f:'🇲🇦', es:'Marruecos', en:'Morocco', tr:'Fas', ar:'المغرب'},
+  {c:'dz', f:'🇩🇿', es:'Argelia', en:'Algeria', tr:'Cezayir', ar:'الجزائر'},
+  {c:'tn', f:'🇹🇳', es:'Túnez', en:'Tunisia', tr:'Tunus', ar:'تونس'},
+  {c:'eg', f:'🇪🇬', es:'Egipto', en:'Egypt', tr:'Mısır', ar:'مصر'},
+  {c:'sy', f:'🇸🇾', es:'Siria', en:'Syria', tr:'Suriye', ar:'سوريا'},
+  {c:'iq', f:'🇮🇶', es:'Iraq', en:'Iraq', tr:'Irak', ar:'العراق'},
+  {c:'lb', f:'🇱🇧', es:'Líbano', en:'Lebanon', tr:'Lübnan', ar:'لبنان'},
+  {c:'jo', f:'🇯🇴', es:'Jordania', en:'Jordan', tr:'Ürdün', ar:'الأردن'},
+  {c:'ps', f:'🇵🇸', es:'Palestina', en:'Palestine', tr:'Filistin', ar:'فلسطين'},
+  {c:'sa', f:'🇸🇦', es:'Arabia Saudita', en:'Saudi Arabia', tr:'Suudi Arabistan', ar:'المملكة العربية السعودية'},
+  {c:'ye', f:'🇾🇪', es:'Yemen', en:'Yemen', tr:'Yemen', ar:'اليمن'},
+  {c:'sd', f:'🇸🇩', es:'Sudán', en:'Sudan', tr:'Sudan', ar:'السودان'},
+  {c:'ly', f:'🇱🇾', es:'Libia', en:'Libya', tr:'Libya', ar:'ليبيا'},
+  {c:'ae', f:'🇦🇪', es:'Emiratos Árabes Unidos', en:'United Arab Emirates', tr:'Birleşik Arap Emirlikleri', ar:'الإمارات العربية المتحدة'},
+  {c:'br', f:'🇧🇷', es:'Brasil', en:'Brazil', tr:'Brezilya', ar:'البرازيل'},
+  {c:'pt', f:'🇵🇹', es:'Portugal', en:'Portugal', tr:'Portekiz', ar:'البرتغال'},
+  {c:'nl', f:'🇳🇱', es:'Países Bajos', en:'Netherlands', tr:'Hollanda', ar:'هولندا'},
+  {c:'other', f:'🌍', es:'Otro', en:'Other', tr:'Diğer', ar:'أخرى'},
+];
+
+function populateCountries() {
+  const sel = document.getElementById('a-reg-country');
+  if (!sel) return;
+  const prevValue = sel.value;
+  sel.innerHTML = '';
+  const ph = document.createElement('option');
+  ph.value = ''; ph.textContent = t.countryPlaceholder; ph.disabled = true; ph.selected = true;
+  sel.appendChild(ph);
+  COUNTRIES.forEach(co => {
+    const o = document.createElement('option');
+    o.value = co.c;
+    o.textContent = `${co.f}  ${co[lang] || co.en}`;
+    sel.appendChild(o);
+  });
+  if (prevValue) sel.value = prevValue;
+}
+
+// ══ APPLY TRANSLATIONS ══
+function applyLang() {
+  setText('back-label', t.backLabel);
+  setText('et-title', t.etTitle);
+  setText('et-sub', t.etSub);
+  setText('et-name1', t.etName1);
+  setText('et-desc1', t.etDesc1);
+  setText('et-name2', t.etName2);
+  setText('et-desc2', t.etDesc2);
+  setText('et-soon', t.etSoon);
+  setText('q-back-label', t.qBackLabel);
+  setText('auth-back-label', t.authBack);
+  setText('auth-title', t.authTitle);
+  setText('auth-sub', t.authSub);
+  setText('tab-reg', t.tabReg);
+  setText('tab-log', t.tabLog);
+  setText('reg-submit-btn', t.regSubmit);
+  setText('log-submit-btn', t.logSubmit);
+  setText('auth-skip-btn', t.skipBtn);
+  // Field labels
+  setText('lbl-name', t.lblName);
+  setText('lbl-age', t.lblAge);
+  setText('lbl-email', t.lblEmail);
+  setText('lbl-pass', t.lblPass);
+  setText('lbl-country', t.lblCountry);
+  setText('lbl-examdate', t.lblExamDate);
+  setText('lbl-log-email', t.lblLogEmail);
+  setText('lbl-log-pass', t.lblLogPass);
+  setText('hint-pass', t.hintPass);
+  setText('hint-examdate', t.hintExamDate);
+  setText('hint-age', t.ageNote);
+  document.getElementById('a-reg-name').placeholder = t.phName;
+  document.getElementById('a-reg-age').placeholder = t.phAge;
+  document.getElementById('a-reg-email').placeholder = t.phEmail;
+  document.getElementById('a-reg-pass').placeholder = t.phPass;
+  document.getElementById('a-log-email').placeholder = t.phEmail;
+  document.getElementById('a-log-pass').placeholder = t.phPassLog;
+  populateCountries();
+  // OTP
+  setText('otp-back-label', t.otpBack);
+  setText('otp-title', t.otpTitle);
+  setText('otp-sub', t.otpSub);
+  setText('otp-demo-label', t.otpDemoLabel);
+  setText('otp-verify-btn', t.otpVerify);
+  setText('otp-resend-btn', t.otpResend);
+}
+
+// ══ AUTH ══
+function showAuth() {
+  // Pre-fill if user already logged in before
+  const savedName = localStorage.getItem('slaagnl_name');
+  const savedEmail = localStorage.getItem('slaagnl_email');
+  if (savedName) document.getElementById('a-reg-name').value = savedName;
+  if (savedEmail) {
+    document.getElementById('a-reg-email').value = savedEmail;
+    document.getElementById('a-log-email').value = savedEmail;
+  }
+  showScreen('screen-auth');
+}
+
+function switchAuthTab(which) {
+  document.getElementById('tab-reg').classList.toggle('active', which === 'reg');
+  document.getElementById('tab-log').classList.toggle('active', which === 'log');
+  document.getElementById('form-reg').style.display = which === 'reg' ? 'flex' : 'none';
+  document.getElementById('form-log').style.display = which === 'log' ? 'flex' : 'none';
+  document.getElementById('err-reg').classList.remove('show');
+  document.getElementById('err-log').classList.remove('show');
+}
+
+function showErr(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.classList.add('show');
+}
+
+function isValidEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
+
+// Pending registration data (filled before OTP, committed after verify)
+let pendingReg = null;
+
+function doRegisterTest() {
+  const name = document.getElementById('a-reg-name').value.trim();
+  const ageStr = document.getElementById('a-reg-age').value.trim();
+  const email = document.getElementById('a-reg-email').value.trim();
+  const pass = document.getElementById('a-reg-pass').value;
+  const country = document.getElementById('a-reg-country').value;
+  const examDate = document.getElementById('a-reg-examdate').value;
+  document.getElementById('err-reg').classList.remove('show');
+  if (!name) return showErr('err-reg', t.eName);
+  const age = parseInt(ageStr, 10);
+  if (!ageStr || isNaN(age)) return showErr('err-reg', t.eAge);
+  if (age < 16) return showErr('err-reg', t.eAgeYoung);
+  if (age > 67) return showErr('err-reg', t.eAgeOld);
+  if (!isValidEmail(email)) return showErr('err-reg', t.eEmail);
+  if (pass.length < 8) return showErr('err-reg', t.ePass);
+  if (!country) return showErr('err-reg', t.eCountry);
+
+  pendingReg = { name, age, email, country, examDate };
+  startOTPFlow(email);
+}
+
+// ══ OTP VERIFICATION ══
+let currentOTP = null;
+
+function generateOTP() {
+  return String(Math.floor(100000 + Math.random() * 900000));
+}
+
+function startOTPFlow(email) {
+  currentOTP = generateOTP();
+  document.getElementById('otp-email-display').textContent = email;
+  document.getElementById('otp-demo-code').textContent = currentOTP;
+  document.getElementById('err-otp').classList.remove('show');
+  document.getElementById('otp-resent-msg').classList.remove('show');
+  // Clear digit inputs
+  document.querySelectorAll('.otp-digit').forEach(d => { d.value=''; d.classList.remove('filled'); });
+  showScreen('screen-otp');
+  setTimeout(() => {
+    const first = document.querySelector('.otp-digit');
+    if (first) first.focus();
+  }, 100);
+}
+
+function getOTPValue() {
+  return Array.from(document.querySelectorAll('.otp-digit')).map(d => d.value).join('');
+}
+
+function doVerifyOTP() {
+  document.getElementById('err-otp').classList.remove('show');
+  const code = getOTPValue();
+  if (code.length < 6) return showErr('err-otp', t.otpEmpty);
+  if (code !== currentOTP) {
+    showErr('err-otp', t.otpInvalid);
+    document.querySelectorAll('.otp-digit').forEach(d => { d.value=''; d.classList.remove('filled'); });
+    const first = document.querySelector('.otp-digit');
+    if (first) first.focus();
+    return;
+  }
+  // Save full registration
+  if (pendingReg) {
+    localStorage.setItem('slaagnl_name', pendingReg.name);
+    localStorage.setItem('slaagnl_age', String(pendingReg.age));
+    localStorage.setItem('slaagnl_email', pendingReg.email);
+    localStorage.setItem('slaagnl_country', pendingReg.country);
+    if (pendingReg.examDate) localStorage.setItem('slaagnl_exam_date', pendingReg.examDate);
+    localStorage.setItem('slaagnl_plan', 'libre');
+    localStorage.setItem('slaagnl_streak', '0');
+    localStorage.setItem('slaagnl_email_verified', '1');
+    localStorage.setItem('slaagnl_show_plan_modal', '1');
+  }
+  goDashboard();
+}
+
+function resendOTP() {
+  currentOTP = generateOTP();
+  document.getElementById('otp-demo-code').textContent = currentOTP;
+  document.getElementById('err-otp').classList.remove('show');
+  const msg = document.getElementById('otp-resent-msg');
+  msg.textContent = t.otpResent;
+  msg.classList.add('show');
+  setTimeout(() => msg.classList.remove('show'), 2500);
+}
+
+function initOTPInputs() {
+  const inputs = document.querySelectorAll('.otp-digit');
+  inputs.forEach((inp, idx) => {
+    inp.addEventListener('input', (e) => {
+      const v = e.target.value.replace(/\D/g, '');
+      e.target.value = v.slice(0,1);
+      if (e.target.value) {
+        e.target.classList.add('filled');
+        if (idx < inputs.length - 1) inputs[idx+1].focus();
+        else if (getOTPValue().length === 6) doVerifyOTP();
+      } else {
+        e.target.classList.remove('filled');
+      }
+    });
+    inp.addEventListener('keydown', (e) => {
+      if (e.key === 'Backspace' && !e.target.value && idx > 0) {
+        inputs[idx-1].focus();
+        inputs[idx-1].value = '';
+        inputs[idx-1].classList.remove('filled');
+      }
+    });
+    inp.addEventListener('paste', (e) => {
+      e.preventDefault();
+      const txt = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g,'').slice(0,6);
+      txt.split('').forEach((ch, i) => {
+        if (inputs[i]) { inputs[i].value = ch; inputs[i].classList.add('filled'); }
+      });
+      if (txt.length === 6) doVerifyOTP();
+      else if (inputs[txt.length]) inputs[txt.length].focus();
+    });
+  });
+}
+
+function doLoginTest() {
+  const email = document.getElementById('a-log-email').value.trim();
+  const pass = document.getElementById('a-log-pass').value;
+  document.getElementById('err-log').classList.remove('show');
+  if (!isValidEmail(email)) return showErr('err-log', t.eEmail);
+  if (!pass) return showErr('err-log', t.ePassL);
+  localStorage.setItem('slaagnl_email', email);
+  if (!localStorage.getItem('slaagnl_name')) {
+    localStorage.setItem('slaagnl_name', email.split('@')[0]);
+  }
+  if (!localStorage.getItem('slaagnl_plan')) localStorage.setItem('slaagnl_plan', 'libre');
+  goDashboard();
+}
+
+// ══ EXAM TYPE SELECTION ══
+function selectExamType(type) {
+  examType = type;
+  localStorage.setItem('slaagnl_exam_type', type);
+  currentQ = 0;
+  score = 0;
+  userAnswers = [];
+  renderQuestion();
+  showScreen('screen-test');
+}
+
+// ══ QUESTION RENDERING ══
+function getOpts(i) {
+  const q = QUESTIONS[i];
+  if (q.opts_fixed) return q.opts_fixed;
+  return t.opts[i] || T.es.opts[i];
+}
+
+function renderQuestion() {
+  const q = QUESTIONS[currentQ];
+  const opts = getOpts(currentQ);
+  const total = QUESTIONS.length;
+
+  setText('q-counter', `${currentQ + 1}/${total}`);
+  document.getElementById('progress-fill').style.width = ((currentQ) / total * 100) + '%';
+
+  // Dutch display
+  const tag = q.type === 'grammar' ? t.grammarTag : q.type === 'kns' ? t.knsTag : t.dutchTag;
+  setText('dutch-tag', tag);
+
+  const dutchContent = document.getElementById('dutch-content');
+  if (q.dutch) {
+    const cls = q.dutch.includes(' ') ? 'dutch-phrase' : 'dutch-word';
+    dutchContent.innerHTML = `<div class="${cls}">${q.dutch}</div>`;
+    document.getElementById('dutch-display').style.display = '';
+  } else {
+    document.getElementById('dutch-display').style.display = 'none';
+  }
+
+  setText('q-text', t.qTexts[currentQ]);
+
+  const grid = document.getElementById('options-grid');
+  grid.innerHTML = opts.map((opt, i) =>
+    `<button class="opt-btn" onclick="selectAnswer(${i})">${opt}</button>`
+  ).join('');
+
+  const nextBtn = document.getElementById('next-btn');
+  nextBtn.classList.remove('show');
+  const isLast = currentQ === total - 1;
+  nextBtn.textContent = isLast ? t.finishBtn : t.nextBtn;
+}
+
+function selectAnswer(idx) {
+  if (document.querySelector('.opt-btn.answered')) return;
+  const q = QUESTIONS[currentQ];
+  const isCorrect = idx === q.correct;
+  if (isCorrect) score++;
+  userAnswers.push({ q: currentQ, chosen: idx, correct: q.correct, ok: isCorrect });
+
+  const btns = document.querySelectorAll('.opt-btn');
+  btns.forEach((btn, i) => {
+    btn.classList.add('answered');
+    if (i === q.correct) btn.classList.add('correct');
+    else if (i === idx && !isCorrect) btn.classList.add('wrong');
+  });
+
+  document.getElementById('next-btn').classList.add('show');
+}
+
+function nextQuestion() {
+  currentQ++;
+  if (currentQ >= QUESTIONS.length) {
+    showResults();
+  } else {
+    renderQuestion();
+  }
+}
+
+// ══ RESULTS ══
+function showResults() {
+  document.getElementById('progress-fill').style.width = '100%';
+
+  // Save mastery based on score
+  let mastery = { m0:0,m1:0,m2:0,m3:0,m4:0,m5:0,m6:0,m7:0, s1:0,s2:0,s3:0,s4:0,s5:0, sp1:0,sp2:0,sp3:0,sp4:0 };
+  let levelIdx;
+  if (score <= 3)      { levelIdx = 0; }
+  else if (score <= 6) { levelIdx = 1; mastery.m0 = 100; }
+  else if (score <= 8) { levelIdx = 2; mastery.m0 = 100; mastery.m1 = 80; }
+  else                 { levelIdx = 3; mastery.m0 = 100; mastery.m1 = 100; mastery.m2 = 80; }
+
+  localStorage.setItem('slaagnl_mastery', JSON.stringify(mastery));
+
+  setText('score-num', score);
+  setText('score-denom', '/10');
+
+  const badge = document.getElementById('level-badge');
+  badge.textContent = t.levels[levelIdx];
+  badge.className = 'level-badge ' + ['level-beginner','level-basic','level-intermediate','level-advanced'][levelIdx];
+
+  setText('result-title', t.levelTitles[levelIdx]);
+  document.getElementById('result-msg').innerHTML = t.levelMsgs[levelIdx];
+  setText('go-btn', t.goBtn);
+
+  // Answer review
+  const opts_all = QUESTIONS.map((q, i) => getOpts(i));
+  const answersHTML = userAnswers.map((a) => {
+    const q = QUESTIONS[a.q];
+    const opts = opts_all[a.q];
+    const qLabel = q.dutch ? `<strong>${q.dutch}</strong>` : `Q${a.q+1}`;
+    return `<div class="result-row">
+      <div class="result-icon">${a.ok ? '✅' : '❌'}</div>
+      <div class="result-q">${qLabel} → ${opts[a.correct]}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('result-answers').innerHTML =
+    `<div class="result-answers-title">${t.reviewTitle}</div>${answersHTML}`;
+
+  showScreen('screen-results');
+}
+
+function goDashboard() {
+  window.location.href = 'dashboard.html';
+}
+
+// ══ INIT ══
+applyLang();
+initOTPInputs();
+</script>
+</body>
+</html>

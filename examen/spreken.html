@@ -1,13 +1,29 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
 <script>
-  // Guard: redirect to disclaimer if not yet accepted
   (function(){
     if (localStorage.getItem('slaagnl_exam_disclaimer_accepted') !== 'true') {
       localStorage.setItem('slaagnl_exam_target', 'spreken');
       location.replace('index.html');
     }
+    function getISOWeek() {
+      const d = new Date(), jan4 = new Date(d.getFullYear(),0,4);
+      const s = new Date(jan4); s.setDate(jan4.getDate()-((jan4.getDay()+6)%7));
+      return d.getFullYear()+'-W'+Math.ceil((d-s)/604800000);
+    }
+    const plan = localStorage.getItem('slaagnl_plan') || 'libre';
+    const limit = plan === 'completo' ? Infinity : plan === 'enfocado' ? 3 : 1;
+    const data = JSON.parse(localStorage.getItem('slaagnl_weekly_exams') || '{}');
+    const week = getISOWeek();
+    const count = (data.spreken && data.spreken.week === week) ? data.spreken.count : 0;
+    if (count >= limit) {
+      alert('Has alcanzado tu límite semanal de simulacros Spreken.');
+      location.replace('../dashboard.html');
+    }
+    window._SLAAG_PLAN = plan;
+    window._SLAAG_TIMER_ENABLED = plan !== 'libre';
   })();
 </script>
 <meta charset="UTF-8">
@@ -121,9 +137,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
 </div>
 
 <div class="bottom-nav" id="bottom-nav">
-  <button class="btn-nav btn-prev" id="btn-prev" onclick="goQ(-1)">‹ Anterior</button>
-  <button class="btn-nav btn-next" id="btn-next" onclick="goQ(1)">Siguiente ›</button>
-  <button class="btn-nav btn-finish" onclick="confirmFinish()">Finalizar</button>
+  <button class="btn-nav btn-prev" id="btn-prev" onclick="goQ(-1)">‹ Vorige</button>
+  <button class="btn-nav btn-next" id="btn-next" onclick="goQ(1)">Volgende ›</button>
+  <button class="btn-nav btn-finish" onclick="confirmFinish()">Afronden</button>
 </div>
 
 <div class="finish-screen" id="finish-screen"></div>
@@ -134,8 +150,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
     <div class="modal-title" id="modal-title"></div>
     <div class="modal-sub" id="modal-sub"></div>
     <div class="modal-btns">
-      <button class="modal-btn secondary" onclick="closeModal()">Cancelar</button>
-      <button class="modal-btn primary" id="modal-confirm-btn">Finalizar</button>
+      <button class="modal-btn secondary" onclick="closeModal()">Annuleren</button>
+      <button class="modal-btn primary" id="modal-confirm-btn">Afronden</button>
     </div>
   </div>
 </div>
@@ -218,13 +234,35 @@ async function initTest(){
 }
 
 function startTimer(){
+  if(window._SLAAG_TIMER_ENABLED === false){
+    showTimerToast('⏱ Sin temporizador — Plan Libre');
+    return;
+  }
   let s = TOTAL_MINUTES * 60;
   timerInterval = setInterval(()=>{
     s--;
-    if(s===5*60) showTimerToast('⏰ Te quedan 5 minutos');
-    if(s===60)   showTimerToast('⚠️ Te queda 1 minuto');
+    if(s===5*60) showTimerToast('⏰ Nog 5 minuten');
+    if(s===60)   showTimerToast('⚠️ Nog 1 minuut');
     if(s<=0){clearInterval(timerInterval);finishTest();}
   },1000);
+}
+function _incrementWeeklyCount(type){
+  function getISOWeek(){const d=new Date(),jan4=new Date(d.getFullYear(),0,4);const s=new Date(jan4);s.setDate(jan4.getDate()-((jan4.getDay()+6)%7));return d.getFullYear()+'-W'+Math.ceil((d-s)/604800000);}
+  const week=getISOWeek();
+  const data=JSON.parse(localStorage.getItem('slaagnl_weekly_exams')||'{}');
+  if(!data[type]||data[type].week!==week) data[type]={week,count:0};
+  data[type].count++;
+  localStorage.setItem('slaagnl_weekly_exams',JSON.stringify(data));
+}
+function _launchConfetti(){
+  if(typeof confetti==='undefined')return;
+  const end=Date.now()+3500;
+  const colors=['#f47c3a','#f4c842','#2ecc8a','#a78bfa','#fdf6ec'];
+  (function frame(){
+    confetti({particleCount:6,angle:60,spread:55,origin:{x:0},colors});
+    confetti({particleCount:6,angle:120,spread:55,origin:{x:1},colors});
+    if(Date.now()<end)requestAnimationFrame(frame);
+  })();
 }
 
 function showTimerToast(msg){
@@ -463,7 +501,7 @@ function renderQ(idx){
   }
 
   document.getElementById('btn-prev').style.display = idx===0 ? 'none' : 'flex';
-  document.getElementById('btn-next').textContent = idx===TEST_SIZE-1 ? 'Última' : 'Siguiente ›';
+  document.getElementById('btn-next').textContent = idx===TEST_SIZE-1 ? 'Laatste' : 'Volgende ›';
   updateQNav();
 }
 
@@ -476,16 +514,18 @@ function goToQ(idx){ renderQ(idx); }
 
 function confirmFinish(){
   const done = transcripts.filter(t=>t?.trim().length>0).length;
-  document.getElementById('modal-title').textContent='¿Finalizar?';
-  document.getElementById('modal-sub').textContent=`Has respondido ${done} de ${TEST_SIZE}.`;
+  document.getElementById('modal-title').textContent='Afronden?';
+  document.getElementById('modal-sub').textContent=`Je hebt ${done} van ${TEST_SIZE} beantwoord.`;
+  document.getElementById('modal-confirm-btn').textContent='Afronden';
   document.getElementById('modal-confirm-btn').onclick=finishTest;
   document.getElementById('confirm-modal').classList.add('open');
 }
 
 function confirmExit(){
-  document.getElementById('modal-title').textContent='¿Salir?';
-  document.getElementById('modal-sub').textContent='Tu progreso se perderá.';
-  document.getElementById('modal-confirm-btn').onclick=()=>window.location.href='../index.html';
+  document.getElementById('modal-title').textContent='Verlaten?';
+  document.getElementById('modal-sub').textContent='Je voortgang gaat verloren.';
+  document.getElementById('modal-confirm-btn').textContent='Verlaten';
+  document.getElementById('modal-confirm-btn').onclick=()=>window.location.href='../dashboard.html';
   document.getElementById('confirm-modal').classList.add('open');
 }
 
@@ -496,6 +536,8 @@ function finishTest(){
   closeModal();
   if(isRecording) stopRecording();
   stopPlayers();
+  _incrementWeeklyCount('spreken');
+  setTimeout(_launchConfetti, 600);
 
   const done = transcripts.filter(t=>t?.trim().length>0).length;
 
@@ -506,8 +548,8 @@ function finishTest(){
   const fs = document.getElementById('finish-screen');
   fs.innerHTML = `
     <div class="finish-emoji">🗣️</div>
-    <div class="finish-title">¡Spreken completado!</div>
-    <div class="finish-sub">Has respondido ${done} de ${TEST_SIZE} ítems.</div>
+    <div class="finish-title">Spreken voltooid!</div>
+    <div class="finish-sub">Je hebt ${done} van ${TEST_SIZE} items beantwoord.</div>
 
     <div class="finish-premium-card">
       <div class="finish-premium-title">¿Quieres una experiencia más real?</div>
@@ -517,7 +559,7 @@ function finishTest(){
       <button class="btn-premium" onclick="showTimerToast('⭐ Revisar test — próximamente')">⭐ Revisar test</button>
     </div>
 
-    <button class="btn-back-home" onclick="window.location.href='../index.html'">‹ Volver al dashboard</button>
+    <button class="btn-back-home" onclick="window.location.href='../dashboard.html'" style="background:linear-gradient(135deg,var(--orange),#e8702f);color:white;border:none;padding:16px 24px;border-radius:14px;font-weight:900;font-size:15px;box-shadow:0 6px 20px rgba(244,124,58,0.35);">🏠 Naar je menu</button>
   `;
   fs.classList.add('show');
 }
