@@ -107,9 +107,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
 </div>
 
 <div class="bottom-nav" id="bottom-nav">
-  <button class="btn-nav btn-prev" id="btn-prev" onclick="goQ(-1)">‹ Anterior</button>
-  <button class="btn-nav btn-next-q" id="btn-next-q" onclick="goQ(1)">Siguiente ›</button>
-  <button class="btn-nav btn-finish" onclick="confirmFinish()">Finalizar</button>
+  <button class="btn-nav btn-prev" id="btn-prev" onclick="goQ(-1)">‹ Vorige</button>
+  <button class="btn-nav btn-next-q" id="btn-next-q" onclick="goQ(1)">Volgende ›</button>
+  <button class="btn-nav btn-finish" onclick="confirmFinish()">Afronden</button>
 </div>
 
 <div class="results-screen" id="results-screen"></div>
@@ -117,11 +117,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
 
 <div class="modal-overlay" id="confirm-modal">
   <div class="modal-box">
-    <div class="modal-title" id="modal-title">¿Finalizar?</div>
+    <div class="modal-title" id="modal-title">Afronden?</div>
     <div class="modal-sub" id="modal-sub"></div>
     <div class="modal-btns">
-      <button class="modal-btn secondary" onclick="closeModal()">Cancelar</button>
-      <button class="modal-btn primary" id="modal-confirm-btn">Finalizar</button>
+      <button class="modal-btn secondary" onclick="closeModal()">Annuleren</button>
+      <button class="modal-btn primary" id="modal-confirm-btn">Afronden</button>
     </div>
   </div>
 </div>
@@ -404,7 +404,7 @@ function renderQ(idx){
     <div class="q-opts">${optsHtml}</div>`;
 
   document.getElementById('btn-prev').style.display=idx===0?'none':'flex';
-  document.getElementById('btn-next-q').textContent=idx===TEST_SIZE-1?'Última':'Siguiente ›';
+  document.getElementById('btn-next-q').textContent=idx===TEST_SIZE-1?'Laatste':'Volgende ›';
   updateQNav();
 }
 
@@ -419,17 +419,17 @@ function goToQ(idx){renderQ(idx);}
 
 function confirmFinish(){
   const u=answers.filter(a=>a===null).length;
-  document.getElementById('modal-title').textContent='¿Finalizar el test?';
-  document.getElementById('modal-sub').textContent=u>0?`Tienes ${u} pregunta${u>1?'s':''} sin responder.`:'¿Estás seguro?';
-  document.getElementById('modal-confirm-btn').textContent='Finalizar';
+  document.getElementById('modal-title').textContent='Afsluiten?';
+  document.getElementById('modal-sub').textContent=u>0?`Je hebt ${u} vraag${u>1?'en':''} nog niet beantwoord.`:'Weet je het zeker?';
+  document.getElementById('modal-confirm-btn').textContent='Afronden';
   document.getElementById('modal-confirm-btn').onclick=finishTest;
   document.getElementById('confirm-modal').classList.add('open');
 }
 
 function confirmExit(){
-  document.getElementById('modal-title').textContent='¿Salir del test?';
-  document.getElementById('modal-sub').textContent='Tu progreso se perderá.';
-  document.getElementById('modal-confirm-btn').textContent='Salir';
+  document.getElementById('modal-title').textContent='Test verlaten?';
+  document.getElementById('modal-sub').textContent='Je voortgang gaat verloren.';
+  document.getElementById('modal-confirm-btn').textContent='Verlaten';
   document.getElementById('modal-confirm-btn').onclick=()=>window.location.href='../dashboard.html';
   document.getElementById('confirm-modal').classList.add('open');
 }
