@@ -8,9 +8,10 @@
 <style>
 :root{
   --navy:#0d1f3c;--navy2:#162d54;--navy3:#1e3a6e;
-  --orange:#f47c3a;--cream:#fdf6ec;
+  --orange:#f47c3a;--cream:#fdf6ec;--yellow:#f4c842;
   --green:#2ecc8a;--red:#e8455a;--purple:#a78bfa;
-  --blue:#60;}
+  --blue:#60a5fa;--border:rgba(255,255,255,0.07);
+  --border-cream:rgba(13,31,60,0.08);--ease:0.22s cubic-bezier(0.4,0,0.2,1);}
 body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
 
 /* ══ HEADER ══ */
@@ -284,7 +285,86 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
 [dir="rtl"] .profile-drawer.open{left:0;}
 [dir="rtl"] .subpanel{right:auto;left:-100%;border-left:none;border-right:1px solid var(--border);}
 [dir="rtl"] .subpanel.open{left:0;}
+
+/* ══ APPROVAL BANNER ══ */
+.approval-banner{background:linear-gradient(135deg,rgba(46,204,138,0.12),rgba(46,204,138,0.06));border:1px solid rgba(46,204,138,0.3);border-radius:14px;padding:14px 16px;margin:14px 16px 0;display:flex;align-items:flex-start;gap:12px;animation:approvalPulse 3s ease infinite;}
+@keyframes approvalPulse{0%,100%{border-color:rgba(46,204,138,0.3);}50%{border-color:rgba(46,204,138,0.6);}}
+.approval-icon{font-size:28px;flex-shrink:0;}
+.approval-text{flex:1;}
+.approval-title{font-size:14px;font-weight:700;color:var(--green);margin-bottom:3px;}
+.approval-sub{font-size:12px;color:rgba(253,246,236,0.55);line-height:1.4;margin-bottom:10px;}
+.approval-btns{display:flex;gap:8px;flex-wrap:wrap;}
+.approval-btn{padding:7px 14px;border-radius:99px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;border:none;}
+.approval-btn.yes{background:var(--green);color:white;}
+.approval-btn.no{background:rgba(255,255,255,0.08);color:rgba(253,246,236,0.6);border:1px solid rgba(255,255,255,0.12);}
+
+/* ══ STREAK MODAL ══ */
+.streak-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:600;display:flex;align-items:flex-end;justify-content:center;padding:0;opacity:0;pointer-events:none;transition:opacity 0.25s;}
+.streak-modal-overlay.open{opacity:1;pointer-events:all;}
+.streak-modal-box{background:var(--navy2);border:1px solid var(--border);border-radius:24px 24px 0 0;padding:28px 24px 40px;width:100%;max-width:480px;transform:translateY(100%);transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1);}
+.streak-modal-overlay.open .streak-modal-box{transform:translateY(0);}
+.streak-pill{width:40px;height:4px;background:rgba(255,255,255,0.15);border-radius:99px;margin:0 auto 20px;}
+.streak-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.streak-flame{font-size:48px;line-height:1;}
+.streak-days{font-family:'Playfair Display',serif;font-size:42px;font-weight:900;color:var(--orange);line-height:1;}
+.streak-label{font-size:12px;color:rgba(253,246,236,0.45);font-weight:600;}
+.streak-milestones{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
+.streak-milestone{display:flex;align-items:center;gap:12px;padding:13px 16px;background:rgba(255,255,255,0.04);border-radius:14px;border:1px solid var(--border);}
+.streak-milestone.reached{background:rgba(46,204,138,0.08);border-color:rgba(46,204,138,0.25);}
+.streak-milestone.next{background:rgba(244,124,58,0.06);border-color:rgba(244,124,58,0.2);}
+.sm-icon{font-size:22px;width:32px;text-align:center;flex-shrink:0;}
+.sm-info{flex:1;}
+.sm-days{font-size:11px;font-weight:700;color:rgba(253,246,236,0.4);margin-bottom:2px;}
+.streak-milestone.reached .sm-days{color:var(--green);}
+.streak-milestone.next .sm-days{color:var(--orange);}
+.sm-reward{font-size:13px;font-weight:600;color:var(--cream);}
+.sm-badge{font-size:11px;padding:3px 10px;border-radius:99px;font-weight:700;}
+.sm-badge.done{background:rgba(46,204,138,0.15);color:var(--green);}
+.sm-badge.pending{background:rgba(244,124,58,0.1);color:var(--orange);}
+.streak-close{width:100%;padding:13px;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:12px;color:var(--cream);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
+
+/* ══ RANKING PANEL ══ */
+.ranking-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);}
+.ranking-pos{font-size:15px;font-weight:900;width:28px;text-align:center;flex-shrink:0;}
+.ranking-pos.top1{color:#f4c842;}
+.ranking-pos.top2{color:#a0b0c8;}
+.ranking-pos.top3{color:#cd7f32;}
+.ranking-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--navy3),var(--navy2));border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--cream);flex-shrink:0;}
+.ranking-avatar.me{background:linear-gradient(135deg,var(--orange),#f4c842);border-color:rgba(244,124,58,0.4);}
+.ranking-info{flex:1;min-width:0;}
+.ranking-name{font-size:13px;font-weight:700;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ranking-name.me{color:var(--orange);}
+.ranking-meta{font-size:11px;color:rgba(253,246,236,0.4);}
+.ranking-score{font-size:13px;font-weight:900;color:var(--orange);}
+.ranking-sep{text-align:center;padding:10px;font-size:12px;color:rgba(253,246,236,0.3);}
+
+/* ══ ERROR SECTION ══ */
+.error-section{margin-top:16px;background:rgba(232,69,90,0.06);border:1px solid rgba(232,69,90,0.2);border-radius:14px;padding:16px;}
+.error-section-title{font-size:13px;font-weight:700;color:var(--red);margin-bottom:10px;}
+.error-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);}
+.error-row:last-child{border-bottom:none;}
+.error-mod{font-size:12px;color:rgba(253,246,236,0.7);flex:1;}
+.error-count{font-size:12px;font-weight:700;color:var(--red);}
+.upgrade-nudge{background:rgba(244,124,58,0.08);border:1px solid rgba(244,124,58,0.2);border-radius:14px;padding:16px;text-align:center;margin-top:12px;}
+.upgrade-nudge-title{font-size:14px;font-weight:700;color:var(--orange);margin-bottom:6px;}
+.upgrade-nudge-sub{font-size:12px;color:rgba(253,246,236,0.5);margin-bottom:12px;line-height:1.5;}
+.btn-upgrade-full{width:100%;padding:12px;background:var(--orange);border:none;border-radius:12px;color:white;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
+
+/* ══ EXAM LIMIT BADGE ══ */
+.exam-limit-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;margin-top:3px;}
+.exam-limit-badge.ok{background:rgba(46,204,138,0.12);color:var(--green);}
+.exam-limit-badge.warn{background:rgba(244,196,58,0.12);color:var(--yellow);}
+.exam-limit-badge.full{background:rgba(232,69,90,0.12);color:var(--red);}
+
+/* ══ CONFETTI CANVAS ══ */
+#confetti-canvas{position:fixed;inset:0;z-index:9998;pointer-events:none;}
+
+/* ══ COUNTER BANNER ══ */
+.counter-banner{background:linear-gradient(135deg,rgba(167,139,250,0.1),rgba(167,139,250,0.05));border:1px solid rgba(167,139,250,0.2);border-radius:14px;padding:12px 16px;margin:0 16px 14px;text-align:center;}
+.counter-num{font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:var(--purple);}
+.counter-label{font-size:11px;color:rgba(253,246,236,0.45);margin-top:2px;}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
 <script src="js/free-access.js"></script>
 </head>
 <body>
@@ -292,7 +372,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
 <!-- HEADER -->
 <div class="header">
   <div class="header-top">
-    <div class="streak-badge" id="dash-streak">🔥 0</div>
+    <div class="streak-badge" id="dash-streak" onclick="openStreakModal()">🔥 0</div>
     <div class="avatar-btn" id="avatar-btn" onclick="openDrawer()">N</div>
   </div>
   <div class="header-center">
@@ -301,6 +381,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
     <div class="logo-text">Slaag<span class="logo-nl">NL</span></div>
   </div>
 </div>
+
+<!-- APPROVAL BANNER (shown when exam date passed) -->
+<div id="approval-banner" style="display:none"></div>
 
 <!-- HERO -->
 <div class="hero">
@@ -388,6 +471,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
   </div>
   <div class="drawer-menu">
     <button class="drawer-item" onclick="openProgressPanel()"><span class="drawer-item-icon">📊</span><span class="drawer-item-label">Mi progreso</span><span class="drawer-item-arrow">›</span></button>
+    <button class="drawer-item" onclick="openRankingPanel()"><span class="drawer-item-icon">🏆</span><span class="drawer-item-label">Ranking global</span><span class="drawer-item-arrow">›</span></button>
     <button class="drawer-item" onclick="openEditPanel()"><span class="drawer-item-icon">✏️</span><span class="drawer-item-label">Editar perfil</span><span class="drawer-item-arrow">›</span></button>
     <button class="drawer-item" onclick="openPlansPanel()"><span class="drawer-item-icon">⭐</span><span class="drawer-item-label">Planes</span><span class="drawer-item-arrow">›</span></button>
     <div class="drawer-divider"></div>
@@ -402,6 +486,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
 <div class="subpanel" id="subpanel-progress">
   <div class="subpanel-header"><button class="subpanel-back" onclick="closeAllSubpanels()">‹</button><div class="subpanel-title">Mi progreso</div></div>
   <div class="subpanel-body" id="progress-body"></div>
+</div>
+
+<!-- SUBPANEL — Ranking -->
+<div class="subpanel" id="subpanel-ranking">
+  <div class="subpanel-header"><button class="subpanel-back" onclick="closeAllSubpanels()">‹</button><div class="subpanel-title">🏆 Ranking global</div></div>
+  <div class="subpanel-body" id="ranking-body"></div>
 </div>
 
 <!-- SUBPANEL — Editar -->
@@ -455,6 +545,22 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
   </div>
 </div>
 
+<!-- STREAK MODAL -->
+<div class="streak-modal-overlay" id="streak-modal" onclick="closeStreakModal()">
+  <div class="streak-modal-box" onclick="event.stopPropagation()">
+    <div class="streak-pill"></div>
+    <div class="streak-header">
+      <div class="streak-flame">🔥</div>
+      <div>
+        <div class="streak-days" id="streak-modal-days">0</div>
+        <div class="streak-label">días seguidos</div>
+      </div>
+    </div>
+    <div class="streak-milestones" id="streak-milestones"></div>
+    <button class="streak-close" onclick="closeStreakModal()">Cerrar</button>
+  </div>
+</div>
+
 <!-- POST-REGISTRATION PLAN MODAL -->
 <div class="modal-overlay" id="postreg-plan-modal">
   <div class="modal-box" style="max-width:420px;text-align:left;padding:24px 22px;">
@@ -495,6 +601,11 @@ const state = {
       m0:0,m1:0,m2:0,m3:0,m4:0,m5:0,m6:0,m7:0,
       s1:0,s2:0,s3:0,s4:0,s5:0,
       sp1:0,sp2:0,sp3:0,sp4:0,
+    },
+    errors: JSON.parse(localStorage.getItem('slaagnl_errors') || 'null') || {
+      m0:0,m1:0,m2:0,m3:0,m4:0,m5:0,m6:0,m7:0,
+      s1:0,s2:0,s3:0,s4:0,s5:0,
+      sp1:0,sp2:0,sp3:0,sp4:0,
     }
   }
 };
@@ -528,17 +639,26 @@ const SPREKEN_MODS = [
 // ══ PLANS ══
 const PLANS_DATA = {
   libre:{name:{es:'Libre',en:'Free',tr:'Ücretsiz',ar:'مجاني'},price:'€0',features:{es:[
-    {t:'Módulos 0 y 1 desbloqueados',ok:true},{t:'5 ejercicios por día',ok:true},
-    {t:'Audio de pronunciación',ok:true},{t:'Módulos 2-7 bloqueados',ok:false},
-    {t:'Sin simulacros',ok:false},{t:'Sin Samenleving ni Spreken',ok:false}]}},
+    {t:'Primeros 2 módulos de cada sección',ok:true},
+    {t:'1 simulacro por semana (sin temporizador)',ok:true},
+    {t:'Racha diaria con recompensas',ok:true},
+    {t:'Módulos avanzados bloqueados',ok:false},
+    {t:'Sin análisis de errores',ok:false},
+    {t:'Sin acceso a Samenleving ni Spreken avanzado',ok:false}]}},
   enfocado:{name:{es:'Enfocado',en:'Focused',tr:'Odaklı',ar:'مركّز'},price:'€4.99',features:{es:[
-    {t:'Todo TAAL desbloqueado',ok:true},{t:'30 ejercicios por día',ok:true},
-    {t:'Audio + velocidad ajustable',ok:true},{t:'1 simulacro por semana',ok:true},
-    {t:'Progreso completo visible',ok:true},{t:'Samenleving y Spreken bloqueados',ok:false}]}},
+    {t:'Todo TAAL desbloqueado',ok:true},
+    {t:'3 simulacros por semana (con temporizador)',ok:true},
+    {t:'Análisis de errores por módulo',ok:true},
+    {t:'Progreso completo visible',ok:true},
+    {t:'Racha con recompensas avanzadas',ok:true},
+    {t:'Samenleving y Spreken bloqueados',ok:false}]}},
   completo:{name:{es:'Completo',en:'Complete',tr:'Tam',ar:'كامل'},price:'€9.99',featured:true,features:{es:[
-    {t:'TAAL + SAMENLEVING + EXAMEN + SPREKEN',ok:true},{t:'Ejercicios ilimitados',ok:true},
-    {t:'Simulacros ilimitados',ok:true},{t:'Estadísticas detalladas',ok:true},
-    {t:'Lowie te guía en cada paso 🦁',ok:true},{t:'Soporte prioritario',ok:true}]}}
+    {t:'TAAL + SAMENLEVING + EXAMEN + SPREKEN',ok:true},
+    {t:'Simulacros ilimitados en modo real',ok:true},
+    {t:'Estadísticas y errores avanzados',ok:true},
+    {t:'Rachas con recompensas exclusivas',ok:true},
+    {t:'Asistente Lowie 🦁 (próximamente)',ok:true},
+    {t:'Soporte prioritario',ok:true}]}}
 };
 
 // ══ LOWIE MESSAGES ══
@@ -569,7 +689,6 @@ function updateLowieBubble() {
     lowieIdx++;
   }, 300);
 }
-
 function startLowieRotation() {
   updateLowieBubble();
   if (lowieTimer) clearInterval(lowieTimer);
@@ -586,28 +705,57 @@ function calcDays() {
   const e = new Date(state.user.examDate), n = new Date();
   n.setHours(0,0,0,0); e.setHours(0,0,0,0);
   const d = Math.ceil((e - n) / 86400000);
-  return d > 0 ? d : 0;
+  return d;
 }
-const DISABLE_EXAMEN_LOCK_UI = true; // TEMP: lock UI disabled while plans are off — set to false to restore
-
-function goExam(target) {
-  const allowed = ['kns', 'spreken', 'lezen'];
-  if (!allowed.includes(target)) return;
-  localStorage.setItem('slaagnl_exam_target', target);
-  const accepted = localStorage.getItem('slaagnl_exam_disclaimer_accepted') === 'true';
-  window.location.href = accepted ? `examen/${target}.html` : 'examen/index.html';
-}
-
+function modPct(id) { return state.user.mastery[id] ?? 0; }
+function modErrors(id) { return state.user.errors[id] ?? 0; }
 function isPremium() {
-  if (window.SLAAGNL_DISABLE_PLANS === true) return true; // TEMP: disable plans (free access)
   const u = state.user;
   if (u.plan === 'completo' || u.plan === 'enfocado') return true;
   if (u.premiumExpiry) return new Date() < new Date(u.premiumExpiry);
   return false;
 }
-function modPct(id) { return state.user.mastery[id] ?? 0; }
+
+// ══ PLAN ACCESS ══
+function isModuleAccessible(modIndex, section) {
+  const plan = state.user.plan;
+  if (plan === 'completo' || isPremium()) return true;
+  if (plan === 'enfocado') {
+    if (section === 'taal') return true;
+    return modIndex < 2;
+  }
+  return modIndex < 2;
+}
+
+// ══ WEEKLY EXAM LIMIT ══
+function getISOWeek() {
+  const d = new Date();
+  const jan4 = new Date(d.getFullYear(), 0, 4);
+  const startOfWeek = new Date(jan4);
+  startOfWeek.setDate(jan4.getDate() - ((jan4.getDay() + 6) % 7));
+  const diff = d - startOfWeek;
+  return `${d.getFullYear()}-W${Math.ceil(diff / 604800000)}`;
+}
+function getWeeklyExamCount(type) {
+  const data = JSON.parse(localStorage.getItem('slaagnl_weekly_exams') || '{}');
+  const week = getISOWeek();
+  if (!data[type] || data[type].week !== week) return 0;
+  return data[type].count || 0;
+}
+function getExamWeeklyLimit() {
+  const plan = state.user.plan;
+  if (plan === 'completo') return Infinity;
+  if (plan === 'enfocado') return 3;
+  return 1;
+}
+function canDoExam(type) {
+  return getWeeklyExamCount(type) < getExamWeeklyLimit();
+}
+
+// ══ SAVE ══
 function saveState() {
   localStorage.setItem('slaagnl_mastery', JSON.stringify(state.user.mastery));
+  localStorage.setItem('slaagnl_errors',  JSON.stringify(state.user.errors));
   localStorage.setItem('slaagnl_name', state.user.name);
   localStorage.setItem('slaagnl_plan', state.user.plan);
   localStorage.setItem('slaagnl_streak', state.user.streak);
@@ -617,19 +765,27 @@ function saveState() {
   if (state.user.country) localStorage.setItem('slaagnl_country', state.user.country);
 }
 
-// ══ RENDER ══
+// ══ RENDER DASHBOARD ══
 function renderDashboard() {
   const avg  = avgMastery();
   const days = calcDays();
   const init = (state.user.name || 'U').charAt(0).toUpperCase();
 
   document.querySelectorAll('.avatar-btn,#drawer-avatar').forEach(el => el.textContent = init);
-  document.getElementById('dash-streak').textContent = '🔥 ' + (state.user.streak || 0);
-  document.getElementById('dash-pct').textContent    = avg + '%';
-  document.getElementById('dash-bar').style.width    = avg + '%';
+  document.getElementById('dash-streak').innerHTML = '🔥 ' + (state.user.streak || 0);
+  document.getElementById('dash-pct').textContent  = avg + '%';
+  document.getElementById('dash-bar').style.width  = avg + '%';
+
   if (days !== null) {
-    document.getElementById('dash-bar-msg').innerHTML = `Examen en <strong>${days} días</strong>`;
+    if (days > 0) {
+      document.getElementById('dash-bar-msg').innerHTML = `Examen en <strong>${days} días</strong>`;
+    } else if (days === 0) {
+      document.getElementById('dash-bar-msg').innerHTML = `<strong>🎯 ¡Hoy es tu examen!</strong>`;
+    } else {
+      document.getElementById('dash-bar-msg').innerHTML = `Examen hace <strong>${Math.abs(days)} días</strong>`;
+    }
   }
+
   document.getElementById('dash-gift').style.display =
     (state.user.premiumDaysLeft > 0 && !state.user.premiumExpiry && state.user.plan !== 'completo') ? 'flex' : 'none';
 
@@ -638,58 +794,48 @@ function renderDashboard() {
   const pn = PLANS_DATA[state.user.plan || 'libre'].name[state.lang] || 'Libre';
   document.getElementById('drawer-plan-label').textContent = 'Plan: ' + pn;
 
-  // Unlock bar
-  const threshold = state.user.plan === 'enfocado' ? 50 : isPremium() ? 0 : 80;
-  document.getElementById('unlock-bar').style.width = Math.min(avg, threshold) / (threshold || 1) * 100 + '%';
-  document.getElementById('unlock-pct-val').textContent = avg + '%';
-  document.getElementById('unlock-pct-of').textContent  = 'de ' + threshold + '% necesario';
-
-  // Check if examen lock UI should be shown — TEMP: disabled via DISABLE_EXAMEN_LOCK_UI
-  if (DISABLE_EXAMEN_LOCK_UI) {
-    const blurEl = document.querySelector('.examen-blur-content');
-    blurEl.style.filter = 'none';
-    blurEl.style.pointerEvents = 'auto';
-    document.querySelector('.examen-overlay').style.display = 'none';
-    document.getElementById('examen-wrap').style.cursor = 'default';
-    document.getElementById('unlock-info').style.display = 'none';
-  } else {
-    const examenUnlocked = isPremium() || avg >= threshold;
-    document.getElementById('examen-wrap').style.cursor = examenUnlocked ? 'default' : 'pointer';
-    document.querySelector('.examen-blur-content').style.filter = examenUnlocked ? 'none' : 'blur(4px)';
-    document.querySelector('.examen-overlay').style.display = examenUnlocked ? 'none' : 'flex';
-  }
+  // Examen section — always unlocked (access controlled per test)
+  document.querySelector('.examen-blur-content').style.filter = 'none';
+  document.querySelector('.examen-blur-content').style.pointerEvents = 'auto';
+  document.querySelector('.examen-overlay').style.display = 'none';
+  document.getElementById('examen-wrap').style.cursor = 'default';
+  document.getElementById('unlock-info').style.display = 'none';
 
   document.documentElement.dir = state.lang === 'ar' ? 'rtl' : 'ltr';
 
-  renderGrid('grid-taal',    TAAL_MODS);
-  renderGrid('grid-sam',     SAM_MODS);
-  renderGrid('grid-spreken', SPREKEN_MODS);
+  renderGrid('grid-taal',    TAAL_MODS,    'taal');
+  renderGrid('grid-sam',     SAM_MODS,     'sam');
+  renderGrid('grid-spreken', SPREKEN_MODS, 'spreken');
+  checkApprovalBanner();
 }
 
-function renderGrid(containerId, mods) {
+function renderGrid(containerId, mods, section) {
   const c = document.getElementById(containerId);
   if (!c) return;
   c.innerHTML = mods.map((mod, i) => {
-    const pct      = modPct(mod.id);
-    const isDone   = pct >= 80;
-    const prevDone = i === 0 || modPct(mods[i-1].id) >= 80;
-    const isCurr   = !isDone && prevDone && mod.ready;
-    const isLocked = !isDone && !isCurr && mod.ready && !isPremium();
-    const soon     = !mod.ready;
+    const pct        = modPct(mod.id);
+    const isDone     = pct >= 80;
+    const prevDone   = i === 0 || modPct(mods[i-1].id) >= 80;
+    const accessible = isModuleAccessible(i, section);
+    const isCurr     = !isDone && prevDone && mod.ready && accessible;
+    const isPlanLock = !accessible && mod.ready;
+    const isSeqLock  = accessible && !isDone && !isCurr && mod.ready;
+    const soon       = !mod.ready;
 
     let cls = 'topic-oval';
-    if (isDone)   cls += ' done';
-    else if (isCurr)   cls += ' curr';
-    else if (isLocked) cls += ' locked';
-    else if (soon)     cls += ' soon';
+    if (isDone)       cls += ' done';
+    else if (isCurr)  cls += ' curr';
+    else if (isPlanLock || isSeqLock) cls += ' locked';
+    else if (soon)    cls += ' soon';
 
-    const sub = soon ? 'Próx.' : `M${mod.id.toUpperCase()}`;
+    const sub = soon ? 'Próx.' : `${pct}%`;
 
     let fn;
-    if (soon)        fn = `showToast('¡Próximamente!')`;
-    else if (isLocked) fn = `showToast('Completa el módulo anterior al 80% primero')`;
-    else if (mod.url)  fn = `window.location.href='${mod.url}'`;
-    else               fn = `showToast('¡Próximamente!')`;
+    if (soon)          fn = `showToast('¡Próximamente!')`;
+    else if (isPlanLock) fn = `showUpgradeNudge()`;
+    else if (isSeqLock)  fn = `showToast('Completa el módulo anterior al 80% primero')`;
+    else if (mod.url)    fn = `window.location.href='${mod.url}'`;
+    else                 fn = `showToast('¡Próximamente!')`;
 
     return `<div class="${cls}" onclick="${fn}">
       <div class="topic-emoji">${mod.emoji}</div>
@@ -699,13 +845,183 @@ function renderGrid(containerId, mods) {
   }).join('');
 }
 
-// ══ EXAMEN UNLOCK INFO ══
-function toggleUnlock() {
-  if (DISABLE_EXAMEN_LOCK_UI) return; // TEMP: lock UI disabled
-  const avg = avgMastery();
-  const threshold = state.user.plan === 'enfocado' ? 50 : 80;
-  if (isPremium() || avg >= threshold) return;
-  document.getElementById('unlock-info').classList.toggle('show');
+// ══ UPGRADE NUDGE ══
+function showUpgradeNudge() {
+  showConfirm(
+    '🔒 Módulo bloqueado',
+    'Este módulo está disponible desde el plan Enfocado o Completo.',
+    'Ver planes',
+    () => { openDrawer(); setTimeout(() => openPlansPanel(), 200); }
+  );
+}
+
+// ══ APPROVAL BANNER ══
+function checkApprovalBanner() {
+  const examDate = state.user.examDate;
+  if (!examDate) return;
+  const exam = new Date(examDate);
+  exam.setHours(0,0,0,0);
+  const now = new Date(); now.setHours(0,0,0,0);
+  const daysSince = Math.floor((now - exam) / 86400000);
+
+  const banner = document.getElementById('approval-banner');
+  const phase1Done = localStorage.getItem('slaagnl_approval_phase1');
+  const phase2Done = localStorage.getItem('slaagnl_approval_phase2');
+
+  if (daysSince >= 1 && daysSince <= 3 && !phase1Done) {
+    banner.style.display = 'block';
+    banner.innerHTML = `<div class="approval-banner">
+      <div class="approval-icon">📋</div>
+      <div class="approval-text">
+        <div class="approval-title">¿Hiciste el examen?</div>
+        <div class="approval-sub">Queremos saber cómo te fue. Tu respuesta ayuda a mejorar SlaagNL para todos.</div>
+        <div class="approval-btns">
+          <button class="approval-btn yes" onclick="approvalPhase1(true)">✅ Sí, lo hice</button>
+          <button class="approval-btn no" onclick="approvalPhase1(false)">No pude ir</button>
+        </div>
+      </div>
+    </div>`;
+  } else if (daysSince >= 21 && !phase2Done && phase1Done === 'yes') {
+    banner.style.display = 'block';
+    banner.innerHTML = `<div class="approval-banner">
+      <div class="approval-icon">🎓</div>
+      <div class="approval-text">
+        <div class="approval-title">¿Aprobaste el Inburgeringsexamen?</div>
+        <div class="approval-sub">Han pasado 3 semanas. ¡Cuéntanos el resultado!</div>
+        <div class="approval-btns">
+          <button class="approval-btn yes" onclick="approvalPhase2(true)">🎉 ¡Sí, aprobé!</button>
+          <button class="approval-btn no" onclick="approvalPhase2(false)">Aún no / No</button>
+        </div>
+      </div>
+    </div>`;
+  } else {
+    banner.style.display = 'none';
+  }
+}
+
+function approvalPhase1(didIt) {
+  localStorage.setItem('slaagnl_approval_phase1', didIt ? 'yes' : 'no');
+  document.getElementById('approval-banner').style.display = 'none';
+  if (didIt) showToast('¡Gracias! Te preguntaremos el resultado en 3 semanas 🙌');
+  else showToast('No pasa nada, ¡suerte la próxima! 💪');
+}
+function approvalPhase2(passed) {
+  localStorage.setItem('slaagnl_approval_phase2', passed ? 'passed' : 'failed');
+  const total = parseInt(localStorage.getItem('slaagnl_global_passed') || '247') + (passed ? 1 : 0);
+  localStorage.setItem('slaagnl_global_passed', String(total));
+  document.getElementById('approval-banner').style.display = 'none';
+  if (passed) {
+    showToast('🎉 ¡Felicidades! Te has unido a los aprobados con SlaagNL');
+    setTimeout(() => launchConfetti(), 400);
+    setTimeout(() => showLowieModal('¡Geslaagd! 🎉', '¡Lo lograste! Has aprobado el Inburgeringsexamen. ¡SlaagNL está orgulloso de ti!'), 800);
+  } else {
+    showToast('No te rindas — ¡la próxima es la tuya! 💪');
+  }
+}
+
+// ══ CONFETTI ══
+function launchConfetti() {
+  if (typeof confetti === 'undefined') return;
+  const duration = 4000;
+  const end = Date.now() + duration;
+  const colors = ['#f47c3a', '#f4c842', '#2ecc8a', '#a78bfa', '#fdf6ec'];
+  (function frame() {
+    confetti({ particleCount: 6, angle: 60,  spread: 55, origin: {x:0}, colors });
+    confetti({ particleCount: 6, angle: 120, spread: 55, origin: {x:1}, colors });
+    if (Date.now() < end) requestAnimationFrame(frame);
+  })();
+}
+
+// ══ STREAK MODAL ══
+const STREAK_REWARDS = [
+  { days: 7,  icon: '🌟', label: 'Insignia de constancia', plans: ['libre','enfocado','completo'] },
+  { days: 15, icon: '🔓', label: 'Módulo extra desbloqueado 24h', plans: ['libre','enfocado'] },
+  { days: 30, icon: '💎', label: '2 días Premium gratis', plans: ['libre','enfocado'] },
+  { days: 60, icon: '🏆', label: 'Recompensa exclusiva', plans: ['completo'] },
+  { days: 100,icon: '👑', label: 'Leyenda de SlaagNL', plans: ['libre','enfocado','completo'] },
+];
+function openStreakModal() {
+  const streak = state.user.streak || 0;
+  const plan   = state.user.plan || 'libre';
+  document.getElementById('streak-modal-days').textContent = streak;
+  document.getElementById('streak-milestones').innerHTML = STREAK_REWARDS
+    .filter(r => r.plans.includes(plan) || plan === 'completo')
+    .map(r => {
+      const reached = streak >= r.days;
+      const isNext  = !reached && STREAK_REWARDS.filter(x => x.plans.includes(plan)).find(x => x.days > streak)?.days === r.days;
+      return `<div class="streak-milestone${reached?' reached':isNext?' next':''}">
+        <div class="sm-icon">${r.icon}</div>
+        <div class="sm-info">
+          <div class="sm-days">${r.days} días</div>
+          <div class="sm-reward">${r.label}</div>
+        </div>
+        <span class="sm-badge ${reached?'done':'pending'}">${reached?'✓ Logrado':'Pendiente'}</span>
+      </div>`;
+    }).join('');
+  document.getElementById('streak-modal').classList.add('open');
+}
+function closeStreakModal() {
+  document.getElementById('streak-modal').classList.remove('open');
+}
+
+// ══ RANKING ══
+const FAKE_USERS = [
+  { name:'Fatima A.',  flag:'🇲🇦', mastery:94, streak:45 },
+  { name:'Yildiz K.',  flag:'🇹🇷', mastery:88, streak:32 },
+  { name:'Ahmad R.',   flag:'🇸🇾', mastery:82, streak:28 },
+  { name:'Nadia V.',   flag:'🇧🇷', mastery:76, streak:21 },
+  { name:'Selin T.',   flag:'🇹🇷', mastery:71, streak:19 },
+  { name:'Mariam O.',  flag:'🇸🇴', mastery:65, streak:14 },
+  { name:'Chen L.',    flag:'🇨🇳', mastery:60, streak:11 },
+  { name:'Rania S.',   flag:'🇪🇬', mastery:54, streak:8  },
+  { name:'Priya M.',   flag:'🇮🇳', mastery:48, streak:6  },
+  { name:'Amara D.',   flag:'🇬🇭', mastery:42, streak:4  },
+];
+function rankScore(u) { return Math.round(u.mastery * 0.7 + u.streak * 1.2); }
+function openRankingPanel() {
+  const me = {
+    name: state.user.name || 'Tú',
+    flag: '⭐',
+    mastery: avgMastery(),
+    streak: state.user.streak || 0,
+    isMe: true
+  };
+  const all = [...FAKE_USERS, me].sort((a,b) => rankScore(b) - rankScore(a));
+  const myPos = all.findIndex(u => u.isMe);
+
+  const posLabel = (i) => {
+    if (i === 0) return `<span class="ranking-pos top1">🥇</span>`;
+    if (i === 1) return `<span class="ranking-pos top2">🥈</span>`;
+    if (i === 2) return `<span class="ranking-pos top3">🥉</span>`;
+    return `<span class="ranking-pos">${i+1}</span>`;
+  };
+
+  const row = (u, i) => `
+    <div class="ranking-row">
+      ${posLabel(i)}
+      <div class="ranking-avatar${u.isMe?' me':''}">${u.flag}</div>
+      <div class="ranking-info">
+        <div class="ranking-name${u.isMe?' me':''}">${u.name}${u.isMe?' (Tú)':''}</div>
+        <div class="ranking-meta">🔥 ${u.streak} días · ${u.mastery}% dominio</div>
+      </div>
+      <div class="ranking-score">${rankScore(u)} pts</div>
+    </div>`;
+
+  const topRows = all.slice(0, 5).map(row).join('');
+  let mySection = '';
+  if (myPos >= 5) {
+    mySection = `<div class="ranking-sep">···</div>` + row(me, myPos);
+  }
+
+  document.getElementById('ranking-body').innerHTML = `
+    <div style="font-size:11px;color:rgba(253,246,236,0.35);margin-bottom:12px;line-height:1.5;">
+      Basado en dominio, racha y simulacros. Se actualiza al abrir la app.
+    </div>
+    ${topRows}${mySection}
+    <div style="margin-top:16px;padding:12px 14px;background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.2);border-radius:12px;font-size:12px;color:rgba(253,246,236,0.5);text-align:center;line-height:1.5;">
+      🌍 Ranking global en tiempo real — <strong style="color:var(--purple)">próximamente con Firebase</strong>
+    </div>`;
+  openSubpanel('subpanel-ranking');
 }
 
 // ══ GIFT ══
@@ -726,7 +1042,7 @@ function showToast(msg) {
   const el = document.getElementById('toast');
   el.textContent = msg; el.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('show'), 3000);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 3200);
 }
 
 // ══ LOWIE MODAL ══
@@ -740,30 +1056,67 @@ function closeLowieModal() {
 }
 
 // ══ DRAWER ══
-function openDrawer()  { document.getElementById('profile-drawer').classList.add('open'); document.getElementById('drawer-overlay').classList.add('open'); }
-function closeDrawer() { document.getElementById('profile-drawer').classList.remove('open'); document.getElementById('drawer-overlay').classList.remove('open'); closeAllSubpanels(); }
+function openDrawer()  {
+  document.getElementById('profile-drawer').classList.add('open');
+  document.getElementById('drawer-overlay').classList.add('open');
+}
+function closeDrawer() {
+  document.getElementById('profile-drawer').classList.remove('open');
+  document.getElementById('drawer-overlay').classList.remove('open');
+  closeAllSubpanels();
+}
 function openSubpanel(id)  { closeAllSubpanels(); document.getElementById(id)?.classList.add('open'); }
 function closeAllSubpanels() { document.querySelectorAll('.subpanel').forEach(p => p.classList.remove('open')); }
 
 // ══ PROGRESS PANEL ══
 function openProgressPanel() {
   const allMods = [...TAAL_MODS,...SAM_MODS,...SPREKEN_MODS];
-  const FREE = 3; const prem = isPremium();
+  const FREE_LIMIT = 3;
+  const plan = state.user.plan || 'libre';
+  const canSeeAll = plan === 'enfocado' || plan === 'completo';
+
   const row = m => {
     const p = modPct(m.id);
-    const c = p >= 80 ? 'var(--green)' : p >= 40 ? 'var(--orange)' : 'var(--blue)';
-    return `<div class="progress-topic-row"><div class="pt-icon">${m.emoji}</div><div class="pt-name">${m.name}</div><div class="pt-pct" style="color:${c}">${p}%</div></div>`;
+    const e = modErrors(m.id);
+    const col = p >= 80 ? 'var(--green)' : p >= 40 ? 'var(--orange)' : 'var(--blue)';
+    const total = 20;
+    const completadas = Math.round(p * total / 100);
+    const faltan = total - completadas;
+    const errBtn = canSeeAll
+      ? `<button onclick="openErrorDetail('${m.id}')" style="font-size:10px;padding:3px 9px;border-radius:99px;background:rgba(232,69,90,0.12);border:none;color:var(--red);font-weight:700;cursor:pointer;font-family:inherit;margin-top:6px;">❌ ${e} errores →</button>`
+      : `<button onclick="showUpgradeNudge()" style="font-size:10px;padding:3px 9px;border-radius:99px;background:rgba(232,69,90,0.08);border:none;color:rgba(232,69,90,0.5);font-weight:700;cursor:pointer;font-family:inherit;margin-top:6px;">🔒 ${e} errores</button>`;
+    return `<div class="progress-topic-row" style="flex-direction:column;align-items:flex-start;">
+      <div style="display:flex;align-items:center;gap:12px;width:100%;padding-bottom:4px;">
+        <div class="pt-icon">${m.emoji}</div>
+        <div class="pt-name">${m.name}</div>
+        <div class="pt-pct" style="color:${col}">${p}%</div>
+      </div>
+      <div style="display:flex;gap:14px;margin-left:40px;font-size:11px;color:rgba(253,246,236,0.4);">
+        <span>✅ Completadas: <strong style="color:var(--green)">${completadas}</strong></span>
+        <span>📌 Faltan: <strong style="color:var(--orange)">${faltan}</strong></span>
+      </div>
+      ${errBtn}
+    </div>`;
   };
-  let html = allMods.slice(0, FREE).map(row).join('');
-  if (!prem) {
-    html += `<div class="progress-blur-wrap"><div class="progress-blur-items">${allMods.slice(FREE).map(row).join('')}</div>
-    <div class="progress-lock-overlay"><p>Desbloquea el progreso completo con el plan Enfocado o Completo</p>
-    <button class="btn-upgrade" onclick="openPlansPanel()">Ver planes →</button></div></div>`;
+
+  let html = allMods.slice(0, FREE_LIMIT).map(row).join('');
+  if (!canSeeAll) {
+    html += `<div class="progress-blur-wrap"><div class="progress-blur-items">${allMods.slice(FREE_LIMIT).map(row).join('')}</div>
+      <div class="progress-lock-overlay">
+        <p>Desbloquea el progreso completo con el plan Enfocado o Completo</p>
+        <button class="btn-upgrade" onclick="closeAllSubpanels();setTimeout(()=>openDrawer(),200);setTimeout(()=>openPlansPanel(),400)">Ver planes →</button>
+      </div></div>`;
   } else {
-    html += allMods.slice(FREE).map(row).join('');
+    html += allMods.slice(FREE_LIMIT).map(row).join('');
   }
   document.getElementById('progress-body').innerHTML = html;
   openSubpanel('subpanel-progress');
+}
+
+function openErrorDetail(modId) {
+  const errors = state.user.errors[modId] || 0;
+  if (errors === 0) { showToast('¡Sin errores en este módulo! 🎉'); return; }
+  showToast(`Módulo ${modId}: ${errors} errores — análisis próximamente 🔍`);
 }
 
 // ══ EDIT PANEL ══
@@ -804,8 +1157,12 @@ function openPlansPanel() {
   openSubpanel('subpanel-plans');
 }
 function selectPlan(id) {
-  if (id === 'libre') { state.user.plan='libre'; saveState(); closeAllSubpanels(); renderDashboard(); showToast('Plan Libre activado'); }
-  else showToast('Pagos próximamente — Stripe 🚀');
+  if (id === 'libre') {
+    state.user.plan = 'libre';
+    saveState(); closeAllSubpanels(); renderDashboard(); showToast('Plan Libre activado');
+  } else {
+    showToast('Pagos próximamente — Stripe 🚀');
+  }
 }
 
 function openSettingsPanel() { openSubpanel('subpanel-settings'); }
@@ -825,6 +1182,20 @@ function changeLang(lang) {
   closeAllSubpanels(); renderDashboard();
 }
 
+// ══ EXAM ACCESS ══
+function goExam(target) {
+  const allowed = ['kns', 'spreken', 'lezen'];
+  if (!allowed.includes(target)) return;
+  if (!canDoExam(target)) {
+    const limit = getExamWeeklyLimit();
+    showToast(`Límite semanal alcanzado (${limit}/sem). ${state.user.plan === 'libre' ? 'Actualiza a Enfocado para 3 sim/sem.' : 'Actualiza a Completo para simulacros ilimitados.'}`);
+    return;
+  }
+  localStorage.setItem('slaagnl_exam_target', target);
+  const accepted = localStorage.getItem('slaagnl_exam_disclaimer_accepted') === 'true';
+  window.location.href = accepted ? `examen/${target}.html` : 'examen/index.html';
+}
+
 // ══ CONFIRM MODAL ══
 function showConfirm(title, sub, btnLabel, fn) {
   document.getElementById('confirm-title').textContent = title;
@@ -834,14 +1205,23 @@ function showConfirm(title, sub, btnLabel, fn) {
   document.getElementById('confirm-modal').classList.add('open');
 }
 function closeConfirm() { document.getElementById('confirm-modal').classList.remove('open'); }
-function confirmLogout() { showConfirm('¿Cerrar sesión?','Podrás volver cuando quieras.','Cerrar sesión',()=>{ showToast('Sesión cerrada'); setTimeout(()=>window.location.href='index.html',800); }); }
+function confirmLogout() {
+  showConfirm('¿Cerrar sesión?','Podrás volver cuando quieras.','Cerrar sesión',()=>{
+    showToast('Sesión cerrada');
+    setTimeout(() => window.location.href='index.html', 800);
+  });
+}
 function confirmResetProgress() {
   showConfirm('¿Reiniciar todo?','Tu progreso vuelve a 0. Tu cuenta se mantiene.','Reiniciar',()=>{
     Object.keys(state.user.mastery).forEach(k => state.user.mastery[k] = 0);
-    state.user.streak = 0; saveState(); renderDashboard(); showToast('Progreso reiniciado ✅');
+    Object.keys(state.user.errors).forEach(k => state.user.errors[k] = 0);
+    state.user.streak = 0;
+    saveState(); renderDashboard(); showToast('Progreso reiniciado ✅');
   });
 }
-function confirmDeleteAccount() { showConfirm('¿Eliminar cuenta?','Esta acción es permanente.','Eliminar',()=>showToast('Cuenta eliminada')); }
+function confirmDeleteAccount() {
+  showConfirm('¿Eliminar cuenta?','Esta acción es permanente.','Eliminar',()=>showToast('Cuenta eliminada'));
+}
 
 // ══ POST-REGISTRATION PLAN MODAL ══
 function openPostRegPlan() {
@@ -852,9 +1232,9 @@ function openPostRegPlan() {
       `<li style="font-size:11.5px;color:${f.ok?'rgba(253,246,236,0.75)':'rgba(253,246,236,0.35)'};margin:2px 0;list-style:none;padding-left:14px;position:relative;">
         <span style="position:absolute;left:0;color:${f.ok?'var(--green)':'var(--red)'};">${f.ok?'✓':'✗'}</span>${f.t}
       </li>`).join('');
-    const gift = (id === 'libre' || id === 'enfocado')
+    const gift = (id !== 'completo')
       ? `<div style="font-size:10.5px;color:#f4c842;margin-top:6px;font-weight:700;">🎁 + 1 día Premium gratis</div>` : '';
-    return `<div style="background:var(--navy3);border:1.5px solid ${plan.featured?'var(--orange)':'var(--border)'};border-radius:14px;padding:14px;cursor:pointer;transition:all var(--ease);" onclick="pickPostRegPlan('${id}')">
+    return `<div style="background:var(--navy3);border:1.5px solid ${plan.featured?'var(--orange)':'var(--border)'};border-radius:14px;padding:14px;cursor:pointer;transition:all var(--ease);margin-bottom:10px;" onclick="pickPostRegPlan('${id}')">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
         <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:900;color:var(--cream);">${plan.name[lang]||plan.name.es}${plan.featured?' ⭐':''}</div>
         <div style="font-size:15px;font-weight:900;color:var(--orange);">${plan.price}${plan.price!=='€0'?'<span style="font-size:10px;color:rgba(253,246,236,0.4);">/mes</span>':''}</div>
@@ -869,7 +1249,7 @@ function openPostRegPlan() {
 function pickPostRegPlan(id) {
   state.user.plan = id;
   saveState();
-  if (id === 'libre' || id === 'enfocado') {
+  if (id !== 'completo') {
     state.user.premiumDaysLeft = 1;
     localStorage.setItem('slaagnl_premdays', '1');
   } else {

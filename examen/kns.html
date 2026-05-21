@@ -1,13 +1,30 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
 <script>
-  // Guard: redirect to disclaimer if not yet accepted
   (function(){
     if (localStorage.getItem('slaagnl_exam_disclaimer_accepted') !== 'true') {
       localStorage.setItem('slaagnl_exam_target', 'kns');
       location.replace('index.html');
     }
+    // Weekly limit check
+    function getISOWeek() {
+      const d = new Date(), jan4 = new Date(d.getFullYear(),0,4);
+      const s = new Date(jan4); s.setDate(jan4.getDate()-((jan4.getDay()+6)%7));
+      return d.getFullYear()+'-W'+Math.ceil((d-s)/604800000);
+    }
+    const plan = localStorage.getItem('slaagnl_plan') || 'libre';
+    const limit = plan === 'completo' ? Infinity : plan === 'enfocado' ? 3 : 1;
+    const data = JSON.parse(localStorage.getItem('slaagnl_weekly_exams') || '{}');
+    const week = getISOWeek();
+    const count = (data.kns && data.kns.week === week) ? data.kns.count : 0;
+    if (count >= limit) {
+      alert('Has alcanzado tu límite semanal de simulacros KNS.');
+      location.replace('../dashboard.html');
+    }
+    window._SLAAG_PLAN = plan;
+    window._SLAAG_TIMER_ENABLED = plan !== 'libre';
   })();
 </script>
 <meta charset="UTF-8" />
@@ -266,6 +283,10 @@ function initTest(){
 }
 
 function startTimer(){
+  if(window._SLAAG_TIMER_ENABLED === false){
+    showTimerToast('⏱ Sin temporizador — Plan Libre');
+    return;
+  }
   let s = TOTAL_MINUTES * 60;
   timerInterval = setInterval(()=>{
     s--;
@@ -273,6 +294,24 @@ function startTimer(){
     if(s===60)   showTimerToast('⚠️ Nog 1 minuut');
     if(s<=0){clearInterval(timerInterval);finishTest();}
   },1000);
+}
+function _incrementWeeklyCount(type){
+  function getISOWeek(){const d=new Date(),jan4=new Date(d.getFullYear(),0,4);const s=new Date(jan4);s.setDate(jan4.getDate()-((jan4.getDay()+6)%7));return d.getFullYear()+'-W'+Math.ceil((d-s)/604800000);}
+  const week=getISOWeek();
+  const data=JSON.parse(localStorage.getItem('slaagnl_weekly_exams')||'{}');
+  if(!data[type]||data[type].week!==week) data[type]={week,count:0};
+  data[type].count++;
+  localStorage.setItem('slaagnl_weekly_exams',JSON.stringify(data));
+}
+function _launchConfetti(){
+  if(typeof confetti==='undefined')return;
+  const end=Date.now()+3500;
+  const colors=['#f47c3a','#f4c842','#2ecc8a','#a78bfa','#fdf6ec'];
+  (function frame(){
+    confetti({particleCount:6,angle:60,spread:55,origin:{x:0},colors});
+    confetti({particleCount:6,angle:120,spread:55,origin:{x:1},colors});
+    if(Date.now()<end)requestAnimationFrame(frame);
+  })();
 }
 
 function showTimerToast(msg){
@@ -396,11 +435,13 @@ function finishTest(){
   testFinished=true;
   closeModal();
   stopSpeech();
+  _incrementWeeklyCount('kns');
 
   let correct=0;
   testQuestions.forEach((q,i)=>{if(answers[i]===q.correct)correct++;});
   const pct=Math.round(correct/TEST_SIZE*100);
   const pass=pct>=70;
+  if(pass) setTimeout(_launchConfetti, 600);
 
   document.getElementById('main-content').style.display='none';
   document.getElementById('bottom-nav').style.display='none';
